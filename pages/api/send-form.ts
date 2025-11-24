@@ -766,7 +766,7 @@ async function sendMailWithPdf(
   }
 
   // 正确解析 SMTP_SECURE（环境变量是字符串）
-  const isSecure = process.env.SMTP_SECURE === 'true' || process.env.SMTP_SECURE === true || process.env.SMTP_PORT === '465';
+  const isSecure = process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465';
   const smtpPort = Number(process.env.SMTP_PORT || 465);
   
   console.log('SMTP 配置:', {
