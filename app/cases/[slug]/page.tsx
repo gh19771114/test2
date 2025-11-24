@@ -266,8 +266,40 @@ const caseDetails: Record<string, any> = {
 
 export default function CaseDetailPage() {
   const params = useParams()
-  const slug = params.slug as string
+  const slug = params?.slug as string | undefined
+  
+  if (!slug) {
+    return (
+      <PageLayout>
+        <div className="container-custom py-20 text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">案例未找到</h1>
+          <p className="text-gray-600 mb-6">抱歉，找不到您要查看的案例。</p>
+          <Link href="/cases" className="btn-primary inline-flex items-center gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            返回案例列表
+          </Link>
+        </div>
+      </PageLayout>
+    )
+  }
+  
   const caseItem = caseDetails[slug]
+  
+  if (!caseItem) {
+    return (
+      <PageLayout>
+        <div className="container-custom py-20 text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">案例未找到</h1>
+          <p className="text-gray-600 mb-6">抱歉，找不到您要查看的案例。</p>
+          <Link href="/cases" className="btn-primary inline-flex items-center gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            返回案例列表
+          </Link>
+        </div>
+      </PageLayout>
+    )
+  }
+  
   const [mapCoordinates, setMapCoordinates] = useState<{ lat: number; lng: number } | null>(null)
   const [mapLoading, setMapLoading] = useState(true)
 
