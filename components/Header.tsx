@@ -55,13 +55,14 @@ const Header = () => {
   }
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as Node
+      if (languageMenuRef.current && !languageMenuRef.current.contains(target)) {
         setIsLanguageOpen(false)
       }
       if (openDropdown) {
         const ref = dropdownRefs.current[openDropdown]
-        if (ref && !ref.contains(event.target as Node)) {
+        if (ref && !ref.contains(target)) {
           setOpenDropdown(null)
         }
       }
