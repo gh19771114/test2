@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+  
+  body {
+    line-height: 1.6;
+    font-family: var(--font-inter), var(--font-noto-sans-jp), 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: transparent;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-navy-700 hover:bg-navy-800 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-navy-700 border border-navy-700 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-navy-700 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .font-display {
+    font-family: var(--font-playfair), var(--font-inter), var(--font-noto-sans-jp), 'Noto Sans JP', sans-serif;
+  }
+
+  .glass-panel {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl;
+  }
+
+  /* 自定义滚动条 */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  /* 隐藏滚动条 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sakura-stage {
+    perspective: 1200px;
+  }
+
+  .sakura-wrap {
+    position: absolute;
+    will-change: transform;
+    animation: sakura-fall var(--fall-duration, 10s) linear infinite;
+  }
+
+  .sakura-sway {
+    display: block;
+    will-change: transform;
+    animation: sakura-sway var(--sway-duration, 9s) ease-in-out infinite;
+  }
+
+  .sakura-tilt {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: sakura-tilt var(--tilt-duration, 8s) ease-in-out infinite;
+  }
+
+  .sakura-petal {
+    display: block;
+    background: radial-gradient(circle at 30% 30%, #ffd5e1 0%, #f7a9c0 60%, #e88aa7 100%);
+    border-radius: 60% 40% 60% 40% / 60% 60% 40% 40%;
+    opacity: 0.95;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    will-change: transform, opacity;
+    animation: sakura-spin var(--spin-duration, 6s) linear infinite,
+      sakura-fade var(--fade-duration, 8s) ease-in infinite;
+  }
+
+  .animate-vertical-scroll {
+    animation: vertical-scroll 20s linear infinite;
+  }
+
+  /* 金属光泽灰色背景 */
+  .bg-metallic-gray {
+    background: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.04) 2px,
+        rgba(255, 255, 255, 0.04) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.04) 2px,
+        rgba(255, 255, 255, 0.04) 4px
+      ),
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+      linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
+    position: relative;
+    min-height: 100vh;
+  }
+
+  .bg-metallic-gray > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes sakura-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0);
+  }
+  100% {
+    transform: translate3d(var(--drift, 0), 110vh, 0);
+  }
+}
+
+@keyframes sakura-sway {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(calc(var(--swayAmp, 20px)));
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(calc(var(--swayAmp, -20px) * -1));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sakura-tilt {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) translateZ(var(--depth, 0));
+  }
+  25% {
+    transform: rotateX(22deg) rotateY(-18deg) translateZ(var(--depth, 0));
+  }
+  50% {
+    transform: rotateX(-16deg) rotateY(20deg) translateZ(var(--depth, 0));
+  }
+  75% {
+    transform: rotateX(18deg) rotateY(14deg) translateZ(var(--depth, 0));
+  }
+  100% {
+    transform: rotateX(0deg) rotateY(0deg) translateZ(var(--depth, 0));
+  }
+}
+
+@keyframes sakura-spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes sakura-fade {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.95;
+  }
+  60% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes vertical-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
