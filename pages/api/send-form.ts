@@ -240,6 +240,7 @@ async function generatePdf(data: {
   const pdfDoc = await PDFDocument.create();
   
   // 注册 fontkit 以支持自定义字体
+  // @ts-ignore - fontkit 类型定义与 pdf-lib 不完全匹配，但运行时兼容
   pdfDoc.registerFontkit(fontkit);
 
   const page = pdfDoc.addPage([595.28, 841.89]); // A4 尺寸
