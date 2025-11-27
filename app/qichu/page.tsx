@@ -184,24 +184,19 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
   }
 
   return (
-    <div className="w-full flex items-center justify-center overflow-x-auto" style={{ minHeight: `${containerHeight}px`, padding: '0' }}>
-      <div className="relative" style={{ 
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? 'visible' : 'hidden'}
+      variants={containerVariants}
+      className="relative mx-auto"
+      style={{ 
         width: `${containerWidth}px`, 
-        maxWidth: '100vw',
-        margin: '0 auto',
-        transform: 'translateX(-28px)' // 向左移动固定像素值，确保在所有设备上一致
-      }}>
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          variants={containerVariants}
-          className="relative"
-          style={{ 
-            width: `${containerWidth}px`, 
-            height: `${containerHeight}px`
-          }}
-        >
+        maxWidth: '100%',
+        height: `${containerHeight}px`,
+        transform: 'translateX(-28px)' // 向左偏移固定像素值
+      }}
+    >
         {/* 动画连接线 */}
         <svg 
           className="absolute inset-0 w-full h-full pointer-events-none" 
@@ -348,8 +343,7 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             </motion.div>
           )
         })}
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   )
 }
@@ -498,9 +492,11 @@ export default function QiChuPage() {
           </div>
         </div>
         
-        {/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方 */}
+        {/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方，移出container-custom确保能真正居中 */}
         <div className="hidden md:block w-full" style={{ marginTop: '-80px' }}>
-          <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+          <div className="w-full flex justify-center overflow-x-auto">
+            <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+          </div>
         </div>
       </section>
 
