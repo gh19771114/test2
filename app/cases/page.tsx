@@ -8,7 +8,6 @@ import Image from 'next/image'
 import PageLayout from '@/components/PageLayout'
 import { Calendar, MapPin, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
 
-
 // 案例数据
 const cases = [
   // 买卖中介
@@ -193,29 +192,30 @@ export default function CasesPage() {
     <PageLayout>
       <div className="relative min-h-screen">
         {/* Hero Section */}
-        <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-700 via-blue-600 to-navy-700 overflow-hidden">
+        <section className="relative pt-28 pb-16 bg-gradient-to-br from-cyan-800 via-cyan-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-              alt="案例展示背景"
+              alt="案例展示"
               fill
               className="object-cover opacity-30"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-navy-900/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/80 to-navy-900/60"></div>
           </div>
           <div className="relative z-10 container-custom">
-            <p className="text-sm text-blue-200 font-semibold mb-4">Case Studies</p>
+            <p className="text-sm text-cyan-300 font-semibold mb-4">Case Studies</p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">案例展示</h1>
-            <p className="text-lg text-gray-100 max-w-3xl leading-relaxed">
+            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
               以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务，为客户提供专业、高效的服务。
             </p>
           </div>
         </section>
 
         {/* Filter Menu */}
-        <section className="section-padding border-b border-gray-200">
-          <div className="container-custom">
+        <section className="relative section-padding border-b border-gray-200">
+          
+          <div className="container-custom relative z-10">
             <div className="flex flex-wrap items-center gap-4">
               {['全部案例', '买卖中介', '物业管理', '企业出海助力', '资产投资'].map((category) => (
                 <button
@@ -235,25 +235,25 @@ export default function CasesPage() {
         </section>
 
         {/* Horizontal Scrolling Cases */}
-        <section className="section-padding">
-          <div className="container-custom">
+        <section className="relative section-padding">
+          <div className="container-custom relative z-10">
             <div className="relative">
               {/* 左滚动按钮 */}
               <button
                 onClick={() => scroll('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
                 aria-label="向左滚动"
               >
-                <ChevronLeft size={24} className="text-navy-700" />
+                <ChevronLeft size={24} className="text-navy-900" />
               </button>
 
               {/* 右滚动按钮 */}
               <button
                 onClick={() => scroll('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
                 aria-label="向右滚动"
               >
-                <ChevronRight size={24} className="text-navy-700" />
+                <ChevronRight size={24} className="text-navy-900" />
               </button>
 
               {/* 横向滚动容器 */}
@@ -273,7 +273,7 @@ export default function CasesPage() {
                     <motion.div
                       key={caseItem.id}
                       variants={itemVariants}
-                      className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0"
+                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0"
                       style={{ width: '380px' }}
                     >
                       <Link href={`/cases/${caseItem.id}`}>
@@ -288,7 +288,7 @@ export default function CasesPage() {
                             />
                           </div>
                           <div className="absolute top-4 right-4">
-                            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            <span className="bg-blue-600 text-navy-900 px-3 py-1 rounded-full text-sm font-medium">
                               {caseItem.type}
                             </span>
                           </div>
@@ -299,14 +299,14 @@ export default function CasesPage() {
                             <Calendar size={16} />
                             <span>{caseItem.date}</span>
                           </div>
-                          <h3 className="text-xl font-semibold text-navy-700 mb-2 group-hover:text-navy-600 transition-colors duration-200">
+                          <h3 className="text-xl font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition-colors duration-200">
                             {caseItem.title}
                           </h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-3">
                             <MapPin size={16} />
                             <span>{caseItem.location}</span>
                           </div>
-                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
                             {caseItem.description}
                           </p>
                         </div>

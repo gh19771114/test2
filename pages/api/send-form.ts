@@ -3,6 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
+import { constants } from "crypto";
 
 import nodemailer from "nodemailer";
 
@@ -754,12 +755,8 @@ async function generateTerminationPDF(formData: {
   }
 }
 
-async function sendMailWithPdf(
-  pdfBuffer: Buffer,
-  subject: string,
-  filename: string,
-  textContent: string
-) {
+// 创建邮件传输器（共享配置）
+function createTransporter() {
   // 验证环境变量
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.MAIL_TO) {
     throw new Error('邮件配置不完整，请检查环境变量：SMTP_HOST, SMTP_USER, SMTP_PASS, MAIL_TO');
@@ -778,24 +775,93 @@ async function sendMailWithPdf(
     mailTo: process.env.MAIL_TO,
   });
 
-  const transporter = nodemailer.createTransport({
+  const transporterConfig: any = {
     host: process.env.SMTP_HOST,
     port: smtpPort,
-    secure: isSecure, // 465 端口需要 secure: true
+    secure: isSecure, // 465 端口需要 secure: true, 587 端口需要 secure: false
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
+      // 尝试不同的认证方法
+      method: 'PLAIN', // 或 'LOGIN', 'XOAUTH2'
     },
     // 添加连接超时和调试选项
-    connectionTimeout: 10000, // 10秒
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+    connectionTimeout: 15000, // 增加到15秒
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
     debug: process.env.NODE_ENV === 'development', // 开发环境启用调试
     // 对于某些邮件服务器，可能需要这些选项
     tls: {
       rejectUnauthorized: false, // 如果证书有问题，可以设置为 false（仅用于测试）
+      // 允许使用较小的 DH 密钥（解决 "dh key too small" 错误）
+      // 注意：这会降低安全性，但某些旧服务器需要此设置
+      minVersion: 'TLSv1',
+      // 使用 secureOptions 来允许较小的 DH 密钥
+      secureOptions: constants.SSL_OP_LEGACY_SERVER_CONNECT | constants.SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION,
+      // 使用更宽松的加密套件
+      ciphers: 'DEFAULT:@SECLEVEL=1', // 降低安全级别以允许较小的 DH 密钥
     },
-  });
+  };
+
+  // 如果使用 587 端口，需要明确设置 secure: false 并使用 STARTTLS
+  if (smtpPort === 587) {
+    transporterConfig.secure = false;
+    transporterConfig.requireTLS = true;
+  }
+
+  return nodemailer.createTransport(transporterConfig);
+}
+
+// 发送邮件（不带PDF附件）
+async function sendMail(
+  subject: string,
+  textContent: string
+) {
+  const transporter = createTransporter();
+
+  const mailOptions = {
+    from: process.env.SMTP_USER,
+    to: process.env.MAIL_TO,
+    subject: subject,
+    text: textContent,
+  };
+
+  try {
+    // 验证连接和认证
+    console.log('正在验证 SMTP 连接和认证...');
+    await transporter.verify();
+    console.log('SMTP 服务器连接和认证验证成功');
+    
+    // 发送邮件
+    const info = await transporter.sendMail(mailOptions);
+    console.log('邮件发送成功:', info.messageId);
+    return info;
+  } catch (error: any) {
+    console.error('邮件发送详细错误:', {
+      code: error.code,
+      command: error.command,
+      response: error.response,
+      responseCode: error.responseCode,
+      message: error.message,
+      // 如果是认证错误，提供更多信息
+      ...(error.code === 'EAUTH' && {
+        authError: '认证失败，请检查用户名和密码是否正确',
+        user: process.env.SMTP_USER ? '已设置' : '未设置',
+        hasPassword: !!process.env.SMTP_PASS,
+      }),
+    });
+    throw error;
+  }
+}
+
+// 发送带PDF附件的邮件
+async function sendMailWithPdf(
+  pdfBuffer: Buffer,
+  subject: string,
+  filename: string,
+  textContent: string
+) {
+  const transporter = createTransporter();
 
   const mailOptions = {
     from: process.env.SMTP_USER,
@@ -812,9 +878,10 @@ async function sendMailWithPdf(
   };
 
   try {
-    // 验证连接
+    // 验证连接和认证
+    console.log('正在验证 SMTP 连接和认证...');
     await transporter.verify();
-    console.log('SMTP 服务器连接验证成功');
+    console.log('SMTP 服务器连接和认证验证成功');
     
     // 发送邮件
     const info = await transporter.sendMail(mailOptions);
@@ -827,6 +894,12 @@ async function sendMailWithPdf(
       response: error.response,
       responseCode: error.responseCode,
       message: error.message,
+      // 如果是认证错误，提供更多信息
+      ...(error.code === 'EAUTH' && {
+        authError: '认证失败，请检查用户名和密码是否正确',
+        user: process.env.SMTP_USER ? '已设置' : '未设置',
+        hasPassword: !!process.env.SMTP_PASS,
+      }),
     });
     throw error;
   }
@@ -895,7 +968,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 详细内容请查看附件 PDF。
       `;
     } else {
-      // 联系表单（默认）
+      // 联系表单（默认）- 首页留言表单，不生成PDF，直接发送邮件
       const { name, email, message, company } = formData as any;
 
       // 验证必要字段
@@ -903,16 +976,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: "缺少必要字段：name, email, message 为必填项" });
       }
 
-      const pdfData = {
-        name: name,
-        email: email,
-        message: company ? `公司：${company}\n\n${message}` : message
-      };
-
-      const pdfBytes = await generatePdf(pdfData);
-      pdfBuffer = Buffer.from(pdfBytes); // 转换为 Buffer
       subject = `联系表单 - ${name || '未填写姓名'}`;
-      filename = `联系表单_${name || '未填写'}_${Date.now()}.pdf`;
       textContent = `
 有新的访客咨询信息：
 
@@ -922,10 +986,27 @@ ${company ? `公司: ${company}\n` : ''}
 咨询内容:
 ${message}
 
-详细内容请查看附件 PDF。
+---
+提交时间: ${new Date().toLocaleString('zh-CN', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+})}
       `;
+
+      // 直接发送邮件，不生成PDF
+      await sendMail(subject, textContent);
+
+      return res.status(200).json({ 
+        ok: true, 
+        message: "表单已提交，我们会尽快与您联系。" 
+      });
     }
 
+    // 解约申请需要生成PDF并发送
     await sendMailWithPdf(pdfBuffer, subject, filename, textContent);
 
     return res.status(200).json({ 

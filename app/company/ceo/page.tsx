@@ -33,26 +33,24 @@ export default function CompanyCeoPage() {
 
   return (
     <PageLayout>
-      <div className="relative">
-        <section className="relative pt-28 pb-20 bg-gradient-to-br from-indigo-900 via-navy-800 to-blue-800 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-              alt="领导力背景"
-              fill
-              className="object-cover opacity-45"
-              priority
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 to-navy-900/60"></div>
-          </div>
-          <div className="relative z-10 container-custom text-center md:text-left">
-            <p className="text-sm text-indigo-200 font-semibold mb-4">President Message</p>
+      <section className="relative pt-28 pb-20 bg-gradient-to-br from-amber-800 via-amber-700 to-navy-800 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+            alt="社长介绍"
+            fill
+            className="object-cover opacity-30"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 to-navy-900/60"></div>
+        </div>
+        <div className="relative z-10 container-custom text-center md:text-left">
+            <p className="text-sm text-amber-300 font-semibold mb-4">President Message</p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">社长介绍</h1>
-            <p className="mt-4 text-base md:text-lg text-indigo-100 max-w-3xl">
+            <p className="mt-4 text-base md:text-lg text-gray-200 max-w-3xl">
               通过跨文化的视角与专业实务经验，Bourn Mark 代表董事社长桂小川带领团队深耕日本不动产市场，持续搭建中日商务合作的桥梁。
             </p>
-            <div className="mt-10 w-full max-w-3xl mx-auto md:mx-0 rounded-2xl overflow-hidden border border-white/40 bg-white/10 backdrop-blur grid grid-cols-2">
+            <div className="mt-10 w-full max-w-3xl mx-auto md:mx-0 rounded-2xl overflow-hidden border border-white/40 bg-white  grid grid-cols-2">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -62,7 +60,7 @@ export default function CompanyCeoPage() {
                     className={`w-full px-6 py-3 text-sm md:text-lg font-semibold transition-all ${
                       isActive
                         ? 'bg-white text-navy-800 shadow-lg'
-                        : 'text-white/85 hover:bg-white/15 hover:text-white'
+                        : 'text-navy-900/85 hover:bg-white/15 hover:text-navy-900'
                     }`}
                   >
                     {tab.label}
@@ -74,8 +72,9 @@ export default function CompanyCeoPage() {
         </section>
 
         {activeTab === 'profile' ? (
-          <section className="section-padding">
-            <div className="container-custom grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] items-start">
+          <section className="relative section-padding">
+          
+          <div className="container-custom grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] items-start">
               <div className="relative w-full max-w-sm mx-auto lg:mx-0 aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
                 <Image src={ceoPortrait2} alt="桂小川肖像" fill className="object-cover" sizes="(min-width: 1024px) 28vw, 80vw" />
               </div>
@@ -112,7 +111,7 @@ export default function CompanyCeoPage() {
           </section>
         ) : (
           <section className="relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-            <div className="absolute inset-0 flex justify-center">
+            <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
               <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
                 <Image
                   src={ceoPortrait1}
@@ -128,7 +127,7 @@ export default function CompanyCeoPage() {
               <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
               <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
             </div>
-            <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20">
+            <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
               <div className="max-w-[620px] text-slate-900 space-y-6">
                 <div>
                   <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
@@ -149,7 +148,6 @@ export default function CompanyCeoPage() {
             </div>
           </section>
         )}
-      </div>
     </PageLayout>
   )
 }

@@ -55,19 +55,19 @@ export default function InvestmentPropertyPage({ params }: PropertyPageProps) {
         <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-12">
           <div className="space-y-8">
             <article className="prose prose-slate max-w-none">
-              <h2 className="text-2xl font-bold text-navy-700">项目概览</h2>
-              <p className="text-gray-700 leading-relaxed">
+              <h2 className="text-2xl font-bold text-white">项目概览</h2>
+              <p className="text-gray-200 leading-relaxed">
                 {property.description}
               </p>
             </article>
 
             <div>
-              <h3 className="text-xl font-semibold text-navy-700 mb-4">投资亮点</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">投资亮点</h3>
               <div className="space-y-3">
                 {property.highlights.map((highlight) => (
                   <div
                     key={highlight}
-                    className="rounded-2xl border border-blue-100 bg-blue-50/60 px-4 py-3 text-sm text-blue-900"
+                    className="rounded-2xl border border-blue-200 bg-blue-50/80 backdrop-blur-sm px-4 py-3 text-sm text-blue-900"
                   >
                     {highlight}
                   </div>
@@ -75,9 +75,9 @@ export default function InvestmentPropertyPage({ params }: PropertyPageProps) {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-3xl p-8 shadow-sm">
+            <div className="bg-white/95 backdrop-blur-sm border border-blue-100 rounded-3xl p-8 shadow-lg">
               <h3 className="text-xl font-semibold text-navy-700 mb-3">我们可以提供的支持</h3>
-              <ul className="space-y-2 text-gray-600 text-sm leading-relaxed">
+              <ul className="space-y-2 text-gray-700 text-sm leading-relaxed">
                 <li>· 专属顾问陪同尽调、估值与收益模型搭建</li>
                 <li>· 协助办理融资、税务、法人登记等全链条手续</li>
                 <li>· 提供租赁运营、物业管理与退出策略规划</li>
@@ -86,7 +86,7 @@ export default function InvestmentPropertyPage({ params }: PropertyPageProps) {
           </div>
 
           <aside className="space-y-6">
-            <div className="rounded-3xl border border-gray-100 bg-gray-50 p-6 shadow-sm">
+            <div className="rounded-3xl border border-gray-100 bg-white/95 backdrop-blur-sm p-6 shadow-lg">
               <h3 className="text-lg font-semibold text-navy-700 mb-3">预约深度咨询</h3>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
                 联系我们的投资顾问，获取完整的财务模型、现金流预测与尽调报告样本。
@@ -96,7 +96,7 @@ export default function InvestmentPropertyPage({ params }: PropertyPageProps) {
               </a>
             </div>
 
-            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div className="rounded-3xl border border-gray-100 bg-white/95 backdrop-blur-sm p-6 shadow-lg">
               <h3 className="text-lg font-semibold text-navy-700 mb-3">返回投资列表</h3>
               <p className="text-sm text-gray-600 leading-relaxed mb-4">
                 浏览当前的投资机会，挑选最符合您资产配置需求的项目。

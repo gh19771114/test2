@@ -25,12 +25,27 @@
 npm install
 ```
 
-2. 開発サーバーの起動
+2. 環境変数の設定（メール送信機能を使用する場合）
+
+プロジェクトルートに `.env.local` ファイルを作成し、以下の環境変数を設定してください：
+
+```env
+SMTP_HOST=your-smtp-host.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-email-password
+MAIL_TO=info@bournmark.jp
+```
+
+詳細な設定方法は `EMAIL_CONFIG.md` を参照してください。
+
+3. 開発サーバーの起動
 ```bash
 npm run dev
 ```
 
-3. ブラウザで [http://localhost:3000](http://localhost:3000) を開く
+4. ブラウザで [http://localhost:3000](http://localhost:3000) を開く
 
 ## プロジェクト構造
 

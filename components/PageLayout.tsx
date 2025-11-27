@@ -3,19 +3,30 @@
 import Header from './Header'
 import Footer from './Footer'
 import FloatingActions from './FloatingActions'
+import Image from 'next/image'
+import backgroundImage from '@/imgs/background.png'
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1" style={{
-        background: 'linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%)',
-        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%)'
-      }}>
-        {children}
-      </main>
-      <Footer />
-      <FloatingActions />
+    <div className="min-h-screen flex flex-col relative">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={backgroundImage}
+          alt=""
+          fill
+          className="object-cover"
+          priority={false}
+          quality={90}
+        />
+      </div>
+      <div className="relative z-10">
+        <Header />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+        <FloatingActions />
+      </div>
     </div>
   )
 }

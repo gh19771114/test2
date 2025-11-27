@@ -56,17 +56,7 @@ const Philosophy = () => {
 
   return (
     <section id="philosophy" className="relative section-padding scroll-mt-32">
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="企业理念背景"
-          fill
-          className="object-cover"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-navy-900/80 backdrop-blur-sm" />
-      </div>
-      <div className="container-custom relative z-10">
+      <div className="container-custom">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -74,7 +64,7 @@ const Philosophy = () => {
           variants={containerVariants}
           className="text-center mb-16"
         >
-          <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold mb-6 text-navy-900">
+          <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold mb-6 text-navy-900 drop-shadow-sm inline-block bg-white/90 px-6 py-3 rounded-lg shadow-md">
             我们的理念
           </motion.h2>
           <motion.div variants={itemVariants} className="max-w-4xl mx-auto bg-white/95 rounded-2xl p-8 md:p-10 shadow-xl border border-gray-100">
@@ -96,13 +86,13 @@ const Philosophy = () => {
             <motion.div
               key={value.title}
               variants={itemVariants}
-              className="text-center group bg-white/92 rounded-2xl p-8 border border-white shadow-lg hover:shadow-xl transition-shadow"
+              className="text-center group bg-white rounded-2xl p-8 border-2 border-gray-100 shadow-lg hover:shadow-xl transition-shadow"
             >
               <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 text-navy-800 rounded-full mb-6 shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
                 <value.icon className="w-10 h-10" />
               </div>
               <h3 className="text-xl font-semibold mb-4 text-navy-900">{value.title}</h3>
-              <p className="text-slate-700 leading-relaxed text-balance">{value.description}</p>
+              <p className="text-slate-800 leading-relaxed text-balance font-medium">{value.description}</p>
             </motion.div>
           ))}
         </motion.div>

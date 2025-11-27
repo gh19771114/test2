@@ -3,44 +3,61 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin } from 'lucide-react'
+import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Briefcase, Hand, Hammer, Coins, Building2 } from 'lucide-react'
 
-const managementHighlights = [
+const regularServices = [
   {
     title: '租赁管理',
-    details: ['租客筛选与背景调查', '合同签署与租金调整策略', '入住退房手续与验房报告'],
     link: '/wuye/zulin',
     icon: ClipboardCheck,
   },
   {
     title: '收支与税务',
-    details: ['每月租金收取与催缴', '资产报表与税务建议', '多货币结算与跨境汇款支持'],
     link: '/wuye/shouzhi',
     icon: DollarSign,
   },
   {
     title: '修缮维护',
-    details: ['24 小时应急维修', '定期检查与耗材更换', '装修升级与项目管理'],
     link: '/wuye/xiushan',
     icon: Wrench,
   },
   {
-    title: '资产增值',
-    details: ['租金交涉', '大规模修缮', '相关附加收益'],
-    link: '/wuye/zengzhi',
-    icon: TrendingUp,
-  },
-  {
     title: '入住者服务',
-    details: ['入住欢迎与生活指南', '中文/日文客服与投诉响应', '居住期间日常支援协调'],
     link: '/wuye/ruzhu',
     icon: Users,
   },
   {
     title: '相关保险',
-    details: ['火灾险与地震险配置', '租金补偿险与责任险', '理赔协助与续保提醒'],
     link: '/wuye/baoxian',
     icon: Shield,
+  },
+]
+
+const assetAppreciationServices = [
+  {
+    title: '市场调查',
+    link: '/wuye/zengzhi',
+    icon: Search,
+  },
+  {
+    title: '企业咨询',
+    link: '/wuye/zengzhi',
+    icon: Briefcase,
+  },
+  {
+    title: '租金交涉',
+    link: '/wuye/zengzhi',
+    icon: Hand,
+  },
+  {
+    title: '大规模修缮',
+    link: '/wuye/zengzhi',
+    icon: Hammer,
+  },
+  {
+    title: '相关附加收益',
+    link: '/wuye/zengzhi',
+    icon: Coins,
   },
 ]
 
@@ -91,54 +108,75 @@ export default function WuYePage() {
               className="object-cover opacity-30"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-navy-900/60"></div>
           </div>
           <div className="relative z-10 container-custom">
-            <p className="text-sm text-blue-300 font-semibold mb-4">物业管理 Property Management</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">全托管物业管理服务</h1>
+            <p className="text-sm text-blue-300 font-semibold mb-4">Property Management</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">全方位物业管理服务</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
-              针对在日本持有房产的个人与机构业主，提供租赁运营、财务报表、维修维护及保险配置等全方位托管服务，让您身处海外也能实时掌控资产状况，享受省心收益。
+              为在日本持有房产的个人与机构业主提供全流程托管服务，不仅涵盖日常租赁管理、财务税务与维修维护，更专注于通过专业的资产增值策略和租金增长交涉，持续提升您的房产价值与投资回报率，让资产稳健成长。
             </p>
           </div>
         </section>
 
       <section id="tenant-services" className="section-padding">
         <div className="container-custom">
-          <h2 className="text-2xl font-bold text-navy-700 mb-6">服务内容</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {managementHighlights.map((item) => {
-              const Icon = item.icon
-              return (
-                <Link key={item.title} href={item.link} className="block">
-                  <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer h-full">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-white mb-8">服务内容</h2>
+          
+          {/* 左右两个大方块 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* 常规服务 - 左侧大方块 */}
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-8 md:p-10 border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">常规服务</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {regularServices.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Link key={item.title} href={item.link} className="block">
+                      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-6 h-6 text-blue-600" />
+                          </div>
+                          <h4 className="text-base font-semibold text-navy-700">{item.title}</h4>
+                        </div>
                       </div>
-                      <h3 className="text-xl font-semibold text-navy-700">{item.title}</h3>
-                    </div>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      {item.details.map((detail) => (
-                        <li key={detail} className="flex items-start gap-2 leading-relaxed">
-                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
-                          <span>{detail}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Link>
-              )
-            })}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* 专业资产增值服务 - 右侧大方块 */}
+            <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-8 md:p-10 border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">专业资产增值服务</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {assetAppreciationServices.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Link key={item.title} href={item.link} className="block">
+                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-6 h-6 text-purple-600" />
+                          </div>
+                          <h4 className="text-base font-semibold text-navy-700">{item.title}</h4>
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="section-padding">
         <div className="container-custom">
-          <h2 className="text-2xl font-bold text-navy-700 mb-6">管理房产</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">管理房产</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {managedProperties.map((property) => (
-              <Link key={property.id} href={`/cases/${property.id}`} className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+              <Link key={property.id} href={`/cases/${property.id}`} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                 <div className="relative overflow-hidden">
                   <div className="relative w-full h-64">
                     <Image
@@ -180,13 +218,44 @@ export default function WuYePage() {
               </Link>
             ))}
           </div>
+
+          {/* 统计信息 */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-200 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
+                    <span>1,300</span><span className="ml-2">户</span>
+                  </h3>
+                  <p className="text-base md:text-lg text-gray-700 font-medium">管理房产总数</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 border-2 border-green-200 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-3xl font-bold">¥</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
+                    <span>約800億</span><span className="ml-2">日元</span>
+                  </h3>
+                  <p className="text-base md:text-lg text-gray-700 font-medium">管理资产总额</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="section-padding">
         <div className="container-custom text-center">
-          <h2 className="text-2xl font-bold text-navy-700 mb-4">需要我们接管您的在日资产吗？</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <h2 className="text-2xl font-bold text-white mb-4">需要我们接管您的在日资产吗？</h2>
+          <p className="text-gray-200 max-w-2xl mx-auto mb-6 leading-relaxed">
             无论您在日本拥有单套公寓、整栋楼宇或组合资产，Bourn Mark 都能提供灵活的托管方案与透明的财务报告。
           </p>
           <a href="/#contact" className="btn-primary inline-flex items-center gap-2">
@@ -198,5 +267,4 @@ export default function WuYePage() {
     </PageLayout>
   )
 }
-
 

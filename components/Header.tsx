@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import logo from '@/imgs/横向logo1-无背景-preview.png'
 import { usePathname, useRouter } from 'next/navigation'
+import { Locale } from '@/data/locales'
 
 const languages = [
   { label: '简体中文', code: 'zh-CN', flag: '🇨🇳' },
@@ -87,6 +88,15 @@ const Header = () => {
     }
   }, [pathname])
 
+  // 清除 hoverTimeoutRef，防止卸载后仍调用 setState
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleLanguageSelect = (language: typeof languages[number]) => {
     setSelectedLanguage(language)
     setIsLanguageOpen(false)
@@ -155,6 +165,7 @@ const Header = () => {
         { name: '企业沿革', href: '/company/history' },
         { name: '企业理念', href: '/company/philosophy' },
         { name: '社长介绍', href: '/company/ceo' },
+        { name: '企业SNS', href: '/company/sns' },
       ],
     },
     { key: 'tenant', name: '租客专用', href: '/tenant' },
@@ -494,4 +505,3 @@ const Header = () => {
 }
 
 export default Header
-

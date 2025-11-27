@@ -3,8 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
-import Image from 'next/image'
-import { Mail, Phone, MapPin, Printer, Send, Copy, Check } from 'lucide-react'
+import { Mail, Phone, MapPin, Printer, Send, Copy, Check, Edit, CheckCircle } from 'lucide-react'
 
 const Contact = () => {
   const ref = useRef(null)
@@ -18,6 +17,7 @@ const Contact = () => {
   const [copied, setCopied] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -29,6 +29,12 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // 先显示确认界面，不直接发送
+    setShowConfirm(true)
+    setSubmitResult(null)
+  }
+
+  const handleConfirmSend = async () => {
     setLoading(true)
     setSubmitResult(null)
 
@@ -53,6 +59,7 @@ const Contact = () => {
 
       const data = await res.json()
       setSubmitResult(data.message || '信息已提交，我们会尽快与您联系。')
+      setShowConfirm(false)
       
       // 清空表单
       setFormData({
@@ -67,6 +74,12 @@ const Contact = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleEdit = () => {
+    // 直接返回编辑状态
+    setShowConfirm(false)
+    setSubmitResult(null)
   }
 
   const handleCopy = async (text: string, type: string) => {
@@ -154,34 +167,23 @@ const Contact = () => {
 
   return (
     <section id="contact" className="relative section-padding scroll-mt-32">
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="联系我们背景"
-          fill
-          className="object-cover"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-navy-900/80 backdrop-blur-sm" />
-      </div>
-
       <div className="container-custom">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="text-center mb-16 text-white"
+          className="text-center mb-16"
         >
           <motion.h2
             variants={itemVariants}
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4 text-white"
           >
             联系我们
           </motion.h2>
           <motion.p
             variants={itemVariants}
-            className="text-base md:text-lg text-white/80 max-w-2xl mx-auto"
+            className="text-base md:text-lg text-gray-200 max-w-2xl mx-auto"
           >
             无论您关注个人房产投资、资产托管还是企业拓展，只需留下需求，我们的顾问会尽快与您取得联系。
           </motion.p>
@@ -194,12 +196,14 @@ const Contact = () => {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={itemVariants}
-            className="bg-white/95 rounded-2xl p-8 shadow-2xl flex flex-col h-full"
+            className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-2xl flex flex-col h-full"
           >
-            <h3 className="text-2xl font-semibold text-navy-700 mb-6">
-              留言表单
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {!showConfirm ? (
+              <>
+                <h3 className="text-2xl font-semibold text-navy-700 mb-6">
+                  留言表单
+                </h3>
+                <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
                   公司名称 <span className="text-red-500">*</span>
@@ -264,27 +268,104 @@ const Contact = () => {
                 />
               </div>
 
-              <div className="space-y-4 mt-auto">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? '提交中...' : '提交信息'}
-                  {!loading && <Send size={20} />}
-                </button>
-                {submitResult && (
-                  <p className={`text-sm text-center ${submitResult.includes('失败') ? 'text-red-600' : 'text-green-600'}`}>
-                    {submitResult}
-                  </p>
-                )}
-                {!submitResult && (
-                  <p className="text-sm text-gray-500 text-center">
-                    提交后，我们将在一个工作日内与您确认需求并安排专属顾问。
-                  </p>
-                )}
-              </div>
-            </form>
+                  <div className="space-y-4 mt-auto">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      提交信息
+                      <Send size={20} />
+                    </button>
+                    {submitResult && (
+                      <p className={`text-sm text-center ${submitResult.includes('失败') ? 'text-red-600' : 'text-green-600'}`}>
+                        {submitResult}
+                      </p>
+                    )}
+                    {!submitResult && (
+                      <p className="text-sm text-gray-500 text-center">
+                        提交后，我们将在一个工作日内与您确认需求并安排专属顾问。
+                      </p>
+                    )}
+                  </div>
+                </form>
+              </>
+            ) : (
+              <>
+                <h3 className="text-2xl font-semibold text-navy-700 mb-6">
+                  确认信息
+                </h3>
+                <div className="space-y-6 flex-1">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <p className="text-sm text-blue-800">
+                      请确认以下信息无误后点击"发送"。如需修改，请点击"修改"按钮。
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="border-b border-gray-200 pb-4">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        公司名称
+                      </label>
+                      <p className="text-base text-navy-700 font-medium">
+                        {formData.company || '未填写'}
+                      </p>
+                    </div>
+                    
+                    <div className="border-b border-gray-200 pb-4">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        联系人姓名
+                      </label>
+                      <p className="text-base text-navy-700 font-medium">
+                        {formData.name}
+                      </p>
+                    </div>
+                    
+                    <div className="border-b border-gray-200 pb-4">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        邮箱地址
+                      </label>
+                      <p className="text-base text-navy-700 font-medium">
+                        {formData.email}
+                      </p>
+                    </div>
+                    
+                    <div className="border-b border-gray-200 pb-4">
+                      <label className="block text-sm font-medium text-gray-500 mb-1">
+                        项目需求
+                      </label>
+                      <p className="text-base text-navy-700 whitespace-pre-wrap">
+                        {formData.message}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3 mt-8 pt-6 border-t border-gray-200">
+                    <button
+                      onClick={handleConfirmSend}
+                      disabled={loading}
+                      className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? '发送中...' : '确认发送'}
+                      {!loading && <CheckCircle size={20} />}
+                    </button>
+                    <button
+                      onClick={handleEdit}
+                      disabled={loading}
+                      className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-lg py-4 inline-flex items-center justify-center gap-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      修改信息
+                      <Edit size={20} />
+                    </button>
+                    {submitResult && (
+                      <p className={`text-sm text-center ${submitResult.includes('失败') ? 'text-red-600' : 'text-green-600'}`}>
+                        {submitResult}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </motion.div>
 
           {/* Contact Information */}
@@ -293,7 +374,7 @@ const Contact = () => {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={itemVariants}
-            className="bg-white/90 rounded-2xl p-8 h-full flex flex-col shadow-2xl"
+            className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 h-full flex flex-col shadow-2xl"
           >
             <h3 className="text-2xl font-semibold text-navy-700 mb-6">
               联系方式
@@ -310,7 +391,7 @@ const Contact = () => {
                   <motion.div
                     key={info.title}
                     variants={itemVariants}
-                    className="flex items-start space-x-4 p-6 bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200"
+                    className="flex items-start space-x-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200"
                   >
                     <div className="flex-shrink-0">
                       <motion.div
@@ -401,7 +482,7 @@ const Contact = () => {
         >
           <div className="relative w-full overflow-hidden rounded-3xl border border-white/30 shadow-2xl">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.5!2d139.783!3d35.693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQxJzM0LjgiTiAxMznCsDQ2JzU4LjgiRQ!5e0!3m2!1szh-CN!2sjp!4v1234567890&q=東京都中央区日本橋人形町1-2-12"
+              src={`https://www.google.com/maps?q=${encodeURIComponent('東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F')}&output=embed&hl=ja&z=17`}
               width="100%"
               height="400"
               style={{ border: 0 }}

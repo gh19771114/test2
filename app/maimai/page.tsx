@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import { Building2, TrendingUp, Award, FileText, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Building2, TrendingUp, Award, FileText, ArrowRight, CheckCircle2, X, Calculator } from 'lucide-react'
 
 const mainCurrencyOptions = [
   { code: 'JPY', label: '日元' },
@@ -56,7 +56,7 @@ const currencyLabels: Record<string, string> = {
 const propertiesNoFee = [
   {
     title: '东京港区·塔楼海景公寓',
-    price: '8,800万円',
+    price: '8,800万日元',
     area: '65㎡',
     type: '2LDK',
     location: '港区六本木',
@@ -65,7 +65,7 @@ const propertiesNoFee = [
   },
   {
     title: '大阪梅田·精品公寓',
-    price: '5,200万円',
+    price: '5,200万日元',
     area: '52㎡',
     type: '1LDK',
     location: '大阪市北区',
@@ -74,7 +74,7 @@ const propertiesNoFee = [
   },
   {
     title: '京都·传统町屋改造',
-    price: '6,500万円',
+    price: '6,500万日元',
     area: '85㎡',
     type: '3LDK',
     location: '京都市中京区',
@@ -83,7 +83,7 @@ const propertiesNoFee = [
   },
   {
     title: '横滨·湾岸高层公寓',
-    price: '7,200万円',
+    price: '7,200万日元',
     area: '58㎡',
     type: '2LDK',
     location: '横滨市港北区',
@@ -95,7 +95,7 @@ const propertiesNoFee = [
 const propertiesWithFee = [
   {
     title: '东京涩谷·商业用地',
-    price: '12,500万円',
+    price: '12,500万日元',
     area: '120㎡',
     type: '商业用地',
     location: '涩谷区',
@@ -104,7 +104,7 @@ const propertiesWithFee = [
   },
   {
     title: '名古屋·整栋公寓',
-    price: '15,800万円',
+    price: '15,800万日元',
     area: '200㎡',
     type: '整栋',
     location: '名古屋市中区',
@@ -113,7 +113,7 @@ const propertiesWithFee = [
   },
   {
     title: '福冈·投资用公寓',
-    price: '9,500万円',
+    price: '9,500万日元',
     area: '95㎡',
     type: '投资用',
     location: '福冈市中央区',
@@ -122,7 +122,7 @@ const propertiesWithFee = [
   },
   {
     title: '札幌·度假别墅',
-    price: '6,800万円',
+    price: '6,800万日元',
     area: '150㎡',
     type: '别墅',
     location: '札幌市南区',
@@ -217,19 +217,23 @@ const formatCurrencyValue = (amount: number, currency: string) => {
     maximumFractionDigits: 0,
   })
   const rounded = Math.round(amount)
-  const formattedNumber = formatter.format(rounded)
   const label = currencyLabels[currency] ?? currency
+  
   if (currency === 'JPY') {
-    return `${formattedNumber}${label}`
+    // 日元价格转换为"万日元"格式
+    const man = rounded / 10_000
+    if (man >= 1) {
+      const formattedMan = formatter.format(man)
+      return `${formattedMan}万${label}`
+    } else {
+      // 如果小于1万，直接显示日元
+      const formattedNumber = formatter.format(rounded)
+      return `${formattedNumber}${label}`
+    }
   }
+  
+  const formattedNumber = formatter.format(rounded)
   return `约${formattedNumber}${label}`
-}
-
-const splitStepDetails = (text: string) => {
-  return text
-    .split(/[，、,]/)
-    .map((segment) => segment.trim())
-    .filter(Boolean)
 }
 
 export default function MaiMaiPage() {
@@ -238,6 +242,60 @@ export default function MaiMaiPage() {
   const [lastUpdated, setLastUpdated] = useState<string>('')
   const [isLoadingRates, setIsLoadingRates] = useState<boolean>(false)
   const [rateError, setRateError] = useState<string | null>(null)
+  
+  // 右侧工具菜单状态
+  const [isToolsOpen, setIsToolsOpen] = useState<boolean>(false)
+  
+  // 房贷计算器状态
+  const [loanAmount, setLoanAmount] = useState<string>('')
+  const [interestRate, setInterestRate] = useState<string>('2.5')
+  const [loanYears, setLoanYears] = useState<string>('35')
+  const [monthlyPayment, setMonthlyPayment] = useState<string>('')
+  
+  // 租金收益计算器状态
+  const [propertyPrice, setPropertyPrice] = useState<string>('')
+  const [yieldRate, setYieldRate] = useState<string>('5.0')
+  const [annualRent, setAnnualRent] = useState<string>('')
+  const [monthlyRent, setMonthlyRent] = useState<string>('')
+  
+  // 计算房贷月供
+  useEffect(() => {
+    if (loanAmount && interestRate && loanYears) {
+      const principal = parseFloat(loanAmount)
+      const rate = parseFloat(interestRate) / 100 / 12
+      const months = parseFloat(loanYears) * 12
+      
+      if (principal > 0 && rate > 0 && months > 0) {
+        const payment = (principal * rate * Math.pow(1 + rate, months)) / (Math.pow(1 + rate, months) - 1)
+        setMonthlyPayment(Math.round(payment).toLocaleString('ja-JP') + ' 日元')
+      } else {
+        setMonthlyPayment('请输入贷款信息进行计算')
+      }
+    } else {
+      setMonthlyPayment('请输入贷款信息进行计算')
+    }
+  }, [loanAmount, interestRate, loanYears])
+  
+  // 计算租金收益
+  useEffect(() => {
+    if (propertyPrice && yieldRate) {
+      const price = parseFloat(propertyPrice)
+      const yieldPercent = parseFloat(yieldRate) / 100
+      
+      if (price > 0 && yieldPercent > 0) {
+        const annual = Math.round(price * yieldPercent)
+        const monthly = Math.round(annual / 12)
+        setAnnualRent(annual.toLocaleString('ja-JP') + ' 日元')
+        setMonthlyRent(monthly.toLocaleString('ja-JP') + ' 日元')
+      } else {
+        setAnnualRent('请输入房产信息进行计算')
+        setMonthlyRent('请输入房产信息进行计算')
+      }
+    } else {
+      setAnnualRent('请输入房产信息进行计算')
+      setMonthlyRent('请输入房产信息进行计算')
+    }
+  }, [propertyPrice, yieldRate])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -295,33 +353,32 @@ export default function MaiMaiPage() {
 
   return (
     <PageLayout>
-      <div className="relative">
-        {/* Hero Section with Background Image */}
-        <section className="relative pt-28 pb-16 bg-gradient-to-br from-navy-800 via-navy-700 to-blue-800 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-              alt="日本房产"
-              fill
-              className="object-cover opacity-30"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-navy-900/80 to-blue-900/60"></div>
-          </div>
-          <div className="relative z-10 container-custom">
-            <p className="text-sm text-blue-300 font-semibold mb-4">买卖中介 Buying & Selling</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">日本房产买卖中介服务</h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
-              为个人及机构投资者提供从项目筛选、尽职调查、融资方案到交割与交付的全流程服务，结合本地资源网络和法律团队，为您争取更优价格与更低风险。
-            </p>
-          </div>
-        </section>
+      <section className="relative pt-28 pb-16 bg-gradient-to-br from-emerald-800 via-emerald-700 to-navy-800 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+            alt="买卖中介"
+            fill
+            className="object-cover opacity-30"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 to-navy-900/60"></div>
+        </div>
+        <div className="relative z-10 container-custom">
+          <p className="text-sm text-emerald-300 font-semibold mb-4">Buying & Selling</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">日本房产买卖中介服务</h1>
+          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+            为个人及机构投资者提供从项目筛选、尽职调查、融资方案到交割与交付的全流程服务，结合本地资源网络和法律团队，为您争取更优价格与更低风险。
+          </p>
+        </div>
+      </section>
 
         {/* 正在销售的房产 - 免中介费 */}
-        <section className="section-padding">
-          <div className="container-custom">
+        <section className="relative section-padding">
+          
+          <div className="container-custom relative z-10">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-navy-700">销售中房产</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-white">销售中房产</h2>
               <div className="flex flex-col md:flex-row md:items-center md:gap-4 gap-2">
                 <div className="flex flex-wrap items-center gap-2">
                   {mainCurrencyOptions.map((option) => (
@@ -331,14 +388,14 @@ export default function MaiMaiPage() {
                       className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
                         selectedCurrency === option.code
                           ? 'bg-navy-700 text-white border-navy-700 shadow-lg'
-                          : 'border-gray-200 text-gray-600 hover:border-navy-500 hover:text-navy-600'
+                          : 'border-gray-200 text-white hover:border-gray-300 hover:text-gray-100'
                       }`}
                     >
                       {option.label}
                     </button>
                   ))}
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">其他</span>
+                    <span className="text-sm text-white">其他</span>
                     <select
                       value={isOtherCurrencySelected ? selectedCurrency : ''}
                       onChange={(event) => {
@@ -358,12 +415,12 @@ export default function MaiMaiPage() {
                     </select>
                   </div>
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-200">
                   {rateError ? rateError : isLoadingRates ? '汇率更新中…' : lastUpdated ? `汇率更新时间：${lastUpdated}` : '汇率以日元为基准实时换算'}
                 </div>
               </div>
             </div>
-            <div className="mb-8 bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
+            <div className="mb-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
               <h3 className="text-xl font-semibold text-green-600 mb-4 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5" />
                 免中介费房源
@@ -371,7 +428,7 @@ export default function MaiMaiPage() {
               <div className="overflow-x-auto pb-4 -mx-2 px-2">
                 <div className="flex gap-6 min-w-max">
                   {propertiesNoFee.map((property, index) => (
-                    <div key={index} className="flex-shrink-0 w-80 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                       <div className="relative h-48 bg-gray-200">
                         <Image
                           src={property.image}
@@ -380,17 +437,17 @@ export default function MaiMaiPage() {
                           className="object-cover"
                           sizes="320px"
                         />
-                        <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
                           {property.feature}
                         </div>
                       </div>
                       <div className="p-5">
-                        <h4 className="text-lg font-semibold text-navy-700 mb-2">{property.title}</h4>
-                        <p className="text-2xl font-bold text-blue-600 mb-1">{currencyDisplay(property.price)}</p>
+                        <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                        <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                         {selectedCurrency !== 'JPY' && (
                           <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
                         )}
-                        <div className="flex flex-wrap gap-3 text-sm text-gray-600 mb-3">
+                        <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-3">
                           <span className="flex items-center gap-1">
                             <Building2 className="w-4 h-4" />
                             {property.area}
@@ -398,7 +455,7 @@ export default function MaiMaiPage() {
                           <span>{property.type}</span>
                           <span>{property.location}</span>
                         </div>
-                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
+                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-navy-900 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
                           查看详情
                         </button>
                       </div>
@@ -409,7 +466,7 @@ export default function MaiMaiPage() {
             </div>
 
             {/* 需中介费房源 */}
-            <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6">
               <h3 className="text-xl font-semibold text-orange-600 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 需中介费房源
@@ -417,7 +474,7 @@ export default function MaiMaiPage() {
               <div className="overflow-x-auto pb-4 -mx-2 px-2">
                 <div className="flex gap-6 min-w-max">
                   {propertiesWithFee.map((property, index) => (
-                    <div key={index} className="flex-shrink-0 w-80 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                       <div className="relative h-48 bg-gray-200">
                         <Image
                           src={property.image}
@@ -426,17 +483,17 @@ export default function MaiMaiPage() {
                           className="object-cover"
                           sizes="320px"
                         />
-                        <div className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        <div className="absolute top-3 right-3 bg-orange-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
                           {property.feature}
                         </div>
                       </div>
                       <div className="p-5">
-                        <h4 className="text-lg font-semibold text-navy-700 mb-2">{property.title}</h4>
-                        <p className="text-2xl font-bold text-blue-600 mb-1">{currencyDisplay(property.price)}</p>
+                        <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                        <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                         {selectedCurrency !== 'JPY' && (
                           <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
                         )}
-                        <div className="flex flex-wrap gap-3 text-sm text-gray-600 mb-3">
+                        <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-3">
                           <span className="flex items-center gap-1">
                             <Building2 className="w-4 h-4" />
                             {property.area}
@@ -444,7 +501,7 @@ export default function MaiMaiPage() {
                           <span>{property.type}</span>
                           <span>{property.location}</span>
                         </div>
-                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
+                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-navy-900 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
                           查看详情
                         </button>
                       </div>
@@ -457,67 +514,85 @@ export default function MaiMaiPage() {
         </section>
 
         {/* 日本房产买卖交易流程 */}
-        <section className="section-padding">
-          <div className="container-custom">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">日本房产买卖交易流程</h2>
-            <div className="max-w-6xl mx-auto">
-              <div className="hidden lg:block bg白 rounded-3xl p-8 border-2 border-blue-100 shadow-xl">
-                <div className="grid grid-cols-4 gap-8">
-                  {transactionSteps.map((item) => (
-                    <div key={item.step} className="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center border-2 border-blue-200 min-h-[260px] flex flex-col">
-                      <div className="text-4xl mb-4">{item.icon}</div>
-                      <div className="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold shadow-md">
-                        {item.step}
-                      </div>
-                      <h3 className="text-lg font-bold text-navy-700 mb-4 whitespace-nowrap">{item.title}</h3>
-                      <div className="space-y-2 text-sm text-gray-600 leading-relaxed text-left">
-                        {splitStepDetails(item.desc).map((detail) => (
-                          <div key={detail} className="flex items-start gap-2">
-                            <span className="mt-1 block h-1.5 w-1.5 rounded-full bg-blue-400"></span>
-                            <span>{detail}</span>
+        <section className="relative section-padding">
+          <div className="container-custom relative z-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center">日本房产买卖交易流程</h2>
+            
+            {/* 桌面端：横向一排布局，确保整行显示 */}
+            <div className="hidden lg:flex items-center justify-center pb-8 w-full overflow-hidden">
+              <div className="flex items-center flex-nowrap w-full" style={{ maxWidth: 'calc(100vw - 4rem)', gap: '-2px' }}>
+                {transactionSteps.map((item) => (
+                  <div key={item.step} className="flex-shrink-0" style={{ width: 'calc((100% - 0px) / 8)', marginRight: '-2px' }}>
+                    {/* 步骤卡片 */}
+                    <div className="relative group h-full">
+                      {/* 钝角箭头背景 - 更高设计，紧密排列 */}
+                      <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-6 py-16 h-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-visible"
+                        style={{
+                          clipPath: 'polygon(0 0, calc(100% - 32px) 0, 100% 50%, calc(100% - 32px) 100%, 0 100%, 32px 50%)',
+                          width: '100%',
+                        }}>
+                        <div className="flex flex-col items-center text-center h-full justify-center relative">
+                          {/* 步骤数字 - 居中在图标上方，大幅向上移动，不遮挡图标 */}
+                          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
+                              <span className="text-blue-700 font-extrabold text-lg">{item.step}</span>
+                            </div>
                           </div>
-                        ))}
+                          {/* 图标 */}
+                          <div className="text-5xl mb-2 mt-8">{item.icon}</div>
+                          {/* 标题 */}
+                          <h3 className="text-base font-bold leading-tight px-2 mt-2">{item.title}</h3>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div className="lg:hidden bg-white rounded-3xl p-6 border-2 border-blue-100 shadow-lg">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {transactionSteps.map((item) => (
-                    <div key={item.step} className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-5 shadow-md text-center border-2 border-blue-200">
-                      <div className="text-3xl mb-3">{item.icon}</div>
-                      <div className="w-10 h-10 bg-blue-600 text白 rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold">
-                        {item.step}
-                      </div>
-                      <h3 className="text-base font-bold text-navy-700 mb-3 whitespace-nowrap">{item.title}</h3>
-                      <div className="space-y-2 text-sm text-gray-600 leading-relaxed text-left">
-                        {splitStepDetails(item.desc).map((detail) => (
-                          <div key={detail} className="flex items-start gap-2">
-                            <span className="mt-1 block h-1 w-1 rounded-full bg-blue-400"></span>
-                            <span>{detail}</span>
+            {/* 移动端：垂直排列布局 */}
+            <div className="lg:hidden pb-4">
+              <div className="flex flex-col items-center gap-3">
+                {transactionSteps.map((item) => (
+                  <div key={item.step} className="w-full max-w-sm">
+                    {/* 步骤卡片 */}
+                    <div className="relative group">
+                      <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-6 py-10 w-full shadow-lg overflow-visible pt-5"
+                        style={{
+                          clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%)',
+                        }}>
+                        <div className="flex flex-col items-center text-center relative">
+                          {/* 步骤数字 - 居中在图标上方，大幅向上移动，不遮挡图标 */}
+                          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                            <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
+                              <span className="text-blue-700 font-extrabold text-base">{item.step}</span>
+                            </div>
                           </div>
-                        ))}
+                          {/* 图标 */}
+                          <div className="text-4xl mb-3 mt-8">{item.icon}</div>
+                          {/* 标题 */}
+                          <h3 className="text-base font-bold leading-tight mt-2">{item.title}</h3>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
         {/* 交易费用一览 */}
-        <section className="section-padding">
-          <div className="container-custom">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">交易费用一览</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto bg-white rounded-2xl p-6 md:p-8 border-2 border-gray-200 shadow-lg">
+        <section className="relative section-padding">
+          
+          <div className="container-custom relative z-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">交易费用一览</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border-2 border-gray-200 shadow-lg">
               {/* 买房费用 */}
               <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 shadow-md">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-white" />
+                    <Building2 className="w-6 h-6 text-navy-900" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-navy-700">买房费用</h3>
                 </div>
@@ -528,7 +603,7 @@ export default function MaiMaiPage() {
                         <p className="text-base md:text-lg font-semibold text-gray-800">{fee.item}</p>
                         <p className="text-sm md:text-base text-gray-500 mt-1">{fee.note}</p>
                       </div>
-                      <p className="text-sm md:text-base font-medium text-blue-600 ml-4 text-right whitespace-nowrap">{fee.rate}</p>
+                      <p className="text-sm md:text-base font-medium text-navy-700 ml-4 text-right whitespace-nowrap">{fee.rate}</p>
                     </div>
                   ))}
                 </div>
@@ -538,7 +613,7 @@ export default function MaiMaiPage() {
               <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-6 border border-green-100 shadow-md">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
+                    <TrendingUp className="w-6 h-6 text-navy-900" />
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-navy-700">卖房费用</h3>
                 </div>
@@ -554,129 +629,175 @@ export default function MaiMaiPage() {
                   ))}
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 房产实用工具 */}
-        <section className="section-padding">
-          <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-navy-700 mb-4">房产实用工具</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                快速计算房贷月供与租金收益，辅助您的投资决策
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* 房贷计算器 */}
-              <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-navy-700">房贷月供计算</h3>
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      贷款金额（日元）
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="例如：50000000"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      年利率（%）
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      defaultValue="2.5"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      贷款年限（年）
-                    </label>
-                    <input
-                      type="number"
-                      defaultValue="35"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-gray-600 mb-1">月供金额</p>
-                    <p className="text-3xl font-bold text-blue-600">
-                      请输入贷款信息进行计算
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* 租金收益计算器 */}
-              <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-green-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-navy-700">租金收益计算</h3>
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      房产价格（日元）
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="例如：50000000"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      年化收益率（%）
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      defaultValue="5.0"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div className="mt-6 space-y-3">
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-sm text-gray-600 mb-1">年租金收入</p>
-                      <p className="text-3xl font-bold text-green-600">
-                        请输入房产信息进行计算
-                      </p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-1">月租金收入</p>
-                      <p className="text-2xl font-bold text-gray-700">
-                        请输入房产信息进行计算
-                      </p>
-                    </div>
-                  </div>
-                </div>
+              {/* 提示文字 */}
+              <div className="lg:col-span-2">
+                <p className="text-sm md:text-base text-gray-600 text-left mt-4">
+                  ※上述金额仅供参考。具体交易金额根据实际情况会有所变动。
+                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* 近期交易房产 & 年度交易额段落已移除 */}
-      </div>
+        
+        {/* 右侧工具菜单 */}
+        <>
+          {/* 触发按钮 */}
+          <button
+            onClick={() => setIsToolsOpen(!isToolsOpen)}
+            className="fixed right-0 top-1/2 -translate-y-1/2 z-50 bg-navy-700 hover:bg-navy-800 text-white px-4 py-6 rounded-l-2xl shadow-2xl transition-all duration-300 flex items-center gap-2 group"
+            aria-label="打开工具菜单"
+          >
+            <Calculator className="w-6 h-6" />
+            <span className="hidden md:block text-sm font-medium whitespace-nowrap">实用工具</span>
+          </button>
+          
+          {/* 滑出菜单 */}
+          <div
+            className={`fixed right-0 top-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-[60] transition-transform duration-300 ease-in-out ${
+              isToolsOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            <div className="h-full overflow-y-auto">
+              {/* 菜单头部 */}
+              <div className="sticky top-0 bg-navy-700 text-white p-6 flex items-center justify-between z-10">
+                <div>
+                  <h2 className="text-2xl font-bold mb-1">房产实用工具</h2>
+                  <p className="text-sm text-gray-200">快速计算房贷月供与租金收益</p>
+                </div>
+                <button
+                  onClick={() => setIsToolsOpen(false)}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  aria-label="关闭菜单"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              {/* 工具内容 */}
+              <div className="p-6 space-y-6">
+                {/* 房贷计算器 */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-navy-700" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">房贷月供计算</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        贷款金额（日元）
+                      </label>
+                      <input
+                        type="number"
+                        value={loanAmount}
+                        onChange={(e) => setLoanAmount(e.target.value)}
+                        placeholder="例如：50000000"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        年利率（%）
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={interestRate}
+                        onChange={(e) => setInterestRate(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        贷款年限（年）
+                      </label>
+                      <input
+                        type="number"
+                        value={loanYears}
+                        onChange={(e) => setLoanYears(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm text-gray-700 mb-1">月供金额</p>
+                      <p className="text-2xl font-bold text-navy-700">
+                        {monthlyPayment}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 租金收益计算器 */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-green-600" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">租金收益计算</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        房产价格（日元）
+                      </label>
+                      <input
+                        type="number"
+                        value={propertyPrice}
+                        onChange={(e) => setPropertyPrice(e.target.value)}
+                        placeholder="例如：50000000"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        年化收益率（%）
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={yieldRate}
+                        onChange={(e) => setYieldRate(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div className="mt-6 space-y-3">
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-sm text-gray-700 mb-1">年租金收入</p>
+                        <p className="text-2xl font-bold text-green-600">
+                          {annualRent}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-700 mb-1">月租金收入</p>
+                        <p className="text-xl font-bold text-gray-700">
+                          {monthlyRent}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* 遮罩层 */}
+          {isToolsOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 z-[55] transition-opacity duration-300"
+              onClick={() => setIsToolsOpen(false)}
+            />
+          )}
+        </>
     </PageLayout>
   )
 }

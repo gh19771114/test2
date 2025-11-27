@@ -136,17 +136,7 @@ const Works = () => {
 
   return (
     <section id="works" className="relative section-padding scroll-mt-32">
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="案例展示背景"
-          fill
-          className="object-cover"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-navy-900/80 backdrop-blur-sm" />
-      </div>
-      <div className="container-custom relative z-10">
+      <div className="container-custom">
         <motion.div
           ref={ref}
           initial="hidden"
@@ -157,13 +147,13 @@ const Works = () => {
           <motion.a
             href="/cases"
             variants={itemVariants}
-            className="text-3xl md:text-4xl font-bold text-navy-700 mb-4 hover:text-navy-600 transition-colors cursor-pointer inline-block"
+            className="text-3xl md:text-4xl font-bold text-white mb-4 hover:text-gray-200 transition-colors cursor-pointer inline-block"
           >
             案例展示
           </motion.a>
           <motion.p
             variants={itemVariants}
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-200 max-w-2xl mx-auto"
           >
             以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务。
           </motion.p>
@@ -180,7 +170,7 @@ const Works = () => {
             <motion.div
               key={work.id}
               variants={itemVariants}
-              className="group relative bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
             >
               <Link href={`/cases/${work.id}`}>
                 <div className="relative overflow-hidden">

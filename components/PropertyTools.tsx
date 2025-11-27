@@ -40,17 +40,7 @@ const PropertyTools = () => {
 
   return (
     <section className="relative section-padding">
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="工具背景"
-          fill
-          className="object-cover"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-navy-900/80 backdrop-blur-sm" />
-      </div>
-      <div className="container-custom relative z-10">
+      <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-navy-700 mb-4">房产实用工具</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
