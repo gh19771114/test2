@@ -182,10 +182,6 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
     },
   }
 
-  // 中心点（容器正中心）- 使用固定宽度确保一致性
-  const centerX = containerWidth / 2
-  const centerY = containerHeight / 2
-  
   return (
     <div 
       style={{ 
