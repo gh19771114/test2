@@ -162,6 +162,7 @@ const Services = () => {
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
           className="flex flex-col items-center gap-12 relative"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}
         >
           {/* 业务说明列表 - 从饼图后方滑出 */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 10 }}>
@@ -252,7 +253,7 @@ const Services = () => {
             className="relative"
             style={{ zIndex: 20 }}
           >
-            <svg width="800" height="800" viewBox="0 0 800 800" className="transform rotate-0 drop-shadow-2xl">
+            <svg width="800" height="800" viewBox="0 0 800 800" className="transform rotate-0 drop-shadow-2xl" style={{ willChange: 'transform' }}>
               {/* 圆心优化 - 添加白色圆形遮罩，与内圆半径一致 */}
               <circle cx="400" cy="400" r="70" fill="white" opacity="0.98" />
               

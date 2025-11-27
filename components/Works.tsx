@@ -171,6 +171,7 @@ const Works = () => {
               key={work.id}
               variants={itemVariants}
               className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              style={{ contentVisibility: index > 5 ? 'auto' : undefined }}
             >
               <Link href={`/cases/${work.id}`}>
                 <div className="relative overflow-hidden">
@@ -181,7 +182,9 @@ const Works = () => {
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      priority={false}
+                      priority={index < 3} // 只对前3张图片使用优先级加载
+                      loading={index < 3 ? undefined : "lazy"} // 后面的图片懒加载
+                      quality={75} // 降低图片质量以加快加载
                     />
                   </div>
                   <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
