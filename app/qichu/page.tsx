@@ -123,7 +123,7 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
   
   // 优化角度分布：9个合作伙伴，均匀分布在360度
   // 调整角度避免遮挡：日本大型保险公司（索引8，320度）和日本大型金融机构（索引0，0度）在圆形上接近
-  const angleOffsets = []
+  const angleOffsets: number[] = []
   for (let i = 0; i < partners.length; i++) {
     let angle = (i * 360) / partners.length
     // 调整日本大型保险公司的角度，让它离顶部更远，避免与日本大型金融机构重叠
