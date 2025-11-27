@@ -186,19 +186,19 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
     <div 
       style={{ 
         width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         minHeight: '1200px',
         position: 'relative'
       }}
     >
       <div
         style={{
-          position: 'relative',
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
           width: `${containerWidth}px`,
           height: `${containerHeight}px`,
-          marginLeft: '-28px' // 居中后再向左偏移28px
+          marginLeft: `${-containerWidth / 2 - 28}px`, // 使用固定的 marginLeft 计算，确保跨平台一致性
+          marginTop: `${-containerHeight / 2}px`
         }}
       >
         <motion.div
