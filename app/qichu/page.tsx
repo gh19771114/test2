@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Building2, Users, Briefcase, Landmark, Globe, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 
 const relatedServices = [
   {
@@ -99,22 +99,8 @@ type PartnerIcon = typeof Building2 | typeof Users | typeof Briefcase | typeof G
 function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], partnerIcons: PartnerIcon[] }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const [containerWidth, setContainerWidth] = useState(1800)
-  
-  useEffect(() => {
-    const updateWidth = () => {
-      const baseWidth = 1800
-      const minWidth = 1200
-      const maxWidth = Math.min(baseWidth, window.innerWidth - 40)
-      setContainerWidth(Math.max(minWidth, maxWidth))
-    }
-    
-    updateWidth()
-    window.addEventListener('resize', updateWidth)
-    return () => window.removeEventListener('resize', updateWidth)
-  }, [])
-  
-  // 容器高度
+  // 使用固定宽度，确保中心点位置一致
+  const containerWidth = 1800
   const containerHeight = 1200
   // 中心点（容器正中心）
   const centerX = containerWidth / 2
@@ -196,25 +182,40 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
     },
   }
 
-  // 中心点（容器正中心）- 使用动态宽度
+  // 中心点（容器正中心）- 使用固定宽度确保一致性
   const centerX = containerWidth / 2
   const centerY = containerHeight / 2
   
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      variants={containerVariants}
-      className="relative mx-auto"
+    <div 
       style={{ 
-        width: `${containerWidth}px`, 
-        maxWidth: '100%',
-        height: `${containerHeight}px`,
-        transform: 'translateX(-28px)' // 向左偏移固定像素值
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '1200px',
+        position: 'relative'
       }}
-      key={containerWidth} // 当宽度变化时重新渲染
     >
+      <div
+        style={{
+          position: 'relative',
+          width: `${containerWidth}px`,
+          height: `${containerHeight}px`,
+          marginLeft: '-28px' // 居中后再向左偏移28px
+        }}
+      >
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+          style={{ 
+            width: '100%',
+            height: '100%',
+            position: 'relative'
+          }}
+        >
         {/* 动画连接线 */}
         <svg 
           className="absolute inset-0 w-full h-full pointer-events-none" 
@@ -361,7 +362,8 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             </motion.div>
           )
         })}
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
@@ -511,10 +513,8 @@ export default function QiChuPage() {
         </div>
         
         {/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方，移出container-custom确保能真正居中 */}
-        <div className="hidden md:block w-full overflow-x-auto" style={{ marginTop: '-80px' }}>
-          <div className="w-full flex justify-center items-center min-h-[1200px]">
-            <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
-          </div>
+        <div className="hidden md:block w-full" style={{ marginTop: '-80px' }}>
+          <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
         </div>
       </section>
 
