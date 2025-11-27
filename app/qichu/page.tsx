@@ -184,19 +184,24 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
   }
 
   return (
-    <div className="w-full flex items-center justify-center" style={{ minHeight: `${containerHeight}px`, padding: '0' }}>
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
-        variants={containerVariants}
-        className="relative"
-        style={{ 
-          width: `${containerWidth}px`, 
-          height: `${containerHeight}px`,
-          transform: 'translateX(-1.8em)' // 向左移动
-        }}
-      >
+    <div className="w-full flex items-center justify-center overflow-x-auto" style={{ minHeight: `${containerHeight}px`, padding: '0' }}>
+      <div className="relative" style={{ 
+        width: `${containerWidth}px`, 
+        maxWidth: '100vw',
+        margin: '0 auto',
+        transform: 'translateX(-28px)' // 向左移动固定像素值，确保在所有设备上一致
+      }}>
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={containerVariants}
+          className="relative"
+          style={{ 
+            width: `${containerWidth}px`, 
+            height: `${containerHeight}px`
+          }}
+        >
         {/* 动画连接线 */}
         <svg 
           className="absolute inset-0 w-full h-full pointer-events-none" 
@@ -343,7 +348,8 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             </motion.div>
           )
         })}
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
