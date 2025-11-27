@@ -84,8 +84,19 @@ const partners = [
 
 const partnerIcons = [Building2, Users, Briefcase, Globe, Landmark]
 
+// 定义类型
+type Partner = {
+  name: string
+  desc: string
+  icon: string | null
+  wide?: boolean
+  link?: string
+}
+
+type PartnerIcon = typeof Building2 | typeof Users | typeof Briefcase | typeof Globe | typeof Landmark
+
 // 合作伙伴网络组件（带动画）
-function PartnersNetwork({ partners, partnerIcons }: { partners: typeof partners, partnerIcons: typeof partnerIcons }) {
+function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], partnerIcons: PartnerIcon[] }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
