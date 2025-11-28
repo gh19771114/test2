@@ -26,8 +26,8 @@ const Insights = () => {
             viewport={{ once: true, amount: 0.4 }}
             className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-navy-700">最新资讯</h3>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2 md:gap-0">
+              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">最新资讯</h3>
               <span className="text-sm text-gray-500">实时关注日本房产动态</span>
             </div>
             <div className="relative overflow-y-auto rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm flex-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" style={{ maxHeight: '400px' }}>
@@ -56,8 +56,8 @@ const Insights = () => {
             viewport={{ once: true, amount: 0.4 }}
             className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-navy-700">日本房产投资百科</h3>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2 md:gap-0">
+              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">日本房产投资百科</h3>
               <span className="text-sm text-gray-500">系统解读投资要点</span>
             </div>
             <div className="relative overflow-y-auto rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm flex-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" style={{ maxHeight: '400px' }}>

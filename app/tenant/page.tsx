@@ -8,18 +8,19 @@ import { Phone, CreditCard, FileText, Shield, Wrench } from 'lucide-react'
 export default function TenantPage() {
   return (
     <PageLayout>
-      <section className="relative pt-28 pb-16 bg-gradient-to-br from-orange-800 via-orange-700 to-navy-800 overflow-hidden">
+      <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
             alt="租客专用"
             fill
             className="object-cover opacity-30"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-900/80 to-navy-900/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom">
+          <p className="text-sm text-blue-300 font-semibold mb-4">Tenant Support</p>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">租客专用</h1>
           <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
             欢迎使用我们的租客服务。如果您是我们的租客，可以通过以下方式联系我们。
@@ -28,6 +29,7 @@ export default function TenantPage() {
       </section>
         
         <section className="relative pt-16 pb-16">
+          <div className="absolute inset-0 bg-white z-[5]"></div>
           
           <div className="container-custom relative z-10">
             <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-12">

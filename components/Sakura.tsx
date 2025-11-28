@@ -17,21 +17,29 @@ type Petal = {
 }
 
 const Sakura = ({ count = 20 }: { count?: number }) => {
+  // 使用固定的种子来生成随机数，确保 SSR 和客户端一致
   const petals = useMemo<Petal[]>(() => {
     const arr: Petal[] = []
+    // 使用固定的种子生成器
+    let seed = 12345
+    const seededRandom = () => {
+      seed = (seed * 9301 + 49297) % 233280
+      return seed / 233280
+    }
+    
     for (let i = 0; i < count; i++) {
       arr.push({
-        left: Math.random() * 100,              // viewport width %
-        delay: Math.random() * 5,                // s
-        duration: 8 + Math.random() * 10,       // 8-18s 更自然
-        size: 10 + Math.random() * 16,          // 10-26px
-        drift: (Math.random() * 50) - 25,       // -25 ~ 25 px 水平漂移
-        rotate: Math.random() * 360,
-        top: 5 + Math.random() * 25,            // 初始顶部偏移（vh）
-        swayFactor: 0.7 + Math.random() * 0.8,  // 0.7x ~ 1.5x 摆动速度
-        rotateFactor: 0.8 + Math.random() * 1.2, // 0.8x ~ 2.0x 旋转速度
-        swayAmp: (Math.random() * 28 + 12) * (Math.random() > 0.5 ? 1 : -1), // 左右最大位移
-        depth: (Math.random() * 120) - 60,
+        left: seededRandom() * 100,              // viewport width %
+        delay: seededRandom() * 5,                // s
+        duration: 8 + seededRandom() * 10,       // 8-18s 更自然
+        size: 10 + seededRandom() * 16,          // 10-26px
+        drift: (seededRandom() * 50) - 25,       // -25 ~ 25 px 水平漂移
+        rotate: seededRandom() * 360,
+        top: 5 + seededRandom() * 25,            // 初始顶部偏移（vh）
+        swayFactor: 0.7 + seededRandom() * 0.8,  // 0.7x ~ 1.5x 摆动速度
+        rotateFactor: 0.8 + seededRandom() * 1.2, // 0.8x ~ 2.0x 旋转速度
+        swayAmp: (seededRandom() * 28 + 12) * (seededRandom() > 0.5 ? 1 : -1), // 左右最大位移
+        depth: (seededRandom() * 120) - 60,
       })
     }
     return arr

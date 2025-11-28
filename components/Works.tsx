@@ -164,7 +164,7 @@ const Works = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {works.map((work, index) => (
             <motion.div
@@ -221,6 +221,70 @@ const Works = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* 移动端：横向滑动形式 */}
+        <div className="md:hidden overflow-x-auto pb-4 scrollbar-hide" style={{ 
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch'
+        }}>
+          <div className="flex gap-4 px-4" style={{ minWidth: 'max-content' }}>
+            {works.map((work, index) => (
+              <motion.div
+                key={work.id}
+                variants={itemVariants}
+                className="flex-shrink-0 w-[320px]"
+                style={{ scrollSnapAlign: 'center' }}
+              >
+                <div className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
+                  <Link href={`/cases/${work.id}`}>
+                    <div className="relative overflow-hidden">
+                      <div className="relative w-full h-48">
+                        <Image
+                          src={work.image}
+                          alt={work.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          sizes="320px"
+                          loading={index < 3 ? undefined : "lazy"}
+                          quality={75}
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <div className="flex space-x-4">
+                          <div className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-colors duration-200">
+                            <ExternalLink size={20} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {work.category}
+                        </span>
+                      </div>
+                      <div className="absolute top-4 right-4">
+                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          {work.type}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                        <span>{work.date}</span>
+                      </div>
+                      <h3 className="text-xl font-semibold text-navy-700 mb-2 group-hover:text-navy-600 transition-colors duration-200 line-clamp-2">
+                        {work.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                        {work.description}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
         <motion.div
           ref={ref}

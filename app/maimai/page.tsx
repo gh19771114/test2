@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import { Building2, TrendingUp, Award, FileText, ArrowRight, CheckCircle2, X, Calculator } from 'lucide-react'
+import { Building2, TrendingUp, Award, FileText, ArrowRight, ArrowDown, CheckCircle2, X, Calculator } from 'lucide-react'
 
 const mainCurrencyOptions = [
   { code: 'JPY', label: '日元' },
@@ -258,6 +258,20 @@ export default function MaiMaiPage() {
   const [annualRent, setAnnualRent] = useState<string>('')
   const [monthlyRent, setMonthlyRent] = useState<string>('')
   
+  // 汇率转换工具状态
+  const [fromCurrency, setFromCurrency] = useState<string>('JPY')
+  const [toCurrency, setToCurrency] = useState<string>('USD')
+  const [fromAmount, setFromAmount] = useState<string>('')
+  const [toAmount, setToAmount] = useState<string>('')
+  const [isConvertingFrom, setIsConvertingFrom] = useState<boolean>(true)
+  
+  // 汇率选择菜单ref和状态（用于iPad fixed定位）
+  const currencyMenuRef = useRef<HTMLDivElement>(null)
+  const currencySectionRef = useRef<HTMLElement>(null)
+  const propertiesWithFeeRef = useRef<HTMLDivElement>(null)
+  const transactionStepsRef = useRef<HTMLElement>(null)
+  const [isCurrencyMenuFixed, setIsCurrencyMenuFixed] = useState<boolean>(false)
+  
   // 计算房贷月供
   useEffect(() => {
     if (loanAmount && interestRate && loanYears) {
@@ -275,6 +289,108 @@ export default function MaiMaiPage() {
       setMonthlyPayment('请输入贷款信息进行计算')
     }
   }, [loanAmount, interestRate, loanYears])
+  
+  // iPad Safari 汇率选择菜单置顶处理 - 只在需中介费房源部分为止置顶
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    let scrollHandler: (() => void) | null = null
+    let resizeHandler: (() => void) | null = null
+    
+    const checkAndSetFixed = () => {
+      // 检测是否为iPad（包括横屏和竖屏）
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const isIPad = (width >= 768 && width <= 1024) || 
+                     (height >= 768 && height <= 1024 && width >= 768)
+      
+      if (!isIPad) {
+        // 其他设备使用sticky定位
+        setIsCurrencyMenuFixed(false)
+        if (scrollHandler) {
+          window.removeEventListener('scroll', scrollHandler)
+          scrollHandler = null
+        }
+        return
+      }
+      
+      // iPad上需要根据滚动位置决定是否使用fixed定位
+      scrollHandler = () => {
+        if (!currencyMenuRef.current || !transactionStepsRef.current || !currencySectionRef.current) return
+        
+        const menu = currencyMenuRef.current
+        const transactionStepsSection = transactionStepsRef.current
+        const section = currencySectionRef.current
+        const headerHeight = width >= 1024 ? 80 : 64
+        
+        // 获取日本房产买卖交易流程部分的顶部位置（置顶结束位置）
+        const transactionStepsTop = transactionStepsSection.getBoundingClientRect().top + window.scrollY
+        const currentScroll = window.scrollY
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY
+        
+        // 当section顶部滚动到header下方，且还没滚动到交易流程部分时，使用fixed定位
+        // 置顶区域：从section开始到交易流程部分之前
+        const shouldBeFixed = currentScroll >= sectionTop - headerHeight && 
+                              currentScroll < transactionStepsTop - headerHeight - menu.offsetHeight
+        
+        // 使用useState的更新函数形式，避免依赖prev状态
+        setIsCurrencyMenuFixed((prev) => {
+          if (prev !== shouldBeFixed) {
+            // 避免跳动：在切换前记录菜单的视觉位置
+            if (shouldBeFixed && !prev) {
+              // 从sticky切换到fixed时，记录当前sticky位置
+              const menuRect = menu.getBoundingClientRect()
+              const stickyTop = menuRect.top
+              const targetTop = headerHeight
+              
+              // 如果位置已经正确，直接切换，不需要补偿
+              if (Math.abs(stickyTop - targetTop) < 1) {
+                return shouldBeFixed
+              }
+              
+              // 需要补偿位置差时，先设置fixed状态
+              // 然后在下一帧用margin-top补偿，再移除margin
+              requestAnimationFrame(() => {
+                if (currencyMenuRef.current) {
+                  const offset = stickyTop - targetTop
+                  currencyMenuRef.current.style.marginTop = `${-offset}px`
+                  currencyMenuRef.current.style.transition = 'none'
+                  // 立即移除margin，让fixed定位生效
+                  requestAnimationFrame(() => {
+                    if (currencyMenuRef.current) {
+                      currencyMenuRef.current.style.marginTop = '0'
+                      currencyMenuRef.current.style.transition = ''
+                    }
+                  })
+                }
+              })
+            }
+            return shouldBeFixed
+          }
+          return prev
+        })
+      }
+      
+      scrollHandler()
+      window.addEventListener('scroll', scrollHandler, { passive: true })
+    }
+    
+    resizeHandler = () => {
+      checkAndSetFixed()
+    }
+    
+    checkAndSetFixed()
+    window.addEventListener('resize', resizeHandler)
+    
+    return () => {
+      if (scrollHandler) {
+        window.removeEventListener('scroll', scrollHandler)
+      }
+      if (resizeHandler) {
+        window.removeEventListener('resize', resizeHandler)
+      }
+    }
+  }, [])
   
   // 计算租金收益
   useEffect(() => {
@@ -296,6 +412,35 @@ export default function MaiMaiPage() {
       setMonthlyRent('请输入房产信息进行计算')
     }
   }, [propertyPrice, yieldRate])
+  
+  // 汇率转换计算
+  useEffect(() => {
+    if (isConvertingFrom && fromAmount) {
+      const amount = parseFloat(fromAmount)
+      if (!isNaN(amount) && amount >= 0 && rates[fromCurrency] && rates[toCurrency]) {
+        // 先转换为日元，再转换为目标货币
+        const yenAmount = fromCurrency === 'JPY' ? amount : amount / rates[fromCurrency]
+        const converted = toCurrency === 'JPY' ? yenAmount : yenAmount * rates[toCurrency]
+        setToAmount(converted.toFixed(2))
+      } else if (!fromAmount) {
+        setToAmount('')
+      }
+    }
+  }, [fromAmount, fromCurrency, toCurrency, rates, isConvertingFrom])
+  
+  useEffect(() => {
+    if (!isConvertingFrom && toAmount) {
+      const amount = parseFloat(toAmount)
+      if (!isNaN(amount) && amount >= 0 && rates[fromCurrency] && rates[toCurrency]) {
+        // 先转换为日元，再转换为源货币
+        const yenAmount = toCurrency === 'JPY' ? amount : amount / rates[toCurrency]
+        const converted = fromCurrency === 'JPY' ? yenAmount : yenAmount * rates[fromCurrency]
+        setFromAmount(converted.toFixed(2))
+      } else if (!toAmount) {
+        setFromAmount('')
+      }
+    }
+  }, [toAmount, fromCurrency, toCurrency, rates, isConvertingFrom])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -336,6 +481,7 @@ export default function MaiMaiPage() {
 
     loadRates()
   }, [])
+  
 
   const isOtherCurrencySelected = useMemo(
     () => otherCurrencyOptions.some((currency) => currency.code === selectedCurrency),
@@ -366,7 +512,7 @@ export default function MaiMaiPage() {
         </div>
         <div className="relative z-10 container-custom">
           <p className="text-sm text-emerald-300 font-semibold mb-4">Buying & Selling</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">日本房产买卖中介服务</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 whitespace-nowrap">日本房产买卖中介服务</h1>
           <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
             为个人及机构投资者提供从项目筛选、尽职调查、融资方案到交割与交付的全流程服务，结合本地资源网络和法律团队，为您争取更优价格与更低风险。
           </p>
@@ -374,49 +520,63 @@ export default function MaiMaiPage() {
       </section>
 
         {/* 正在销售的房产 - 免中介费 */}
-        <section className="relative section-padding">
+        <section ref={currencySectionRef} className="relative section-padding">
           
           <div className="container-custom relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-white">销售中房产</h2>
-              <div className="flex flex-col md:flex-row md:items-center md:gap-4 gap-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  {mainCurrencyOptions.map((option) => (
-                    <button
-                      key={option.code}
-                      onClick={() => setSelectedCurrency(option.code)}
-                      className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
-                        selectedCurrency === option.code
-                          ? 'bg-navy-700 text-white border-navy-700 shadow-lg'
-                          : 'border-gray-200 text-white hover:border-gray-300 hover:text-gray-100'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-white">其他</span>
-                    <select
-                      value={isOtherCurrencySelected ? selectedCurrency : ''}
-                      onChange={(event) => {
-                        const value = event.target.value
-                        if (value) {
-                          setSelectedCurrency(value)
-                        }
-                      }}
-                      className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500 bg-white"
-                    >
-                      <option value="">请选择</option>
-                      {otherCurrencyOptions.map((option) => (
-                        <option key={option.code} value={option.code}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+            {/* 汇率选择菜单 - 固定置顶（桌面端和移动端都置顶，考虑Header高度） */}
+            {/* iPad Safari 使用 fixed 定位，其他使用 sticky */}
+            <div 
+              ref={currencyMenuRef}
+              className={`currency-sticky top-16 md:top-20 lg:top-20 bg-gradient-to-br from-emerald-800 via-emerald-700 to-navy-800 py-4 mb-6 shadow-lg backdrop-blur-sm transition-none ${
+                isCurrencyMenuFixed ? 'fixed left-0 right-0 z-[60]' : 'sticky -mx-6 px-6 z-50'
+              }`}
+              style={isCurrencyMenuFixed ? {
+                top: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '80px' : '64px',
+                width: '100%',
+              } : {}}
+            >
+              <div className={`flex flex-col md:flex-row md:items-center md:justify-between gap-4 ${isCurrencyMenuFixed ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' : ''}`}>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white whitespace-nowrap">销售中房产</h2>
+                <div className="flex flex-col md:flex-row md:items-center md:gap-4 gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {mainCurrencyOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => setSelectedCurrency(option.code)}
+                        className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                          selectedCurrency === option.code
+                            ? 'bg-navy-700 text-white border-navy-700 shadow-lg'
+                            : 'border-gray-200 text-white hover:border-gray-300 hover:text-gray-100'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-white">其他</span>
+                      <select
+                        value={isOtherCurrencySelected ? selectedCurrency : ''}
+                        onChange={(event) => {
+                          const value = event.target.value
+                          if (value) {
+                            setSelectedCurrency(value)
+                          }
+                        }}
+                        className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy-500 bg-white"
+                        suppressHydrationWarning
+                      >
+                        <option value="">请选择</option>
+                        {otherCurrencyOptions.map((option) => (
+                          <option key={option.code} value={option.code}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div className="text-sm text-gray-200">
-                  {rateError ? rateError : isLoadingRates ? '汇率更新中…' : lastUpdated ? `汇率更新时间：${lastUpdated}` : '汇率以日元为基准实时换算'}
+                  <div className="text-sm text-gray-200">
+                    {rateError ? rateError : isLoadingRates ? '汇率更新中…' : lastUpdated ? `汇率更新时间：${lastUpdated}` : '汇率以日元为基准实时换算'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -466,7 +626,7 @@ export default function MaiMaiPage() {
             </div>
 
             {/* 需中介费房源 */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6">
+            <div ref={propertiesWithFeeRef} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6">
               <h3 className="text-xl font-semibold text-orange-600 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 需中介费房源
@@ -514,9 +674,9 @@ export default function MaiMaiPage() {
         </section>
 
         {/* 日本房产买卖交易流程 */}
-        <section className="relative section-padding">
+        <section ref={transactionStepsRef} className="relative section-padding">
           <div className="container-custom relative z-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center">日本房产买卖交易流程</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-12 text-center whitespace-nowrap">日本房产买卖交易流程</h2>
             
             {/* 桌面端：横向一排布局，确保整行显示 */}
             <div className="hidden lg:flex items-center justify-center pb-8 w-full overflow-hidden">
@@ -541,7 +701,7 @@ export default function MaiMaiPage() {
                           {/* 图标 */}
                           <div className="text-5xl mb-2 mt-8">{item.icon}</div>
                           {/* 标题 */}
-                          <h3 className="text-base font-bold leading-tight px-2 mt-2">{item.title}</h3>
+                          <h3 className="text-sm md:text-base font-bold leading-tight px-2 mt-2 whitespace-nowrap">{item.title}</h3>
                         </div>
                       </div>
                     </div>
@@ -550,28 +710,38 @@ export default function MaiMaiPage() {
               </div>
             </div>
 
-            {/* 移动端：垂直排列布局 */}
+            {/* 移动端：垂直排列布局，箭头向下（桌面端箭头顺时针旋转90度） */}
             <div className="lg:hidden pb-4">
-              <div className="flex flex-col items-center gap-3">
-                {transactionSteps.map((item) => (
+              <div className="flex flex-col items-center gap-0">
+                {transactionSteps.map((item, index) => (
                   <div key={item.step} className="w-full max-w-sm">
-                    {/* 步骤卡片 */}
+                    {/* 步骤卡片 - 桌面端箭头顺时针旋转90度：从右箭头变成下箭头 */}
                     <div className="relative group">
-                      <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-6 py-10 w-full shadow-lg overflow-visible pt-5"
+                      <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-6 py-16 w-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-visible"
                         style={{
-                          clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%)',
+                          clipPath: index < transactionSteps.length - 1 
+                            // 桌面端：polygon(0 0, calc(100% - 32px) 0, 100% 50%, calc(100% - 32px) 100%, 0 100%, 32px 50%)
+                            // 顺时针旋转90度：原右箭头(→)变成下箭头(↓)
+                            // 顶部凹进：50% 32px（对应原左边凹进 32px 50%）
+                            // 底部凸出：50% 100%（对应原右边凸出 100% 50%）
+                            ? 'polygon(50% 32px, 0 0, 0 calc(100% - 32px), 50% 100%, 100% calc(100% - 32px), 100% 0)'
+                            // 最后一个：没有底部箭头，但保留顶部凹进（接收上一个的底部凸出）
+                            // 从左上角开始，顺时针：0 0 -> 50% 32px（凹进点）-> 100% 0 -> 100% 100% -> 0 100% -> 回到起点
+                            : 'polygon(0 0, 50% 32px, 100% 0, 100% 100%, 0 100%)',
                         }}>
-                        <div className="flex flex-col items-center text-center relative">
-                          {/* 步骤数字 - 居中在图标上方，大幅向上移动，不遮挡图标 */}
+                        <div className="flex flex-col items-center text-center h-full justify-center relative">
+                          {/* 步骤数字 - 居中在图标上方 */}
                           <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                             <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
                               <span className="text-blue-700 font-extrabold text-base">{item.step}</span>
                             </div>
                           </div>
-                          {/* 图标 */}
-                          <div className="text-4xl mb-3 mt-8">{item.icon}</div>
+                          {/* 图标 - 使用圆形背景，避免被clipPath裁剪 */}
+                          <div className="text-4xl mb-2 mt-8 w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">{item.icon}</div>
                           {/* 标题 */}
-                          <h3 className="text-base font-bold leading-tight mt-2">{item.title}</h3>
+                          <h3 className="text-sm md:text-base font-bold leading-tight px-2 mt-2 whitespace-nowrap">{item.title}</h3>
+                          {/* 描述 */}
+                          <p className="text-xs md:text-sm text-blue-100 mt-2 px-2 line-clamp-2">{item.desc}</p>
                         </div>
                       </div>
                     </div>
@@ -586,7 +756,7 @@ export default function MaiMaiPage() {
         <section className="relative section-padding">
           
           <div className="container-custom relative z-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">交易费用一览</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-8 text-center whitespace-nowrap">交易费用一览</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 border-2 border-gray-200 shadow-lg">
               {/* 买房费用 */}
               <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 shadow-md">
@@ -646,7 +816,7 @@ export default function MaiMaiPage() {
           {/* 触发按钮 */}
           <button
             onClick={() => setIsToolsOpen(!isToolsOpen)}
-            className="fixed right-0 top-1/2 -translate-y-1/2 z-50 bg-navy-700 hover:bg-navy-800 text-white px-4 py-6 rounded-l-2xl shadow-2xl transition-all duration-300 flex items-center gap-2 group"
+            className="fixed right-0 top-1/2 -translate-y-1/2 z-50 bg-navy-700 hover:bg-navy-800 text-white px-4 py-6 rounded-l-2xl shadow-2xl transition-all duration-300 flex items-center gap-2 group tools-button-landscape"
             aria-label="打开工具菜单"
           >
             <Calculator className="w-6 h-6" />
@@ -663,7 +833,7 @@ export default function MaiMaiPage() {
               {/* 菜单头部 */}
               <div className="sticky top-0 bg-navy-700 text-white p-6 flex items-center justify-between z-10">
                 <div>
-                  <h2 className="text-2xl font-bold mb-1">房产实用工具</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1 whitespace-nowrap">房产实用工具</h2>
                   <p className="text-sm text-gray-200">快速计算房贷月供与租金收益</p>
                 </div>
                 <button
@@ -697,6 +867,7 @@ export default function MaiMaiPage() {
                         onChange={(e) => setLoanAmount(e.target.value)}
                         placeholder="例如：50000000"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        suppressHydrationWarning
                       />
                     </div>
 
@@ -710,6 +881,7 @@ export default function MaiMaiPage() {
                         value={interestRate}
                         onChange={(e) => setInterestRate(e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        suppressHydrationWarning
                       />
                     </div>
 
@@ -722,6 +894,7 @@ export default function MaiMaiPage() {
                         value={loanYears}
                         onChange={(e) => setLoanYears(e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        suppressHydrationWarning
                       />
                     </div>
 
@@ -754,6 +927,7 @@ export default function MaiMaiPage() {
                         onChange={(e) => setPropertyPrice(e.target.value)}
                         placeholder="例如：50000000"
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        suppressHydrationWarning
                       />
                     </div>
 
@@ -767,6 +941,7 @@ export default function MaiMaiPage() {
                         value={yieldRate}
                         onChange={(e) => setYieldRate(e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        suppressHydrationWarning
                       />
                     </div>
 
@@ -786,6 +961,146 @@ export default function MaiMaiPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* 汇率转换工具 */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800">汇率转换</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {/* 上方输入框 - 源货币 */}
+                    <div>
+                      <div className="flex gap-2">
+                        <select
+                          value={fromCurrency}
+                          onChange={(e) => {
+                            setFromCurrency(e.target.value)
+                            setIsConvertingFrom(true)
+                          }}
+                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                          suppressHydrationWarning
+                        >
+                          {[...mainCurrencyOptions, ...otherCurrencyOptions].map((option) => (
+                            <option key={option.code} value={option.code}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          value={fromAmount}
+                          onChange={(e) => {
+                            setFromAmount(e.target.value)
+                            setIsConvertingFrom(true)
+                          }}
+                          placeholder="输入金额"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          suppressHydrationWarning
+                        />
+                      </div>
+                    </div>
+
+                    {/* 中间交换按钮 */}
+                    <div className="flex justify-center">
+                      <button
+                        onClick={() => {
+                          const tempCurrency = fromCurrency
+                          const tempAmount = fromAmount
+                          setFromCurrency(toCurrency)
+                          setToCurrency(tempCurrency)
+                          setFromAmount(toAmount)
+                          setToAmount(tempAmount)
+                          setIsConvertingFrom(true)
+                        }}
+                        className="p-2 bg-purple-100 hover:bg-purple-200 rounded-full transition-colors"
+                        aria-label="交换货币"
+                      >
+                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* 下方输入框 - 目标货币 */}
+                    <div>
+                      <div className="flex gap-2">
+                        <select
+                          value={toCurrency}
+                          onChange={(e) => {
+                            setToCurrency(e.target.value)
+                            setIsConvertingFrom(false)
+                          }}
+                          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                          suppressHydrationWarning
+                        >
+                          {[...mainCurrencyOptions, ...otherCurrencyOptions].map((option) => (
+                            <option key={option.code} value={option.code}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          value={toAmount}
+                          onChange={(e) => {
+                            setToAmount(e.target.value)
+                            setIsConvertingFrom(false)
+                          }}
+                          placeholder="转换结果"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          suppressHydrationWarning
+                        />
+                      </div>
+                    </div>
+
+                    {/* 汇率信息 */}
+                    {fromCurrency !== toCurrency && rates[fromCurrency] && rates[toCurrency] && (() => {
+                      // 计算1单位源货币对应的目标货币金额
+                      let rateValue: number
+                      if (fromCurrency === 'JPY') {
+                        rateValue = rates[toCurrency]
+                      } else if (toCurrency === 'JPY') {
+                        rateValue = 1 / rates[fromCurrency]
+                      } else {
+                        rateValue = (1 / rates[fromCurrency]) * rates[toCurrency]
+                      }
+                      
+                      // 格式化：保留小数点后3位有效数字（去除末尾的0）
+                      const formatRate = (value: number): string => {
+                        // 使用toFixed(6)确保精度，然后去除末尾的0
+                        let formatted = value.toFixed(6)
+                        // 去除末尾的0和小数点
+                        formatted = formatted.replace(/\.?0+$/, '')
+                        // 如果小数点后超过3位，截取前3位有效数字
+                        if (formatted.includes('.')) {
+                          const parts = formatted.split('.')
+                          if (parts[1] && parts[1].length > 3) {
+                            // 保留3位有效数字
+                            const significant = parseFloat(formatted).toPrecision(3)
+                            formatted = parseFloat(significant).toString()
+                          }
+                        }
+                        return formatted
+                      }
+                      
+                      return (
+                        <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                          <p className="text-sm text-gray-700 mb-1">当前汇率</p>
+                          <p className="text-sm text-gray-600">
+                            1 {currencyLabels[fromCurrency]} = {formatRate(rateValue)} {currencyLabels[toCurrency]}
+                          </p>
+                          <div className="mt-2 text-xs text-gray-500">
+                            {rateError ? rateError : isLoadingRates ? '汇率更新中…' : lastUpdated ? `更新时间：${lastUpdated}` : '汇率以日元为基准实时换算'}
+                          </div>
+                        </div>
+                      )
+                    })()}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -801,3 +1116,4 @@ export default function MaiMaiPage() {
     </PageLayout>
   )
 }
+

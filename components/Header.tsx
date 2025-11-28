@@ -8,12 +8,13 @@ import logo from '@/imgs/横向logo1-无背景-preview.png'
 import { usePathname, useRouter } from 'next/navigation'
 import { Locale } from '@/data/locales'
 
+// 使用 Unicode 转义序列确保在所有系统上都能正确显示
 const languages = [
-  { label: '简体中文', code: 'zh-CN', flag: '🇨🇳' },
-  { label: '繁體中文（台灣）', code: 'zh-TW', flag: '🇹🇼' },
-  { label: '繁體中文（香港）', code: 'zh-HK', flag: '🇭🇰' },
-  { label: '日本語', code: 'ja-JP', flag: '🇯🇵' },
-  { label: 'English', code: 'en', flag: '🇺🇸' },
+  { label: '简体中文', code: 'zh-CN', flag: '\u{1F1E8}\u{1F1F3}' }, // 🇨🇳
+  { label: '繁體中文（台灣）', code: 'zh-TW', flag: '\u{1F1F9}\u{1F1FC}' }, // 🇹🇼
+  { label: '繁體中文（香港）', code: 'zh-HK', flag: '\u{1F1ED}\u{1F1F0}' }, // 🇭🇰
+  { label: '日本語', code: 'ja-JP', flag: '\u{1F1EF}\u{1F1F5}' }, // 🇯🇵
+  { label: 'English', code: 'en', flag: '\u{1F1FA}\u{1F1F8}' }, // 🇺🇸
 ]
 
 type NavChild = {
@@ -351,7 +352,7 @@ const Header = () => {
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
                 className="flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 xl:py-2 text-gray-700 hover:text-navy-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
               >
-                <span className="text-base xl:text-lg">{selectedLanguage.flag}</span>
+                <span className="text-base xl:text-lg flag-emoji">{selectedLanguage.flag}</span>
                 <span className="text-xs xl:text-sm font-medium hidden xl:inline">{selectedLanguage.label}</span>
                 <Globe2 size={16} className="xl:w-[18px] xl:h-[18px]" />
               </button>
@@ -370,7 +371,7 @@ const Header = () => {
                         className={`w-full text-left px-4 py-3 flex items-center gap-3 text-sm ${lang.code === selectedLanguage.code ? 'bg-navy-50 text-navy-700' : 'text-gray-700 hover:bg-gray-50'}`}
                         onClick={() => handleLanguageSelect(lang)}
                       >
-                        <span className="text-lg">{lang.flag}</span>
+                        <span className="text-lg flag-emoji">{lang.flag}</span>
                         <span className="font-medium flex-1">{lang.label}</span>
                         {lang.code === selectedLanguage.code && <Check size={16} className="text-navy-600" />}
                       </button>
@@ -489,7 +490,7 @@ const Header = () => {
                         setOpenDropdown(null)
                       }}
                     >
-                      <span className="text-xl">{lang.flag}</span>
+                      <span className="text-xl flag-emoji">{lang.flag}</span>
                       <span className="flex-1 text-left">{lang.label}</span>
                       {lang.code === selectedLanguage.code && <Check size={16} className="text-navy-600" />}
                     </motion.button>

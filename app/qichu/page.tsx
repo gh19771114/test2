@@ -386,10 +386,16 @@ export default function QiChuPage() {
               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
               alt="企业出海"
               fill
-              className="object-cover opacity-30"
+              className="object-cover opacity-30 md:object-cover"
+              style={{ 
+                objectFit: 'cover',
+                minHeight: '100%',
+                height: 'auto'
+              }}
+              sizes="100vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-green-900/80 to-navy-900/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-900/80 to-navy-900/60" style={{ minHeight: '100%' }}></div>
           </div>
           <div className="relative z-10 container-custom">
             <p className="text-sm text-green-300 font-semibold mb-4">Corporate Expansion</p>
@@ -508,6 +514,15 @@ export default function QiChuPage() {
           </div>
         </div>
         
+        {/* 移动端：缩小的网络图 */}
+        <div className="md:hidden w-full flex justify-center items-center py-8" style={{ marginTop: '-40px' }}>
+          <div style={{ width: '100%', maxWidth: '100vw', overflow: 'hidden' }}>
+            <div style={{ transform: 'scale(0.4)', transformOrigin: 'center center', width: '1800px', height: '1200px', margin: '0 auto' }}>
+              <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+            </div>
+          </div>
+        </div>
+
         {/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方，移出container-custom确保能真正居中 */}
         <div className="hidden md:block w-full" style={{ marginTop: '-80px' }}>
           <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />

@@ -50,9 +50,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <body
         className={`${notoSansJp.variable} ${inter.variable} ${playfair.variable} antialiased font-sans`}
+        suppressHydrationWarning
       >
         {children}
       </body>

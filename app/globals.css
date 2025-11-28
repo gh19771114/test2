@@ -15,6 +15,19 @@
     background: transparent;
     min-height: 100vh;
   }
+
+  /* 确保 emoji 国旗在所有系统上都能正确显示 */
+  .flag-emoji {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Segoe UI Symbol', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Noto Emoji', sans-serif;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 @layer components {
@@ -31,7 +44,40 @@
   }
   
   .container-custom {
-    @apply max-w-7xl mx-auto;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* 移动端子页面标题增加边距 */
+  @media (max-width: 768px) {
+    .container-custom {
+      @apply px-6;
+    }
+    
+    /* 子页面标题区域增加左右边距 */
+    section.relative.pt-28,
+    section.relative.pt-16 {
+      @apply px-4;
+    }
+    
+    section.relative.pt-28 .container-custom,
+    section.relative.pt-16 .container-custom {
+      @apply px-6;
+    }
+  }
+  
+  /* 横向模式下的布局调整 */
+  @media (orientation: landscape) and (max-height: 600px) {
+    /* 实用工具按钮在横向模式下调整位置，避免与FloatingActions重叠 */
+    .tools-button-landscape {
+      top: auto !important;
+      bottom: 5rem !important;
+      transform: translateY(0) !important;
+    }
+    
+    /* FloatingActions在横向模式下调整位置 */
+    .floating-actions-landscape {
+      bottom: 5rem !important;
+    }
   }
   
   .text-gradient {
@@ -67,6 +113,20 @@
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  
+  /* iPad 汇率选择菜单置顶修复 */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .currency-sticky {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 80px !important;
+    }
+    
+    /* 确保 section 不限制 sticky */
+    section.relative.section-padding {
+      overflow: visible !important;
+    }
   }
 
   .scrollbar-hide::-webkit-scrollbar {
@@ -138,6 +198,21 @@
   .bg-metallic-gray > * {
     position: relative;
     z-index: 1;
+  }
+
+  /* 移动端背景图优化 - 支持无限向下衔接 */
+  .bg-image-responsive {
+    background-size: cover;
+    background-position: center top;
+    background-repeat: repeat-y; /* 垂直方向重复 */
+    background-attachment: local; /* 使用 local 让背景随内容滚动 */
+  }
+
+  @media (max-width: 768px) {
+    .bg-image-responsive {
+      background-size: 100% auto; /* 移动端按宽度缩放 */
+      min-height: 100vh; /* 确保至少覆盖一屏 */
+    }
   }
 }
 

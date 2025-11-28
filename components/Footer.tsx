@@ -103,10 +103,10 @@ const Footer = () => {
 
   return (
     <footer className="bg-navy-900 text-white">
-      <div className="container-custom">
+      <div className="container-custom px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto pr-20 md:pr-24 lg:pr-8">
             {/* Company Info */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}

@@ -102,14 +102,16 @@ const Contact = () => {
 
   const handleAddressClick = () => {
     const address = encodeURIComponent('東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F')
-    // 检测移动设备
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    if (isMobile) {
-      // 移动设备使用原生地图应用
-      window.location.href = `https://maps.google.com/maps?q=${address}`
-    } else {
-      // 桌面端在新窗口打开
-      window.open(`https://maps.google.com/maps?q=${address}`, '_blank')
+    // 检测移动设备 - 使用 typeof window 检查确保在客户端执行
+    if (typeof window !== 'undefined') {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+      if (isMobile) {
+        // 移动设备使用原生地图应用
+        window.location.href = `https://maps.google.com/maps?q=${address}`
+      } else {
+        // 桌面端在新窗口打开
+        window.open(`https://maps.google.com/maps?q=${address}`, '_blank')
+      }
     }
   }
 
@@ -203,7 +205,7 @@ const Contact = () => {
                 <h3 className="text-2xl font-semibold text-navy-700 mb-6">
                   留言表单
                 </h3>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" suppressHydrationWarning>
               <div>
                 <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
                   公司名称 <span className="text-red-500">*</span>
@@ -217,6 +219,7 @@ const Contact = () => {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200"
                   placeholder="如：东京蓝海股份有限公司"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -233,6 +236,7 @@ const Contact = () => {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200"
                   placeholder="请输入姓名"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -249,6 +253,7 @@ const Contact = () => {
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200"
                   placeholder="example@company.com"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -265,6 +270,7 @@ const Contact = () => {
                   rows={5}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200 resize-none"
                   placeholder="请描述您的需求或希望了解的服务内容"
+                  suppressHydrationWarning
                 />
               </div>
 
@@ -387,11 +393,14 @@ const Contact = () => {
                 
                 const copyValue = info.contentLines ? info.contentLines.join(' ') : info.content
 
+                // 判断是否为地址项，在移动端需要特殊布局
+                const isAddress = info.title === '公司地址'
+                
                 return (
                   <motion.div
                     key={info.title}
                     variants={itemVariants}
-                    className="flex items-start space-x-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200"
+                    className="p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 flex items-start space-x-4"
                   >
                     <div className="flex-shrink-0">
                       <motion.div
@@ -458,7 +467,7 @@ const Contact = () => {
                       {info.contentLines && (
                         <div className="text-navy-600 font-medium mb-1 space-y-1">
                           {info.contentLines.map((line) => (
-                            <p key={line}>{line}</p>
+                            <p key={line} className="break-words">{line}</p>
                           ))}
                         </div>
                       )}
@@ -491,6 +500,7 @@ const Contact = () => {
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
               title="公司位置地图"
+              suppressHydrationWarning
             ></iframe>
           </div>
         </motion.div>
