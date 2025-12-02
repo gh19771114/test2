@@ -168,7 +168,7 @@
   }
 
   .animate-vertical-scroll {
-    animation: vertical-scroll 20s linear infinite;
+    animation: vertical-scroll var(--scroll-duration, 20s) linear infinite;
   }
 
   /* 金属光泽灰色背景 */
@@ -294,6 +294,310 @@
   }
   100% {
     transform: translateY(-50%);
+  }
+}
+
+/* 移动端和iPad饼图容器 - 在小于1024px时显示，iPad横屏时也显示 */
+.mobile-pie-chart-container {
+  display: flex !important;
+}
+
+/* 桌面端大屏幕（非iPad）隐藏移动端饼图 */
+@media (min-width: 1024px) {
+  .mobile-pie-chart-container {
+    display: none !important;
+  }
+}
+
+/* iPad横屏时（宽度1024-1366px）强制显示移动端饼图 */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .mobile-pie-chart-container {
+    display: flex !important;
+  }
+}
+
+/* iPad Pro横屏时（宽度1366px，高度<=1024px）强制显示移动端饼图 */
+@media (min-width: 1366px) and (max-width: 1370px) and (max-height: 1024px) {
+  .mobile-pie-chart-container {
+    display: flex !important;
+  }
+}
+
+/* 桌面端大屏幕（宽度 > 1370px）强制隐藏移动端饼图 */
+@media (min-width: 1370px) {
+  .mobile-pie-chart-container {
+    display: none !important;
+  }
+}
+
+/* 手机端强制隐藏桌面版饼图 */
+@media (max-width: 1023px) {
+  .desktop-pie-chart-container,
+  .desktop-pie-chart-container *,
+  [class*="desktop-pie-chart"],
+  div[style*="1700px"],
+  div[style*="1800px"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* iPad上强制隐藏桌面版饼图 - 更广泛的媒体查询 */
+@media (min-width: 768px) and (max-width: 1366px) {
+  .desktop-pie-chart-container,
+  .desktop-pie-chart-container *,
+  [class*="desktop-pie-chart"],
+  div[style*="1700px"],
+  div[style*="1800px"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* 额外的保护：针对可能的iPad横屏情况 */
+@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 1024px) {
+  .desktop-pie-chart-container,
+  .desktop-pie-chart-container *,
+  [class*="desktop-pie-chart"],
+  div[style*="1700px"],
+  div[style*="1800px"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* iPad横版社长寄语：图片向右移动150px（50px + 100px），向下移动20px */
+@media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (min-height: 768px) and (max-height: 1024px) {
+  .ipad-landscape-image-container {
+    padding-left: calc(8% + 150px) !important;
+    padding-top: 20px !important;
+  }
+}
+
+/* 桌面端（min-width: 1024px）：显示桌面版，隐藏iPad和手机端 */
+@media (min-width: 1024px) {
+  .desktop-message {
+    display: block !important;
+  }
+  .ipad-landscape-message,
+  .ipad-portrait-mobile-message {
+    display: none !important;
+  }
+}
+
+/* iPad横版（768px-1023px, landscape）：显示横版，隐藏其他 */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .desktop-message {
+    display: none !important;
+  }
+  .ipad-landscape-message {
+    display: block !important;
+  }
+  .ipad-portrait-mobile-message {
+    display: none !important;
+  }
+}
+
+/* iPad竖版和手机端（max-width: 1023px 或 768px-1023px portrait）：显示竖版布局，隐藏其他 */
+@media (max-width: 767px), (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .desktop-message {
+    display: none !important;
+  }
+  .ipad-landscape-message {
+    display: none !important;
+  }
+  .ipad-portrait-mobile-message {
+    display: flex !important;
+  }
+}
+
+/* 手机端：社长图片放大3倍，向右移动200px，向上移动500px */
+@media (max-width: 767px) {
+  .ipad-mobile-portrait-image {
+    transform: scale(3) translate(100px, -700px) !important;
+    transform-origin: center center !important;
+  }
+}
+
+/* iPad竖版：社长图片缩小为现在的80%（scale 2.4），向下移动100px，向右移动20px */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .ipad-mobile-portrait-image {
+    transform: scale(2.4) translate(-80px, -300px) !important;
+    transform-origin: center center !important;
+  }
+  /* iPad竖版：页底向上移动，对齐到照片底部 */
+  .ipad-portrait-mobile-message {
+    min-height: auto !important;
+    align-items: flex-end !important;
+  }
+  .ipad-portrait-mobile-message > div:first-child {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .ipad-portrait-mobile-message > div:last-child {
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .ipad-portrait-mobile-message > div:last-child > div {
+    height: auto !important;
+    min-height: auto !important;
+  }
+}
+
+/* iPad上饼图固定大小 - 根据横竖屏自动适配 */
+/* iPad竖屏：宽度768px，饼图适中大小 */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .ipad-pie-chart-wrapper {
+    min-height: 472.5px !important;
+    max-height: 472.5px !important;
+    height: 472.5px !important;
+    isolation: isolate !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner {
+    width: 472.5px !important;
+    max-width: 472.5px !important;
+    min-width: 472.5px !important;
+    height: 472.5px !important;
+    max-height: 472.5px !important;
+    min-height: 472.5px !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    will-change: auto !important;
+    transform: translate3d(0, 0, 0) !important;
+    backfaceVisibility: hidden !important;
+    isolation: isolate !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner svg,
+  .mobile-pie-chart-inner svg.ipad-pie-chart-svg {
+    width: 472.5px !important;
+    height: 472.5px !important;
+    max-width: 472.5px !important;
+    max-height: 472.5px !important;
+    min-width: 472.5px !important;
+    min-height: 472.5px !important;
+    /* 强制覆盖内联样式 */
+    width: 472.5px !important;
+    height: 472.5px !important;
+  }
+}
+
+/* iPad横屏：宽度1024px或更大，饼图大小与竖屏一致 */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .ipad-pie-chart-wrapper {
+    min-height: 472.5px !important;
+    max-height: 472.5px !important;
+    height: 472.5px !important;
+    isolation: isolate !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner {
+    width: 472.5px !important;
+    max-width: 472.5px !important;
+    min-width: 472.5px !important;
+    height: 472.5px !important;
+    max-height: 472.5px !important;
+    min-height: 472.5px !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    will-change: auto !important;
+    transform: translate3d(0, 0, 0) !important;
+    backfaceVisibility: hidden !important;
+    isolation: isolate !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner svg,
+  .mobile-pie-chart-inner svg.ipad-pie-chart-svg {
+    width: 472.5px !important;
+    height: 472.5px !important;
+    max-width: 472.5px !important;
+    max-height: 472.5px !important;
+    min-width: 472.5px !important;
+    min-height: 472.5px !important;
+    /* 强制覆盖内联样式 */
+    width: 472.5px !important;
+    height: 472.5px !important;
+  }
+}
+
+/* iPad Pro横屏：宽度1366px，饼图大小与竖屏一致 */
+@media (min-width: 1366px) and (max-height: 1024px) {
+  .ipad-pie-chart-wrapper {
+    min-height: 472.5px !important;
+    max-height: 472.5px !important;
+    height: 472.5px !important;
+    isolation: isolate !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner {
+    width: 472.5px !important;
+    max-width: 472.5px !important;
+    min-width: 472.5px !important;
+    height: 472.5px !important;
+    max-height: 472.5px !important;
+    min-height: 472.5px !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    will-change: auto !important;
+    transform: translate3d(0, 0, 0) !important;
+    backfaceVisibility: hidden !important;
+    isolation: isolate !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  
+  .mobile-pie-chart-inner svg,
+  .mobile-pie-chart-inner svg.ipad-pie-chart-svg {
+    width: 472.5px !important;
+    height: 472.5px !important;
+    max-width: 472.5px !important;
+    max-height: 472.5px !important;
+    min-width: 472.5px !important;
+    min-height: 472.5px !important;
+    /* 强制覆盖内联样式 */
+    width: 472.5px !important;
+    height: 472.5px !important;
+  }
+}
+
+/* iPad竖屏：说明框向上移动，更靠近饼图 */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .ipad-description-box {
+    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
+    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
+  }
+}
+
+/* iPad横屏：说明框向上移动，更靠近饼图（与竖屏一致） */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .ipad-description-box {
+    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
+    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
+  }
+}
+
+/* iPad Pro横屏：说明框向上移动，更靠近饼图（与竖屏一致） */
+@media (min-width: 1366px) and (max-height: 1024px) {
+  .ipad-description-box {
+    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
+    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
   }
 }
 

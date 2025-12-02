@@ -3,6 +3,7 @@ import PageLayout from '@/components/PageLayout'
 import { ArrowLeft, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { getEncyclopediaBySlug, getAllEncyclopediaSlugs } from '@/lib/knowledge'
+import EncyclopediaContent from '@/components/EncyclopediaContent'
 
 export default async function EncyclopediaDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -42,11 +43,10 @@ export default async function EncyclopediaDetailPage({ params }: { params: Promi
         {/* 内容 */}
         <section className="section-padding">
           <div className="container-custom max-w-4xl">
-            <div className="prose prose-lg max-w-none">
-              <div className="text-gray-200 leading-relaxed whitespace-pre-line text-lg md:text-xl">
-                {entry.content}
-              </div>
-            </div>
+            <EncyclopediaContent 
+              content={entry.content} 
+              charts={entry.charts as any}
+            />
 
             {/* 返回按钮 */}
             <div className="mt-12 pt-8 border-t border-gray-400">

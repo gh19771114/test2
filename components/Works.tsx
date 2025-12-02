@@ -2,16 +2,18 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ExternalLink, Play } from 'lucide-react'
 import Image from 'next/image'
 
 const Works = () => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const isInView = useInView(ref, { once: true, margin: '200px' }) // 提前加载，减少延迟
+  const [visibleCount, setVisibleCount] = useState(6) // 初始只显示6个案例
 
-  const works = [
+  // 使用 useMemo 缓存数据，避免每次渲染都重新创建
+  const works = useMemo(() => [
     {
       id: 'grand-maison-asakusa-1302',
       title: 'グランドメゾン浅草花川戸1302',
@@ -111,25 +113,46 @@ const Works = () => {
       image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
       description: '引入智能门禁与租客社群运营，每年续约率保持在 92%。'
     }
-  ]
+  ], [])
+
+  // 当滚动到底部时，加载更多案例
+  useEffect(() => {
+    if (!isInView || visibleCount >= works.length) return
+
+    const handleScroll = () => {
+      const scrollPosition = window.innerHeight + window.scrollY
+      const documentHeight = document.documentElement.scrollHeight
+      
+      // 当接近底部时，加载更多
+      if (scrollPosition >= documentHeight - 500 && visibleCount < works.length) {
+        setVisibleCount(prev => Math.min(prev + 3, works.length))
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isInView, visibleCount, works.length])
+
+  // 只渲染可见的案例
+  const visibleWorks = useMemo(() => works.slice(0, visibleCount), [works, visibleCount])
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.05 // 减少延迟，加快显示速度
       }
     }
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 }, // 减少移动距离
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6
+        duration: 0.3 // 减少动画时间
       }
     }
   }
@@ -166,7 +189,7 @@ const Works = () => {
           variants={containerVariants}
           className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {works.map((work, index) => (
+          {visibleWorks.map((work, index) => (
             <motion.div
               key={work.id}
               variants={itemVariants}
@@ -184,7 +207,9 @@ const Works = () => {
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       priority={index < 3} // 只对前3张图片使用优先级加载
                       loading={index < 3 ? undefined : "lazy"} // 后面的图片懒加载
-                      quality={75} // 降低图片质量以加快加载
+                      quality={70} // 进一步降低图片质量以加快加载
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                   </div>
                   <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -228,7 +253,7 @@ const Works = () => {
           WebkitOverflowScrolling: 'touch'
         }}>
           <div className="flex gap-4 px-4" style={{ minWidth: 'max-content' }}>
-            {works.map((work, index) => (
+            {visibleWorks.map((work, index) => (
               <motion.div
                 key={work.id}
                 variants={itemVariants}
@@ -246,7 +271,9 @@ const Works = () => {
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                           sizes="320px"
                           loading={index < 3 ? undefined : "lazy"}
-                          quality={75}
+                          quality={70}
+                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                         />
                       </div>
                       <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">

@@ -3,29 +3,34 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useMemo, useState, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { Building2, ClipboardCheck, Globe2, TrendingUp, Rocket } from 'lucide-react'
 import Link from 'next/link'
 
 const Services = () => {
   const ref = useRef(null)
   const pieChartRef = useRef(null)
-  const mobilePieChartRef = useRef(null)
+  const mobilePieChartRef = useRef<HTMLDivElement>(null)
+  const mobilePieChartInnerRef = useRef<HTMLDivElement>(null)
+  const mobilePieChartSvgRef = useRef<SVGSVGElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const isPieChartInView = useInView(pieChartRef, { once: true, margin: '200px' }) // 提前加载
   const isMobilePieChartInView = useInView(mobilePieChartRef, { once: true, margin: '100px' }) // 移动端饼图
   const [hoveredService, setHoveredService] = useState<string | null>(null)
+  // 初始状态设为false，避免在iPad上初始渲染时显示
   const [shouldRenderPieChart, setShouldRenderPieChart] = useState(false)
-  const [shouldRenderMobilePieChart, setShouldRenderMobilePieChart] = useState(false)
+  
+  // 初始状态：服务端和客户端都默认为false，避免hydration错误
+  // 只在客户端挂载后才检测iPad
   const [isIPad, setIsIPad] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-  const [selectedMobileService, setSelectedMobileService] = useState<string | null>(null)
-  const mobileButtonsRef = useRef<HTMLDivElement>(null)
-  const mobileButtonRefs = useRef<Record<string, HTMLDivElement | null>>({})
   // iPad上点击状态，独立于hover状态，防止滚动时被清空
   const [clickedIPadService, setClickedIPadService] = useState<string | null>(null)
   // 使用ref保存iPad点击状态，确保滚动时不会被重置 - ref 是唯一真实来源
   const clickedIPadServiceRef = useRef<string | null>(null)
+  // 使用ref缓存iPad检测结果，避免每次渲染都重新计算，防止滚动时尺寸变化
+  // 初始值设为false，在客户端挂载后再检测，避免hydration错误
+  const isIPadDeviceRef = useRef<boolean>(false)
+  const [shouldShowDesktopChart, setShouldShowDesktopChart] = useState(false)
   
   // 强制同步：确保 ref 始终是最新的，state 只是用于触发重新渲染
   useEffect(() => {
@@ -39,6 +44,14 @@ const Services = () => {
     }
   }, [clickedIPadService])
   
+  // 确保在滚动时，如果说明框已经打开，状态不会被重置
+  // 只在必要时恢复状态，避免无限循环
+  useEffect(() => {
+    if (clickedIPadServiceRef.current && !clickedIPadService) {
+      setClickedIPadService(clickedIPadServiceRef.current)
+    }
+  }, [clickedIPadService]) // 只依赖 clickedIPadService，避免无限循环
+  
   // 检测是否为iPad - 只在客户端执行，避免hydration错误
   useEffect(() => {
     setIsMounted(true)
@@ -46,75 +59,191 @@ const Services = () => {
       if (typeof window === 'undefined') return
       const width = window.innerWidth
       const height = window.innerHeight
-      // 更精确的iPad检测：排除桌面端大屏幕
-      const isIPadDevice = (width >= 768 && width <= 1024 && height >= 768 && height <= 1366) || 
-                           (height >= 768 && height <= 1024 && width >= 768 && width <= 1366)
-      setIsIPad(isIPadDevice)
+      // 更精确的iPad检测：包括横屏和竖屏，排除桌面端大屏幕
+      // iPad检测：宽度或高度在768-1366之间，且另一个维度在合理范围内，排除大桌面屏幕
+      const isIPadDevice = (width >= 768 && width <= 1366 && height >= 768 && height <= 1366) &&
+                           !(width >= 1920 && height >= 1080) // 排除大桌面屏幕
+      // 检查是否为手机端（宽度 < 1024）
+      const isMobile = width < 1024
+      
+      // 如果之前已经检测到是iPad，保持为true，避免滚动时状态变化导致opacity闪烁
+      // 一旦检测到是iPad，就始终保持为true，不会因为滚动而改变
+      if (isIPadDeviceRef.current) {
+        // 如果之前是iPad，保持为true，不更新（避免滚动时状态变化）
+        setIsIPad(true)
+        setShouldShowDesktopChart(false)
+      } else {
+        // 之前不是iPad，根据当前检测结果更新
+        isIPadDeviceRef.current = isIPadDevice
+        setIsIPad(isIPadDevice)
+        // 只有在不是iPad且不是手机端时才显示桌面版饼图
+        setShouldShowDesktopChart(!isIPadDevice && !isMobile)
+      }
+      
+      // 直接操作DOM，强制隐藏桌面版饼图（优先级最高，使用!important）
+      if (pieChartRef.current) {
+        const pieChartElement = pieChartRef.current as HTMLElement
+        if (isIPadDevice) {
+          pieChartElement.style.setProperty('display', 'none', 'important')
+          pieChartElement.style.setProperty('visibility', 'hidden', 'important')
+        } else {
+          pieChartElement.style.removeProperty('display')
+          pieChartElement.style.removeProperty('visibility')
+        }
+      }
+      
+      // 强制隐藏桌面版饼图容器
+      const desktopContainer = document.querySelector('.desktop-pie-chart-container') as HTMLElement
+      if (desktopContainer) {
+        if (isIPadDevice) {
+          desktopContainer.style.setProperty('display', 'none', 'important')
+          desktopContainer.style.setProperty('visibility', 'hidden', 'important')
+        } else {
+          desktopContainer.style.removeProperty('display')
+          desktopContainer.style.removeProperty('visibility')
+        }
+      }
     }
     
+    // 立即执行一次检测
     checkIPad()
+    
+    // 滚动时保持说明框状态（节流处理，避免性能问题）
+    let scrollTimeout: NodeJS.Timeout | null = null
+    const handleScroll = () => {
+      // 使用节流，避免频繁更新状态
+      if (scrollTimeout) return
+      scrollTimeout = setTimeout(() => {
+        scrollTimeout = null
+        // 确保说明框状态在滚动时保持：如果ref有值但state没有，恢复state
+        if (clickedIPadServiceRef.current && !clickedIPadService) {
+          setClickedIPadService(clickedIPadServiceRef.current)
+        }
+      }, 100) // 每100ms最多执行一次
+    }
+    
+    // 添加滚动事件监听，确保滚动时iPad检测保持更新
     window.addEventListener('resize', checkIPad)
-    return () => window.removeEventListener('resize', checkIPad)
+    window.addEventListener('orientationchange', checkIPad)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    // 使用多个requestAnimationFrame确保DOM已渲染后再检查
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        checkIPad()
+      })
+    })
+    // 移除MutationObserver，避免性能问题
+    // 桌面版饼图已经通过条件渲染和CSS完全隐藏，不需要监听DOM变化
+    return () => {
+      window.removeEventListener('resize', checkIPad)
+      window.removeEventListener('orientationchange', checkIPad)
+      window.removeEventListener('scroll', handleScroll)
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+    }
   }, [])
 
   // 同步ref和state，确保状态在滚动时保持
+  // 只在state变化时更新ref，避免覆盖用户操作
   useEffect(() => {
-    clickedIPadServiceRef.current = clickedIPadService
+    if (clickedIPadService !== clickedIPadServiceRef.current) {
+      clickedIPadServiceRef.current = clickedIPadService
+    }
   }, [clickedIPadService])
 
-  // 在iPad上，确保滚动时状态不会丢失
+  // 在iPad上，确保滚动时状态不会丢失（但不触发重新渲染，避免饼图大小变化）
   useEffect(() => {
     if (!isMounted || !isIPad) return
 
-    // 防止滚动时状态丢失 - 强制同步 ref 到 state
-    const handleScroll = () => {
-      const refValue = clickedIPadServiceRef.current
-      // 如果 ref 有值但 state 没有，强制恢复 state（触发重新渲染）
-      if (refValue && !clickedIPadService) {
-        setClickedIPadService(refValue)
+    // 防止滚动时状态丢失 - 但不触发重新渲染，避免饼图大小变化
+    // 移除滚动监听，因为说明框的显示已经直接使用 ref，不需要 state 触发渲染
+  }, [isMounted, isIPad])
+  
+  // 在iPad横屏时，直接设置DOM尺寸，防止滚动时尺寸变化
+  useEffect(() => {
+    if (!isMounted || !isIPad) return
+    
+    const setFixedSize = () => {
+      // 检查是否为横屏
+      const isLandscape = window.innerWidth > window.innerHeight
+      if (!isLandscape) return
+      
+      // 直接设置DOM元素尺寸，强制固定为472.5px（525px的90%）
+      if (mobilePieChartInnerRef.current) {
+        const element = mobilePieChartInnerRef.current
+        // 使用直接赋值，确保优先级最高
+        element.style.width = '472.5px'
+        element.style.height = '472.5px'
+        element.style.minWidth = '472.5px'
+        element.style.maxWidth = '472.5px'
+        element.style.minHeight = '472.5px'
+        element.style.maxHeight = '472.5px'
+        element.style.flexShrink = '0'
+        element.style.flexGrow = '0'
+        // 清除可能影响尺寸的其他属性
+        element.style.aspectRatio = 'none'
+      }
+      
+      if (mobilePieChartSvgRef.current) {
+        const svg = mobilePieChartSvgRef.current
+        svg.style.width = '472.5px'
+        svg.style.height = '472.5px'
+        svg.style.minWidth = '472.5px'
+        svg.style.maxWidth = '472.5px'
+        svg.style.minHeight = '472.5px'
+        svg.style.maxHeight = '472.5px'
       }
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [isMounted, isIPad, clickedIPadService])
-  
-  // 立即渲染饼图，避免加载时点击跳转
-  useEffect(() => {
-    // 移除延迟，立即渲染饼图
-    setShouldRenderPieChart(true)
-  }, [])
-  
-  // 延迟渲染移动端饼图
-  useEffect(() => {
-    if (isMobilePieChartInView) {
-      const timer = requestAnimationFrame(() => {
-        setShouldRenderMobilePieChart(true)
-      })
-      return () => cancelAnimationFrame(timer)
+    
+    setFixedSize()
+    
+    // 监听滚动和窗口变化，确保尺寸始终固定
+    const handleScroll = () => {
+      requestAnimationFrame(setFixedSize)
     }
-  }, [isMobilePieChartInView])
+    
+    const handleResize = () => {
+      requestAnimationFrame(setFixedSize)
+    }
+    
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('orientationchange', handleResize)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('orientationchange', handleResize)
+    }
+  }, [isMounted, isIPad])
   
-  // 移动端：点击饼图区域时，滑动对应按钮到中央
+  // 立即渲染饼图，避免加载时点击跳转（但只在非iPad设备上）
   useEffect(() => {
-    if (!selectedMobileService || !mobileButtonsRef.current || !mobileButtonRefs.current[selectedMobileService]) return
-    
-    const container = mobileButtonsRef.current
-    const targetButton = mobileButtonRefs.current[selectedMobileService]
-    
-    if (!container || !targetButton) return
-    
-    const containerRect = container.getBoundingClientRect()
-    const buttonRect = targetButton.getBoundingClientRect()
-    const containerCenter = containerRect.left + containerRect.width / 2
-    const buttonCenter = buttonRect.left + buttonRect.width / 2
-    const scrollLeft = container.scrollLeft + (buttonCenter - containerCenter)
-    
-    container.scrollTo({
-      left: scrollLeft,
-      behavior: 'smooth'
-    })
-  }, [selectedMobileService])
+    if (!isMounted) return
+    // 只在非iPad设备上渲染桌面版饼图
+    // 使用更严格的检查，确保在iPad上始终为false
+    const isIPadDevice = isIPad || isIPadDeviceRef.current
+    if (isIPadDevice) {
+      setShouldRenderPieChart(false)
+      // 强制确保桌面版饼图不渲染
+      if (pieChartRef.current) {
+        const pieChartElement = pieChartRef.current as HTMLElement
+        pieChartElement.style.setProperty('display', 'none', 'important')
+        pieChartElement.style.setProperty('visibility', 'hidden', 'important')
+      }
+      const desktopContainer = document.querySelector('.desktop-pie-chart-container') as HTMLElement
+      if (desktopContainer) {
+        desktopContainer.style.setProperty('display', 'none', 'important')
+        desktopContainer.style.setProperty('visibility', 'hidden', 'important')
+      }
+    } else {
+      setShouldRenderPieChart(true)
+    }
+  }, [isMounted, isIPad])
+  
+  // 移动端和iPad饼图始终渲染，不需要复杂的检查逻辑
+  
 
   const services = [
     {
@@ -258,26 +387,57 @@ const Services = () => {
 
           <div
             ref={ref}
-            className="flex flex-col items-center gap-12 relative"
+            className="flex flex-col items-center gap-4 relative"
             style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}
           >
-          {/* 移动端：饼图 - 无点击放大和弹窗功能 */}
-          <div ref={mobilePieChartRef} className="md:hidden w-full flex justify-center mb-8">
-            {shouldRenderMobilePieChart ? (
-              <div className="relative" style={{ width: '100%', maxWidth: '400px', aspectRatio: '1/1' }}>
+          {/* 移动端和iPad：饼图 */}
+          <div 
+            ref={mobilePieChartRef} 
+            className="w-full flex justify-center mb-0 mobile-pie-chart-container ipad-pie-chart-wrapper"
+            style={{ minHeight: '400px' }}
+          >
+            <div 
+              ref={mobilePieChartInnerRef}
+              className="relative mobile-pie-chart-inner" 
+              style={{ 
+                // 在iPad上，完全由CSS控制尺寸，不使用内联样式
+                ...(isMounted && isIPadDeviceRef.current ? {} : {
+                  width: '100%', 
+                  maxWidth: '400px', 
+                  aspectRatio: '1/1',
+                }),
+                flexShrink: 0,
+                willChange: 'auto',
+                transform: 'translate3d(0, 0, 0)',
+                backfaceVisibility: 'hidden',
+              }}
+            >
                 <svg 
-                  width="100%" 
-                  height="100%" 
+                  ref={mobilePieChartSvgRef}
                   viewBox="0 0 800 800" 
-                  className="drop-shadow-lg"
-                  style={{ width: '100%', height: '100%' }}
+                  className="drop-shadow-lg ipad-pie-chart-svg"
+                  style={{ 
+                    // 在iPad上，完全由CSS控制尺寸，不使用内联样式
+                    // 非iPad设备使用百分比
+                    ...(isMounted && isIPadDeviceRef.current ? {} : {
+                      width: '100%',
+                      height: '100%',
+                    })
+                  }}
                 >
                   {/* 圆心优化 - 添加白色圆形遮罩 */}
                   <circle cx="400" cy="400" r="70" fill="white" opacity="0.98" />
                   
                   {pieDataList.map((pieData, index) => {
                     const { service } = pieData
-                    const isSelected = selectedMobileService === service.title
+                    // 完全使用ref来判断，不依赖任何state，确保滚动时状态稳定
+                    // 移除对isMounted的依赖，因为isMounted在滚动时可能变化
+                    const isIPadMode = isIPadDeviceRef.current
+                    const isSelected = isIPadMode && clickedIPadServiceRef.current === service.title
+                    // 修复opacity逻辑：完全使用ref来判断，避免滚动时state变化导致opacity闪烁
+                    // 只在iPad模式下，且有选中的服务，且当前服务不是选中的服务时，才变暗
+                    const hasActiveService = clickedIPadServiceRef.current !== null
+                    const shouldDim = isIPadMode && hasActiveService && clickedIPadServiceRef.current !== service.title
                     return (
                       <g key={service.title}>
                         <path
@@ -287,11 +447,28 @@ const Services = () => {
                           strokeWidth={isSelected ? "5" : "3"}
                           className="cursor-pointer transition-all duration-200"
                           style={{
-                            opacity: isSelected ? 1 : selectedMobileService && selectedMobileService !== service.title ? 0.6 : 1,
+                            opacity: isSelected ? 1 : shouldDim ? 0.6 : 1,
                             filter: isSelected ? 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(1.1)' : 'none',
                           }}
-                          onClick={() => {
-                            setSelectedMobileService(service.title)
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            // 移动端（包括手机和iPad）点击时，设置选中状态用于显示下方说明框
+                            // 完全使用ref来判断，确保滚动时也能正常工作
+                            if (typeof window === 'undefined') return
+                            const width = window.innerWidth
+                            const isMobileDevice = width < 1024 || isIPadDeviceRef.current
+                            
+                            if (isMobileDevice) {
+                              const currentService = clickedIPadServiceRef.current
+                              const newService = currentService === service.title ? null : service.title
+                              // 先更新ref，确保状态立即生效
+                              clickedIPadServiceRef.current = newService
+                              // 然后更新state，触发重新渲染
+                              setClickedIPadService(newService)
+                              // 强制阻止任何可能的导航
+                              return false
+                            }
                           }}
                         />
                         <text
@@ -303,8 +480,20 @@ const Services = () => {
                           stroke={service.title === '物业管理' || service.title === '企业出海助力' ? '#000000' : 'none'}
                           strokeWidth={service.title === '物业管理' || service.title === '企业出海助力' ? '2' : '0'}
                           paintOrder="stroke fill"
-                          style={{
-                            fontSize: `${pieData.percentage >= 50 ? 32 : pieData.percentage >= 20 ? 24 : pieData.percentage >= 10 ? 18 : 14}px`,
+                            style={{
+                            fontSize: `${(() => {
+                              const baseSize = pieData.percentage >= 50 ? 32 : pieData.percentage >= 20 ? 24 : pieData.percentage >= 10 ? 18 : 14
+                              // 移动设备（包括手机和iPad）放大文字
+                              if (isMounted && typeof window !== 'undefined') {
+                                const isMobile = window.innerWidth < 1024
+                                if (isMobile) {
+                                  // iPad放大1.3倍，手机放大1.4倍
+                                  const scale = (isIPad || isIPadDeviceRef.current) ? 1.3 : 1.4
+                                  return Math.round(baseSize * scale)
+                                }
+                              }
+                              return baseSize
+                            })()}px`,
                             fontWeight: '600',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                           }}
@@ -316,81 +505,82 @@ const Services = () => {
                   })}
                 </svg>
               </div>
-            ) : (
-              <div className="w-full max-w-[400px] aspect-square flex items-center justify-center">
-                <div className="w-16 h-16 border-4 border-navy-200 border-t-navy-600 rounded-full animate-spin"></div>
-              </div>
-            )}
           </div>
 
-          {/* 移动端：按钮列表 - 横向滑动形式 */}
-          <div 
-            ref={mobileButtonsRef}
-            className="md:hidden w-full overflow-x-auto pb-4 mb-8 scrollbar-hide"
-            style={{ 
-              scrollSnapType: 'x mandatory',
-              WebkitOverflowScrolling: 'touch'
-            }}
-          >
-            <div className="flex gap-4 px-4" style={{ minWidth: 'max-content' }}>
-              {services.map((service, index) => {
-                const Icon = service.icon
-                const isSelected = selectedMobileService === service.title
-                return (
-                  <div
-                    key={service.title}
-                    ref={(el) => {
-                      if (el) {
-                        mobileButtonRefs.current[service.title] = el
-                      }
-                    }}
-                    className="flex-shrink-0 w-[280px] h-[180px]"
-                    style={{ scrollSnapAlign: 'center' }}
-                  >
-                    <Link
-                      href={service.link}
-                      className={`group bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border-2 transition-all duration-300 block h-full flex flex-col ${
-                        isSelected 
-                          ? 'border-4 shadow-xl scale-105' 
-                          : 'border-gray-100 hover:shadow-xl'
-                      }`}
-                      style={{ 
-                        borderLeftColor: service.color, 
-                        borderLeftWidth: isSelected ? '6px' : '4px',
-                        borderColor: isSelected ? service.color : undefined
-                      }}
+
+          {/* 移动端和iPad：说明框 - 显示在饼图下方 */}
+          {(() => {
+            // 优先使用ref，因为它不会因为滚动而改变
+            const activeServiceTitle = clickedIPadServiceRef.current || clickedIPadService
+            
+            // 如果没有选中的服务，不显示说明框
+            if (!activeServiceTitle) return null
+            
+            // 检测是否为移动设备（包括手机和iPad）
+            // 修复运算符优先级：确保条件判断正确
+            // 如果说明框已经打开，即使检测暂时失败也保持显示，避免滚动时闪烁
+            const isMobileMode = isMounted && (
+              (typeof window !== 'undefined' && window.innerWidth < 1024) || 
+              (isIPad || isIPadDeviceRef.current)
+            )
+            
+            // 如果说明框已经打开（有activeServiceTitle），就显示它，不管isMobileMode如何
+            // 这样可以避免滚动时说明框闪烁
+            
+            const activeService = services.find(s => s.title === activeServiceTitle)
+            if (!activeService) return null
+            
+            return (
+              <div className="w-full flex justify-center ipad-description-box mb-4 -mt-4">
+                <div className="w-full max-w-[600px]">
+                  <Link href={activeService.link} className="block">
+                    <div
+                      className="rounded-xl p-6 bg-gradient-to-br from-gray-50 to-white shadow-2xl border-l-4 cursor-pointer hover:shadow-3xl transition-shadow duration-300"
+                      style={{ borderLeftColor: activeService.color }}
                     >
-                      <div className="flex items-start gap-4 flex-1">
+                      <div className="flex items-center justify-center mb-4">
                         <div 
-                          className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center transition-transform duration-300"
-                          style={{ 
-                            backgroundColor: `${service.color}20`,
-                            transform: isSelected ? 'scale(1.1)' : 'scale(1)'
-                          }}
+                          className="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center shadow-md"
+                          style={{ backgroundColor: `${activeService.color}20` }}
                         >
-                          <Icon className="w-6 h-6" style={{ color: service.color }} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className={`text-lg font-semibold mb-2 transition-colors line-clamp-1 ${
-                            isSelected ? 'text-navy-700' : 'text-navy-900 group-hover:text-navy-600'
-                          }`}>
-                            {service.title}
-                          </h3>
-                          <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{service.description}</p>
+                          <activeService.icon className="w-7 h-7" style={{ color: activeService.color }} />
                         </div>
                       </div>
-                    </Link>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+                      <div className="flex-1 flex flex-col">
+                        <h3 className="text-xl font-bold text-navy-900 mb-2 text-center">{activeService.title}</h3>
+                        <p className="text-gray-700 mb-4 leading-relaxed text-base font-medium">{activeService.description}</p>
+                        <ul className="space-y-2">
+                          {activeService.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className="flex items-start">
+                              <div 
+                                className="w-1.5 h-1.5 rounded-full mr-3 mt-1.5 flex-shrink-0"
+                                style={{ backgroundColor: activeService.color }}
+                              ></div>
+                              <span className="text-sm text-gray-600 leading-relaxed">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            )
+          })()}
 
-          {/* 桌面端：饼图容器 - 包含饼图和iPad弹窗 */}
-          <div className="hidden md:block relative w-full flex flex-col items-center">
+          {/* 桌面端：饼图容器 - 包含饼图和弹窗（仅大屏幕桌面端，非iPad） */}
+          {/* 在iPad上完全不渲染，避免闪现 - 使用shouldShowDesktopChart状态控制 */}
+          {shouldShowDesktopChart && (
+          <div 
+            className={`desktop-pie-chart-container relative w-full overflow-visible`} 
+            style={{ 
+              minHeight: '400px', 
+              padding: '0'
+            }}
+          >
             {/* 桌面端：业务说明列表 - 从饼图后方滑出（非iPad） */}
-            {(!isMounted || !isIPad) && isMounted && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 10 }}>
+            {isMounted && (
+              <div className="absolute pointer-events-none" style={{ zIndex: 10, width: '1800px', height: '1550px', left: '50%', top: '50%', transform: 'translate(calc(-50% + 50px), calc(-50% - 450px))', overflow: 'visible' }}>
                 {services.map((service, index) => {
                   const isHovered = hoveredService === service.title
                   const pieData = pieDataList[index]
@@ -401,29 +591,51 @@ const Services = () => {
                   // 根据扇区角度计算弹窗的垂直位置（分散开，不都集中在底部）
                   const midAngle = pieData.midAngle
                   // 将角度转换为垂直偏移（0度在顶部，180度在底部）
+                  // 使用正弦计算垂直偏移
                   const angleRad = (midAngle - 90) * (Math.PI / 180)
-                  const verticalOffset = Math.sin(angleRad) * 150 // 根据角度分散位置
+                  const verticalOffset = Math.sin(angleRad) * 100 // 根据角度分散位置
                   
                   // 计算弹窗的最终位置
-                  // 饼图SVG宽度800px，半径300px，中心在400px
-                  // 弹窗宽度280px，中心需要距离饼图中心至少：300（饼图半径）+ 140（弹窗宽度一半）+ 80（安全边距）= 520px
-                  // 左侧弹窗需要更往左（负值更小），右侧弹窗需要更往右（正值更大）
-                  const finalX = isRightSide ? 500 : -520 // 物业管理在右侧（稍微向右移动），其他在左侧
+                  // 弹窗父容器：1800px宽，1100px高，通过translate(-50%, -50%)居中
+                  // 饼图SVG容器：1700px宽（1500px + 向右扩大200px），300px高（800px - 下方缩小500px），在容器中居中
+                  // 饼图容器在弹窗父容器中居中，左边缘在：(1800-1700)/2 = 50px
+                  // 饼图中心在饼图容器中：850px（1700/2）X坐标，150px（300/2）Y坐标
+                  // 饼图中心在弹窗父容器中：50 + 850 = 900px X坐标，150px Y坐标
+                  // 饼图向右移动200px，所以实际中心：900 + 200 = 1100px X坐标
+                  // 弹窗宽度280px，中心需要距离饼图中心至少：300（饼图半径）+ 140（弹窗宽度一半）+ 30（安全边距）= 470px
+                  const pieCenterX = 1100 // 饼图中心X坐标（弹窗父容器1800px宽，饼图容器1700px居中，再向右移动200px）
+                  const pieCenterY = 150 // 饼图中心Y坐标（容器高度300px，饼图居中）
+                  const minDistance = 470 // 最小距离，确保弹窗不被饼图遮挡
+                  
+                  // 计算弹窗中心位置（相对于弹窗父容器）
+                  // 物业管理（右侧）：向左移动200px，向下移动300px + 350px = 650px
+                  // 其他三个（资产投资运营、企业出海助力、买卖中介）：向右移动350px - 50px = 300px，向下移动100px
+                  const popupCenterX = isRightSide 
+                    ? pieCenterX + minDistance - 100 - 80 - 200  // 右侧（物业管理）：1100 + 470 - 100 - 80 - 200 = 1190px（向左移动200px）
+                    : pieCenterX - minDistance - 100 - 80 - 300 - 50 - 150 + 350 - 50  // 左侧（其他三个）：1100 - 470 - 100 - 80 - 300 - 50 - 150 + 350 - 50 = 250px（向右移动350px，再向左移动50px）
+                  const popupCenterY = isRightSide 
+                    ? pieCenterY + verticalOffset + 500 + 300 + 350  // 物业管理：向下移动500px + 300px + 350px = 1300px左右
+                    : pieCenterY + verticalOffset + 500 + 200 + 300 + 100  // 其他三个：向下移动500px + 200px + 300px + 100px = 1250px左右
+                  
+                  // 边界检查：确保弹窗完全在父容器内（1800x1550）
+                  // 弹窗宽度280px，高度约320px
+                  // 左侧边界：250px（弹窗中心）- 140px（弹窗宽度一半）= 110px（安全）
+                  // 右侧边界：1190px（弹窗中心）+ 140px（弹窗宽度一半）= 1330px（安全）
+                  // 顶部边界：物业管理弹窗中心Y在1300px左右，其他三个在1250px左右
+                  // 底部边界：物业管理弹窗中心Y在1300px左右（底部在1460px左右），其他三个在1250px左右（底部在1410px左右）
+                  const clampedX = Math.max(140, Math.min(1660, popupCenterX))
+                  const clampedY = popupCenterY // 不限制Y坐标，容器高度已扩大到1550px
                   
                   return (
                     <motion.div
                       key={service.title}
                       initial={{ 
                         opacity: 0,
-                        x: '-50%', // 从饼图中心（后方）开始，先居中
-                        y: `calc(-50% + ${verticalOffset}px)`, // 垂直偏移
                         scale: 0.85,
                         zIndex: 10, // 初始状态在饼图后面（饼图z-index是20）
                       }}
                       animate={{
                         opacity: isHovered ? 1 : 0,
-                        x: isHovered ? `calc(-50% + ${finalX}px)` : '-50%', // 从中心滑出到最终位置
-                        y: `calc(-50% + ${verticalOffset}px)`,
                         scale: isHovered ? 1 : 0.85,
                         pointerEvents: isHovered ? 'auto' : 'none',
                         zIndex: isHovered ? 30 : 10, // 弹出时在饼图前面（30 > 20）
@@ -432,16 +644,18 @@ const Services = () => {
                         duration: 0.4,
                         ease: 'easeOut'
                       }}
-                      className="absolute w-[280px]" // 高瘦的长方形，固定宽度
+                      className="absolute w-[252px]" // 高瘦的长方形，固定宽度（90%）
                       style={{
-                        left: '50%',
-                        top: '50%',
+                        left: `${clampedX}px`, // 弹窗中心X坐标（相对于弹窗父容器）
+                        top: `${clampedY}px`, // 弹窗中心Y坐标（相对于弹窗父容器）
+                        transform: 'translate(-50%, -50%)', // 让弹窗以中心点定位
+                        transformOrigin: 'center center',
                       }}
                     >
                       <Link href={service.link} className="block pointer-events-auto h-full">
                         <div
                           className="rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-2xl border-l-4 cursor-pointer hover:shadow-3xl transition-shadow duration-300 h-full flex flex-col"
-                          style={{ borderLeftColor: service.color, minHeight: '320px' }} // 高瘦的长方形
+                          style={{ borderLeftColor: service.color, minHeight: '288px' }} // 高瘦的长方形（90%）
                         >
                           <div className="flex items-center justify-center mb-4">
                             <div 
@@ -473,107 +687,28 @@ const Services = () => {
               </div>
             )}
           </div>
+          )}
 
-          {/* 桌面端：圆盘图表 - 放大并突出 */}
-          {/* iPad上点击时缩小饼图，为下方弹窗留出空间 */}
+          {/* 桌面端：圆盘图表 - 放大并突出（仅大屏幕桌面端，非iPad） */}
+          {/* 在iPad上完全不渲染，避免闪现 - 使用shouldShowDesktopChart状态控制 */}
+          {shouldShowDesktopChart && (
           <div
             ref={pieChartRef}
-            className="hidden md:block relative"
-            style={{ zIndex: 20, minHeight: isMounted && isIPad && clickedIPadServiceRef.current ? '1100px' : '800px' }}
+            className={`relative mx-auto`}
+            style={{ 
+              zIndex: 20, 
+              minHeight: '300px', 
+              width: '1700px', 
+              height: '300px', 
+              transform: 'translate(250px, -450px)'
+            }}
           >
-            {/* iPad上弹窗统一显示在饼图正下方 - 使用 Portal 渲染到 body，避免受父容器影响 */}
-            {(() => {
-              // 在渲染时直接读取 ref，避免依赖 state
-              const currentActiveService = clickedIPadServiceRef.current
-              const isIPadMode = isMounted && (isIPad || (typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth <= 1024))
-              
-              if (!isIPadMode || !currentActiveService || typeof window === 'undefined' || typeof document === 'undefined') {
-                return null
-              }
-              
-              const activeService = services.find(s => s.title === currentActiveService)
-              if (!activeService) return null
-              
-              const popupContent = (
-                <div
-                  key={`ipad-popup-${activeService.title}`}
-                  className="fixed w-[340px] max-w-[90vw] z-[100]"
-                  style={{
-                    // 使用固定的视口中心位置
-                    left: '50%',
-                    top: '50%',
-                    marginTop: '160px', // 从视口中心向下偏移 160px
-                    transform: 'translateX(-50%) translateY(0) translateZ(0)', // 使用 translateZ(0) 启用硬件加速
-                    position: 'fixed', // 明确指定fixed定位
-                    marginLeft: 0,
-                    marginRight: 0,
-                    padding: 0,
-                    // 使用transform3d启用硬件加速，避免滚动时位置跳动
-                    transformOrigin: 'center center',
-                    // 使用will-change优化性能
-                    willChange: 'transform',
-                    // 确保弹窗不会因为滚动而重新定位
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                    // 确保弹窗不受父容器 transform 影响
-                    isolation: 'isolate',
-                    // 强制使用视口定位，不受任何父容器影响
-                    contain: 'layout style paint',
-                  }}
-                >
-                    <Link href={activeService.link} className="block pointer-events-auto h-full">
-                      <div
-                        className="rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-2xl border-l-4 cursor-pointer hover:shadow-3xl transition-shadow duration-300 h-full flex flex-col"
-                        style={{ borderLeftColor: activeService.color, minHeight: '280px' }}
-                      >
-                        <div className="flex items-center justify-center mb-4">
-                          <div 
-                            className="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center shadow-md"
-                            style={{ backgroundColor: `${activeService.color}20` }}
-                          >
-                            <activeService.icon className="w-7 h-7" style={{ color: activeService.color }} />
-                          </div>
-                        </div>
-                        <div className="flex-1 flex flex-col">
-                          <h3 className="text-xl font-bold text-navy-900 mb-2 text-center">{activeService.title}</h3>
-                          <p className="text-gray-700 mb-4 leading-relaxed text-base font-medium flex-shrink-0">{activeService.description}</p>
-                          <ul className="space-y-2 flex-1">
-                            {activeService.features.map((feature, featureIndex) => (
-                              <li key={featureIndex} className="flex items-start">
-                                <div 
-                                  className="w-1.5 h-1.5 rounded-full mr-3 mt-1.5 flex-shrink-0"
-                                  style={{ backgroundColor: activeService.color }}
-                                ></div>
-                                <span className="text-sm text-gray-600 leading-relaxed">{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                )
-                // 使用 Portal 将弹窗渲染到 body，避免受父容器 transform 影响
-                return createPortal(popupContent, document.body)
-              })()
-            }
             {shouldRenderPieChart ? (
               <svg 
-                width="800" 
-                height="800" 
+                width="720" 
+                height="720" 
                 viewBox="0 0 800 800" 
                 className="transform rotate-0 drop-shadow-2xl" 
-                style={{ 
-                  willChange: isMounted && isIPad && clickedIPadServiceRef.current ? 'transform' : 'auto',
-                  // 直接使用 ref，确保滚动时 transform 不会重置
-                  transform: isMounted && isIPad && clickedIPadServiceRef.current
-                    ? 'scale(0.65) translateY(-80px) translateZ(0)' 
-                    : 'scale(1) translateY(0) translateZ(0)',
-                  transition: 'transform 0.3s ease-out',
-                  // 确保 transform 在滚动时不会被重置
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
               >
                 {/* 圆心优化 - 添加白色圆形遮罩，与内圆半径一致 */}
                 <circle cx="400" cy="400" r="70" fill="white" opacity="0.98" />
@@ -591,52 +726,13 @@ const Services = () => {
                 const isHovered = hoveredService === service.title
                 const scale = isHovered ? 1.08 : 1
                 
-                // 检测是否为iPad或触摸设备
+                // 检测是否为触摸设备
                 const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
-                // 使用ref来检查，确保即使state被清空也能正确判断
-                const shouldShowPopup = isMounted && (isIPad || (typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth <= 1024))
                 
                 return (
                   <g key={service.title} className="pie-segment-group">
-                    {shouldShowPopup && shouldRenderPieChart ? (
-                      // iPad上不使用Link，直接渲染path，点击只显示弹窗 - 只有在饼图加载完成后才可点击
-                      <path
-                        d={pieData.path}
-                        fill={service.color}
-                        stroke="white"
-                        strokeWidth="5"
-                        className="transition-all duration-300 cursor-pointer"
-                        style={{ 
-                          filter: isHovered ? 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25)) brightness(1.15)' : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
-                          transformOrigin: '400px 400px',
-                          transform: `scale(${scale})`,
-                          transition: 'filter 0.2s ease, transform 0.2s ease',
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          // 如果点击的是当前已选中的，则关闭；否则选中新的
-                          const currentService = clickedIPadServiceRef.current
-                          const newService = currentService === service.title ? null : service.title
-                          // 先设置 ref，确保状态立即生效
-                          clickedIPadServiceRef.current = newService
-                          // 然后设置 state，触发重新渲染
-                          setClickedIPadService(newService)
-                          setHoveredService(newService)
-                          // 强制触发一次重新渲染，确保状态同步
-                          if (newService) {
-                            // 使用 requestAnimationFrame 确保状态更新
-                            requestAnimationFrame(() => {
-                              if (clickedIPadServiceRef.current !== newService) {
-                                clickedIPadServiceRef.current = newService
-                                setClickedIPadService(newService)
-                              }
-                            })
-                          }
-                        }}
-                      />
-                    ) : shouldRenderPieChart ? (
-                      // 桌面端使用Link，可以跳转 - 只有在饼图加载完成后才可点击
+                    {shouldRenderPieChart ? (
+                      // 桌面端使用Link，可以跳转
                       <Link 
                         href={service.link}
                       >
@@ -648,7 +744,7 @@ const Services = () => {
                           className="transition-all duration-300 cursor-pointer"
                           style={{ 
                             filter: isHovered ? 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25)) brightness(1.15)' : 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
-                            transformOrigin: '400px 400px',
+                            transformOrigin: '360px 360px',
                             transform: `scale(${scale})`,
                             transition: 'filter 0.2s ease, transform 0.2s ease',
                           }}
@@ -691,11 +787,12 @@ const Services = () => {
               })}
               </svg>
             ) : (
-              <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '800px' }}>
+              <div className="w-full h-full flex items-center justify-center" style={{ minHeight: '400px' }}>
                 <div className="w-16 h-16 border-4 border-navy-200 border-t-navy-600 rounded-full animate-spin"></div>
               </div>
             )}
           </div>
+          )}
         </div>
 
         <div

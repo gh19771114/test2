@@ -386,12 +386,7 @@ export default function QiChuPage() {
               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
               alt="企业出海"
               fill
-              className="object-cover opacity-30 md:object-cover"
-              style={{ 
-                objectFit: 'cover',
-                minHeight: '100%',
-                height: 'auto'
-              }}
+              className="object-cover opacity-30"
               sizes="100vw"
               priority
             />

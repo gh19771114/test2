@@ -110,43 +110,121 @@ export default function CompanyCeoPage() {
             </div>
           </section>
         ) : (
-          <section className="relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-            <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-              <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
-                <Image
-                  src={ceoPortrait1}
-                  alt="桂小川人物照片"
-                  fill
-                  className="object-contain object-bottom"
-                  priority={false}
-                  sizes="100vw"
-                />
-              </div>
-            </div>
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
-              <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
-            </div>
-            <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-              <div className="max-w-[620px] text-slate-900 space-y-6">
-                <div>
-                  <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                  <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
-                </div>
-                <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                  {messageParagraphs.map((paragraph) => (
-                    <p key={paragraph} className="text-balance">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-                <div className="pt-4">
-                  <p className="text-base text-slate-600">董事长 / President</p>
-                  <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+          <>
+            <section className="desktop-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
+                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="100vw"
+                  />
                 </div>
               </div>
-            </div>
-          </section>
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
+                <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
+              </div>
+              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
+                <div className="max-w-[620px] text-slate-900 space-y-6">
+                  <div>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                  </div>
+                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
+                    {messageParagraphs.map((paragraph) => (
+                      <p key={paragraph} className="text-balance">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-base text-slate-600">董事长 / President</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            {/* iPad横版：图片向右移动50px */}
+            <section className="ipad-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="absolute inset-0 flex justify-center ipad-landscape-image-container">
+                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="100vw"
+                  />
+                </div>
+              </div>
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
+                <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
+              </div>
+              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
+                <div className="max-w-[620px] text-slate-900 space-y-6">
+                  <div>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                  </div>
+                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
+                    {messageParagraphs.map((paragraph) => (
+                      <p key={paragraph} className="text-balance">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-base text-slate-600">董事长 / President</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            {/* iPad竖版和手机端：文字在左边（不超过三分之二），图片在右边（三分之一） */}
+            <section className="ipad-portrait-mobile-message flex flex-row relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              {/* 文字内容 - 左边，不超过三分之二 */}
+              <div className="w-[66.666%] relative z-10 py-12 px-4 md:px-6 lg:px-8">
+                <div className="max-w-full text-slate-900 space-y-6">
+                  <div>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                  </div>
+                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
+                    {messageParagraphs.map((paragraph) => (
+                      <p key={paragraph} className="text-balance">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-base text-slate-600">董事长 / President</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  </div>
+                </div>
+              </div>
+              {/* 图片 - 右边三分之一 */}
+              <div className="w-[33.333%] relative overflow-visible">
+                <div className="relative w-full h-full min-h-[90vh] ipad-mobile-portrait-image">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="33vw"
+                  />
+                </div>
+              </div>
+            </section>
+          </>
         )}
     </PageLayout>
   )
