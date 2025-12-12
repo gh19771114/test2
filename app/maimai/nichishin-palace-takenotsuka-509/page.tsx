@@ -26,11 +26,11 @@ export default function NisshinPalaceTakenotsuka509Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  日神パレス竹ノ塚 509号室（最上阶）
+                  日神パレス竹ノ塚 5楼（最上阶）
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   东武伊势崎线「竹ノ塚」站从步行6分前后，位于安静住宅街的单身者向公寓。
-                  509号室作为最上阶住戸，采光和隐私性优秀的一室。
+                  5楼作为最上阶住戸，采光和隐私性优秀的一室。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
@@ -259,7 +259,7 @@ export default function NisshinPalaceTakenotsuka509Page() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  509号室的户型・面积・价格・租金等在互联网上无法确认，
+                  5楼的户型・面积・价格・租金等在互联网上无法确认，
                   请务必根据最新资料输入・修正。
                 </p>
               </div>

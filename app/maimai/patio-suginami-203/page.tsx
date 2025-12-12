@@ -27,7 +27,7 @@ export default function PatioSuginami203Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  パティオ杉並 203号室
+                  パティオ杉並 2楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   东京地铁丸之内线「方南町」站步行6分的紧凑单间。
@@ -168,7 +168,7 @@ export default function PatioSuginami203Page() {
                         对应住戸
                       </th>
                       <td className="px-4 py-3">
-                        2层 203号室／1R（洋室约6帖）／专有面积 约19.2m²
+                        2楼／1R（洋室约6帖）／专有面积 约19.2m²
                       </td>
                     </tr>
                     <tr>

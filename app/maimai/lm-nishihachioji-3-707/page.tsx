@@ -26,11 +26,11 @@ export default function LMNishiHachioji3_707Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  ライオンズマンション西八王子第3 707号室
+                  ライオンズマンション西八王子第3 7楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   JR中央线「西八王子」站步行范围内的ライオンズ品牌区分公寓。
-                  707号室是南向・约18.2m²的1K住戸，学生・单身社会人向的稳定租赁需求可以预期的一室。
+                  7楼是南向・约18.2m²的1K住戸，学生・单身社会人向的稳定租赁需求可以预期的一室。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">

@@ -26,7 +26,7 @@ export default function StHillsShiinamachi405Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  セントヒルズ椎名町 405号室（最上阶）
+                  セントヒルズ椎名町 4楼（最上阶）
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   西武池袋线「椎名町」站步行约5分，有乐町线・副都心线「要町」站也可利用的多重访问位置。
@@ -167,7 +167,7 @@ export default function StHillsShiinamachi405Page() {
                         对应住戸
                       </th>
                       <td className="px-4 py-3">
-                        4层 405号室（最上阶）／居住用途
+                        4楼（最上阶）／居住用途
                       </td>
                     </tr>
                     <tr>
@@ -269,7 +269,7 @@ export default function StHillsShiinamachi405Page() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  405号室的专有面积・户型・价格・管理费等在互联网上无法确认，
+                  4楼的专有面积・户型・价格・管理费等在互联网上无法确认，
                   请务必根据最新的销售资料・重要事项说明书输入・修正数值。
                 </p>
               </div>

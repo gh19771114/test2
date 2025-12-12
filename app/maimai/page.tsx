@@ -66,7 +66,7 @@ const propertiesNoFee = [
     href: '/maimai/lions-higashiginza-2f'
   },
   {
-    title: '新中野駅上プラザ304',
+    title: '新中野駅上プラザ3楼',
     price: '5,200万日元',
     area: '52㎡',
     type: '1LDK',
@@ -79,7 +79,7 @@ const propertiesNoFee = [
 
 const propertiesWithFee = [
   {
-    title: 'パティオ杉並 203',
+    title: 'パティオ杉並 2楼',
     price: '1,050万日元',
     area: '19.2㎡',
     type: '1R',
@@ -89,7 +89,7 @@ const propertiesWithFee = [
     href: '/maimai/patio-suginami-203'
   },
   {
-    title: 'セントヒルズ椎名町 405',
+    title: 'セントヒルズ椎名町 4楼',
     price: '1,050万日元',
     area: '—',
     type: '—',
@@ -99,7 +99,7 @@ const propertiesWithFee = [
     href: '/maimai/cent-hills-shiinamachi-405'
   },
   {
-    title: 'パレ・ドール相模原 808',
+    title: 'パレ・ドール相模原 8楼',
     price: '420万日元',
     area: '—',
     type: '1R',
@@ -109,7 +109,7 @@ const propertiesWithFee = [
     href: '/maimai/pale-dor-sagamihara-808'
   },
   {
-    title: '日神パレス竹ノ塚 509',
+    title: '日神パレス竹ノ塚 5楼',
     price: '700万日元',
     area: '—',
     type: '1R/1K',
@@ -119,7 +119,7 @@ const propertiesWithFee = [
     href: '/maimai/nichishin-palace-takenotsuka-509'
   },
   {
-    title: 'セザール高島平 206',
+    title: 'セザール高島平 2楼',
     price: '1,200万日元',
     area: '50〜52㎡',
     type: '2〜3LDK',
@@ -129,7 +129,7 @@ const propertiesWithFee = [
     href: '/maimai/cesar-takashimadaira-206'
   },
   {
-    title: '美和プラザ高井戸 101・104・106',
+    title: '美和プラザ高井戸 1楼',
     price: '990万日元',
     area: '—',
     type: '1K×3戸',
@@ -139,7 +139,7 @@ const propertiesWithFee = [
     href: '/maimai/miwa-plaza-takaido-101'
   },
   {
-    title: 'LM西八王子第3 707',
+    title: 'LM西八王子第3 7楼',
     price: '480万日元',
     area: '18.2㎡',
     type: '1K',
@@ -149,7 +149,7 @@ const propertiesWithFee = [
     href: '/maimai/lm-nishihachioji-3-707'
   },
   {
-    title: 'スカイコート生田 202',
+    title: 'スカイコート生田 2楼',
     price: '430万日元',
     area: '约17㎡',
     type: '1K',

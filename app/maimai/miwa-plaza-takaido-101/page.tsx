@@ -26,11 +26,11 @@ export default function MiwaPlazaTakaido1FPortfolioPage() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  美和プラザ高井戸 1层 101-104-106号室 投资组合
+                  美和プラザ高井戸 1楼 投资组合
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   位于京王线「八幡山」「上北沢」站步行范围内的美和プラザ高井戸。
-                  1层的3户（101-104-106号室）统一取得运营，预期用于投资的组合。
+                  1楼的3户统一取得运营，预期用于投资的组合。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-1 gap-4 text-xs sm:grid-cols-3">
@@ -165,13 +165,13 @@ export default function MiwaPlazaTakaido1FPortfolioPage() {
               </div>
 
               <h2 className="mt-8 text-lg font-semibold text-slate-900">
-                1层投资组合概要（101-104-106号室）
+                1楼投资组合概要
               </h2>
               <div className="mt-4 overflow-hidden rounded-2xl bg-white shadow-sm">
                 <table className="w-full border-separate border-spacing-0">
                   <thead>
                     <tr className="bg-slate-50 text-[11px] text-slate-500">
-                      <th className="px-4 py-2 text-left">号室</th>
+                      <th className="px-4 py-2 text-left">楼层</th>
                       <th className="px-4 py-2 text-left">所在层</th>
                       <th className="px-4 py-2 text-left">户型</th>
                       <th className="px-4 py-2 text-left">专有面积</th>
@@ -321,7 +321,7 @@ export default function MiwaPlazaTakaido1FPortfolioPage() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  101-104-106号室各自的面积、租金、管理费等，请务必根据最新租金表、租赁合同输入。
+                  1楼各自的面积、租金、管理费等，请务必根据最新租金表、租赁合同输入。
                 </p>
               </div>
             </aside>

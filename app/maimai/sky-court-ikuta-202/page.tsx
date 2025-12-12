@@ -26,11 +26,11 @@ export default function SkyCourtIkuta202Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  スカイコート生田 202号室
+                  スカイコート生田 2楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   小田急线「生田」站步行5分，站近的スカイコート品牌公寓。
-                  202号室是约17m²的1K预期住戸，学生・单身者向的稳定租赁需求可以期待。
+                  2楼是约17m²的1K预期住戸，学生・单身者向的稳定租赁需求可以期待。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
@@ -259,7 +259,7 @@ export default function SkyCourtIkuta202Page() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  202号室的准确专有面积・租金水平・管理费等，请根据最新募集资料输入・修正。
+                  2楼的准确专有面积・租金水平・管理费等，请根据最新募集资料输入・修正。
                 </p>
               </div>
             </aside>

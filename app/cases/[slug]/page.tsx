@@ -18,7 +18,7 @@ const caseDetails: Record<string, any> = {
   'grand-maison-asakusa-1302': {
     date: '2025/08/25',
     type: '销售',
-    title: 'グランドメゾン浅草花川戸1302',
+    title: 'グランドメゾン浅草花川戸13楼',
     location: '东京都台东区浅草花川戸',
     category: '高级公寓',
     image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -40,14 +40,14 @@ const caseDetails: Record<string, any> = {
   'park-tower-nishishinjuku-101-201': {
     date: '2025/09/25',
     type: '销售',
-    title: 'パークタワー西新宿施設棟101、201',
+    title: 'パークタワー西新宿施設棟1楼',
     location: '东京都新宿区西新宿',
     category: '商业设施',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
     description: '成功完成西新宿核心地段商业设施两个单元的销售交易。',
     details: [
       '成功完成销售交易，交易日期：2025年9月25日',
-      '包含101和201两个单元，总面积约200㎡',
+      '包含1楼两个单元，总面积约200㎡',
       '为客户提供专业的商业设施销售服务',
       '位于新宿核心商业区，商业价值高',
       '顺利完成所有交易手续，获得客户认可',
@@ -62,7 +62,7 @@ const caseDetails: Record<string, any> = {
   'my-castle-yoyogi-1203': {
     date: '2025/05/16',
     type: '销售',
-    title: 'マイキャスル代々木1203',
+    title: 'マイキャスル代々木12楼',
     location: '东京都涩谷区代代木',
     category: '公寓',
     image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -84,7 +84,7 @@ const caseDetails: Record<string, any> = {
   'shinjuku-daikan-plaza-a-201': {
     date: '2025/10/23',
     type: '资产购入',
-    title: '新宿ダイカンプラザA館201',
+    title: '新宿ダイカンプラザA館2楼',
     location: '东京都新宿区',
     category: '商业设施',
     image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',

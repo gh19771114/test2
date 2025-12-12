@@ -26,11 +26,11 @@ export default function PalaisDorSagamihara808Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  パレ・ドール相模原 808号室
+                  パレ・ドール相模原 8楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   JR横滨线「相模原」站步行8〜9分，站北侧的住宅街建的投资用公寓。
-                  808号室作为上阶层住戸，可期待采光和眺望的1R类型预期住戸。
+                  8楼作为上阶层住戸，可期待采光和眺望的1R类型预期住戸。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
@@ -258,7 +258,7 @@ export default function PalaisDorSagamihara808Page() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  808号室的专有面积・租金・共益费等条件，请务必根据最新的募集资料・
+                  8楼的专有面积・租金・共益费等条件，请务必根据最新的募集资料・
                   管理公司的信息输入・修正。
                 </p>
               </div>

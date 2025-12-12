@@ -27,7 +27,7 @@ export default function ShinNakanoPlaza304Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  新中野駅上プラザ 304号室
+                  新中野駅上プラザ 3楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   位于东京地铁丸之内线「新中野」站正上方的站直结型公寓。
@@ -171,7 +171,7 @@ export default function ShinNakanoPlaza304Page() {
                         对应区划
                       </th>
                       <td className="px-4 py-3">
-                        3层 304号室（居住・事务所利用设想）
+                        3楼（居住・事务所利用设想）
                         <span className="ml-1 text-[11px] text-slate-500">
                           ※请确认实际的用途区分・募集条件
                         </span>
@@ -234,7 +234,7 @@ export default function ShinNakanoPlaza304Page() {
                     <h3 className="text-sm font-semibold text-slate-900">也适合居住兼事务所的灵活性</h3>
                   </div>
                   <p className="mt-2 leading-relaxed text-slate-700">
-                    建筑物内其他号室也有居住・事务所利用的实例，
+                    建筑物内其他楼层也有居住・事务所利用的实例，
                     作为SOHO或小规模办公室的运营也容易考虑的房源。
                     （※请确认实际利用可否・管理规约・募集条件）
                   </p>
@@ -323,7 +323,7 @@ export default function ShinNakanoPlaza304Page() {
                 </div>
                 <p className="mt-2 leading-relaxed">
                   本页面是基于从公开信息可确认的建筑物概要制作的。
-                  304号室的专有面积・户型・价格・管理费等条件在互联网上无法确认，
+                  3楼的专有面积・户型・价格・管理费等条件在互联网上无法确认，
                   请根据现在的募集资料・重要事项说明书等，务必输入・修正数值。
                 </p>
               </div>

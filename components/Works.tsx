@@ -16,7 +16,7 @@ const Works = () => {
   const works = useMemo(() => [
     {
       id: 'grand-maison-asakusa-1302',
-      title: 'グランドメゾン浅草花川戸1302',
+      title: 'グランドメゾン浅草花川戸13楼',
       date: '2025/08/25',
       type: '销售',
       category: '高级公寓',
@@ -25,7 +25,7 @@ const Works = () => {
     },
     {
       id: 'park-tower-nishishinjuku-101-201',
-      title: 'パークタワー西新宿施設棟101、201',
+      title: 'パークタワー西新宿施設棟1楼',
       date: '2025/09/25',
       type: '销售',
       category: '商业设施',
@@ -34,7 +34,7 @@ const Works = () => {
     },
     {
       id: 'my-castle-yoyogi-1203',
-      title: 'マイキャスル代々木1203',
+      title: 'マイキャスル代々木12楼',
       date: '2025/05/16',
       type: '销售',
       category: '公寓',
@@ -43,7 +43,7 @@ const Works = () => {
     },
     {
       id: 'shinjuku-daikan-plaza-a-201',
-      title: '新宿ダイカンプラザA館201',
+      title: '新宿ダイカンプラザA館2楼',
       date: '2025/10/23',
       type: '资产购入',
       category: '商业设施',

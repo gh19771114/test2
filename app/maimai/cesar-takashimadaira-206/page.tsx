@@ -26,11 +26,11 @@ export default function CaesarTakashimadaira206Page() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  セザール高島平 206号室
+                  セザール高島平 2楼
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   都营三田线「高岛平」站步行范围内位置的家庭类型分售公寓。
-                  206号室是约50m²台的2〜3LDK预期住戸，自用・租赁运用的两方面都容易考虑的一室。
+                  2楼是约50m²台的2〜3LDK预期住戸，自用・租赁运用的两方面都容易考虑的一室。
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
@@ -257,7 +257,7 @@ export default function CaesarTakashimadaira206Page() {
                   <h3 className="text-sm font-semibold">注意事项</h3>
                 </div>
                 <p className="mt-2 leading-relaxed">
-                  206号室的准确专有面积・户型・价格・租金等，请根据最新销售资料输入・修正。
+                  2楼的准确专有面积・户型・价格・租金等，请根据最新销售资料输入・修正。
                 </p>
               </div>
             </aside>

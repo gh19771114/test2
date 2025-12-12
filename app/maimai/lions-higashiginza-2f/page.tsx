@@ -27,7 +27,7 @@ export default function LionsHigashiGinza2FPage() {
                   不动产投资用 房源介绍
                 </p>
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-                  ライオンズマンション東銀座 2F（201号室）
+                  ライオンズマンション東銀座 2F（2楼）
                 </h1>
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">
                   位于东京核心商务与商圈——银座与筑地之间的角地商铺/事务所区画。
@@ -172,7 +172,7 @@ export default function LionsHigashiGinza2FPage() {
                         对应区划
                       </th>
                       <td className="px-4 py-3">
-                        2层 201号室（店铺・事务所区划／开放式楼层）
+                        2楼（店铺・事务所区划／开放式楼层）
                       </td>
                     </tr>
                     <tr className="border-b border-slate-100">
