@@ -3,12 +3,13 @@ import './globals.css'
 import { Noto_Sans_JP, Inter, Playfair_Display } from 'next/font/google'
 
 const notoSansJp = Noto_Sans_JP({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-noto-sans-jp',
   preload: true,
   adjustFontFallback: true,
+  fallback: ['Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'sans-serif'],
 })
 
 const inter = Inter({
@@ -42,6 +43,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({

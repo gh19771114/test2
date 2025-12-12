@@ -43,17 +43,18 @@ export default function BaoxianPage() {
               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
               alt="相关保险"
               fill
-              className="object-cover"
+              className="object-cover opacity-30"
               priority
             />
+            <div className="absolute inset-0 bg-gradient-to-br from-red-900/80 to-navy-900/60"></div>
           </div>
           <div className="relative z-10 container-custom">
             <div className="flex items-center gap-3 mb-4">
               <Shield className="w-8 h-8 text-red-300" />
-              <p className="text-sm text-red-300 font-semibold">Insurance</p>
+              <p className="text-sm text-red-300 font-semibold drop-shadow-md">Insurance</p>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">相关保险服务</h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">相关保险服务</h1>
+            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
               为您的房产配置全面的保险保障，包括火灾险、地震险、租金补偿险等，确保资产安全无忧。
             </p>
           </div>
@@ -75,32 +76,11 @@ export default function BaoxianPage() {
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>火灾保险</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>地震保险</span>
+                    <span>火灾·地震险与责任险配置</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
                     <span>保额优化建议</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                <h3 className="text-lg font-semibold text-navy-700 mb-3">租金补偿险与责任险</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>租金补偿保险</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>业主责任保险</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>综合保障方案</span>
                   </li>
                 </ul>
               </div>

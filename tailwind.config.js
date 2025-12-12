@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'noto': ['Noto Sans JP', 'sans-serif'],
-        'inter': ['Inter', 'sans-serif'],
+        'noto': ['Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'sans-serif'],
+        'inter': ['Inter', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'sans-serif'],
+        'sans': ['var(--font-noto-sans-jp)', 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'var(--font-inter)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         'navy': {

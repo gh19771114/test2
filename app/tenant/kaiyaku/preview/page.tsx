@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 // 注意：这里的结构要和「主申请页面」里的 TerminationForm 保持一致
 type TerminationForm = {
@@ -73,6 +74,8 @@ export default function TerminationPreviewPage() {
   const [formData, setFormData] = useState<TerminationForm | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
 
   useEffect(() => {
     // 从 sessionStorage 读取主页面保存的表单数据
@@ -93,6 +96,32 @@ export default function TerminationPreviewPage() {
 
   const handleConfirm = async () => {
     if (!formData) return
+
+    // 验证 reCAPTCHA
+    if (!recaptchaToken) {
+      setSubmitResult('请完成机器人验证')
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
+      return
+    }
+
+    // 先验证 reCAPTCHA token
+    const verifyRes = await fetch('/api/verify-recaptcha', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: recaptchaToken }),
+    })
+
+    const verifyData = await verifyRes.json()
+    if (!verifyData.success) {
+      setSubmitResult('机器人验证失败，请重试')
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
+      setRecaptchaToken(null)
+      return
+    }
 
     setLoading(true)
     setSubmitResult(null)
@@ -131,8 +160,12 @@ export default function TerminationPreviewPage() {
           '解约申请已提交。系统将生成日文PDF解約通知書并发送至管理公司。'
       )
 
-      // 提交成功后清掉缓存
+      // 提交成功后清掉缓存和 reCAPTCHA
       sessionStorage.removeItem('terminationFormData')
+      setRecaptchaToken(null)
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
     } catch (err: any) {
       console.error('提交错误:', err)
       const errorMsg = err.message || '网络错误或服务器无响应'
@@ -443,21 +476,32 @@ export default function TerminationPreviewPage() {
               </div>
 
               {/* 按钮 + 提示 */}
-              <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between pt-4">
-                <button
-                  onClick={handleConfirm}
-                  disabled={loading}
-                  className="btn-primary w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? '提交中...' : '确认提交'}
-                </button>
-                <button
-                  onClick={handleBack}
-                  disabled={loading}
-                  className="w-full sm:w-auto px-8 py-3 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  返回修改
-                </button>
+              <div className="flex flex-col gap-4 pt-4">
+                <div className="flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                    onChange={(token) => setRecaptchaToken(token)}
+                    onExpired={() => setRecaptchaToken(null)}
+                    onError={() => setRecaptchaToken(null)}
+                  />
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+                  <button
+                    onClick={handleConfirm}
+                    disabled={loading || !recaptchaToken}
+                    className="btn-primary w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? '提交中...' : '确认提交'}
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    disabled={loading}
+                    className="w-full sm:w-auto px-8 py-3 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    返回修改
+                  </button>
+                </div>
               </div>
 
               {submitResult && (

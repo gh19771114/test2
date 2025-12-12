@@ -32,6 +32,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
             </div>
             
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-navy-900 mb-6">
+              {news.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
               {news.title}
             </h1>
           </div>

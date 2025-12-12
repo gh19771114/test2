@@ -98,6 +98,13 @@ const Header = () => {
     }
   }, [])
 
+  // 当主下拉菜单关闭时，清除子菜单状态
+  useEffect(() => {
+    if (!openDropdown) {
+      setHoveredChild(null)
+    }
+  }, [openDropdown])
+
   const handleLanguageSelect = (language: typeof languages[number]) => {
     setSelectedLanguage(language)
     setIsLanguageOpen(false)
@@ -178,7 +185,7 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm"
+      className="fixed top-0 left-0 right-0 z-[10000] bg-white shadow-sm"
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
@@ -217,9 +224,35 @@ const Header = () => {
                         dropdownRefs.current[item.key] = node
                       }
                     }}
+                    onMouseEnter={() => {
+                      // 当鼠标进入整个菜单区域时，确保下拉菜单打开
+                      if (openDropdown !== item.key) {
+                        setOpenDropdown(item.key)
+                      }
+                      // 清除任何待关闭的定时器
+                      if (hoverTimeoutRef.current) {
+                        clearTimeout(hoverTimeoutRef.current)
+                        hoverTimeoutRef.current = null
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      // 延迟关闭，给用户时间移动到子菜单
+                      hoverTimeoutRef.current = setTimeout(() => {
+                        setOpenDropdown(null)
+                        setHoveredChild(null)
+                      }, 400)
+                    }}
                   >
                     <button
-                      onClick={() => setOpenDropdown((prev) => (prev === item.key ? null : item.key))}
+                      onMouseEnter={() => {
+                        // 鼠标进入按钮时，打开下拉菜单
+                        setOpenDropdown(item.key)
+                        // 清除任何待关闭的定时器
+                        if (hoverTimeoutRef.current) {
+                          clearTimeout(hoverTimeoutRef.current)
+                          hoverTimeoutRef.current = null
+                        }
+                      }}
                       className={`flex items-center gap-1 text-sm xl:text-base text-gray-700 font-medium transition-colors duration-200 px-2 py-1 ${
                         openDropdown === item.key ? 'text-navy-700' : 'hover:text-navy-700'
                       }`}
@@ -237,14 +270,22 @@ const Header = () => {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-lg overflow-visible z-50"
+                          className="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-xl shadow-lg overflow-visible z-[10000]"
+                          onMouseEnter={() => {
+                            // 清除任何待关闭的定时器
+                            if (hoverTimeoutRef.current) {
+                              clearTimeout(hoverTimeoutRef.current)
+                              hoverTimeoutRef.current = null
+                            }
+                          }}
                           onMouseLeave={() => {
+                            // 延迟关闭，给用户时间移动到子菜单
                             hoverTimeoutRef.current = setTimeout(() => {
                               setHoveredChild(null)
-                            }, 200)
+                            }, 400)
                           }}
                         >
-                          {item.children.map((child) => (
+                          {item.children.map((child, childIndex) => (
                             <div
                               key={child.name}
                               className="relative group"
@@ -261,12 +302,16 @@ const Header = () => {
                                 // 延迟关闭，给用户时间移动到子菜单
                                 hoverTimeoutRef.current = setTimeout(() => {
                                   setHoveredChild(null)
-                                }, 150)
+                                }, 400)
                               }}
                             >
                               <a
                                 href={child.href}
-                                className="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                className={`flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 focus:bg-slate-200 focus:outline-none transition-colors ${
+                                  childIndex === 0 ? 'rounded-t-xl' : ''
+                                } ${
+                                  childIndex === (item.children?.length ?? 0) - 1 ? 'rounded-b-xl' : ''
+                                }`}
                                 onClick={(e) => {
                                   if (!child.subChildren) {
                                     handleNavClick(e, child.href)
@@ -288,7 +333,7 @@ const Header = () => {
                                       animate={{ opacity: 1, x: 0 }}
                                       exit={{ opacity: 0, x: -10 }}
                                       transition={{ duration: 0.2 }}
-                                      className="absolute left-full top-0 ml-1 w-56 bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden z-[60] min-w-[224px]"
+                                      className="absolute left-full top-0 ml-1 w-56 bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden z-[10001] min-w-[224px]"
                                       onMouseEnter={() => {
                                         if (hoverTimeoutRef.current) {
                                           clearTimeout(hoverTimeoutRef.current)
@@ -299,7 +344,7 @@ const Header = () => {
                                       onMouseLeave={() => {
                                         hoverTimeoutRef.current = setTimeout(() => {
                                           setHoveredChild(null)
-                                        }, 150)
+                                        }, 400)
                                       }}
                                       style={{ willChange: 'transform' }}
                                     >
@@ -363,17 +408,25 @@ const Header = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+                    className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-[10000]"
                   >
-                    {languages.map((lang) => (
+                    {languages.map((lang, index) => (
                       <button
                         key={lang.code}
-                        className={`w-full text-left px-4 py-3 flex items-center gap-3 text-sm ${lang.code === selectedLanguage.code ? 'bg-navy-50 text-navy-700' : 'text-gray-700 hover:bg-gray-50'}`}
+                        className={`w-full text-left px-4 py-3 flex items-center gap-3 text-sm transition-colors ${
+                          lang.code === selectedLanguage.code
+                            ? `bg-slate-200 text-gray-800 ${
+                                index === 0 ? 'rounded-t-xl' : ''
+                              } ${
+                                index === languages.length - 1 ? 'rounded-b-xl' : ''
+                              }`
+                            : 'text-gray-700 hover:bg-gray-50'
+                        }`}
                         onClick={() => handleLanguageSelect(lang)}
                       >
                         <span className="text-lg flag-emoji">{lang.flag}</span>
                         <span className="font-medium flex-1">{lang.label}</span>
-                        {lang.code === selectedLanguage.code && <Check size={16} className="text-navy-600" />}
+                        {lang.code === selectedLanguage.code && <Check size={16} className="text-gray-700" />}
                       </button>
                     ))}
                   </motion.div>

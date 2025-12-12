@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from 'react'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Building2, TrendingUp, Award, FileText, ArrowRight, ArrowDown, CheckCircle2, X, Calculator } from 'lucide-react'
 
 const mainCurrencyOptions = [
@@ -55,79 +56,107 @@ const currencyLabels: Record<string, string> = {
 
 const propertiesNoFee = [
   {
-    title: '东京港区·塔楼海景公寓',
-    price: '8,800万日元',
-    area: '65㎡',
-    type: '2LDK',
-    location: '港区六本木',
+    title: 'ライオンズマンション東銀座2F',
+    price: '42,680万日元',
+    area: '127.6㎡',
+    type: '店舗・事務所',
+    location: '東京都中央区築地',
     feature: '免中介费',
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/lions-higashiginza-2f'
   },
   {
-    title: '大阪梅田·精品公寓',
+    title: '新中野駅上プラザ304',
     price: '5,200万日元',
     area: '52㎡',
     type: '1LDK',
-    location: '大阪市北区',
+    location: '東京都中野区本町',
     feature: '免中介费',
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    title: '京都·传统町屋改造',
-    price: '6,500万日元',
-    area: '85㎡',
-    type: '3LDK',
-    location: '京都市中京区',
-    feature: '免中介费',
-    image: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    title: '横滨·湾岸高层公寓',
-    price: '7,200万日元',
-    area: '58㎡',
-    type: '2LDK',
-    location: '横滨市港北区',
-    feature: '免中介费',
-    image: 'https://images.unsplash.com/photo-1574362848149-11496d93a8c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/shin-nakano-ekijou-plaza-304'
   },
 ]
 
 const propertiesWithFee = [
   {
-    title: '东京涩谷·商业用地',
-    price: '12,500万日元',
-    area: '120㎡',
-    type: '商业用地',
-    location: '涩谷区',
+    title: 'パティオ杉並 203',
+    price: '1,050万日元',
+    area: '19.2㎡',
+    type: '1R',
+    location: '东京都杉并区堀之内',
     feature: '需中介费',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/patio-suginami-203'
   },
   {
-    title: '名古屋·整栋公寓',
-    price: '15,800万日元',
-    area: '200㎡',
-    type: '整栋',
-    location: '名古屋市中区',
+    title: 'セントヒルズ椎名町 405',
+    price: '1,050万日元',
+    area: '—',
+    type: '—',
+    location: '东京都丰岛区长崎',
     feature: '需中介费',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/cent-hills-shiinamachi-405'
   },
   {
-    title: '福冈·投资用公寓',
-    price: '9,500万日元',
-    area: '95㎡',
-    type: '投资用',
-    location: '福冈市中央区',
+    title: 'パレ・ドール相模原 808',
+    price: '420万日元',
+    area: '—',
+    type: '1R',
+    location: '神奈川县相模原市',
     feature: '需中介费',
-    image: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/pale-dor-sagamihara-808'
   },
   {
-    title: '札幌·度假别墅',
-    price: '6,800万日元',
-    area: '150㎡',
-    type: '别墅',
-    location: '札幌市南区',
+    title: '日神パレス竹ノ塚 509',
+    price: '700万日元',
+    area: '—',
+    type: '1R/1K',
+    location: '东京都足立区伊兴',
     feature: '需中介费',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/nichishin-palace-takenotsuka-509'
+  },
+  {
+    title: 'セザール高島平 206',
+    price: '1,200万日元',
+    area: '50〜52㎡',
+    type: '2〜3LDK',
+    location: '东京都板桥区德丸',
+    feature: '需中介费',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/cesar-takashimadaira-206'
+  },
+  {
+    title: '美和プラザ高井戸 101・104・106',
+    price: '990万日元',
+    area: '—',
+    type: '1K×3戸',
+    location: '东京都杉并区上高井戸',
+    feature: '需中介费',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/miwa-plaza-takaido-101'
+  },
+  {
+    title: 'LM西八王子第3 707',
+    price: '480万日元',
+    area: '18.2㎡',
+    type: '1K',
+    location: '东京都八王子市八木町',
+    feature: '需中介费',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/lm-nishihachioji-3-707'
+  },
+  {
+    title: 'スカイコート生田 202',
+    price: '430万日元',
+    area: '约17㎡',
+    type: '1K',
+    location: '神奈川县川崎市多摩区',
+    feature: '需中介费',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/sky-court-ikuta-202'
   },
 ]
 
@@ -511,9 +540,9 @@ export default function MaiMaiPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom">
-          <p className="text-sm text-emerald-300 font-semibold mb-4">Buying & Selling</p>
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 whitespace-nowrap">日本房产买卖中介服务</h1>
-          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+          <p className="text-sm text-emerald-300 font-semibold mb-4 drop-shadow-md">Buying & Selling</p>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 whitespace-nowrap drop-shadow-lg">日本房产买卖中介服务</h1>
+          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
             为个人及机构投资者提供从项目筛选、尽职调查、融资方案到交割与交付的全流程服务，结合本地资源网络和法律团队，为您争取更优价格与更低风险。
           </p>
         </div>
@@ -588,39 +617,140 @@ export default function MaiMaiPage() {
               <div className="overflow-x-auto pb-4 -mx-2 px-2">
                 <div className="flex gap-6 min-w-max">
                   {propertiesNoFee.map((property, index) => (
-                    <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="relative h-48 bg-gray-200">
-                        <Image
-                          src={property.image}
-                          alt={property.title}
-                          fill
-                          className="object-cover"
-                          sizes="320px"
-                        />
-                        <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
-                          {property.feature}
+                    property.href ? (
+                      <Link
+                        key={index}
+                        href={property.href}
+                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col"
+                      >
+                        <div className="relative h-48 bg-gray-200">
+                          <Image
+                            src={property.image}
+                            alt={property.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            sizes="320px"
+                          />
+                          <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
+                            {property.feature}
+                          </div>
+                        </div>
+                        <div className="p-5 flex flex-col flex-1">
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.title}</h4>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          {selectedCurrency !== 'JPY' && (
+                            <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
+                          )}
+                          <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
+                            <span className="flex items-center gap-1">
+                              <Building2 className="w-4 h-4" />
+                              {property.area}
+                            </span>
+                            <span>{property.type}</span>
+                          </div>
+                          <div className="text-sm text-gray-700 mb-auto">
+                            {property.location}
+                          </div>
+                          <div className="w-full mt-4 bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium text-center">
+                            查看详情
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                        <div className="relative h-48 bg-gray-200">
+                          <Image
+                            src={property.image}
+                            alt={property.title}
+                            fill
+                            className="object-cover"
+                            sizes="320px"
+                          />
+                          <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
+                            {property.feature}
+                          </div>
+                        </div>
+                        <div className="p-5 flex flex-col flex-1">
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          {selectedCurrency !== 'JPY' && (
+                            <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
+                          )}
+                          <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
+                            <span className="flex items-center gap-1">
+                              <Building2 className="w-4 h-4" />
+                              {property.area}
+                            </span>
+                            <span>{property.type}</span>
+                          </div>
+                          <div className="text-sm text-gray-700 mb-auto">
+                            {property.location}
+                          </div>
+                          <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
+                            查看详情
+                          </button>
                         </div>
                       </div>
-                      <div className="p-5">
-                        <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
-                        <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
-                        {selectedCurrency !== 'JPY' && (
-                          <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
-                        )}
-                        <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-3">
-                          <span className="flex items-center gap-1">
-                            <Building2 className="w-4 h-4" />
-                            {property.area}
-                          </span>
-                          <span>{property.type}</span>
-                          <span>{property.location}</span>
-                        </div>
-                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-navy-900 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
-                          查看详情
-                        </button>
+                    )
+                  ))}
+                  {/* Coming Soon 卡片 */}
+                  <div className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                    <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-4xl font-bold text-gray-400 mb-2">Coming Soon</div>
+                        <div className="text-sm text-gray-500">新物件準備中</div>
+                      </div>
+                      <div className="absolute top-3 right-3 bg-gray-400 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        準備中
                       </div>
                     </div>
-                  ))}
+                    <div className="p-5 flex flex-col flex-1">
+                      <h4 className="text-lg font-semibold text-gray-400 mb-2">新物件情報</h4>
+                      <p className="text-2xl font-bold text-gray-400 mb-1">—</p>
+                      <div className="flex flex-wrap gap-3 text-sm text-gray-400 mb-2">
+                        <span className="flex items-center gap-1">
+                          <Building2 className="w-4 h-4" />
+                          —
+                        </span>
+                        <span>—</span>
+                      </div>
+                      <div className="text-sm text-gray-400 mb-auto">
+                        —
+                      </div>
+                      <button className="w-full mt-4 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium cursor-not-allowed" disabled>
+                        準備中
+                      </button>
+                    </div>
+                  </div>
+                  {/* Coming Soon 卡片 2 */}
+                  <div className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                    <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-4xl font-bold text-gray-400 mb-2">Coming Soon</div>
+                        <div className="text-sm text-gray-500">新物件準備中</div>
+                      </div>
+                      <div className="absolute top-3 right-3 bg-gray-400 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        準備中
+                      </div>
+                    </div>
+                    <div className="p-5 flex flex-col flex-1">
+                      <h4 className="text-lg font-semibold text-gray-400 mb-2">新物件情報</h4>
+                      <p className="text-2xl font-bold text-gray-400 mb-1">—</p>
+                      <div className="flex flex-wrap gap-3 text-sm text-gray-400 mb-2">
+                        <span className="flex items-center gap-1">
+                          <Building2 className="w-4 h-4" />
+                          —
+                        </span>
+                        <span>—</span>
+                      </div>
+                      <div className="text-sm text-gray-400 mb-auto">
+                        —
+                      </div>
+                      <button className="w-full mt-4 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium cursor-not-allowed" disabled>
+                        準備中
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -634,38 +764,81 @@ export default function MaiMaiPage() {
               <div className="overflow-x-auto pb-4 -mx-2 px-2">
                 <div className="flex gap-6 min-w-max">
                   {propertiesWithFee.map((property, index) => (
-                    <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="relative h-48 bg-gray-200">
-                        <Image
-                          src={property.image}
-                          alt={property.title}
-                          fill
-                          className="object-cover"
-                          sizes="320px"
-                        />
-                        <div className="absolute top-3 right-3 bg-orange-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
-                          {property.feature}
+                    property.href ? (
+                      <Link
+                        key={index}
+                        href={property.href}
+                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col"
+                      >
+                        <div className="relative h-48 bg-gray-200">
+                          <Image
+                            src={property.image}
+                            alt={property.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            sizes="320px"
+                          />
+                          <div className="absolute top-3 right-3 bg-orange-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
+                            {property.feature}
+                          </div>
+                        </div>
+                        <div className="p-5 flex flex-col flex-1">
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.title}</h4>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          {selectedCurrency !== 'JPY' && (
+                            <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
+                          )}
+                          <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
+                            <span className="flex items-center gap-1">
+                              <Building2 className="w-4 h-4" />
+                              {property.area}
+                            </span>
+                            <span>{property.type}</span>
+                          </div>
+                          <div className="text-sm text-gray-700 mb-auto">
+                            {property.location}
+                          </div>
+                          <div className="w-full mt-4 bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium text-center">
+                            查看详情
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                        <div className="relative h-48 bg-gray-200">
+                          <Image
+                            src={property.image}
+                            alt={property.title}
+                            fill
+                            className="object-cover"
+                            sizes="320px"
+                          />
+                          <div className="absolute top-3 right-3 bg-orange-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
+                            {property.feature}
+                          </div>
+                        </div>
+                        <div className="p-5 flex flex-col flex-1">
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          {selectedCurrency !== 'JPY' && (
+                            <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
+                          )}
+                          <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
+                            <span className="flex items-center gap-1">
+                              <Building2 className="w-4 h-4" />
+                              {property.area}
+                            </span>
+                            <span>{property.type}</span>
+                          </div>
+                          <div className="text-sm text-gray-700 mb-auto">
+                            {property.location}
+                          </div>
+                          <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
+                            查看详情
+                          </button>
                         </div>
                       </div>
-                      <div className="p-5">
-                        <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
-                        <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
-                        {selectedCurrency !== 'JPY' && (
-                          <p className="text-xs text-gray-500 mb-2">日元价格：{property.price}</p>
-                        )}
-                        <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-3">
-                          <span className="flex items-center gap-1">
-                            <Building2 className="w-4 h-4" />
-                            {property.area}
-                          </span>
-                          <span>{property.type}</span>
-                          <span>{property.location}</span>
-                        </div>
-                        <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-navy-900 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
-                          查看详情
-                        </button>
-                      </div>
-                    </div>
+                    )
                   ))}
                 </div>
               </div>

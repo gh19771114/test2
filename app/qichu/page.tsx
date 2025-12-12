@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Building2, Users, Briefcase, Landmark, Globe, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 const relatedServices = [
   {
@@ -98,10 +98,73 @@ type PartnerIcon = typeof Building2 | typeof Users | typeof Briefcase | typeof G
 // 合作伙伴网络组件（带动画）
 function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], partnerIcons: PartnerIcon[] }) {
   const ref = useRef(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  
+  // 客户端挂载后检查sessionStorage
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    setIsMounted(true)
+    try {
+      const animated = sessionStorage.getItem('partners-network-animated') === 'true'
+      if (animated) {
+        setHasAnimated(true)
+      }
+    } catch (error) {
+      // 忽略sessionStorage错误（某些浏览器或隐私模式下可能不可用）
+      console.warn('sessionStorage not available:', error)
+    }
+  }, [])
+  
+  // 如果已经播放过，不等待isInView，直接显示
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  
+  // 监听sessionStorage变化（当其他实例播放动画时）
+  useEffect(() => {
+    if (!isMounted || typeof window === 'undefined') return
+    
+    const checkAnimated = () => {
+      try {
+        const animated = sessionStorage.getItem('partners-network-animated') === 'true'
+        if (animated && !hasAnimated) {
+          setHasAnimated(true)
+        }
+      } catch (error) {
+        // 忽略sessionStorage错误
+        console.warn('sessionStorage not available:', error)
+      }
+    }
+    
+    // 定期检查（因为storage事件只在不同标签页间触发）
+    const interval = setInterval(checkAnimated, 100)
+    
+    return () => {
+      clearInterval(interval)
+    }
+  }, [hasAnimated, isMounted])
+  
+  // 当动画触发时，记录到sessionStorage
+  useEffect(() => {
+    if (isInView && !hasAnimated && isMounted && typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem('partners-network-animated', 'true')
+        setHasAnimated(true)
+      } catch (error) {
+        // 忽略sessionStorage错误
+        console.warn('sessionStorage not available:', error)
+        setHasAnimated(true) // 即使无法保存，也设置状态
+      }
+    }
+  }, [isInView, hasAnimated, isMounted])
+  
+  // 确保内容始终显示：默认显示，动画只是增强效果
+  // 如果已经播放过动画，直接显示；否则等待isInView；如果已挂载，也显示
+  const shouldAnimate = true // 始终显示内容，动画只是视觉效果
   // 使用固定宽度，确保中心点位置一致
   const containerWidth = 1800
   const containerHeight = 1200
+  // 地图容器高度（缩小为一半）
+  const mapContainerHeight = 600
   // 中心点（容器正中心）
   const centerX = containerWidth / 2
   const centerY = containerHeight / 2
@@ -110,15 +173,26 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
   const cardHeight = 150
   // 计算安全半径：确保卡片不会超出容器
   // 卡片中心到边缘的距离 = 卡片对角线的一半 + 一些边距
-  // 考虑最宽的卡片（320px）
-  const maxCardWidth = 320
-  const cardDiagonal = Math.sqrt(maxCardWidth * maxCardWidth + cardHeight * cardHeight) / 2
-  const padding = 20 // 进一步减少边距，让图形更紧凑
+  // 考虑最宽的卡片（放大后360px）和高度（放大后170px）
+  const maxCardWidth = 360 // 放大后的最大宽度
+  const maxCardHeight = 170 // 放大后的高度
+  const cardDiagonal = Math.sqrt(maxCardWidth * maxCardWidth + maxCardHeight * maxCardHeight) / 2
+  const padding = 40 // 增加边距，避免卡片互相遮挡
   const maxRadius = Math.min(
     (containerWidth / 2) - cardDiagonal - padding,
     (containerHeight / 2) - cardDiagonal - padding
   )
-  const baseRadius = maxRadius - 5 // 进一步减少余量
+  // 计算相邻卡片所需的最小半径，确保不遮挡
+  // 9个卡片，每个间隔40度，需要确保相邻卡片中心距离 > 卡片对角线 + margin
+  const numCards = partners.length
+  const angleStep = 360 / numCards // 40度
+  const minCardDistance = cardDiagonal * 2 + 20 // 卡片对角线 + 边距（减少到20以适配容器）
+  const requiredRadius = minCardDistance / (2 * Math.sin((angleStep * Math.PI / 180) / 2))
+  // 如果所需半径超出容器，使用最大可用半径，并调整卡片间距
+  const baseRadius = Math.min(maxRadius - 10, requiredRadius)
+  
+  // 如果baseRadius小于requiredRadius，说明容器空间不足，需要减少卡片尺寸或增加间距
+  // 这里我们通过CSS的margin来增加实际间距
   
   // 优化角度分布：9个合作伙伴，均匀分布在360度
   // 调整角度避免遮挡：日本大型保险公司（索引8，320度）和日本大型金融机构（索引0，0度）在圆形上接近
@@ -133,7 +207,7 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
   }
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 1 }, // 改为1，确保始终可见
     visible: {
       opacity: 1,
       transition: {
@@ -187,10 +261,110 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
       style={{ 
         width: '100%',
         minHeight: '1200px',
-        position: 'relative'
+        position: 'relative',
+        pointerEvents: 'none',
+        visibility: 'visible',
+        opacity: 1,
+        display: 'block',
+        overflow: 'visible',
+        zIndex: 1
       }}
     >
+      {/* 地图容器边框 */}
       <div
+        className="map-container-border"
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: '100%',
+          height: `${mapContainerHeight}px`,
+          zIndex: 1,
+          border: '3px solid red',
+          boxSizing: 'border-box',
+          pointerEvents: 'none'
+        }}
+      >
+        {/* 红框中心点 */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: '12px',
+            height: '12px',
+            marginLeft: '-6px',
+            marginTop: '-6px',
+            borderRadius: '50%',
+            backgroundColor: 'red',
+            border: '2px solid white',
+            zIndex: 1000,
+            pointerEvents: 'none'
+          }}
+        />
+      </div>
+      
+      {/* 黑白世界地图背景 */}
+      <div
+        className="map-container-background"
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: '100%',
+          height: `${mapContainerHeight}px`,
+          zIndex: 0,
+          opacity: 0.15,
+          filter: 'grayscale(100%) brightness(0.8)',
+          pointerEvents: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Image
+          src="/imgs/worldmap.svg"
+          alt="世界地图"
+          width={containerWidth}
+          height={mapContainerHeight}
+          style={{
+            width: `${containerWidth}px`,
+            height: `${mapContainerHeight}px`,
+            maxWidth: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain'
+          }}
+          priority={false}
+        />
+        {/* 地图中心点 */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: '20px',
+            height: '20px',
+            marginLeft: '-10px',
+            marginTop: '-10px',
+            borderRadius: '50%',
+            backgroundColor: 'white',
+            border: '2px solid #333',
+            zIndex: 1000,
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#333'
+          }}
+        >
+          地
+        </div>
+      </div>
+
+      <div
+        className="network-container-border"
         style={{
           position: 'absolute',
           left: '50%',
@@ -198,13 +372,36 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
           width: `${containerWidth}px`,
           height: `${containerHeight}px`,
           marginLeft: `${-containerWidth / 2 - 28}px`, // 使用固定的 marginLeft 计算，确保跨平台一致性
-          marginTop: `${-containerHeight / 2}px`
+          marginTop: `${-containerHeight / 2}px`,
+          zIndex: 1,
+          border: '3px solid blue',
+          boxSizing: 'border-box'
         }}
       >
+        {/* 蓝框中心点 */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: '12px',
+            height: '12px',
+            marginLeft: '-6px',
+            marginTop: '-6px',
+            borderRadius: '50%',
+            backgroundColor: 'blue',
+            border: '2px solid white',
+            zIndex: 1000,
+            pointerEvents: 'none',
+            boxSizing: 'border-box',
+            flexShrink: 0,
+            flexGrow: 0
+          }}
+        />
         <motion.div
           ref={ref}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          initial="visible"
+          animate={shouldAnimate ? 'visible' : 'visible'}
           variants={containerVariants}
           style={{ 
             width: '100%',
@@ -261,7 +458,8 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             marginLeft: '-72px',
             marginTop: '-72px',
             zIndex: 10,
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            pointerEvents: 'auto'
           }}
           variants={centerVariants}
         >
@@ -290,25 +488,71 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             finalRadius = baseRadius * 0.92
           }
           
-          const x = Math.round((centerX + finalRadius * Math.cos(radians)) * 100) / 100
-          const y = Math.round((centerY + finalRadius * Math.sin(radians)) * 100) / 100
+          let x = Math.round((centerX + finalRadius * Math.cos(radians)) * 100) / 100
+          let y = Math.round((centerY + finalRadius * Math.sin(radians)) * 100) / 100
           
-          // 为特定合作伙伴设置特殊宽度
+          // 为特定合作伙伴添加位置偏移
+          if (partner.name === '在日中国企业协会') {
+            x += 100 // 向右移动100px
+            x += 20 // 再向右移动20px
+          } else if (partner.name === '日本大型保险公司') {
+            x -= 40 // 向左移动40px（从50px改为40px，向右移动了10px）
+            y -= 30 // 向上移动30px
+          } else if (partner.name === '日本大型金融机构') {
+            y -= 10 // 向上移动10px
+            x += 30 // 向右移动30px
+          } else if (partner.name === '大型保证公司') {
+            y -= 10 // 向上移动10px
+            x -= 20 // 向左移动20px
+          } else if (partner.name === '日本大型装修公司') {
+            x -= 20 // 向左移动20px
+          } else if (partner.name === 'Jetro 日本贸易振兴协会') {
+            y += 20 // 向下移动20px
+            x += 60 // 向右移动60px
+          } else if (partner.name === '综合法律与会计事务所') {
+            y -= 20 // 向上移动20px
+          }
+          
+          // 为特定合作伙伴设置特殊宽度和拉宽方向
           let finalCardWidth = cardWidth
           let cardOffsetX = 0
           
           if (partner.name === '全日本中国企业协会联合会') {
-            // 向左扩大，标题不换行
-            finalCardWidth = 320 // 增加宽度
-            cardOffsetX = -(finalCardWidth - cardWidth) / 2 // 向左偏移，保持中心点不变
+            // 向左拉宽20px（从350px改为370px，但向左拉宽意味着左边扩展20px）
+            finalCardWidth = 320 + 50 // 原320px + 50px = 370px（30px向右 + 20px向左，实际总宽度增加50px）
+            cardOffsetX = (finalCardWidth - cardWidth) / 2 - 20 // 向左偏移20px，实现向左拉宽
           } else if (partner.name === 'Jetro 日本贸易振兴协会') {
-            // 向右扩大，标题不换行
-            finalCardWidth = 320 // 增加宽度
-            cardOffsetX = (finalCardWidth - cardWidth) / 2 // 向右偏移，保持中心点不变
+            // 向右拉宽40px
+            finalCardWidth = 320 + 40 // 320px + 40px = 360px
+            cardOffsetX = (finalCardWidth - cardWidth) / 2 // 向右偏移，保持中心点不变，向右拉宽40px
           } else if (partner.name === '综合法律与会计事务所') {
-            // 向右扩大，标题不换行
-            finalCardWidth = 320 // 增加宽度
-            cardOffsetX = (finalCardWidth - cardWidth) / 2 // 向右偏移，保持中心点不变
+            // 向左拉宽20px
+            finalCardWidth = 320 + 20 // 320px + 20px = 340px
+            cardOffsetX = (finalCardWidth - cardWidth) / 2 - 20 // 向左偏移20px，实现向左拉宽
+          } else if (partner.name === '日本大型保险公司') {
+            // 向左拉宽50px（30px + 20px，宽度增加50px，左边扩展50px），然后向左移动20px
+            finalCardWidth = cardWidth + 50 // 240 + 50 = 290px
+            cardOffsetX = -70 // 向左偏移70px（-50拉宽 + -20移动）
+          } else if (partner.name === '日本大型装修公司') {
+            // 向左拉宽50px（30px + 20px，宽度增加50px，左边扩展50px）
+            finalCardWidth = cardWidth + 50 // 240 + 50 = 290px
+            cardOffsetX = -50 // 向左偏移50px，实现向左拉宽（再向左拉宽20px）
+          } else if (partner.name === '日本大型金融机构') {
+            // 向左拉宽10px，向右拉宽100px（60px + 40px，总宽度增加110px，左边扩展10px，右边扩展100px），然后向左移动40px，再向右移动30px
+            finalCardWidth = cardWidth + 110 // 240 + 110 = 350px
+            cardOffsetX = -10 // 向左移动10px（从-40变成-10，向右移动了30px）
+          } else if (partner.name === '大型保证公司') {
+            // 向左拉宽40px，向左移动20px，然后向右拉宽20px
+            finalCardWidth = cardWidth + 60 // 240 + 60 = 300px（40px向左 + 20px向右）
+            cardOffsetX = -60 // 向左偏移60px（-40拉宽 + -20移动），向右拉宽20px
+          } else if (partner.name === '在日中国企业协会') {
+            // 向右拉宽90px（30px + 30px + 30px，宽度增加90px，右边扩展90px）
+            finalCardWidth = cardWidth + 90 // 240 + 90 = 330px
+            cardOffsetX = 30 // 向右偏移30px，实现向右拉宽（再向右拉宽30px）
+          } else if (partner.name === '苏州工业园区') {
+            // 向左拉宽80px（30px + 50px，宽度增加80px，左边扩展80px）
+            finalCardWidth = cardWidth + 80 // 240 + 80 = 320px
+            cardOffsetX = -80 // 向左偏移80px，实现向左拉宽（再向左拉宽50px）
           }
           
           const cardContent = (
@@ -328,9 +572,9 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
                 >
                   {Icon ? <Icon className="w-6 h-6 text-green-600" /> : <Globe className="w-6 h-6 text-green-600" />}
                 </motion.div>
-                <h3 className="text-base font-semibold text-navy-900 leading-tight flex-1">{partner.name}</h3>
+                <h3 className="font-semibold text-navy-900 leading-tight flex-1" style={{ fontSize: '22px' }}>{partner.name}</h3>
               </div>
-              <p className="text-xs text-gray-700 leading-relaxed">{partner.desc}</p>
+              <p className="text-gray-700 leading-relaxed" style={{ fontSize: '18px' }}>{partner.desc}</p>
             </motion.div>
           )
 
@@ -343,6 +587,7 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
                 top: `${y}px`,
                 transform: 'translate(-50%, -50%)',
                 zIndex: 2,
+                pointerEvents: 'auto'
               }}
             >
               {partner.link ? (
@@ -358,6 +603,31 @@ function PartnersNetwork({ partners, partnerIcons }: { partners: Partner[], part
             </motion.div>
           )
         })}
+        {/* 网络图中心点 */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            width: '20px',
+            height: '20px',
+            marginLeft: '-10px',
+            marginTop: '-10px',
+            borderRadius: '50%',
+            backgroundColor: 'white',
+            border: '2px solid #333',
+            zIndex: 1000,
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#333'
+          }}
+        >
+          网
+        </div>
         </motion.div>
       </div>
     </div>
@@ -376,6 +646,47 @@ const projects = [
 ]
 
 export default function QiChuPage() {
+  const [showMobilePortrait, setShowMobilePortrait] = useState(false)
+  const [showIpadPortrait, setShowIpadPortrait] = useState(false)
+
+  useEffect(() => {
+    // 确保只在客户端执行
+    if (typeof window === 'undefined') return
+
+    const checkViewport = () => {
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const isPortrait = height > width
+      
+      // 手机竖版：宽度 ≤767 且竖屏（与CSS媒体查询匹配）
+      const mobilePortrait = width <= 767 && isPortrait
+      setShowMobilePortrait(mobilePortrait)
+      
+      // iPad竖版：宽度 768–1023 且竖屏（与CSS媒体查询匹配）
+      const ipadPortrait = width >= 768 && width <= 1023 && isPortrait
+      setShowIpadPortrait(ipadPortrait)
+    }
+
+    // 立即执行一次
+    checkViewport()
+    
+    // 延迟执行多次，确保在DOM渲染后
+    const timeoutId1 = setTimeout(checkViewport, 100)
+    const timeoutId2 = setTimeout(checkViewport, 300)
+    const timeoutId3 = setTimeout(checkViewport, 500)
+    
+    window.addEventListener('resize', checkViewport)
+    window.addEventListener('orientationchange', checkViewport)
+    
+    return () => {
+      clearTimeout(timeoutId1)
+      clearTimeout(timeoutId2)
+      clearTimeout(timeoutId3)
+      window.removeEventListener('resize', checkViewport)
+      window.removeEventListener('orientationchange', checkViewport)
+    }
+  }, [])
+
   return (
     <PageLayout>
       <div className="relative">
@@ -393,15 +704,15 @@ export default function QiChuPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-green-900/80 to-navy-900/60" style={{ minHeight: '100%' }}></div>
           </div>
           <div className="relative z-10 container-custom">
-            <p className="text-sm text-green-300 font-semibold mb-4">Corporate Expansion</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">企业出海助力与落地服务</h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+            <p className="text-sm text-green-300 font-semibold mb-4 drop-shadow-md">Corporate Expansion</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">企业出海助力与落地服务</h1>
+            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
               面向计划进入日本市场的企业，提供市场进入策略、合作伙伴对接、合规办理及品牌本地化支持，帮助团队快速搭建在地运营体系，降低文化与制度差异带来的挑战。
             </p>
           </div>
         </section>
 
-      <section id="services" className="section-padding">
+      <section id="services" className="section-padding" style={{ position: 'relative', zIndex: 10 }}>
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">相关服务</h2>
@@ -410,13 +721,14 @@ export default function QiChuPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 relative z-10">
             {relatedServices.map((service, index) => {
               const Icon = partnerIcons[index] ?? Globe
               return (
                 <div
                   key={service.name}
-                  className="group bg-gradient-to-br from-white to-green-50/50 backdrop-blur-sm border-2 border-green-100 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-green-300"
+                  className="group bg-gradient-to-br from-white to-green-50/50 backdrop-blur-sm border-2 border-green-100 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-green-300 relative z-10"
+                  style={{ pointerEvents: 'auto' }}
                 >
                   <div className="flex items-start gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -461,8 +773,8 @@ export default function QiChuPage() {
         </div>
       </section>
 
-      <section id="partners" className="section-padding">
-        <div className="container-custom">
+      <section id="partners" className="section-padding partners-section" style={{ overflow: 'hidden', position: 'relative', zIndex: 10, paddingTop: '50px', paddingBottom: '0px', border: '3px solid green', boxSizing: 'border-box' }}>
+        <div className="container-custom" style={{ overflow: 'visible' }}>
           <div className="text-center mb-4">
             <h2 className="text-3xl font-bold text-white mb-4">合作伙伴网络</h2>
             <p className="text-gray-300 max-w-2xl mx-auto">
@@ -470,61 +782,81 @@ export default function QiChuPage() {
             </p>
           </div>
           
-          {/* 移动端：简单网格布局 */}
-          <div className="md:hidden grid grid-cols-1 gap-6">
-            {partners.map((partner, index) => {
-              const Icon = partnerIcons[index % partnerIcons.length]
-              const cardContent = (
-                <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
-                  <div className="flex items-start gap-4 mb-4">
-                    {partner.icon ? (
-                      <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        <Image src={partner.icon} alt={partner.name} width={56} height={56} className="object-cover rounded-xl" />
-                      </div>
-                    ) : (
-                      <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        {Icon ? <Icon className="w-7 h-7 text-green-600" /> : <Globe className="w-7 h-7 text-green-600" />}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-navy-900 leading-tight mb-2">{partner.name}</h3>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{partner.desc}</p>
-                </div>
-              )
-              
-              return partner.link ? (
-                <a
-                  key={partner.name}
-                  href={partner.link}
-                  className="block focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white rounded-2xl"
-                >
-                  {cardContent}
-                </a>
-              ) : (
-                <div key={partner.name}>{cardContent}</div>
-              )
-            })}
-          </div>
         </div>
         
-        {/* 移动端：缩小的网络图 */}
-        <div className="md:hidden w-full flex justify-center items-center py-8" style={{ marginTop: '-40px' }}>
-          <div style={{ width: '100%', maxWidth: '100vw', overflow: 'hidden' }}>
-            <div style={{ transform: 'scale(0.4)', transformOrigin: 'center center', width: '1800px', height: '1200px', margin: '0 auto' }}>
+        {/* iPad竖版：缩小的网络图 - 始终渲染，通过CSS控制显示 */}
+        <div className="ipad-portrait-partners" style={{ marginTop: '20px', marginBottom: '-690px', paddingTop: '0', paddingBottom: '0', position: 'relative', zIndex: 10, overflow: 'visible', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ width: '100%', maxWidth: '100vw', overflow: 'visible', position: 'relative', minHeight: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="ipad-portrait-network" style={{ transform: 'scale(0.5)', transformOrigin: 'center center', width: '1800px', height: '1200px', position: 'relative', zIndex: 10, visibility: 'visible', opacity: 1, display: 'block' }}>
               <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
             </div>
           </div>
         </div>
 
-        {/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方，移出container-custom确保能真正居中 */}
-        <div className="hidden md:block w-full" style={{ marginTop: '-80px' }}>
-          <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+        {/* 手机竖版：参考iPad竖版和桌面版重新制作 */}
+        <div className="mobile-portrait-partners" style={{ marginTop: '-50px', marginBottom: '0px', paddingTop: '0', paddingBottom: '0', position: 'relative', zIndex: 10, overflow: 'hidden', width: 'calc(100% + 40px)', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '-20px', marginRight: '20px' }}>
+          <div style={{ width: '100%', maxWidth: '100vw', overflow: 'hidden', position: 'relative', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10 }}>
+            <div className="mobile-portrait-network" style={{ transform: 'scale(0.36) translateY(600px)', transformOrigin: 'center center', width: '1800px', height: '1200px', position: 'relative', zIndex: 10, visibility: 'visible', opacity: 1, display: 'block', overflow: 'visible', margin: 'auto' }}>
+              <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+            </div>
+          </div>
         </div>
+
+                {/* iPad横版和手机横版：缩小的网络图 */}
+        {!showMobilePortrait && !showIpadPortrait && (
+          <div
+            className="ipad-landscape-partners w-full flex justify-center items-center"
+            style={{
+              marginTop: '20px',
+              marginBottom: '-690px',
+              paddingTop: 0,
+              paddingBottom: 0,
+              position: 'relative',
+              zIndex: 10,
+              overflow: 'visible',
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '100vw',
+                overflow: 'visible',
+                position: 'relative',
+                minHeight: '720px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  transform: 'scale(0.6)',
+                  transformOrigin: 'center center',
+                  width: '1800px',
+                  height: '1200px',
+                  position: 'relative',
+                  zIndex: 10,
+                  visibility: 'visible',
+                  opacity: 1,
+                  display: 'block',
+                }}
+              >
+                <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+              </div>
+            </div>
+          </div>
+        )}
+
+{/* 桌面端：优化的中心辐射式网络布局 - 放在标题文字正下方，移出container-custom确保能真正居中 */}
+        <div className="hidden xl:block w-full desktop-partners-network" style={{ marginTop: '-140px', marginBottom: '-120px', paddingTop: '0', paddingBottom: '0' }}>
+          <div style={{ transform: 'scale(0.85) translateY(50px) translateX(80px)', transformOrigin: 'center center', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <PartnersNetwork partners={partners} partnerIcons={partnerIcons} />
+          </div>
+        </div>
+
       </section>
 
-      <section id="cases" className="section-padding">
+      <section id="cases" className="section-padding" style={{ marginTop: '0px', position: 'relative', zIndex: 10, border: '3px solid orange', boxSizing: 'border-box' }}>
         <div className="container-custom">
           <h2 className="text-2xl font-bold text-white mb-8 text-center">成功案例</h2>
           

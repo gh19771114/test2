@@ -81,28 +81,6 @@ const caseDetails: Record<string, any> = {
       { label: '楼层', value: '12层' },
     ],
   },
-  'grand-palace-minamiazabu-901': {
-    date: '2025/06/27',
-    type: '资产购入',
-    title: 'グランパレス南麻布901',
-    location: '东京都港区南麻布',
-    category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '公司成功购入南麻布地区高端公寓资产。',
-    details: [
-      '公司资产购入，购入日期：2025年6月27日',
-      '南麻布高端住宅区，地理位置优越',
-      '周边有多个国际学校，适合外籍人士',
-      '建筑品质高端，物业管理专业',
-      '作为公司持有资产进行长期运营管理',
-    ],
-    highlights: [
-      { label: '建筑面积', value: '约85㎡' },
-      { label: '房间布局', value: '3LDK' },
-      { label: '建筑年份', value: '2019年' },
-      { label: '楼层', value: '9层' },
-    ],
-  },
   'shinjuku-daikan-plaza-a-201': {
     date: '2025/10/23',
     type: '资产购入',

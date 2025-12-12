@@ -20,9 +20,9 @@ export default function TenantPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom">
-          <p className="text-sm text-blue-300 font-semibold mb-4">Tenant Support</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">租客专用</h1>
-          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+          <p className="text-sm text-blue-300 font-semibold mb-4 drop-shadow-md">Tenant Support</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">租客专用</h1>
+          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
             欢迎使用我们的租客服务。如果您是我们的租客，可以通过以下方式联系我们。
           </p>
         </div>
@@ -61,8 +61,7 @@ export default function TenantPage() {
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-navy-900 mb-2">更新 &amp; 保险</h2>
-                <p className="text-gray-700 leading-relaxed">租约更新、火灾保险续保等问题，请致电：</p>
-                <p className="text-gray-700 leading-relaxed mt-2">03-6661-2588</p>
+                <p className="text-gray-700 leading-relaxed">租约更新、火灾保险续保等问题，请联系：03-6661-2588</p>
               </div>
             </div>
 
@@ -72,8 +71,7 @@ export default function TenantPage() {
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-navy-900 mb-2">日常维修</h2>
-                <p className="text-gray-700 leading-relaxed">如涉及设备保养、日常维修，请联系：</p>
-                <p className="text-gray-700 leading-relaxed mt-2">03-6661-1848</p>
+                <p className="text-gray-700 leading-relaxed">如涉及设备保养、日常维修，请联系：03-6661-1848</p>
               </div>
             </div>
 

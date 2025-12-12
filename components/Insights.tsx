@@ -11,23 +11,46 @@ const Insights = () => {
   const [isMounted, setIsMounted] = useState(false)
   const newsScrollRef = useRef<HTMLDivElement>(null)
   const encyclopediaScrollRef = useRef<HTMLDivElement>(null)
+  const pinnedBarRef = useRef<HTMLDivElement>(null)
+  const [pinnedBarHeight, setPinnedBarHeight] = useState(0)
   
   // 统一的滚动速度：30px/秒
   const SCROLL_SPEED_PX_PER_SEC = 30
 
-  // 按时间排序，显示最新20条资讯（取消半年期限限制）
-  const filteredAndSortedNews = useMemo(() => {
+  // 分离置顶和非置顶资讯
+  const pinnedNewsList = useMemo(() => {
+    const pinnedNews = latestNews.filter(news => news.isPinned)
     // 按日期排序（最新的在前）
-    const sorted = [...latestNews].sort((a, b) => {
+    return [...pinnedNews].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
-    
-    // 返回最新的20条资讯
-    return sorted.slice(0, 20)
+  }, [])
+
+  // 按时间排序，显示最新20条普通资讯（不包含置顶）
+  const filteredAndSortedNews = useMemo(() => {
+    const normalNews = latestNews.filter(news => !news.isPinned)
+    // 按日期排序（最新的在前）
+    const sortedNormal = [...normalNews].sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    })
+    // 返回最新的20条普通资讯
+    return sortedNormal.slice(0, 20)
   }, [])
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
   const encyclopedia = useMemo(() => encyclopediaEntries, [])
+
+  // 检测置顶栏高度，用于精确对齐滚动框
+  useEffect(() => {
+    if (pinnedBarRef.current && pinnedNewsList.length > 0) {
+      // offsetHeight 包含元素高度，但不包括 margin
+      // 需要加上 mb-3 (12px) 的 margin-bottom
+      const height = pinnedBarRef.current.offsetHeight + 12 // mb-3 = 12px
+      setPinnedBarHeight(height)
+    } else {
+      setPinnedBarHeight(0)
+    }
+  }, [pinnedNewsList.length])
 
   // 检测是否为iPad或移动设备，并设置统一的滚动速度
   useEffect(() => {
@@ -125,11 +148,36 @@ const Insights = () => {
                 </Link>
               </div>
             </div>
+            {/* 置顶栏 - 固定位置 */}
+            {pinnedNewsList.length > 0 && (
+              <div ref={pinnedBarRef} className="mb-3 rounded-xl border-2 border-red-200 bg-red-50/80 backdrop-blur-sm">
+                {pinnedNewsList.map((item, index) => (
+                  <Link
+                    key={`pinned-${item.title}-${index}`}
+                    href={`/news/${item.slug}`}
+                    className="flex items-start gap-3 px-4 py-3 hover:bg-red-100/50 transition-colors cursor-pointer"
+                  >
+                    <span className="mt-1 h-2 w-2 rounded-full bg-red-500 flex-shrink-0"></span>
+                    <div className="flex-1">
+                      <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
+                        {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
+                        {item.title}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">{item.date}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
             <div 
-              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm flex-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
+              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
                 isMounted && isIPad ? 'overflow-y-auto' : 'overflow-hidden'
               }`} 
-              style={{ maxHeight: '400px' }}
+              style={{ 
+                height: '400px',
+                maxHeight: '400px',
+                minHeight: '400px'
+              }}
             >
               {newsList.length === 0 ? (
                 <div className="px-6 py-8 text-center text-gray-500">
@@ -146,7 +194,10 @@ const Insights = () => {
                     >
                       <span className="mt-1 h-2 w-2 rounded-full bg-navy-500 flex-shrink-0"></span>
                       <div className="flex-1">
-                        <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">{item.title}</p>
+                        <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
+                          {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
+                          {item.title}
+                        </p>
                         <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                       </div>
                     </Link>
@@ -167,7 +218,10 @@ const Insights = () => {
                     >
                       <span className="mt-1 h-2 w-2 rounded-full bg-navy-500 flex-shrink-0"></span>
                       <div className="flex-1">
-                        <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">{item.title}</p>
+                        <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
+                          {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
+                          {item.title}
+                        </p>
                         <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                       </div>
                     </Link>
@@ -197,10 +251,14 @@ const Insights = () => {
               </div>
             </div>
             <div 
-              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm flex-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
+              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
                 isMounted && isIPad ? 'overflow-y-auto' : 'overflow-hidden'
               }`} 
-              style={{ maxHeight: '400px' }}
+              style={{ 
+                height: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
+                maxHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
+                minHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px'
+              }}
             >
               {isMounted && isIPad ? (
                 // 移动设备（包括手机和iPad）: 使用手动滚动

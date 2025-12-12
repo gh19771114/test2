@@ -21,9 +21,9 @@ export default function TouZiPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom">
-          <p className="text-sm text-purple-300 font-semibold mb-4">Asset Investment</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">资产投资运营</h1>
-          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+          <p className="text-sm text-purple-300 font-semibold mb-4 drop-shadow-md">Asset Investment</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">资产投资运营</h1>
+          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
             长期投入自有资本于优良资产的投资与运营。本页旨在展示既有投资项目与管理实力，相关信息仅供业务介绍之用，不面向客户提供任何资产投资或募集服务。
           </p>
         </div>

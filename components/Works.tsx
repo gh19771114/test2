@@ -42,15 +42,6 @@ const Works = () => {
       description: '成功完成代代木地区优质公寓单元的销售交易。'
     },
     {
-      id: 'grand-palace-minamiazabu-901',
-      title: 'グランパレス南麻布901',
-      date: '2025/06/27',
-      type: '资产购入',
-      category: '高级公寓',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      description: '公司成功购入南麻布地区高端公寓资产。'
-    },
-    {
       id: 'shinjuku-daikan-plaza-a-201',
       title: '新宿ダイカンプラザA館201',
       date: '2025/10/23',

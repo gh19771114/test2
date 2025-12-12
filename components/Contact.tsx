@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Mail, Phone, MapPin, Printer, Send, Copy, Check, Edit, CheckCircle } from 'lucide-react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 const Contact = () => {
   const ref = useRef(null)
@@ -18,6 +19,8 @@ const Contact = () => {
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -35,6 +38,32 @@ const Contact = () => {
   }
 
   const handleConfirmSend = async () => {
+    // 验证 reCAPTCHA
+    if (!recaptchaToken) {
+      setSubmitResult('请完成机器人验证')
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
+      return
+    }
+
+    // 先验证 reCAPTCHA token
+    const verifyRes = await fetch('/api/verify-recaptcha', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: recaptchaToken }),
+    })
+
+    const verifyData = await verifyRes.json()
+    if (!verifyData.success) {
+      setSubmitResult('机器人验证失败，请重试')
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
+      setRecaptchaToken(null)
+      return
+    }
+
     setLoading(true)
     setSubmitResult(null)
 
@@ -61,13 +90,17 @@ const Contact = () => {
       setSubmitResult(data.message || '信息已提交，我们会尽快与您联系。')
       setShowConfirm(false)
       
-      // 清空表单
+      // 清空表单和 reCAPTCHA
       setFormData({
         company: '',
         name: '',
         email: '',
         message: ''
       })
+      setRecaptchaToken(null)
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
     } catch (err: any) {
       console.error(err)
       setSubmitResult(err.message || '提交失败，请稍后重试。')
@@ -80,6 +113,10 @@ const Contact = () => {
     // 直接返回编辑状态
     setShowConfirm(false)
     setSubmitResult(null)
+    setRecaptchaToken(null)
+    if (recaptchaRef.current) {
+      recaptchaRef.current.reset()
+    }
   }
 
   const handleCopy = async (text: string, type: string) => {
@@ -347,9 +384,18 @@ const Contact = () => {
                   </div>
                   
                   <div className="space-y-3 mt-8 pt-6 border-t border-gray-200">
+                    <div className="flex justify-center">
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                        onChange={(token) => setRecaptchaToken(token)}
+                        onExpired={() => setRecaptchaToken(null)}
+                        onError={() => setRecaptchaToken(null)}
+                      />
+                    </div>
                     <button
                       onClick={handleConfirmSend}
-                      disabled={loading}
+                      disabled={loading || !recaptchaToken}
                       className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {loading ? '发送中...' : '确认发送'}
@@ -412,12 +458,12 @@ const Contact = () => {
                         <info.icon className="w-6 h-6 text-navy-700" />
                       </motion.div>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="text-lg font-semibold text-navy-700">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1 gap-2">
+                        <h4 className="text-lg font-semibold text-navy-700 whitespace-nowrap flex-shrink-0">
                           {info.title}
                         </h4>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-shrink-0">
                           {info.title === '电子邮箱' && (
                             <button
                               onClick={handleEmailClick}

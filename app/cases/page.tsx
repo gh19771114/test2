@@ -114,17 +114,6 @@ const cases = [
   },
   // 资产投资
   {
-    id: 'grand-palace-minamiazabu-901',
-    date: '2025/06/27',
-    type: '资产购入',
-    categoryGroup: '资产投资',
-    title: 'グランパレス南麻布901',
-    location: '东京都港区南麻布',
-    category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '公司成功购入南麻布地区高端公寓资产。',
-  },
-  {
     id: 'shinjuku-daikan-plaza-a-201',
     date: '2025/10/23',
     type: '资产购入',
@@ -204,9 +193,9 @@ export default function CasesPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/80 to-navy-900/60"></div>
           </div>
           <div className="relative z-10 container-custom">
-            <p className="text-sm text-cyan-300 font-semibold mb-4">Case Studies</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">案例展示</h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
+            <p className="text-sm text-cyan-300 font-semibold mb-4 drop-shadow-md">Case Studies</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">案例展示</h1>
+            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
               以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务，为客户提供专业、高效的服务。
             </p>
           </div>

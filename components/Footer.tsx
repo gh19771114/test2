@@ -1,12 +1,26 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { Mail, Phone, MapPin, Printer } from 'lucide-react'
 import Image from 'next/image'
 import xiaohongshuIcon from '@/imgs/xiaohongshu-seeklogo.svg'
 import wechatIcon from '@/imgs/wechat_icon_130789.svg'
 
 const Footer = () => {
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      if (typeof window !== 'undefined') {
+        setIsDesktop(window.innerWidth >= 1024) // lg breakpoint
+      }
+    }
+    checkDesktop()
+    window.addEventListener('resize', checkDesktop)
+    return () => window.removeEventListener('resize', checkDesktop)
+  }, [])
+
   const handleEmailClick = () => {
     window.location.href = 'mailto:info@bournmark.jp'
   }
@@ -102,7 +116,7 @@ const Footer = () => {
   ]
 
   return (
-    <footer className="bg-navy-900 text-white">
+    <footer className="bg-navy-900 text-white relative z-[9999]">
       <div className="container-custom px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="py-16">
@@ -142,8 +156,8 @@ const Footer = () => {
 
             {/* Quick Links */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, x: isDesktop ? 30 : 0 }}
+              whileInView={{ opacity: 1, y: 0, x: isDesktop ? 30 : 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true }}
             >
@@ -198,8 +212,8 @@ const Footer = () => {
 
             {/* Contact Info */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, x: isDesktop ? -20 : 0 }}
+              whileInView={{ opacity: 1, y: 0, x: isDesktop ? -20 : 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
             >
@@ -227,7 +241,7 @@ const Footer = () => {
                 <div className="flex items-start space-x-3">
                   <MapPin size={20} className="text-gray-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-gray-300">東京都中央区日本橋人形町1-2-12</p>
+                    <p className="text-gray-300 whitespace-nowrap">東京都中央区日本橋人形町1-2-12</p>
                     <p className="text-sm text-gray-400">Bourn Mark Ningyocho BLD. 2F</p>
                   </div>
                 </div>

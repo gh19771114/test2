@@ -96,3 +96,12 @@ export default function EncyclopediaListPage() {
 }
 
 
+
+
+
+
+
+
+
+
+

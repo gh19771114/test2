@@ -83,6 +83,32 @@ export function extractDateFromWebString(dateStr: string, copyrightYear?: number
 // 最新资讯数据
 export const latestNews = [
   {
+    title: '2025年年末休假时间通知',
+    date: '2025-12-20',
+    slug: '2025-year-end-holiday-notice',
+    isPinned: true,
+    isNotice: true,
+    content: `尊敬的客户及合作伙伴：
+
+感谢您一直以来对Bourn Mark的支持与信任。
+
+根据公司安排，2025年年末休假时间如下：
+
+【休假期间】
+2025年12月24日（星期三）至2026年1月6日（星期一）
+
+【业务恢复时间】
+2026年1月7日（星期二）起正常营业
+
+休假期间，紧急事务请联系：
+紧急报修热线：0120-559-989（24小时）
+
+给您带来的不便，敬请谅解。祝您新年快乐，万事如意！
+
+Bourn Mark株式会社
+2025年12月20日`,
+  },
+  {
     title: '日本政府加强外国人购房监管，多项新措施即将实施',
     date: '2025-11-06',
     slug: 'japan-government-strengthens-foreign-buyer-regulation',

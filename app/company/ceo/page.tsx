@@ -17,10 +17,18 @@ const profileHighlights = [
   { label: '媒体报道', value: '曾获《财界》《周刊大楼经营》《日经新闻》与 NHK《クローズアップ現代》等媒体专题报道' },
 ]
 
-const messageParagraphs = [
+// 原始文本（用于桌面版和iPad横版）
+const messageParagraphsOriginal = [
   '1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。',
-  '在专注业务发展的同时，我们也不断反思企业存在的意义，回归“企业应为社会之公器”的基本理念。我来到日本后始终坚守的信念——“搭建中日友好的桥梁”——在这段历程中得以实践。我深知改善中日关系任重道远，并非只靠口号即可实现，但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。',
+  '在专注业务发展的同时，我们也不断反思企业存在的意义，回归"企业应为社会之公器"的基本理念。我来到日本后始终坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。我深知改善中日关系任重道远，并非只靠口号即可实现，但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。',
   '长期以来，我们通过不动产业务与中日经济领域的企业携手，与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，力求拓展更广阔的业务版图。',
+]
+
+// 带换行标签的文本（用于iPad竖版）
+const messageParagraphs = [
+  '1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，<br />于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务<br />快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。',
+  '在专注业务发展的同时，我们也不断反思企业存在的意义，<br />回归"企业应为社会之公器"的基本理念。我来到日本后始终<br />坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。<br />我深知改善中日关系任重道远，并非只靠口号即可实现，<br />但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。',
+  '长期以来，我们通过不动产业务与中日经济领域的企业携手，<br />与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，<br />推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，<br />力求拓展更广阔的业务版图。',
 ]
 
 const tabs: Array<{ id: 'profile' | 'message'; label: string }> = [
@@ -111,6 +119,7 @@ export default function CompanyCeoPage() {
           </section>
         ) : (
           <>
+            {/* 桌面版 */}
             <section className="desktop-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
                 <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
@@ -124,10 +133,6 @@ export default function CompanyCeoPage() {
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
-                <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
-              </div>
               <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
                 <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
@@ -135,8 +140,8 @@ export default function CompanyCeoPage() {
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                    {messageParagraphs.map((paragraph) => (
-                      <p key={paragraph} className="text-balance">
+                    {messageParagraphsOriginal.map((paragraph, index) => (
+                      <p key={index} className="text-balance">
                         {paragraph}
                       </p>
                     ))}
@@ -148,10 +153,10 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
-            
-            {/* iPad横版：图片向右移动50px */}
+
+            {/* iPad横版 */}
             <section className="ipad-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center ipad-landscape-image-container">
+              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
                 <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
                   <Image
                     src={ceoPortrait1}
@@ -163,10 +168,6 @@ export default function CompanyCeoPage() {
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#f2e7da] via-[#f2e7da]/82 to-transparent"></div>
-                <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-[#f4ecde] via-[#f4ecde]/80 to-transparent"></div>
-              </div>
               <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
                 <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
@@ -174,8 +175,8 @@ export default function CompanyCeoPage() {
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                    {messageParagraphs.map((paragraph) => (
-                      <p key={paragraph} className="text-balance">
+                    {messageParagraphsOriginal.map((paragraph, index) => (
+                      <p key={index} className="text-balance">
                         {paragraph}
                       </p>
                     ))}
@@ -187,19 +188,63 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
-            
-            {/* iPad竖版和手机端：文字在左边（不超过三分之二），图片在右边（三分之一） */}
-            <section className="ipad-portrait-mobile-message flex flex-row relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              {/* 文字内容 - 左边，不超过三分之二 */}
-              <div className="w-[66.666%] relative z-10 py-12 px-4 md:px-6 lg:px-8">
-                <div className="max-w-full text-slate-900 space-y-6">
+
+            {/* iPad竖版 */}
+            <section className="ipad-portrait-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
+                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="100vw"
+                  />
+                </div>
+              </div>
+              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
+                <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
                     <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                    {messageParagraphs.map((paragraph) => (
-                      <p key={paragraph} className="text-balance">
+                    {messageParagraphs.map((paragraph, index) => (
+                      <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-base text-slate-600">董事长 / President</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 手机横版 - 参考iPad横版 */}
+            <section className="mobile-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
+                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="100vw"
+                  />
+                </div>
+              </div>
+              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
+                <div className="max-w-[620px] text-slate-900 space-y-6">
+                  <div>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                  </div>
+                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
+                    {messageParagraphsOriginal.map((paragraph, index) => (
+                      <p key={index} className="text-balance">
                         {paragraph}
                       </p>
                     ))}
@@ -210,17 +255,37 @@ export default function CompanyCeoPage() {
                   </div>
                 </div>
               </div>
-              {/* 图片 - 右边三分之一 */}
-              <div className="w-[33.333%] relative overflow-visible">
-                <div className="relative w-full h-full min-h-[90vh] ipad-mobile-portrait-image">
+            </section>
+
+            {/* 手机竖版 - 参考iPad竖版 */}
+            <section className="mobile-portrait-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
+                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
                   <Image
                     src={ceoPortrait1}
                     alt="桂小川人物照片"
                     fill
                     className="object-contain object-bottom"
                     priority={false}
-                    sizes="33vw"
+                    sizes="100vw"
                   />
+                </div>
+              </div>
+              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
+                <div className="max-w-[620px] text-slate-900 space-y-6">
+                  <div>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                  </div>
+                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
+                    {messageParagraphs.map((paragraph, index) => (
+                      <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <p className="text-base text-slate-600">董事长 / President</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  </div>
                 </div>
               </div>
             </section>

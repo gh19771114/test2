@@ -9,11 +9,24 @@
     min-height: 100vh;
   }
   
+  * {
+    font-family: inherit;
+  }
+  
   body {
     line-height: 1.6;
-    font-family: var(--font-inter), var(--font-noto-sans-jp), 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: transparent;
     min-height: 100vh;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* 确保所有文本元素继承正确的字体 */
+  p, span, div, h1, h2, h3, h4, h5, h6, a, li, td, th, label, input, textarea, select, button {
+    font-family: inherit;
   }
 
   /* 确保 emoji 国旗在所有系统上都能正确显示 */
@@ -35,8 +48,61 @@
     @apply bg-navy-700 hover:bg-navy-800 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200;
   }
   
+  /* 桌面端合作伙伴网络section样式 */
+  @media (min-width: 1280px) {
+    /* 绿框（合作伙伴网络section）在红框内上下左右居中 */
+    section#partners.partners-section,
+    section#partners.partners-section.section-padding,
+    section#partners.section-padding {
+      position: relative !important;
+      min-height: 940px !important; /* 底部再向上缩短20px (960 - 20 = 940) */
+      height: 940px !important; /* 固定高度确保生效 */
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start !important; /* 改为顶部对齐，保持内容位置不变 */
+      padding-top: 0 !important; /* 确保从顶部开始 */
+    }
+    
+    section#partners.partners-section .container-custom {
+      position: relative !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      z-index: 10 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start !important; /* 改为顶部对齐，保持内容位置不变 */
+      margin-top: 0 !important; /* 确保从顶部开始 */
+    }
+    
+    /* 确保标题文字可见 */
+    section#partners.partners-section .container-custom > div {
+      position: relative !important;
+      z-index: 10 !important;
+    }
+    
+    /* 蓝框向上移动，避免下方伸出绿框 */
+    .desktop-partners-network .network-container-border {
+      margin-top: -730px !important; /* 从-600px向上移动130px，避免下方伸出 */
+    }
+  }
+  
   .btn-secondary {
     @apply bg-white hover:bg-gray-50 text-navy-700 border border-navy-700 px-6 py-3 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  /* 确保蓝框中心点大小固定为12px，不被其他规则影响 */
+  .network-container-border > div:first-child {
+    width: 12px !important;
+    height: 12px !important;
+    min-width: 12px !important;
+    max-width: 12px !important;
+    min-height: 12px !important;
+    max-height: 12px !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
   }
   
   .section-padding {
@@ -65,6 +131,26 @@
     }
   }
   
+  /* 手机竖版：所有容器距离屏幕边缘8px */
+  @media (max-width: 767px) and (orientation: portrait) {
+    .container-custom {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    
+    .section-padding {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    
+    /* 确保所有section的内容都距离边缘8px */
+    section .container-custom,
+    section.container-custom {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+  }
+  
   /* 横向模式下的布局调整 */
   @media (orientation: landscape) and (max-height: 600px) {
     /* 实用工具按钮在横向模式下调整位置，避免与FloatingActions重叠 */
@@ -85,7 +171,7 @@
   }
 
   .font-display {
-    font-family: var(--font-playfair), var(--font-inter), var(--font-noto-sans-jp), 'Noto Sans JP', sans-serif;
+    font-family: var(--font-playfair), var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', var(--font-inter), sans-serif;
   }
 
   .glass-panel {
@@ -372,81 +458,1665 @@
   }
 }
 
-/* iPad横版社长寄语：图片向右移动150px（50px + 100px），向下移动20px */
-@media (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) and (min-height: 768px) and (max-height: 1024px) {
-  .ipad-landscape-image-container {
-    padding-left: calc(8% + 150px) !important;
-    padding-top: 20px !important;
-  }
+/* 社长寄语页面 - 响应式显示控制 */
+
+/* 默认全部隐藏，避免多个版本同时出现 */
+.desktop-message,
+.ipad-landscape-message,
+.ipad-portrait-message,
+.mobile-landscape-message,
+.mobile-portrait-message {
+  display: none !important;
 }
 
-/* 桌面端（min-width: 1024px）：显示桌面版，隐藏iPad和手机端 */
-@media (min-width: 1024px) {
+/* 桌面版：宽度 ≥ 1370 */
+@media (min-width: 1370px) {
   .desktop-message {
     display: block !important;
   }
-  .ipad-landscape-message,
-  .ipad-portrait-mobile-message {
+  /* 桌面版：隐藏background.png背景图 */
+  body > div > div > div.absolute.inset-0.z-0 {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
 
-/* iPad横版（768px-1023px, landscape）：显示横版，隐藏其他 */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
-  .desktop-message {
-    display: none !important;
-  }
-  .ipad-landscape-message {
-    display: block !important;
-  }
-  .ipad-portrait-mobile-message {
-    display: none !important;
-  }
-}
-
-/* iPad竖版和手机端（max-width: 1023px 或 768px-1023px portrait）：显示竖版布局，隐藏其他 */
-@media (max-width: 767px), (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
-  .desktop-message {
-    display: none !important;
-  }
-  .ipad-landscape-message {
-    display: none !important;
-  }
-  .ipad-portrait-mobile-message {
+/* iPad 横版（含 iPad Pro）：宽度 1024–1369 且横屏 */
+@media (min-width: 1024px) and (max-width: 1369px) and (orientation: landscape) {
+  /* iPad横版：合作伙伴网络显示 */
+  section#partners .ipad-landscape-partners,
+  #partners .ipad-landscape-partners,
+  .ipad-landscape-partners {
     display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  /* 隐藏其他版本 */
+  section#partners .ipad-portrait-partners,
+  section#partners .mobile-portrait-partners,
+  .ipad-portrait-partners,
+  .mobile-portrait-partners {
+    display: none !important;
+  }
+  #partners .ipad-landscape-partners {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  #partners .ipad-landscape-partners > div {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  #partners .ipad-landscape-partners > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  
+  /* iPad横版：蓝框相对于绿框上下左右居中（向上移动800px后居中） */
+  section#partners .ipad-landscape-partners .network-container-border {
+    width: 1600px !important;
+    height: 1100px !important;
+    left: 50% !important;
+    top: calc(50% - 800px) !important; /* 向上移动800px */
+    margin-left: -800px !important; /* -width/2 = -1600/2 = -800 */
+    margin-top: -550px !important; /* -height/2 = -1100/2 = -550 */
+    transform: none !important;
+    z-index: 2 !important;
+    border: 3px solid blue !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+  }
+  
+  /* iPad横版：蓝框内的网络图内容相对于蓝框居中 */
+  section#partners .ipad-landscape-partners .network-container-border > div {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* iPad横版：红框相对于绿框上下左右居中（高度缩短200px） */
+  section#partners .ipad-landscape-partners .map-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1600px !important;
+    height: 900px !important; /* 1100 - 200 = 900 */
+    margin-left: -800px !important; /* -width/2 = -1600/2 = -800 */
+    margin-top: -450px !important; /* -height/2 = -900/2 = -450 */
+    transform: none !important;
+    z-index: 1 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* iPad横版：红框内的地图背景相对于红框居中 */
+  section#partners .ipad-landscape-partners .map-container-background {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1600px !important;
+    height: 900px !important;
+    margin-left: -800px !important; /* -width/2 = -1600/2 = -800 */
+    margin-top: -450px !important; /* -height/2 = -900/2 = -450 */
+    transform: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.15 !important; /* 统一透明度 */
+    filter: grayscale(100%) brightness(0.8) !important; /* 统一滤镜 */
+  }
+  
+  /* iPad横版：地图图片相对于红框居中 */
+  section#partners .ipad-landscape-partners .map-container-background img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  
+  /* iPad横版：绿框防止溢出 */
+  section#partners .ipad-landscape-partners {
+    overflow: hidden !important;
+    max-width: 100% !important;
+  }
+  
+  /* 防止横向滚动 */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+  }
+  .ipad-landscape-message {
+    display: block !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    min-height: 90vh !important;
+    height: 90vh !important;
+    overflow-y: hidden !important;
+  }
+  /* iPad横版：社长照片向右移动100px，向下移动20px，固定位置 */
+  .ipad-landscape-message > div.absolute.inset-0.flex.justify-center {
+    transform: translateX(100px) translateY(20px) !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+  /* iPad横版：文案容器固定位置，不随页尾移动 */
+  .ipad-landscape-message .container-custom {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
+  }
+  /* iPad横版：隐藏background.png背景图 */
+  body > div > div > div.absolute.inset-0.z-0 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+    /* iPad横版：页尾向上移动10px */
+  footer {
+    transform: translateY(-10px) !important;
+    position: relative !important;
+    z-index: 9999 !important;
+  }
+  /* iPad横版：合作伙伴网络正常显示 */
+  #partners section {
+    overflow: visible !important;
+  }
+  #partners .container-custom {
+    overflow: visible !important;
+  }
+  #partners div[style*="scale(0.6)"],
+  #partners div[style*="scale(0.4)"] {
+    display: block !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10 !important;
+    position: relative !important;
+  }
+  #partners div[style*="scale(0.6)"] > div,
+  #partners div[style*="scale(0.4)"] > div {
+    overflow: visible !important;
+    max-width: 100vw !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+  #partners div[style*="scale(0.6)"] > div > div,
+  #partners div[style*="scale(0.5)"] > div > div,
+  #partners div[style*="scale(0.4)"] > div > div,
+  #partners div[style*="scale(0.35)"] > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  /* 确保PartnersNetwork组件本身可见 */
+  #partners div[style*="scale(0.6)"] > div > div > div,
+  #partners div[style*="scale(0.5)"] > div > div > div,
+  #partners div[style*="scale(0.4)"] > div > div > div,
+  #partners div[style*="scale(0.35)"] > div > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+    pointer-events: none !important;
+  }
+  #partners div[style*="scale(0.6)"] > div > div > div > div,
+  #partners div[style*="scale(0.5)"] > div > div > div > div,
+  #partners div[style*="scale(0.4)"] > div > div > div > div,
+  #partners div[style*="scale(0.35)"] > div > div > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: absolute !important;
   }
 }
 
-/* 手机端：社长图片放大3倍，向右移动200px，向上移动500px */
-@media (max-width: 767px) {
-  .ipad-mobile-portrait-image {
-    transform: scale(3) translate(100px, -700px) !important;
-    transform-origin: center center !important;
-  }
+/* 默认隐藏规则已移除，由各媒体查询直接控制显示/隐藏 */
+
+/* 全局：减少partners section的上下padding - 覆盖Tailwind的py-16 */
+/* 全局：减少partners section的上下padding - 覆盖Tailwind的py-16 */
+section#partners.partners-section.section-padding,
+section#partners.section-padding,
+section#partners.partners-section {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
 }
 
-/* iPad竖版：社长图片缩小为现在的80%（scale 2.4），向下移动100px，向右移动20px */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
-  .ipad-mobile-portrait-image {
-    transform: scale(2.4) translate(-80px, -300px) !important;
-    transform-origin: center center !important;
-  }
-  /* iPad竖版：页底向上移动，对齐到照片底部 */
-  .ipad-portrait-mobile-message {
-    min-height: auto !important;
-    align-items: flex-end !important;
-  }
-  .ipad-portrait-mobile-message > div:first-child {
+/* 不再默认隐藏，由各媒体查询控制显示/隐藏 */
+
+/* 桌面端：缩小网络图容器的上下padding */
+@media (min-width: 1280px) {
+  #partners .desktop-partners-network,
+  section#partners .desktop-partners-network {
+    padding-top: 0 !important;
     padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
   }
-  .ipad-portrait-mobile-message > div:last-child {
+  /* 隐藏移动端和iPad版本 */
+  section#partners .mobile-portrait-partners,
+  section#partners .ipad-portrait-partners,
+  section#partners .ipad-landscape-partners,
+  .mobile-portrait-partners,
+  .ipad-portrait-partners,
+  .ipad-landscape-partners {
+    display: none !important;
+  }
+}
+
+/* iPad 竖版：宽度 768–1023 且竖屏 */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  /* iPad竖版：合作伙伴网络显示 - 使用最高优先级选择器 */
+  .ipad-portrait-partners-force-show,
+  section#partners .ipad-portrait-partners-force-show,
+  section#partners .ipad-portrait-partners,
+  #partners .ipad-portrait-partners,
+  .ipad-portrait-partners,
+  section#partners.partners-section .ipad-portrait-partners {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+    overflow: hidden !important; /* 防止溢出 */
+    max-width: 100% !important;
+  }
+  
+  /* iPad竖版：蓝框相对于绿框上下左右居中 */
+  section#partners .ipad-portrait-partners .network-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -900px !important; /* -containerWidth/2 = -1800/2 = -900 */
+    margin-top: -600px !important; /* -containerHeight/2 = -1200/2 = -600 */
+    transform: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* iPad竖版：蓝框内的网络图内容相对于蓝框居中 */
+  section#partners .ipad-portrait-partners .network-container-border > div {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* iPad竖版：红框相对于绿框上下左右居中 */
+  section#partners .ipad-portrait-partners .map-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1800px !important;
+    height: 600px !important;
+    margin-left: -900px !important; /* -width/2 = -1800/2 = -900 */
+    margin-top: -300px !important; /* -height/2 = -600/2 = -300 */
+    transform: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* iPad竖版：红框内的地图背景相对于红框居中 */
+  section#partners .ipad-portrait-partners .map-container-background {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1800px !important;
+    height: 600px !important;
+    margin-left: -900px !important; /* -width/2 = -1800/2 = -900 */
+    margin-top: -300px !important; /* -height/2 = -600/2 = -300 */
+    transform: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.15 !important; /* 统一透明度 */
+    filter: grayscale(100%) brightness(0.8) !important; /* 统一滤镜 */
+  }
+  
+  /* iPad竖版：地图图片相对于红框居中 */
+  section#partners .ipad-portrait-partners .map-container-background img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  
+  /* iPad竖版：绿框防止溢出 */
+  section#partners.partners-section,
+  section#partners.partners-section.section-padding,
+  section#partners.section-padding {
+    overflow: hidden !important;
+  }
+  /* 隐藏其他版本 */
+  section#partners .ipad-landscape-partners,
+  section#partners .mobile-portrait-partners,
+  .ipad-landscape-partners,
+  .mobile-portrait-partners {
+    display: none !important;
+  }
+  section#partners .ipad-portrait-partners > div,
+  #partners .ipad-portrait-partners > div,
+  section#partners.partners-section .ipad-portrait-partners > div {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+  }
+  
+  section#partners .ipad-portrait-partners > div > div,
+  #partners .ipad-portrait-partners > div > div,
+  section#partners.partners-section .ipad-portrait-partners > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  section#partners .ipad-portrait-network,
+  #partners .ipad-portrait-network,
+  section#partners.partners-section .ipad-portrait-network {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  section#partners .ipad-portrait-network > div,
+  #partners .ipad-portrait-network > div,
+  section#partners.partners-section .ipad-portrait-network > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  /* 确保PartnersNetwork组件内部元素可见 */
+  section#partners .ipad-portrait-network > div > div,
+  #partners .ipad-portrait-network > div > div,
+  section#partners.partners-section .ipad-portrait-network > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  
+  .ipad-portrait-message {
+    display: block !important;
+  }
+  /* iPad竖版：文字部分移到页面左边，避免遮挡图片 */
+  .ipad-portrait-message > div.container-custom {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    max-width: 75% !important;
+    width: 75% !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    height: 80% !important;
+    max-height: 80% !important;
+    transform: translateX(50px) !important;
+  }
+  .ipad-portrait-message > div.container-custom > div {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  /* iPad竖版：文字内容优化排版，使用break-word避免数字与中文之间换行 */
+  .ipad-portrait-message > div.container-custom > div > div.space-y-5 {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+  /* iPad竖版：正文段落设置等长字间距，使用break-word避免数字与中文之间断行，容器宽度足够大 */
+  .ipad-portrait-message > div.container-custom > div > div.space-y-5 > p {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    text-align: left !important;
+    letter-spacing: 0.05em !important;
+    line-height: 1.75 !important;
+    /* 确保使用正确的中文字体，优先使用中文字体修复"关"字字体问题 */
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+    font-feature-settings: 'kern' 1, 'liga' 1 !important;
+  }
+  /* iPad竖版：图片移到右边，避免与文字重叠 */
+  .ipad-portrait-message > div.absolute.inset-0.flex.justify-center {
+    padding-left: 0 !important;
+    justify-content: flex-end !important;
+    padding-right: 2% !important;
+    left: auto !important;
+    right: 0 !important;
+    width: 40% !important;
+  }
+  .ipad-portrait-message > div.absolute.inset-0.flex.justify-center > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: scale(2) translateX(-70px) translateY(-220px) !important;
+  }
+  /* iPad竖版：隐藏background.png背景图 */
+  body > div > div > div.absolute.inset-0.z-0 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* 手机横版：宽度 ≤1023 且横屏 - 参考iPad横版 */
+@media (max-width: 1023px) and (orientation: landscape) {
+  /* 手机横版：合作伙伴网络显示 */
+  .ipad-landscape-partners {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  /* 隐藏其他版本 */
+  .ipad-portrait-partners,
+  .mobile-portrait-partners {
+    display: none !important;
+  }
+  #partners .ipad-landscape-partners {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  #partners .ipad-landscape-partners > div {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  #partners .ipad-landscape-partners > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  /* 防止横向滚动 */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+    position: relative !important;
+  }
+  html {
+    overflow-x: hidden !important;
+  }
+  body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+  body > div {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+  .desktop-message,
+  .ipad-landscape-message,
+  .ipad-portrait-message,
+  .mobile-portrait-message {
+    display: none !important;
+  }
+  .mobile-landscape-message {
+    display: block !important;
+    /* 固定页面尺寸，防止横竖屏转换时大小变化 */
+    min-height: 100vh !important;
+    max-height: none !important;
     height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    position: relative !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+  /* 手机横版：参考iPad横版，社长照片向右移动100px，向下移动200px，固定尺寸 */
+  .mobile-landscape-message > div.absolute.inset-0.flex.justify-center {
+    transform: translateX(100px) translateY(200px) !important;
+    position: absolute !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    box-sizing: border-box !important;
+    align-items: flex-start !important;
+  }
+  .mobile-landscape-message > div.absolute.inset-0.flex.justify-center > div {
+    width: 100% !important;
+    max-width: 1120px !important;
+    min-width: 1120px !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    position: relative !important;
+    transform: scale(1.5) !important;
+    transform-origin: center center !important;
+    overflow: visible !important;
+  }
+  /* 手机横版：确保图片完整显示，不被裁切 */
+  .mobile-landscape-message > div.absolute.inset-0.flex.justify-center > div > div {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
     min-height: auto !important;
   }
-  .ipad-portrait-mobile-message > div:last-child > div {
+  .mobile-landscape-message > div.absolute.inset-0.flex.justify-center > div img {
+    object-fit: contain !important;
+    object-position: center bottom !important;
+  }
+  /* 手机横版：文字容器固定尺寸，向右移动100px */
+  .mobile-landscape-message .container-custom {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    position: relative !important;
+    z-index: 10 !important;
     height: auto !important;
+    transform: translateX(100px) !important;
+  }
+  .mobile-landscape-message > div.container-custom > div {
+    max-width: 50% !important;
+    width: 50% !important;
+    min-width: 50% !important;
+  }
+  /* 手机横版：固定字体大小，防止缩放变化 */
+  .mobile-landscape-message {
+    font-size: 14px !important;
+  }
+  .mobile-landscape-message p,
+  .mobile-landscape-message span,
+  .mobile-landscape-message div {
+    font-size: inherit !important;
+  }
+  /* 手机横版：只在社长寄语页面隐藏background.png背景图 */
+  body:has(.mobile-landscape-message) > div > div > div.page-background {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  /* 手机横版：合作伙伴网络正常显示 */
+  #partners section {
+    overflow: visible !important;
+  }
+  #partners .container-custom {
+    overflow: visible !important;
+  }
+  #partners div[style*="scale(0.6)"],
+  #partners div[style*="scale(0.4)"] {
+    display: block !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10 !important;
+    position: relative !important;
+  }
+  #partners div[style*="scale(0.6)"] > div,
+  #partners div[style*="scale(0.4)"] > div {
+    overflow: visible !important;
+    max-width: 100vw !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+  }
+  #partners div[style*="scale(0.6)"] > div > div,
+  #partners div[style*="scale(0.5)"] > div > div,
+  #partners div[style*="scale(0.4)"] > div > div,
+  #partners div[style*="scale(0.35)"] > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  /* 确保PartnersNetwork组件本身可见 */
+  #partners div[style*="scale(0.6)"] > div > div > div,
+  #partners div[style*="scale(0.5)"] > div > div > div,
+  #partners div[style*="scale(0.4)"] > div > div > div,
+  #partners div[style*="scale(0.35)"] > div > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+    pointer-events: none !important;
+  }
+  #partners div[style*="scale(0.6)"] > div > div > div > div,
+  #partners div[style*="scale(0.5)"] > div > div > div > div,
+  #partners div[style*="scale(0.4)"] > div > div > div > div,
+  #partners div[style*="scale(0.35)"] > div > div > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: absolute !important;
+  }
+}
+
+/* 手机竖版：宽度 ≤767 且竖屏 - 参考iPad竖版 */
+@media (max-width: 767px) and (orientation: portrait) {
+  /* 防止整个页面横向滚动 */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+  }
+  body > div {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+  }
+  /* 防止整个页面横向滚动 - 强制覆盖内联样式 */
+  section#partners,
+  section#partners.partners-section,
+  section#partners[style*="overflow"] {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  section#partners .container-custom,
+  section#partners .container-custom[style*="overflow"] {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  /* 手机竖版：确保section有足够padding显示容器边框 */
+  section#partners.partners-section.section-padding,
+  section#partners.section-padding,
+  section#partners.partners-section {
+    padding-top: 50px !important;
+    padding-bottom: 0px !important;
+  }
+  /* 手机竖版：合作伙伴网络显示 - 使用最高优先级选择器 */
+  .mobile-portrait-partners-force-show,
+  section#partners .mobile-portrait-partners-force-show,
+  section#partners .mobile-portrait-partners,
+  #partners .mobile-portrait-partners,
+  .mobile-portrait-partners,
+  section#partners.partners-section .mobile-portrait-partners {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+    overflow: hidden !important; /* 防止溢出 */
+    max-width: 100% !important;
+    width: 100% !important; /* 改为100%，避免溢出 */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* 手机竖版：蓝框相对于绿框上下左右居中 */
+  section#partners .mobile-portrait-partners .network-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -900px !important; /* -containerWidth/2 = -1800/2 = -900 */
+    margin-top: -600px !important; /* -containerHeight/2 = -1200/2 = -600 */
+    transform: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* 手机竖版：蓝框内的网络图内容相对于蓝框居中 */
+  section#partners .mobile-portrait-partners .network-container-border > div {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* 手机竖版：红框相对于绿框上下左右居中 */
+  section#partners .mobile-portrait-partners .map-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1800px !important;
+    height: 600px !important;
+    margin-left: -900px !important; /* -width/2 = -1800/2 = -900 */
+    margin-top: -300px !important; /* -height/2 = -600/2 = -300 */
+    transform: none !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* 手机竖版：红框内的地图背景相对于红框居中 */
+  section#partners .mobile-portrait-partners .map-container-background {
+    left: 50% !important;
+    top: 50% !important;
+    width: 1800px !important;
+    height: 600px !important;
+    margin-left: -900px !important; /* -width/2 = -1800/2 = -900 */
+    margin-top: -300px !important; /* -height/2 = -600/2 = -300 */
+    transform: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.15 !important; /* 统一透明度 */
+    filter: grayscale(100%) brightness(0.8) !important; /* 统一滤镜 */
+  }
+  
+  /* 手机竖版：地图图片相对于红框居中 */
+  section#partners .mobile-portrait-partners .map-container-background img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  
+  /* 手机竖版：绿框防止溢出 */
+  section#partners.partners-section,
+  section#partners.partners-section.section-padding,
+  section#partners.section-padding {
+    overflow: hidden !important;
+  }
+  /* 隐藏其他版本 */
+  section#partners .ipad-portrait-partners,
+  section#partners .ipad-landscape-partners,
+  .ipad-portrait-partners,
+  .ipad-landscape-partners {
+    display: none !important;
+  }
+  section#partners .mobile-portrait-partners > div,
+  #partners .mobile-portrait-partners > div,
+  section#partners.partners-section .mobile-portrait-partners > div {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* 手机竖版：确保蓝框和红框相对于绿框居中 */
+  section#partners .mobile-portrait-partners .network-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  section#partners .mobile-portrait-partners .map-container-border {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  section#partners .mobile-portrait-partners .map-container-background {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0.15 !important; /* 统一透明度 */
+    filter: grayscale(100%) brightness(0.8) !important; /* 统一滤镜 */
+  }
+  
+  /* 手机竖版：确保内容相对于容器居中 */
+  section#partners .mobile-portrait-partners .network-container-border > div {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  section#partners .mobile-portrait-partners .map-container-background img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  section#partners .mobile-portrait-partners > div > div,
+  #partners .mobile-portrait-partners > div > div,
+  section#partners.partners-section .mobile-portrait-partners > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  section#partners .mobile-portrait-network,
+  #partners .mobile-portrait-network,
+  section#partners.partners-section .mobile-portrait-network {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 10 !important;
+    overflow: visible !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  /* 确保网络图内部元素不会超出 */
+  section#partners .mobile-portrait-network > *,
+  #partners .mobile-portrait-network > *,
+  section#partners.partners-section .mobile-portrait-network > * {
+    max-width: 100vw !important;
+    overflow: visible !important;
+  }
+  /* 确保PartnersNetwork组件的根容器不会超出 */
+  section#partners .mobile-portrait-network > div,
+  #partners .mobile-portrait-network > div,
+  section#partners.partners-section .mobile-portrait-network > div {
+    max-width: 100vw !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    box-sizing: border-box !important;
+  }
+  /* 确保绝对定位的容器居中且不超出 */
+  section#partners .mobile-portrait-network div[style*="position: absolute"],
+  #partners .mobile-portrait-network div[style*="position: absolute"],
+  section#partners.partners-section .mobile-portrait-network div[style*="position: absolute"] {
+    max-width: calc(100vw - 20px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    box-sizing: border-box !important;
+  }
+  /* 确保SVG和所有子元素不超出 */
+  section#partners .mobile-portrait-network svg,
+  #partners .mobile-portrait-network svg,
+  section#partners.partners-section .mobile-portrait-network svg {
+    max-width: 100vw !important;
+    overflow: visible !important;
+  }
+  section#partners .mobile-portrait-network > div,
+  #partners .mobile-portrait-network > div,
+  section#partners.partners-section .mobile-portrait-network > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  /* 确保PartnersNetwork组件内部元素可见 */
+  section#partners .mobile-portrait-network > div > div,
+  #partners .mobile-portrait-network > div > div,
+  section#partners.partners-section .mobile-portrait-network > div > div {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    position: relative !important;
+  }
+  
+  .desktop-message,
+  .ipad-landscape-message,
+  .ipad-portrait-message,
+  .mobile-landscape-message {
+    display: none !important;
+  }
+  .mobile-portrait-message {
+    display: block !important;
+    /* 固定页面尺寸，防止横竖屏转换时大小变化 */
+    min-height: 100vh !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+  /* 手机竖版：参考iPad竖版，文字部分移到页面左边，避免遮挡图片 */
+  .mobile-portrait-message > div.container-custom {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    max-width: 75% !important;
+    width: 75% !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    height: auto !important;
+    max-height: none !important;
     min-height: auto !important;
+    transform: translateX(50px) !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  .mobile-portrait-message > div.container-custom > div {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  /* 手机竖版：文字内容优化排版，使用break-word避免数字与中文之间换行 */
+  .mobile-portrait-message > div.container-custom > div > div.space-y-5 {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+  /* 手机竖版：正文段落设置等长字间距，使用break-word避免数字与中文之间断行，容器宽度足够大 */
+  .mobile-portrait-message > div.container-custom > div > div.space-y-5 > p {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    text-align: left !important;
+    letter-spacing: 0.05em !important;
+    line-height: 1.75 !important;
+    /* 确保使用正确的中文字体，优先使用中文字体修复"关"字字体问题 */
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+    font-feature-settings: 'kern' 1, 'liga' 1 !important;
+  }
+  /* 手机竖版：图片移到右边，避免与文字重叠，固定尺寸 */
+  .mobile-portrait-message > div.absolute.inset-0.flex.justify-center {
+    padding-left: 0 !important;
+    justify-content: flex-end !important;
+    padding-right: 2% !important;
+    left: auto !important;
+    right: 0 !important;
+    width: 40% !important;
+    min-width: 40% !important;
+    max-width: 40% !important;
+    position: absolute !important;
+    height: 100vh !important;
+    max-height: none !important;
+    min-height: 100vh !important;
+    top: 0 !important;
+    bottom: auto !important;
+    z-index: 1 !important;
+  }
+  .mobile-portrait-message > div.absolute.inset-0.flex.justify-center > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    transform: scale(2) translateX(-70px) translateY(-220px) !important;
+    transform-origin: center center !important;
+    position: relative !important;
+  }
+  /* 手机竖版：只在社长寄语页面隐藏background.png背景图 */
+  body:has(.mobile-portrait-message) > div > div > div.page-background {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  /* 手机竖版：成功案例容器marginTop设置 */
+  section#cases {
+    margin-top: 0px !important;
+  }
+  /* 手机竖版：缩小成功案例框 */
+  section#cases a.flex-shrink-0,
+  section#cases .group.flex-shrink-0 {
+    width: 280px !important;
+  }
+  section#cases a[style*="380px"] {
+    width: 280px !important;
+  }
+  
+  /* 手机竖版：联系方式标题不换行 */
+  #contact .flex-1 h4 {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+  
+  #contact .flex-1 > div {
+    min-width: 0 !important;
+  }
+  
+  #contact .flex-1 > div > div {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* 手机竖版：扩大最新资讯置顶栏和滚动栏，重新排版内容 */
+  /* 置顶栏 */
+  .border-red-200.bg-red-50\/80 {
+    padding: 1rem !important;
+  }
+  
+  .border-red-200.bg-red-50\/80 .px-4 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  
+  .border-red-200.bg-red-50\/80 .py-3 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  .border-red-200.bg-red-50\/80 .text-gray-800 {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  .border-red-200.bg-red-50\/80 .text-xs {
+    font-size: 0.95rem !important;
+  }
+  
+  /* 新闻滚动栏 */
+  .rounded-2xl.border-gray-100.bg-white\/80 {
+    padding: 0.5rem !important;
+  }
+  
+  .rounded-2xl.border-gray-100.bg-white\/80 .px-6 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+  
+  .rounded-2xl.border-gray-100.bg-white\/80 .py-4 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+  
+  .rounded-2xl.border-gray-100.bg-white\/80 .text-gray-800 {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  .rounded-2xl.border-gray-100.bg-white\/80 .text-xs {
+    font-size: 0.95rem !important;
+  }
+  
+  /* 房产投资百科滚动栏 */
+  .rounded-3xl.bg-gradient-to-br {
+    padding: 2rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .p-8 {
+    padding: 2rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .text-sm {
+    font-size: 1.05rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .rounded-2xl .px-6 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .rounded-2xl .py-4 {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .rounded-2xl .text-gray-800 {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  .rounded-3xl.bg-gradient-to-br .rounded-2xl .text-xs {
+    font-size: 0.95rem !important;
+  }
+  
+  /* 展示案例框 */
+  #works .overflow-x-auto {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  #works .flex.gap-4 {
+    gap: 1.5rem !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  #works .bg-white\/80.rounded-xl {
+    width: 85vw !important;
+    max-width: 85vw !important;
+  }
+  
+  #works .bg-white\/80.rounded-xl .p-6 {
+    padding: 1.5rem !important;
+  }
+  
+  #works .bg-white\/80.rounded-xl .text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  #works .bg-white\/80.rounded-xl .text-sm {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  #works .bg-white\/80.rounded-xl .text-xs {
+    font-size: 1rem !important;
+  }
+  
+  /* 手机竖版：扩大所有卡片和内部方块 */
+  /* 联系方式卡片 */
+  #contact .bg-white\/80 {
+    padding: 3rem !important;
+  }
+  
+  #contact .p-6 {
+    padding: 3rem !important;
+  }
+  
+  #contact .p-8 {
+    padding: 3.5rem !important;
+  }
+  
+  #contact .w-12.h-12 {
+    width: 5rem !important;
+    height: 5rem !important;
+  }
+  
+  #contact .w-6.h-6 {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  /* 通用卡片扩大 */
+  .rounded-xl,
+  .rounded-2xl {
+    padding: 2.5rem !important;
+  }
+  
+  .p-6 {
+    padding: 2.5rem !important;
+  }
+  
+  .p-8 {
+    padding: 3rem !important;
+  }
+  
+  /* 图标容器扩大 */
+  .w-12.h-12 {
+    width: 4.5rem !important;
+    height: 4.5rem !important;
+  }
+  
+  .w-10.h-10 {
+    width: 4rem !important;
+    height: 4rem !important;
+  }
+  
+  /* 内部小方块进一步扩大 */
+  #contact .space-x-4 {
+    gap: 2.5rem !important;
+  }
+  
+  #contact .space-y-6 {
+    gap: 3rem !important;
+  }
+  
+  /* 表单输入框扩大 - 使用更具体的选择器覆盖Tailwind类 */
+  #contact input[type="text"].w-full,
+  #contact input[type="email"].w-full,
+  #contact textarea.w-full,
+  #contact input.w-full,
+  #contact textarea {
+    padding: 1.75rem !important;
+    font-size: 1.15rem !important;
+    line-height: 1.7 !important;
+    width: calc(100% + 40px) !important;
+    max-width: calc(100% + 40px) !important;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
+    box-sizing: border-box !important;
+  }
+  
+  #contact textarea.w-full,
+  #contact textarea {
+    min-height: calc(8rem + 40px) !important;
+    height: calc(8rem + 40px) !important;
+  }
+  
+  /* 表单容器扩大 */
+  #contact form {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+  
+  #contact form > div,
+  #contact form .space-y-6 > div {
+    width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    overflow: visible !important;
+  }
+  
+  /* 确保表单输入框的父容器不裁剪 */
+  #contact form .space-y-6 {
+    overflow: visible !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  #contact form .space-y-6 > div {
+    overflow: visible !important;
+  }
+  
+  /* 根据方块大小重新排版内容 */
+  /* 联系方式标题和内容 */
+  #contact h3 {
+    font-size: 2rem !important;
+    margin-bottom: 2rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  #contact h4 {
+    font-size: 1.4rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  #contact .text-lg {
+    font-size: 1.25rem !important;
+    line-height: 1.7 !important;
+  }
+  
+  #contact .text-base {
+    font-size: 1.15rem !important;
+    line-height: 1.7 !important;
+  }
+  
+  #contact .text-sm {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* 联系方式内容区域 */
+  #contact .text-navy-600 {
+    font-size: 1.2rem !important;
+    line-height: 1.8 !important;
+    margin-bottom: 0.75rem !important;
+    font-weight: 500 !important;
+  }
+  
+  #contact .text-gray-500 {
+    font-size: 1.1rem !important;
+    line-height: 1.7 !important;
+  }
+  
+  /* 按钮扩大 */
+  #contact button {
+    padding: 1.25rem 2rem !important;
+    font-size: 1.15rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* 表单标签和输入框 */
+  #contact label {
+    font-size: 1.15rem !important;
+    margin-bottom: 1rem !important;
+    font-weight: 500 !important;
+  }
+  
+  /* 间距调整 */
+  #contact .space-y-6 > * {
+    margin-bottom: 2.5rem !important;
+  }
+  
+  #contact .mb-6 {
+    margin-bottom: 2.5rem !important;
+  }
+  
+  #contact .mb-4 {
+    margin-bottom: 2rem !important;
+  }
+  
+  #contact .mb-1 {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* 联系方式卡片内部布局优化 */
+  #contact .flex.items-start {
+    align-items: flex-start !important;
+    gap: 2rem !important;
+  }
+  
+  #contact .flex.items-center {
+    align-items: center !important;
+  }
+  
+  /* 按钮文字大小 */
+  #contact button.text-sm {
+    font-size: 1.05rem !important;
+  }
+  
+  #contact button.text-blue-600 {
+    font-size: 1.15rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+  
+  /* 联系方式内容重新排版 - 使用最高优先级选择器 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-xl.border,
+  section#contact .p-6.bg-white\/80,
+  #contact .bg-white\/80.rounded-xl.p-6 {
+    padding: 2.5rem !important;
+    overflow: visible !important;
+  }
+  
+  /* 确保红框宽度不被其他规则覆盖 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.p-6,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.p-6,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.p-6,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.p-6 {
+    width: 95% !important;
+    min-width: 95% !important;
+    max-width: 95% !important;
+  }
+  
+  /* 联系方式图标和内容区域 */
+  section#contact .flex-shrink-0 {
+    flex-shrink: 0 !important;
+  }
+  
+  section#contact .flex-1.min-w-0,
+  section#contact .flex-1 {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+  
+  /* 联系方式卡片容器 */
+  section#contact .flex.items-start.space-x-4,
+  section#contact .flex.items-start {
+    width: 100% !important;
+    align-items: flex-start !important;
+    gap: 2rem !important;
+    overflow: visible !important;
+  }
+  
+  /* 确保红框（第一个卡片）居中 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.flex.items-start,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.flex.items-start,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.flex.items-start,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.flex.items-start {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    align-self: center !important;
+  }
+  
+  /* 联系方式标题和按钮区域 */
+  section#contact .flex.items-center.justify-between.mb-1.gap-2,
+  section#contact .flex.items-center.justify-between {
+    flex-wrap: nowrap !important;
+    gap: 1rem !important;
+    margin-bottom: 1rem !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+  
+  /* 联系方式标题 */
+  section#contact h4.text-lg.font-semibold.text-navy-700.whitespace-nowrap,
+  section#contact h4.text-lg.font-semibold,
+  section#contact h4 {
+    font-size: 1.3rem !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* 联系方式内容文字 - 确保完整显示 */
+  section#contact p.text-navy-600.font-medium.mb-1,
+  section#contact .text-navy-600.font-medium {
+    font-size: 1.25rem !important;
+    line-height: 1.8 !important;
+    margin-bottom: 0.75rem !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+  
+  /* 联系方式描述文字 */
+  section#contact p.text-sm.text-gray-500,
+  section#contact .text-gray-500 {
+    font-size: 1.15rem !important;
+    line-height: 1.7 !important;
+    margin-top: 0.5rem !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+  
+  /* 联系方式多行内容 */
+  section#contact .text-navy-600.font-medium.mb-1.space-y-1,
+  section#contact .space-y-1 {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+  
+  section#contact .space-y-1 p.break-words,
+  section#contact .space-y-1 p {
+    font-size: 1.25rem !important;
+    line-height: 1.8 !important;
+    margin-bottom: 0.5rem !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+  
+  /* 联系方式按钮组 */
+  section#contact .flex.gap-2.flex-shrink-0,
+  section#contact .flex.gap-2 {
+    gap: 1rem !important;
+    flex-wrap: wrap !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* 联系方式卡片间距 */
+  section#contact .space-y-6 > * {
+    margin-bottom: 2.5rem !important;
+  }
+  
+  /* 确保联系方式内容区域不被裁剪 */
+  section#contact .bg-white\/80.rounded-xl,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-xl {
+    overflow: visible !important;
+  }
+  
+  section#contact .bg-white\/80.rounded-xl > div,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-xl > div {
+    overflow: visible !important;
+  }
+  
+  /* 联系方式容器 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl {
+    overflow: visible !important;
+  }
+  
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl > div {
+    overflow: visible !important;
+  }
+  
+  /* 确保联系方式区域的父容器允许子元素超出 - 使用最高优先级 */
+  section#contact,
+  #contact,
+  section#contact[class],
+  #contact[class] {
+    overflow-x: visible !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+  
+  section#contact .container-custom,
+  #contact .container-custom,
+  section#contact .container-custom[class],
+  #contact .container-custom[class] {
+    overflow-x: visible !important;
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl[class],
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl[class] {
+    overflow-x: visible !important;
+    max-width: none !important;
+    width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border: 3px solid yellow !important;
+    background-color: rgba(255, 255, 0, 0.1) !important;
+    padding: 0 !important;
+  }
+  
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl > div,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl > div {
+    overflow-x: visible !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+  
+  /* 确保联系方式区域的space-y-6正常显示 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* 联系方式卡片 - 参考桌面版布局，只调整宽度和间距 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:not(:first-child),
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:not(:first-child),
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:not(:first-child),
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:not(:first-child) {
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: auto !important;
+  }
+  
+  /* 调试边框：电子邮箱的白色区域容器 - 红色 - 居中于灰色框，宽度为灰色框的100%（含padding） */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child {
+    border: 3px solid red !important;
+    background-color: rgba(255, 0, 0, 0.1) !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    position: relative !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    align-self: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* 调试边框：电子邮箱的Icon容器 - 绿色 - 向上移动150px，进入红框区域 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-shrink-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-shrink-0,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-shrink-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-shrink-0 {
+    border: 3px solid green !important;
+    background-color: rgba(0, 255, 0, 0.1) !important;
+    transform: translateY(-150px) !important;
+    position: relative !important;
+    z-index: 10 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* 确保电子邮箱容器左边贴住Icon容器右边 - 移除间距 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-1.min-w-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-1.min-w-0,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-1.min-w-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-1.min-w-0 {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+  
+  /* 移除红框内的space-x-4间距 */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.space-x-4,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child.space-x-4,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.space-x-4,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child.space-x-4 {
+    gap: 0 !important;
+  }
+  
+  /* 调试边框：电子邮箱的文字容器 - 蓝色 - 宽度扩大到1.8倍，顶端向下拉150px */
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-1.min-w-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .bg-white\/80.rounded-xl:first-child .flex-1.min-w-0,
+  section#contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-1.min-w-0,
+  #contact .bg-white\/80.backdrop-blur-sm.rounded-2xl .space-y-6 > .p-6.bg-white\/80:first-child .flex-1.min-w-0 {
+    border: 3px solid blue !important;
+    background-color: rgba(0, 0, 255, 0.1) !important;
+    width: 180% !important;
+    flex: 0 0 180% !important;
+    margin-top: 150px !important;
+    position: relative !important;
+  }
+  
+  /* 确保红框内部内容自适应 */
+  section#contact .space-y-6 > *:first-child > *,
+  #contact .space-y-6 > *:first-child > * {
+    box-sizing: border-box !important;
+  }
+  
+  /* 确保电子邮箱容器内的所有内容可见 */
+  section#contact .space-y-6 > *:first-child > *,
+  #contact .space-y-6 > *:first-child > * {
+    overflow: visible !important;
+  }
+  
+  section#contact .space-y-6 > *:first-child .flex-1.min-w-0 > *,
+  #contact .space-y-6 > *:first-child .flex-1.min-w-0 > * {
+    overflow: visible !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
   }
 }
 
@@ -472,7 +2142,7 @@
     flex-grow: 0 !important;
     will-change: auto !important;
     transform: translate3d(0, 0, 0) !important;
-    backfaceVisibility: hidden !important;
+    backface-visibility: hidden !important;
     isolation: isolate !important;
     position: relative !important;
     box-sizing: border-box !important;
@@ -487,9 +2157,6 @@
     max-height: 472.5px !important;
     min-width: 472.5px !important;
     min-height: 472.5px !important;
-    /* 强制覆盖内联样式 */
-    width: 472.5px !important;
-    height: 472.5px !important;
   }
 }
 
@@ -514,7 +2181,7 @@
     flex-grow: 0 !important;
     will-change: auto !important;
     transform: translate3d(0, 0, 0) !important;
-    backfaceVisibility: hidden !important;
+    backface-visibility: hidden !important;
     isolation: isolate !important;
     position: relative !important;
     box-sizing: border-box !important;
@@ -529,9 +2196,6 @@
     max-height: 472.5px !important;
     min-width: 472.5px !important;
     min-height: 472.5px !important;
-    /* 强制覆盖内联样式 */
-    width: 472.5px !important;
-    height: 472.5px !important;
   }
 }
 
@@ -556,7 +2220,7 @@
     flex-grow: 0 !important;
     will-change: auto !important;
     transform: translate3d(0, 0, 0) !important;
-    backfaceVisibility: hidden !important;
+    backface-visibility: hidden !important;
     isolation: isolate !important;
     position: relative !important;
     box-sizing: border-box !important;
@@ -571,33 +2235,91 @@
     max-height: 472.5px !important;
     min-width: 472.5px !important;
     min-height: 472.5px !important;
-    /* 强制覆盖内联样式 */
-    width: 472.5px !important;
-    height: 472.5px !important;
   }
 }
 
 /* iPad竖屏：说明框向上移动，更靠近饼图 */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
   .ipad-description-box {
-    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
-    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
+    margin-top: -2rem !important;
+    transform: translateY(-2rem) !important;
   }
 }
 
 /* iPad横屏：说明框向上移动，更靠近饼图（与竖屏一致） */
 @media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
   .ipad-description-box {
-    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
-    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
+    margin-top: -2rem !important;
+    transform: translateY(-2rem) !important;
   }
 }
 
 /* iPad Pro横屏：说明框向上移动，更靠近饼图（与竖屏一致） */
 @media (min-width: 1366px) and (max-height: 1024px) {
   .ipad-description-box {
-    margin-top: -2rem !important; /* 使用负值向上移动，更靠近饼图 */
-    transform: translateY(-2rem) !important; /* 双重保险，确保向上移动 */
+    margin-top: -2rem !important;
+    transform: translateY(-2rem) !important;
   }
 }
 
+/* 页尾（Footer）层级设置 - 确保在所有元素之上 */
+footer {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+/* 社长寄语页面：隐藏background.png背景图 */
+/* 当社长寄语页面显示时，隐藏PageLayout中的背景图片容器 */
+body:has(.desktop-message) > div > div > div.absolute.inset-0.z-0,
+body:has(.ipad-landscape-message) > div > div > div.absolute.inset-0.z-0,
+body:has(.ipad-portrait-message) > div > div > div.absolute.inset-0.z-0,
+body:has(.mobile-landscape-message) > div > div > div.absolute.inset-0.z-0,
+body:has(.mobile-portrait-message) > div > div > div.absolute.inset-0.z-0 {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 如果:has()不支持，使用备用方法：直接隐藏所有背景图片容器，当社长寄语页面显示时 */
+.desktop-message,
+.ipad-landscape-message,
+.ipad-portrait-message,
+.mobile-landscape-message,
+.mobile-portrait-message {
+  /* 确保社长寄语页面本身有背景色，覆盖PageLayout的背景 */
+  background-color: #f3eadf !important;
+}
+
+/* 手机横版：页尾向上移动40px，避免遮挡文案 */
+@media (max-width: 1023px) and (orientation: landscape) {
+  footer {
+    transform: translateY(-40px) !important;
+  }
+}
+
+/* Header下拉菜单字体设置 - 确保中文字符（如"关"字）使用正确字体 */
+header nav a,
+header nav button,
+header nav span,
+header .absolute a,
+header .absolute button,
+header .absolute span,
+header .absolute div a,
+header .absolute div button,
+header .absolute div span {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+}
+
+/* 确保所有文本元素使用正确的中文字体 */
+body, p, span, div, h1, h2, h3, h4, h5, h6, a, li, td, th, label, input, textarea, select, button, .text-gray-800, .font-medium, .font-semibold, .font-bold {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Header下拉菜单项字体设置 - 特别针对"投资相关"等菜单项 */
+header .absolute.mt-3 a,
+header .absolute.mt-3 span,
+header .absolute.left-full a,
+header .absolute.left-full span {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+}

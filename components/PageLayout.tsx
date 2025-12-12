@@ -10,7 +10,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* 背景图容器 - 使用 absolute 定位，随页面滚动 */}
-      <div className="absolute inset-0 z-0 w-full">
+      <div className="absolute inset-0 z-0 w-full page-background">
         <Image
           src={backgroundImage}
           alt=""
