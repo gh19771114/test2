@@ -8,7 +8,7 @@ const professionalTeam = [
   { title: '日本不动产交易士', count: '7名' },
   { title: '租赁不动产经营管理士', count: '4名' },
   { title: '公寓楼管理士', count: '1名' },
-  { title: 'Financial Planner 3级', count: '1名' },
+  { title: 'Financial Planner 3级', count: '2名' },
   { title: 'Financial Planner 2级', count: '1名' },
 ]
 
@@ -39,7 +39,7 @@ const corporateProfile = [
   },
   {
     label: '资格认证',
-    value: '宅地建物取引业免许・賃貸住宅管理业者登记・古物营业许可等',
+    value: '宅地建物取引业免许・賃貸住宅管理业者登记等',
   },
 ]
 
