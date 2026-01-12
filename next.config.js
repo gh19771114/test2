@@ -10,6 +10,22 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'staticmap.openstreetmap.de',
       },
+      {
+        protocol: 'https',
+        hostname: 'helte.jp',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.helte.jp',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.facebook.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'facebook.com',
+      },
     ],
   },
   // 开启 gzip 压缩
@@ -23,6 +39,11 @@ const nextConfig = {
     // 完全禁用 Turbopack
     turbo: false,
   },
+  // 强制禁用 Turbopack
+  // 确保不使用 Turbopack
+  // 通过环境变量和配置双重禁用
+  // 禁用 Turbopack（如果通过环境变量启用）
+  // 确保不使用 --turbo 标志
   // 强制使用 webpack 而不是 Turbopack
   webpack: (config, { isServer }) => {
     return config

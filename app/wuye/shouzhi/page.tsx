@@ -5,96 +5,12 @@ import Image from 'next/image'
 import ServiceTimeline from '@/components/ServiceTimeline'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { DollarSign, FileText, Calculator, TrendingUp, CheckCircle2, Clock, BarChart3, Sparkles, ArrowRight } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
-const timelineItems = [
-  {
-    time: '每月月底',
-    title: '租金收取',
-    description: '每月月底为止收取租金，租金的处理也是月底为止。如遇延迟将及时进行催缴，确保租金按时到账。',
-  },
-  {
-    time: '每月20日',
-    title: '财务报表制作',
-    description: '每月20日制作完成并发送。完成当月收支统计，制作详细的财务报表，包括租金收入、各项支出明细等，并通过邮件或系统发送给业主。',
-  },
-  {
-    time: '按决算月/12月',
-    title: '税务处理',
-    description: '法人和个人是分开的。法人是按照决算月，个人是12月开始做手续。根据财务报表提供税务建议，协助处理相关税务申报，确保合规运营。',
-  },
-]
-
-const stats = [
-  { value: '每月20日', label: '报表发送', icon: Clock },
-  { value: '100%', label: '透明度', icon: CheckCircle2 },
-  { value: '实时', label: '财务监控', icon: BarChart3 },
-  { value: '专业', label: '税务服务', icon: Calculator },
-]
-
-const services = [
-  {
-    title: '每月租金收取与催缴',
-    icon: DollarSign,
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '及时收取租金，确保资金流稳定',
-    items: [
-      '定期租金收取',
-      '延迟租金催缴',
-      '租金到账确认',
-      '资金流向追踪',
-    ],
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    title: '资产报表与税务建议',
-    icon: FileText,
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '详细的财务报表和专业的税务优化建议',
-    items: [
-      '月度收支报表',
-      '年度财务总结',
-      '税务优化建议',
-      '合规性检查',
-    ],
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    title: '税务申报与处理',
-    icon: Calculator,
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '专业的税务服务，确保合规运营',
-    items: [
-      '法人税务处理',
-      '个人税务处理',
-      '税务申报协助',
-      '税务咨询支持',
-    ],
-    color: 'from-purple-500 to-purple-600',
-  },
-]
-
-const processSteps = [
-  {
-    step: '01',
-    title: '租金收取',
-    description: '每月月底为止收取租金，确保资金及时到账，如遇延迟及时催缴。',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '02',
-    title: '财务报表制作',
-    description: '每月20日制作完成并发送详细的财务报表，包括收支明细和资金流向。',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '03',
-    title: '税务处理',
-    description: '根据财务报表提供税务建议，协助处理法人或个人税务申报，确保合规运营。',
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-]
+// 这些数据将在组件内从多语言文件读取
+// 这些数据将在组件内从多语言文件读取
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -118,6 +34,7 @@ const itemVariants = {
 }
 
 export default function ShouzhiPage() {
+  const { t } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -127,6 +44,80 @@ export default function ShouzhiPage() {
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isProcessInView = useInView(processRef, { once: true, margin: '-100px' })
+  
+  // 从多语言文件读取数据
+  const timelineItems = useMemo(() => [
+    {
+      time: t('wuye.shouzhi.timeline.item1.time'),
+      title: t('wuye.shouzhi.timeline.item1.title'),
+      description: t('wuye.shouzhi.timeline.item1.description'),
+    },
+    {
+      time: t('wuye.shouzhi.timeline.item2.time'),
+      title: t('wuye.shouzhi.timeline.item2.title'),
+      description: t('wuye.shouzhi.timeline.item2.description'),
+    },
+    {
+      time: t('wuye.shouzhi.timeline.item3.time'),
+      title: t('wuye.shouzhi.timeline.item3.title'),
+      description: t('wuye.shouzhi.timeline.item3.description'),
+    },
+  ], [t])
+  
+  const stats = useMemo(() => [
+    { value: t('wuye.shouzhi.stats.report.value'), label: t('wuye.shouzhi.stats.report.label'), icon: Clock },
+    { value: t('wuye.shouzhi.stats.transparency.value'), label: t('wuye.shouzhi.stats.transparency.label'), icon: CheckCircle2 },
+    { value: t('wuye.shouzhi.stats.monitoring.value'), label: t('wuye.shouzhi.stats.monitoring.label'), icon: BarChart3 },
+    { value: t('wuye.shouzhi.stats.taxService.value'), label: t('wuye.shouzhi.stats.taxService.label'), icon: Calculator },
+  ], [t])
+  
+  const services = useMemo(() => [
+    {
+      title: t('wuye.shouzhi.services.service1.title'),
+      icon: DollarSign,
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.shouzhi.services.service1.description'),
+      items: (t('wuye.shouzhi.services.service1.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      title: t('wuye.shouzhi.services.service2.title'),
+      icon: FileText,
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.shouzhi.services.service2.description'),
+      items: (t('wuye.shouzhi.services.service2.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      title: t('wuye.shouzhi.services.service3.title'),
+      icon: Calculator,
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.shouzhi.services.service3.description'),
+      items: (t('wuye.shouzhi.services.service3.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-purple-500 to-purple-600',
+    },
+  ], [t])
+  
+  const processSteps = useMemo(() => [
+    {
+      step: '01',
+      title: t('wuye.shouzhi.process.step1.title'),
+      description: t('wuye.shouzhi.process.step1.description'),
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '02',
+      title: t('wuye.shouzhi.process.step2.title'),
+      description: t('wuye.shouzhi.process.step2.description'),
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '03',
+      title: t('wuye.shouzhi.process.step3.title'),
+      description: t('wuye.shouzhi.process.step3.description'),
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+  ], [t])
 
   return (
     <PageLayout>
@@ -233,9 +224,9 @@ export default function ShouzhiPage() {
                 <Sparkles className="w-6 h-6 text-green-500" />
                 <p className="text-sm text-green-400 font-semibold">Our Services</p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">专业服务内容</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                全方位的财务管理和税务服务，确保资产运营透明合规
+                {t('wuye.shouzhi.description')}
               </p>
             </motion.div>
 
@@ -260,11 +251,6 @@ export default function ShouzhiPage() {
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
-                    <div className="absolute top-4 left-4">
-                      <div className="w-14 h-14 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <service.icon className={`w-7 h-7 bg-gradient-to-br ${service.color} bg-clip-text text-transparent`} style={{ filter: 'none' }} />
-                      </div>
-                    </div>
                     <div className="absolute bottom-4 left-4 right-4">
                       <h3 className="text-xl font-bold text-white mb-1">{service.title}</h3>
                       <p className="text-sm text-white/90">{service.description}</p>
@@ -290,22 +276,6 @@ export default function ShouzhiPage() {
         <section ref={processRef} className="section-padding bg-gradient-to-b from-navy-900 to-gray-900">
           <div className="container-custom">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isProcessInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <BarChart3 className="w-6 h-6 text-green-400" />
-                <p className="text-sm text-green-300 font-semibold">Our Process</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">服务流程</h2>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                从租金收取到税务处理，三步流程确保财务管理高效透明
-              </p>
-            </motion.div>
-
-            <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isProcessInView ? 'visible' : 'hidden'}
@@ -327,11 +297,6 @@ export default function ShouzhiPage() {
                         sizes="(min-width: 768px) 50vw, 100vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 to-navy-900/40"></div>
-                      <div className="absolute top-4 left-4">
-                        <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                          <span className="text-2xl font-bold text-white">{step.step}</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div className="flex-1 w-full">
@@ -342,12 +307,6 @@ export default function ShouzhiPage() {
                       <h3 className="text-2xl md:text-3xl font-bold text-white">{step.title}</h3>
                     </div>
                     <p className="text-lg text-gray-300 leading-relaxed">{step.description}</p>
-                    {index < processSteps.length - 1 && (
-                      <div className="mt-6 flex items-center gap-2 text-green-400">
-                        <ArrowRight className="w-5 h-5" />
-                        <span className="text-sm font-medium">下一步</span>
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               ))}
@@ -358,7 +317,6 @@ export default function ShouzhiPage() {
         {/* Timeline Section */}
         <section className="section-padding">
           <div className="container-custom max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">服务流程时间线</h2>
             <ServiceTimeline items={timelineItems} />
           </div>
         </section>

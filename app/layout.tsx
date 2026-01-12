@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Noto_Sans_JP, Inter, Playfair_Display } from 'next/font/google'
+import { LanguageProvider } from '@/contexts/LanguageContext'
 
 const notoSansJp = Noto_Sans_JP({
   subsets: ['latin', 'latin-ext'],
@@ -44,7 +45,9 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
+  minimumScale: 1,
   userScalable: false,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
@@ -58,7 +61,9 @@ export default function RootLayout({
         className={`${notoSansJp.variable} ${inter.variable} ${playfair.variable} antialiased font-sans`}
         suppressHydrationWarning
       >
+        <LanguageProvider>
         {children}
+        </LanguageProvider>
       </body>
     </html>
   )

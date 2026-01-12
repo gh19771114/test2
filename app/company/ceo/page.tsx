@@ -2,50 +2,49 @@
 
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import ceoPortrait1 from '@/imgs/ceo3.png'
 import ceoPortrait2 from '@/imgs/ceo2.png'
-
-const profileHighlights = [
-  { label: '出生', value: '1975 年 9 月，中国桂林' },
-  { label: '学历', value: '1996 年毕业于桂林工学院' },
-  { label: '早期经历', value: ['曾任职于中国银行桂林分行', '1997 年赴日留学'] },
-  { label: '专业资格', value: '1999 年取得日本宅地建物取引士资格' },
-  { label: '职业历程', value: ['2000 年加入株式会社 minimini', '2009 年创立株式会社川雨流痕（原社名：株式会社暖灯）'] },
-  { label: '现任职务', value: '川雨流痕股份有限公司 代表董事社长' },
-  { label: '社会职务', value: '中国企业协会常务理事、资产资源整合委员会主任' },
-  { label: '媒体报道', value: '曾获《财界》《周刊大楼经营》《日经新闻》与 NHK《クローズアップ現代》等媒体专题报道' },
-]
-
-// 原始文本（用于桌面版和iPad横版）
-const messageParagraphsOriginal = [
-  '1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。',
-  '在专注业务发展的同时，我们也不断反思企业存在的意义，回归"企业应为社会之公器"的基本理念。我来到日本后始终坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。我深知改善中日关系任重道远，并非只靠口号即可实现，但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。',
-  '长期以来，我们通过不动产业务与中日经济领域的企业携手，与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，力求拓展更广阔的业务版图。',
-]
-
-// 带换行标签的文本（用于iPad竖版）
-const messageParagraphs = [
-  '1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，<br />于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务<br />快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。',
-  '在专注业务发展的同时，我们也不断反思企业存在的意义，<br />回归"企业应为社会之公器"的基本理念。我来到日本后始终<br />坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。<br />我深知改善中日关系任重道远，并非只靠口号即可实现，<br />但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。',
-  '长期以来，我们通过不动产业务与中日经济领域的企业携手，<br />与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，<br />推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，<br />力求拓展更广阔的业务版图。',
-]
-
-const tabs: Array<{ id: 'profile' | 'message'; label: string }> = [
-  { id: 'profile', label: '社长介绍' },
-  { id: 'message', label: '社长寄语' },
-]
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function CompanyCeoPage() {
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<'profile' | 'message'>('profile')
+
+  const profileHighlights = useMemo(() => [
+    { label: t('company.ceo.profile.highlights.birth.label'), value: t('company.ceo.profile.highlights.birth.value', { returnObjects: true }) },
+    { label: t('company.ceo.profile.highlights.earlyExperience.label'), value: t('company.ceo.profile.highlights.earlyExperience.value', { returnObjects: true }) },
+    { label: t('company.ceo.profile.highlights.qualification.label'), value: t('company.ceo.profile.highlights.qualification.value') },
+    { label: t('company.ceo.profile.highlights.career.label'), value: t('company.ceo.profile.highlights.career.value', { returnObjects: true }) },
+    { label: t('company.ceo.profile.highlights.currentPosition.label'), value: t('company.ceo.profile.highlights.currentPosition.value') },
+    { label: t('company.ceo.profile.highlights.socialPosition.label'), value: t('company.ceo.profile.highlights.socialPosition.value', { returnObjects: true }) },
+    { label: t('company.ceo.profile.highlights.media.label'), value: t('company.ceo.profile.highlights.media.value', { returnObjects: true }) },
+  ], [t])
+
+  // 原始文本（用于桌面版和iPad横版）
+  const messageParagraphsOriginal = useMemo(() => {
+    const paragraphs = t('company.ceo.message.paragraphs.original', { returnObjects: true })
+    return Array.isArray(paragraphs) ? paragraphs : []
+  }, [t])
+
+  // 带换行标签的文本（用于iPad竖版）
+  const messageParagraphs = useMemo(() => {
+    const paragraphs = t('company.ceo.message.paragraphs.withBreaks', { returnObjects: true })
+    return Array.isArray(paragraphs) ? paragraphs : []
+  }, [t])
+
+  const tabs: Array<{ id: 'profile' | 'message'; label: string }> = useMemo(() => [
+    { id: 'profile', label: t('company.ceo.tabs.profile') },
+    { id: 'message', label: t('company.ceo.tabs.message') },
+  ], [t])
 
   return (
     <PageLayout>
-      <section className="relative pt-28 pb-20 bg-gradient-to-br from-amber-800 via-amber-700 to-navy-800 overflow-hidden">
+        <section className="relative pt-20 md:pt-28 pb-8 md:pb-20 bg-gradient-to-br from-amber-800 via-amber-700 to-navy-800 overflow-hidden company-ceo-header-section">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-            alt="社长介绍"
+            alt={t('company.ceo.title')}
             fill
             className="object-cover opacity-30"
             priority
@@ -53,19 +52,19 @@ export default function CompanyCeoPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom text-center md:text-left">
-            <p className="text-sm text-amber-300 font-semibold mb-4">President Message</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">社长介绍</h1>
-            <p className="mt-4 text-base md:text-lg text-gray-200 max-w-3xl">
-              通过跨文化的视角与专业实务经验，Bourn Mark 代表董事社长桂小川带领团队深耕日本不动产市场，持续搭建中日商务合作的桥梁。
+            <p className="text-xs md:text-sm text-amber-300 font-semibold mb-1 md:mb-4">{t('company.ceo.subtitle')}</p>
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white">{t('company.ceo.title')}</h1>
+            <p className="mt-2 md:mt-4 text-sm md:text-lg text-gray-200 max-w-3xl">
+              {t('company.ceo.description')}
             </p>
-            <div className="mt-10 w-full max-w-3xl mx-auto md:mx-0 rounded-2xl overflow-hidden border border-white/40 bg-white  grid grid-cols-2">
+            <div className="mt-4 md:mt-10 w-full max-w-3xl mx-auto md:mx-0 rounded-2xl overflow-hidden border border-white/40 bg-white grid grid-cols-2 gap-0 company-ceo-tabs-container">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full px-6 py-3 text-sm md:text-lg font-semibold transition-all ${
+                    className={`w-full px-2 md:px-6 py-2 md:py-3 text-sm md:text-lg font-semibold transition-all company-ceo-tab-button ${
                       isActive
                         ? 'bg-white text-navy-800 shadow-lg'
                         : 'text-navy-900/85 hover:bg-white/15 hover:text-navy-900'
@@ -80,37 +79,48 @@ export default function CompanyCeoPage() {
         </section>
 
         {activeTab === 'profile' ? (
-          <section className="relative section-padding">
+          <section className="relative py-3 md:py-6">
           
-          <div className="container-custom grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] items-start">
-              <div className="relative w-full max-w-sm mx-auto lg:mx-0 aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
-                <Image src={ceoPortrait2} alt="桂小川肖像" fill className="object-cover" sizes="(min-width: 1024px) 28vw, 80vw" />
-              </div>
-              <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10 space-y-8">
-                <div className="space-y-6">
-                  <h2 className="text-4xl md:text-5xl font-bold text-navy-800 mb-6">桂小川</h2>
-                  <div className="space-y-5">
-                    <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                      自 2009 年创立 Bourn Mark 以来，以跨文化视角与专业实务经验带领团队深耕日本不动产市场，致力于搭建中日商务合作的桥梁，推动资产运营、企业落地与投资业务的协同发展。
-                    </p>
-                    <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                      将企业定位于&ldquo;根植日本、连接中日&rdquo;，以扎实的租赁管理、资产增值与企业服务经验，持续扩展公司的业务版图，并通过长期主义的经营理念，打造兼具国际视野与本地执行力的服务体系。
-                    </p>
+          <div className="container-custom company-ceo-profile-container">
+              <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-3 md:p-6 company-ceo-profile-intro">
+                <div className="company-ceo-profile-intro-content">
+                  <div className="relative w-full max-w-sm mx-auto lg:mx-0 aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-gray-200 company-ceo-profile-image lg:float-left lg:mr-6 lg:mb-4">
+                    <Image src={ceoPortrait2} alt={t('company.ceo.profile.name')} fill className="object-cover" sizes="(min-width: 1024px) 28vw, 80vw" />
+                  </div>
+                  <div className="company-ceo-profile-intro-image">
+                    <Image src={ceoPortrait2} alt={t('company.ceo.profile.name')} fill className="object-cover" sizes="(max-width: 767px) 45vw, 28vw" />
+                  </div>
+                  <div className="company-ceo-profile-intro-text">
+                    <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-navy-800">{t('company.ceo.profile.name')}</h2>
+                    <div className="space-y-2 md:space-y-3">
+                      <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
+                        {t('company.ceo.profile.introduction1')}
+                      </p>
+                      <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
+                        {t('company.ceo.profile.introduction2')}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 gap-4">
-                  {profileHighlights.map((item) => (
-                    <div key={item.label} className="bg-gray-50 rounded-2xl px-5 py-4 border border-gray-100 shadow-sm">
-                      <p className="text-sm font-semibold text-indigo-600 mb-1">{item.label}</p>
-                      {Array.isArray(item.value) ? (
-                        <div className="space-y-1">
-                          {item.value.map((line, index) => (
-                            <p key={index} className="text-gray-700 leading-relaxed">{line}</p>
-                          ))}
+              </div>
+              <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-3 md:p-6 company-ceo-profile-highlights">
+                <div className="space-y-1.5 md:space-y-2">
+                  {profileHighlights.map((item, index) => (
+                    <div key={item.label} className={index !== profileHighlights.length - 1 ? 'border-b border-gray-200 pb-1.5 md:pb-2' : ''}>
+                      <div className="flex flex-row items-start justify-between md:justify-start gap-3">
+                        <p className="text-sm font-semibold text-indigo-600 flex-shrink-0 md:w-32 lg:w-40">{item.label}</p>
+                        <div className="flex-1 text-right">
+                          {Array.isArray(item.value) ? (
+                            <div className="space-y-1">
+                              {item.value.map((line, lineIndex) => (
+                                <p key={lineIndex} className="text-gray-700 leading-relaxed text-sm md:text-base text-right">{line}</p>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-gray-700 leading-relaxed text-sm md:text-base text-right break-words">{item.value}</p>
+                          )}
                         </div>
-                      ) : (
-                        <p className="text-gray-700 leading-relaxed text-balance">{item.value}</p>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -136,8 +146,8 @@ export default function CompanyCeoPage() {
               <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
                 <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
-                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
                     {messageParagraphsOriginal.map((paragraph, index) => (
@@ -147,8 +157,8 @@ export default function CompanyCeoPage() {
                     ))}
                   </div>
                   <div className="pt-4">
-                    <p className="text-base text-slate-600">董事长 / President</p>
-                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                    <p className="text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
               </div>
@@ -171,8 +181,8 @@ export default function CompanyCeoPage() {
               <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
                 <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
-                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
                     {messageParagraphsOriginal.map((paragraph, index) => (
@@ -182,8 +192,8 @@ export default function CompanyCeoPage() {
                     ))}
                   </div>
                   <div className="pt-4">
-                    <p className="text-base text-slate-600">董事长 / President</p>
-                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                    <p className="text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
               </div>
@@ -206,8 +216,8 @@ export default function CompanyCeoPage() {
               <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
                 <div className="max-w-[620px] text-slate-900 space-y-6">
                   <div>
-                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+                    <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
+                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed">
                     {messageParagraphs.map((paragraph, index) => (
@@ -215,76 +225,78 @@ export default function CompanyCeoPage() {
                     ))}
                   </div>
                   <div className="pt-4">
-                    <p className="text-base text-slate-600">董事长 / President</p>
-                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                    <p className="text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* 手机横版 - 参考iPad横版 */}
-            <section className="mobile-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
-                  <Image
-                    src={ceoPortrait1}
-                    alt="桂小川人物照片"
-                    fill
-                    className="object-contain object-bottom"
-                    priority={false}
-                    sizes="100vw"
-                  />
-                </div>
-              </div>
-              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-                <div className="max-w-[620px] text-slate-900 space-y-6">
-                  <div>
-                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+            {/* 手机横版 - 文字环绕人物图 */}
+            <section className="mobile-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf', minHeight: '90vh' }}>
+              <div className="container-custom relative z-10 py-6 md:py-20 px-4">
+                <div className="mobile-landscape-message-content relative">
+                  <div className="mobile-landscape-message-image-wrapper">
+                    <Image
+                      src={ceoPortrait1}
+                      alt="桂小川人物照片"
+                      width={400}
+                      height={600}
+                      className="mobile-landscape-message-image"
+                      priority={false}
+                      sizes="40vw"
+                    />
                   </div>
-                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                    {messageParagraphsOriginal.map((paragraph, index) => (
-                      <p key={index} className="text-balance">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                  <div className="pt-4">
-                    <p className="text-base text-slate-600">董事长 / President</p>
-                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  <div className="mobile-landscape-message-text">
+                    <div>
+                      <p className="text-lg md:text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
+                      <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-slate-500 mt-1 md:mt-2">{t('company.ceo.message.subtitle')}</p>
+                    </div>
+                    <div className="space-y-3 md:space-y-5 text-sm md:text-[1.05rem] leading-relaxed">
+                      {messageParagraphsOriginal.map((paragraph, index) => (
+                        <p key={index} className="text-balance">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                    <div className="pt-2 md:pt-4">
+                      <p className="text-sm md:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                      <p className="text-lg md:text-2xl font-semibold text-navy-800 mt-1 md:mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* 手机竖版 - 参考iPad竖版 */}
-            <section className="mobile-portrait-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
-                  <Image
-                    src={ceoPortrait1}
-                    alt="桂小川人物照片"
-                    fill
-                    className="object-contain object-bottom"
-                    priority={false}
-                    sizes="100vw"
-                  />
-                </div>
-              </div>
-              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-                <div className="max-w-[620px] text-slate-900 space-y-6">
-                  <div>
-                    <p className="text-xl tracking-[0.35em] text-slate-700">董事长寄语</p>
-                    <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">Message From President</p>
+            {/* 手机竖版 - 文字环绕人物图 */}
+            <section className="mobile-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf', minHeight: '90vh' }}>
+              <div className="container-custom relative z-10 py-6 md:py-20 px-4">
+                <div className="mobile-portrait-message-content relative">
+                  <div className="mobile-portrait-message-image-wrapper">
+                    <Image
+                      src={ceoPortrait1}
+                      alt="桂小川人物照片"
+                      width={300}
+                      height={450}
+                      className="mobile-portrait-message-image"
+                      priority={false}
+                      sizes="45vw"
+                    />
                   </div>
-                  <div className="space-y-5 text-[1.05rem] leading-relaxed">
-                    {messageParagraphs.map((paragraph, index) => (
-                      <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
-                    ))}
-                  </div>
-                  <div className="pt-4">
-                    <p className="text-base text-slate-600">董事长 / President</p>
-                    <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">桂 小川</p>
+                  <div className="mobile-portrait-message-text">
+                    <div>
+                      <p className="text-lg md:text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
+                      <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-slate-500 mt-1 md:mt-2">{t('company.ceo.message.subtitle')}</p>
+                    </div>
+                    <div className="space-y-3 md:space-y-5 text-sm md:text-[1.05rem] leading-relaxed">
+                      {messageParagraphs.map((paragraph, index) => (
+                        <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                      ))}
+                    </div>
+                    <div className="pt-2 md:pt-4">
+                      <p className="text-sm md:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                      <p className="text-lg md:text-2xl font-semibold text-navy-800 mt-1 md:mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
+                    </div>
                   </div>
                 </div>
               </div>

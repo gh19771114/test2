@@ -101,17 +101,6 @@ const cases = [
     image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
     description: '协助完成法人登记、签约日本大型不动产公司设立办公室，并搭建本地财务与招聘体系。',
   },
-  {
-    id: 'xiaomi-japan-consulting',
-    date: '2024/09/20',
-    type: '企业服务',
-    categoryGroup: '企业出海助力',
-    title: '小米日本分公司设立咨询服务',
-    location: '东京都',
-    category: '企业出海',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '提供市场进入策略与合规咨询，统筹办公选址、品牌本地化及通路合作伙伴对接。',
-  },
   // 资产投资
   {
     id: 'shinjuku-daikan-plaza-a-201',
@@ -179,8 +168,8 @@ export default function CasesPage() {
 
   return (
     <PageLayout>
-      <div className="relative min-h-screen">
-        {/* Hero Section */}
+        <div className="relative min-h-screen">
+          {/* Hero Section */}
         <section className="relative pt-28 pb-16 bg-gradient-to-br from-cyan-800 via-cyan-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
@@ -262,44 +251,42 @@ export default function CasesPage() {
                     <motion.div
                       key={caseItem.id}
                       variants={itemVariants}
-                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 flex-shrink-0"
+                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0"
                       style={{ width: '380px' }}
                     >
-                      <Link href={`/cases/${caseItem.id}`}>
-                        <div className="relative overflow-hidden">
-                          <div className="relative w-full h-64">
-                            <Image
-                              src={caseItem.image}
-                              alt={caseItem.title}
-                              fill
-                              className="object-cover group-hover:scale-110 transition-transform duration-500"
-                              sizes="380px"
-                            />
-                          </div>
-                          <div className="absolute top-4 right-4">
-                            <span className="bg-blue-600 text-navy-900 px-3 py-1 rounded-full text-sm font-medium">
-                              {caseItem.type}
-                            </span>
-                          </div>
+                      <div className="relative overflow-hidden">
+                        <div className="relative w-full h-64">
+                          <Image
+                            src={caseItem.image}
+                            alt={caseItem.title}
+                            fill
+                            className="object-cover"
+                            sizes="380px"
+                          />
                         </div>
+                        <div className="absolute top-4 right-4">
+                          <span className="bg-blue-600 text-navy-900 px-3 py-1 rounded-full text-sm font-medium">
+                            {caseItem.type}
+                          </span>
+                        </div>
+                      </div>
 
-                        <div className="p-6">
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                            <Calendar size={16} />
-                            <span>{caseItem.date}</span>
-                          </div>
-                          <h3 className="text-xl font-semibold text-navy-900 mb-2 group-hover:text-navy-600 transition-colors duration-200">
-                            {caseItem.title}
-                          </h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-3">
-                            <MapPin size={16} />
-                            <span>{caseItem.location}</span>
-                          </div>
-                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
-                            {caseItem.description}
-                          </p>
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                          <Calendar size={16} />
+                          <span>{caseItem.date}</span>
                         </div>
-                      </Link>
+                        <h3 className="text-xl font-semibold text-navy-900 mb-2">
+                          {caseItem.title}
+                        </h3>
+                        <div className="flex items-center gap-2 text-sm text-gray-700 mb-3">
+                          <MapPin size={16} />
+                          <span>{caseItem.location}</span>
+                        </div>
+                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
+                          {caseItem.description}
+                        </p>
+                      </div>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -307,7 +294,7 @@ export default function CasesPage() {
             </div>
           </div>
         </section>
-      </div>
+        </div>
     </PageLayout>
   )
 }

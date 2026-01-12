@@ -1,0 +1,417 @@
+{
+  "common": {
+    "language": "语言",
+    "home": "首页",
+    "about": "关于我们",
+    "services": "服务",
+    "contact": "联系我们",
+    "required": "必填",
+    "submit": "提交",
+    "viewAll": "查看全部",
+    "detailPage": "详细页面",
+    "backToHome": "返回首页"
+  },
+  "hero": {
+    "headlineLine1": "让您在日本的",
+    "headlineLine2": "房产投资",
+    "headlineLine3": "更省心 更增值",
+    "subtext": "我们专注于服务日本市场与在日华人，为您提供从购房投资、物业管理到企业拓展的全链条支持，助力资产稳健增值。"
+  },
+  "navigation": {
+    "business": "业务介绍",
+    "maimai": "不动产买卖中介",
+    "wuye": "投资不动产管理",
+    "qichu": "企业出海助力",
+    "touzi": "投资相关",
+    "company": "关于我们",
+    "cases": "成功案例",
+    "news": "最新资讯",
+    "encyclopedia": "日本房产投资百科",
+    "tenant": "租客专用",
+    "contact": "联系我们",
+    "maimaiSub": {
+      "sales": "销售中房产",
+      "process": "日本房产买卖交易流程",
+      "fees": "交易费用一览",
+      "tools": "房产实用工具"
+    },
+    "wuyeSub": {
+      "zulin": "租赁管理",
+      "shouzhi": "收支与税务",
+      "xiushan": "修缮维护",
+      "zengzhi": "资产增值",
+      "ruzhu": "入住者服务",
+      "baoxian": "相关保险"
+    },
+    "qichuSub": {
+      "intro": "服务介绍",
+      "services": "相关服务",
+      "partners": "合作伙伴网络",
+      "cases": "成功案例"
+    },
+    "companySub": {
+      "overview": "企业概要",
+      "history": "企业沿革",
+      "philosophy": "企业理念",
+      "ceo": "社长介绍",
+      "sns": "企业SNS"
+    }
+  },
+  "home": {
+    "insights": {
+      "title": "最新资讯",
+      "subtitle": "实时关注日本房产动态",
+      "viewAll": "查看全部",
+      "encyclopediaTitle": "日本房产投资百科",
+      "encyclopediaSubtitle": "系统解读投资要点",
+      "encyclopediaViewAll": "查看全部",
+      "noNews": "暂无最新资讯"
+    },
+    "services": {
+      "title": "主要业务",
+      "subtitle": "从选房买卖到资产运营，再到企业落地，我们以一站式服务陪伴您在日本的每一步投资与发展。",
+      "wuye": {
+        "title": "物业管理",
+        "description": "面向在日资产及海外业主的托管服务，包括租赁管理、收支统计、内装修缮、税务申报，确保资产稳健运营。",
+        "features": ["租客筛选与签约", "租金收取与账目透明", "定期巡检与应急维修", "保险与税费协办"]
+      },
+      "maimai": {
+        "title": "买卖中介",
+        "description": "针对住宅、公寓、整栋楼宇及商用物业提供全流程购置与出售服务，助您高效匹配优质项目。",
+        "features": ["严选投资房源", "一对一顾问陪同", "税务与贷款协调", "交割与法律支持"]
+      },
+      "qichu": {
+        "title": "企业出海助力",
+        "description": "为有意拓展日本市场的企业提供落地策略、伙伴对接与项目执行支持，快速适配当地商业环境。",
+        "features": ["市场调研与选址", "合作伙伴对接", "注册与合规办理", "宣传与品牌本地化"]
+      },
+      "touzi": {
+        "title": "资产投资运营",
+        "description": "Bourn Mark 长期持有优质不动产与创新企业股权，展示自有资本运营成果，供业务伙伴了解集团实力。",
+        "features": ["企业自有资产展示", "长期稳健运营体系", "跨城市投资布局", "不对外提供投资募集"]
+      },
+      "detailPage": "详细页面"
+    },
+    "works": {
+      "title": "成功案例",
+      "viewAll": "查看全部案例",
+      "subtitle": "以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务。",
+      "viewMore": "查看更多案例"
+    },
+    "contact": {
+      "title": "联系我们",
+      "subtitle": "无论您关注个人房产投资、资产托管还是企业拓展，只需留下需求，我们的顾问会尽快与您取得联系。",
+      "formTitle": "留言表单",
+      "companyName": "公司名称",
+      "name": "联系人姓名",
+      "email": "邮箱地址",
+      "message": "留言",
+      "required": "必填",
+      "submit": "提交",
+      "consultation": "联系我们预约咨询"
+    }
+  },
+  "news": {
+    "title": "最新资讯",
+    "subtitle": "实时关注日本房产市场动态，获取最新投资资讯和政策解读",
+    "backToHome": "返回首页",
+    "category": {
+      "notice": "通知",
+      "news": "News！",
+      "companyActivity": "公司活动"
+    }
+  },
+  "company": {
+    "overview": {
+      "title": "企业概要",
+      "subtitle": "Company Profile",
+      "description1": "川雨流痕股份有限公司（Bourn Mark CO., LTD.）扎根东京中央区日本桥，毗邻多条地铁与商务枢纽，具备覆盖首都圈乃至日本全国的服务能力。",
+      "description2": "我们整合不动产运营、企业落地与自有投资经验，凭借多语种专业团队与数字化管理体系，为跨境客户提供透明、高效、长周期的综合解决方案。",
+      "profileTitle": "公司概况一览",
+      "headquartersImageAlt": "公司总部外观",
+      "profile": {
+        "companyName": "公司名",
+        "establishmentDate": "成立日期",
+        "legalRepresentative": "法人代表",
+        "capital": "资本金",
+        "headquartersAddress": "总部地址",
+        "subsidiary": "子公司",
+        "businessContent": "业务内容",
+        "businessContentValue": "不动产买卖中介业务・投资不动产管理业务・企业出海助力业务",
+        "affiliatedGroups": "加盟团体",
+        "affiliatedGroupsValue": "公益财团法人 全日本不动产协会、公益财团法人 保证协会、在日中国企业协会、全日本中国企业协会联合会",
+        "qualifications": "资格认证",
+        "qualificationsValue": "宅地建物取引业免许 東京都知事（3）第98009号\n賃貸住宅管理业者登记 国土交通大臣（01）第004834号\n等"
+      },
+      "teamTitle": "专业团队",
+      "team": {
+        "team1": {
+          "title": "日本不动产交易士",
+          "count": "7名"
+        },
+        "team2": {
+          "title": "租赁不动产经营管理士",
+          "count": "4名"
+        },
+        "team3": {
+          "title": "公寓楼管理士",
+          "count": "1名"
+        },
+        "team4": {
+          "title": "Financial Planner 3级",
+          "count": "2名"
+        },
+        "team5": {
+          "title": "Financial Planner 2级",
+          "count": "1名"
+        }
+      },
+      "partnersTitle": "合作伙伴",
+      "partners": {
+        "partner1": {
+          "title": "外部顾问",
+          "count": "1名"
+        },
+        "partner2": {
+          "title": "顾问律师事务所",
+          "count": "2所"
+        },
+        "partner3": {
+          "title": "合作税理士事务所",
+          "count": "7所"
+        },
+        "partner4": {
+          "title": "合作银行",
+          "count": "10家"
+        },
+        "partner5": {
+          "title": "合作司法书士事务所",
+          "count": "2所"
+        },
+        "partner6": {
+          "title": "战略合作伙伴",
+          "count": "1所"
+        },
+        "partner7": {
+          "title": "不动产投资鉴定事务所",
+          "count": "4所"
+        }
+      },
+      "financialPartnersTitle": "主要合作金融机构"
+    },
+    "philosophy": {
+      "title": "企业理念",
+      "subtitle": "Corporate Philosophy",
+      "description": "Bourn Mark 根植日本、服务中日。我们在不动产、企业服务与资本运营之间寻找长期平衡，以诚信、专业与跨文化理解为核心，持续推进城市更新、资产运营与商务合作的共赢。我们以诚挚的态度陪伴客户走过每一个阶段，让资产、企业与团队在日本不断成长，并持续为地区发展注入活力。",
+      "ourPhilosophy": {
+        "title": "我们的理念",
+        "description": "我们深耕日本市场，致力于用专业与诚信搭建中日合作的桥梁。从不动产到企业投资，我们坚持以长期价值为导向，将城市更新、资产运营与商务整合紧密结合，为客户与伙伴创造可持续的成长空间。"
+      },
+      "values": {
+        "value1": {
+          "title": "中日桥梁",
+          "description": "根植日本、服务华语市场，搭建中日企业与投资者之间透明顺畅的沟通与合作渠道。"
+        },
+        "value2": {
+          "title": "城市更新",
+          "description": "关注城市更新与资产运营价值，用精细化管理推动社区与资产的长期成长。"
+        },
+        "value3": {
+          "title": "诚信专业",
+          "description": "以诚信、合规与专业判断为底线，长期守护客户与伙伴的信任与成果。"
+        },
+        "value4": {
+          "title": "资源整合",
+          "description": "跨文化、跨领域整合多方资源，推动中日企业交流合作与创新业务的共同发展。"
+        }
+      },
+      "mission": {
+        "title": "我们的使命",
+        "description": "「通过跨文化协作，让中日商务与不动产服务互相成就。」我们以透明沟通、专业判断与数字化管理，帮助客户稳健拓展在日业务，同时推动合作伙伴在新生态中实现价值递增。",
+        "longTermValue": {
+          "title": "长期价值",
+          "description": "审慎配置资产、强化风险控制，以可持续收益与品牌影响力回应客户期待。"
+        },
+        "collaborativeNetwork": {
+          "title": "协同网络",
+          "description": "整合金融、法律、政府与行业伙伴资源，打造开放共享的跨境服务平台。"
+        }
+      }
+    },
+    "history": {
+      "title": "企业沿革",
+      "subtitle": "Company History",
+      "description": "自 2009 年成立以来，Bourn Mark 持续深化日本不动产与跨境服务版图：从租赁买卖、资产增值到企业投资，与中日企业共同成长，构建扎实的城市运营与资本运作经验。",
+      "milestones": {
+        "milestone1": {
+          "year": "2009.06",
+          "title": "公司成立",
+          "description": "川雨流痕股份有限公司（当时社名：株式会社暖灯）在东京成立，开启专注华语客户的日本不动产业务。",
+          "imageAlt": "初创阶段的办公环境"
+        },
+        "milestone2": {
+          "year": "2010.01",
+          "title": "总部设立",
+          "description": "在东京都荒川区设立总公司，构建最初的租赁与买卖顾问团队，并同年 10 月开设日暮里站前店。",
+          "imageAlt": "东京城区街景"
+        },
+        "milestone3": {
+          "year": "2012.01",
+          "title": "区域拓展",
+          "description": "川口店开业，服务圈扩大至埼玉及首都圈北部；同年 9 月正式进入台湾市场。",
+          "imageAlt": "跨区域交通枢纽"
+        },
+        "milestone4": {
+          "year": "2015.03",
+          "title": "业务升级",
+          "description": "开拓不动产增值业务与国际不动产业务，拓展服务领域与市场范围。",
+          "imageAlt": "现代城市商务楼宇"
+        },
+        "milestone5": {
+          "year": "2015.08",
+          "title": "海外拓展",
+          "description": "在上海设立当地法人公司，进一步拓展中国市场，建立跨境业务网络。",
+          "imageAlt": "上海商务区"
+        },
+        "milestone6": {
+          "year": "2015.12",
+          "title": "购入总部大楼",
+          "description": "购入自有总部办公大楼，确立公司在日本市场的稳固根基。",
+          "imageAlt": "总部办公大楼"
+        },
+        "milestone7": {
+          "year": "2016.03",
+          "title": "总部迁移",
+          "description": "总部迁至东京都中央区，进一步贴近日本桥金融商务区，夯实跨境业务据点。",
+          "imageAlt": "日本桥金融区"
+        },
+        "milestone8": {
+          "year": "2017.04",
+          "title": "资本强化",
+          "description": "公司注册资本增资至 2,500 万日元，并在 10 月推出首个自有公寓项目 \"WARMLIGHT RESIDENCE\"。",
+          "imageAlt": "现代公寓建筑"
+        },
+        "milestone9": {
+          "year": "2018.02",
+          "title": "资产扩张",
+          "description": "收购 \"京都乌丸六条酒店\"，进入酒店与商用资产运营领域。",
+          "imageAlt": "酒店大堂"
+        },
+        "milestone10": {
+          "year": "2021.04",
+          "title": "战略协同",
+          "description": "与 Helte 公司展开业务及资本合作，结合数字化与社区运营优势。",
+          "imageAlt": "团队协作会议"
+        },
+        "milestone11": {
+          "year": "2021.06",
+          "title": "品牌焕新",
+          "description": "公司正式更名为川雨流痕股份有限公司（Bourn Mark CO., LTD.），确立\"根植日本、连接中日\"的企业定位。",
+          "imageAlt": "品牌发布活动"
+        }
+      }
+    },
+    "ceo": {
+      "title": "社长介绍",
+      "subtitle": "President Message",
+      "description": "通过跨文化的视角与专业实务经验，Bourn Mark 代表董事社长桂小川带领团队深耕日本不动产市场，持续搭建中日商务合作的桥梁。",
+      "tabs": {
+        "profile": "社长介绍",
+        "message": "社长寄语"
+      },
+      "profile": {
+        "name": "桂小川",
+        "introduction1": "自 2009 年创立 Bourn Mark 以来，以跨文化视角与专业实务经验带领团队深耕日本不动产市场，致力于搭建中日商务合作的桥梁，推动资产运营、企业落地与投资业务的协同发展。",
+        "introduction2": "将企业定位于"根植日本、连接中日"，以扎实的租赁管理、资产增值与企业服务经验，持续扩展公司的业务版图，并通过长期主义的经营理念，打造兼具国际视野与本地执行力的服务体系。",
+        "portraitAlt": "桂小川肖像",
+        "highlights": {
+          "birth": {
+            "label": "出生",
+            "value": "1975 年 9 月，中国桂林"
+          },
+          "earlyExperience": {
+            "label": "早期经历",
+            "value": ["曾任职于中国银行桂林分行", "1997 年赴日留学"]
+          },
+          "qualification": {
+            "label": "专业资格",
+            "value": "1999 年取得日本宅地建物取引士资格"
+          },
+          "career": {
+            "label": "职业历程",
+            "value": ["2000 年加入株式会社 minimini", "2009 年创立株式会社川雨流痕（原社名：株式会社暖灯）"]
+          },
+          "currentPosition": {
+            "label": "现任职务",
+            "value": "川雨流痕股份有限公司 代表董事社长"
+          },
+          "socialPosition": {
+            "label": "社会职务",
+            "value": "中国企业协会常务理事、资产资源整合委员会主任"
+          },
+          "media": {
+            "label": "媒体报道",
+            "value": "曾获《财界》《周刊大楼经营》《日经新闻》与 NHK《クローズアップ現代》等媒体专题报道"
+          }
+        }
+      },
+      "message": {
+        "title": "董事长寄语",
+        "subtitle": "Message From President",
+        "presidentTitle": "董事长 / President",
+        "presidentName": "桂 小川",
+        "imageAlt": "桂小川人物照片",
+        "paragraphs": {
+          "original": [
+            "1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。",
+            "在专注业务发展的同时，我们也不断反思企业存在的意义，回归"企业应为社会之公器"的基本理念。我来到日本后始终坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。我深知改善中日关系任重道远，并非只靠口号即可实现，但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。",
+            "长期以来，我们通过不动产业务与中日经济领域的企业携手，与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，力求拓展更广阔的业务版图。"
+          ],
+          "withBreaks": [
+            "1997 年，我怀抱创业理想从中国来到日本，以不动产业务为起点，<br />于 2009 年成立了本公司。伴随着时代的更迭，我们经历了从业务<br />快速搭建到不断深耕的过程，业务拓展范围涵盖租赁、管理、买卖、投资等领域，并在经营规模、运营实绩和服务能力等方面取得长足进步。",
+            "在专注业务发展的同时，我们也不断反思企业存在的意义，<br />回归"企业应为社会之公器"的基本理念。我来到日本后始终<br />坚守的信念——"搭建中日友好的桥梁"——在这段历程中得以实践。<br />我深知改善中日关系任重道远，并非只靠口号即可实现，<br />但我愿意投入时间，通过商业活动为中日友好贡献绵薄之力。",
+            "长期以来，我们通过不动产业务与中日经济领域的企业携手，<br />与卓越经营者一道，积极推进构筑大中华经济圈。未来，我们将正式开展投资业务，并在强化核心的物业管理业务的同时，大力推进 IT 开发应用，<br />推动数字化、智能化转型，提升管理与服务能力，培育新的业务增长点，<br />力求拓展更广阔的业务版图。"
+          ]
+        }
+      }
+    }
+  },
+  "touzi": {
+    "title": "资产投资运营",
+    "subtitle": "Asset Investment",
+    "description": "长期投入自有资本于优良资产的投资与运营。本页旨在展示既有投资项目与管理实力，相关信息仅供业务介绍之用，不面向客户提供任何资产投资或募集服务。",
+    "realEstateInvestment": {
+      "title": "不动产投资资产",
+      "description": "依托东京、关西与北海道等核心城市的市场洞察，我们以自有资金投资稀缺型物业，并由内部团队统筹运营，确保资产稳健成长。",
+      "cards": {
+        "card1": {
+          "title": "精选投资标的",
+          "description": "聚焦城市核心物业、特色资产与高成长区域，实现长期持有与收益再投入。"
+        },
+        "card2": {
+          "title": "风险评估与回报分析",
+          "description": "集团投研中心定期审视现金流、租客结构与市场波动，维持资产组合的健康度。"
+        },
+        "card3": {
+          "title": "资产管理服务",
+          "description": "自建物业管理体系与合作伙伴网络，统一监管营运、改装与增值计划。"
+        }
+      },
+      "heldAssets": {
+        "title": "企业持有资产",
+        "description": "呈现 Bourn Mark 在日本各地持有并长期运营的物业资产，所有项目均由内部团队自主管理。"
+      }
+    }
+  },
+  "footer": {
+    "followUs": "关注我们",
+    "companyInfo": "深耕日本市场十余年，为个人投资者与企业客户提供买卖中介、物业管理与出海落地等一站式服务，帮助资产稳健增值。",
+    "quickLinks": "站点导航",
+    "services": "服务项目",
+    "contactInfo": "联系方式",
+    "workingHours": "工作日 10:00-18:00",
+    "copyright": "© 2024 Bourn Mark Co., Ltd. 保留所有权利。",
+    "privacyPolicy": "隐私政策",
+    "mobileVersion": "移动版"
+  }
+}

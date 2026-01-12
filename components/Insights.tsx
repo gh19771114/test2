@@ -1,18 +1,26 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { encyclopediaEntries, latestNews } from '@/lib/knowledge'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 const Insights = () => {
-  const [isIPad, setIsIPad] = useState(false)
+  const { t } = useLanguage()
   const [isMounted, setIsMounted] = useState(false)
-  const newsScrollRef = useRef<HTMLDivElement>(null)
-  const encyclopediaScrollRef = useRef<HTMLDivElement>(null)
   const pinnedBarRef = useRef<HTMLDivElement>(null)
   const [pinnedBarHeight, setPinnedBarHeight] = useState(0)
+  const newsScrollContainerRef = useRef<HTMLDivElement>(null)
+  const encyclopediaScrollContainerRef = useRef<HTMLDivElement>(null)
+  const newsAutoScrollAnimationRef = useRef<number | null>(null)
+  const encyclopediaAutoScrollAnimationRef = useRef<number | null>(null)
+  const newsIsUserScrollingRef = useRef(false)
+  const encyclopediaIsUserScrollingRef = useRef(false)
+  const newsScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const encyclopediaScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const newsLastScrollTimeRef = useRef<number>(0)
+  const encyclopediaLastScrollTimeRef = useRef<number>(0)
   
   // 统一的滚动速度：30px/秒
   const SCROLL_SPEED_PX_PER_SEC = 30
@@ -26,11 +34,45 @@ const Insights = () => {
     })
   }, [])
 
-  // 按时间排序，显示最新20条普通资讯（不包含置顶）
+  // 获取分类标识
+  const getCategoryLabel = (news: any) => {
+    if (news.category) {
+      // 如果category是"公司活动"，需要翻译
+      if (news.category === '公司活动') {
+        return t('news.category.companyActivity')
+      }
+      if (news.category === '通知') {
+        return t('news.category.notice')
+      }
+      return news.category
+    }
+    if (news.isNotice) {
+      return t('news.category.notice')
+    }
+    return t('news.category.news')
+  }
+
+  // 按时间排序，显示最新20条普通资讯（不包含置顶），只保留3个月以内的新闻
   const filteredAndSortedNews = useMemo(() => {
     const normalNews = latestNews.filter(news => !news.isPinned)
+    
+    // 计算3个月前的日期
+    const threeMonthsAgo = new Date()
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
+    
+    // 过滤掉3个月以前的新闻（但保留通知和公司活动）
+    const recentNews = normalNews.filter(news => {
+      const newsDate = new Date(news.date)
+      // 如果是通知或公司活动，不进行时间过滤
+      if (news.isNotice || news.category === '公司活动') {
+        return true
+      }
+      // 其他新闻只保留3个月以内的
+      return newsDate >= threeMonthsAgo
+    })
+    
     // 按日期排序（最新的在前）
-    const sortedNormal = [...normalNews].sort((a, b) => {
+    const sortedNormal = [...recentNews].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
     // 返回最新的20条普通资讯
@@ -39,6 +81,25 @@ const Insights = () => {
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
   const encyclopedia = useMemo(() => encyclopediaEntries, [])
+
+  const getNewsTitle = (slug: string) => {
+    const translated = t(`news.items.${slug}.title`)
+    // 如果翻译缺失，t() 通常会返回 key 本身；此处兜底显示 slug
+    if (!translated || translated === `news.items.${slug}.title`) return slug
+    return translated
+  }
+
+  const getEncyclopediaTitle = (slug: string, fallback?: string) => {
+    const translated = t(`encyclopedia.items.${slug}.title`)
+    if (!translated || translated === `encyclopedia.items.${slug}.title`) return fallback || slug
+    return translated
+  }
+
+  const getEncyclopediaTag = (slug: string, fallback?: string) => {
+    const translated = t(`encyclopedia.items.${slug}.tag`)
+    if (!translated || translated === `encyclopedia.items.${slug}.tag`) return fallback || ''
+    return translated
+  }
 
   // 检测置顶栏高度，用于精确对齐滚动框
   useEffect(() => {
@@ -52,99 +113,167 @@ const Insights = () => {
     }
   }, [pinnedNewsList.length])
 
-  // 检测是否为iPad或移动设备，并设置统一的滚动速度
+  // 启动自动滚动（使用 requestAnimationFrame 实现平滑滚动）
+  const startAutoScroll = (
+    containerRef: React.RefObject<HTMLDivElement>, 
+    isUserScrollingRef: React.MutableRefObject<boolean>, 
+    animationRef: React.MutableRefObject<number | null>,
+    lastScrollTimeRef: React.MutableRefObject<number>
+  ) => {
+    // 清除之前的动画
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current)
+    }
+    
+    // 检查容器是否存在
+    if (!containerRef.current) return
+    
+    lastScrollTimeRef.current = performance.now()
+    
+    const animate = (currentTime: number) => {
+      // 每一帧都重新获取容器引用，确保引用是最新的
+      const container = containerRef.current
+      
+      // 检查容器是否存在
+      if (!container) {
+        animationRef.current = null
+        return
+      }
+      
+      // 如果用户正在滚动，不更新位置，但继续动画循环
+      if (!isUserScrollingRef.current) {
+        const deltaTime = currentTime - lastScrollTimeRef.current
+        lastScrollTimeRef.current = currentTime
+        
+        // 计算基于时间的滚动距离（像素/秒转换为像素/毫秒）
+        const scrollDistance = (SCROLL_SPEED_PX_PER_SEC * deltaTime) / 1000
+        
+        const maxScroll = container.scrollHeight - container.clientHeight
+        const currentScroll = container.scrollTop
+        
+        // 如果滚动到底部，平滑重置到顶部（无缝循环）
+        if (currentScroll >= maxScroll - 1) {
+          container.scrollTop = 0
+        } else {
+          container.scrollTop += scrollDistance
+        }
+      } else {
+        // 用户正在滚动，更新时间戳但不更新位置
+        lastScrollTimeRef.current = currentTime
+      }
+      
+      // 始终继续下一帧动画，保持流畅
+      animationRef.current = requestAnimationFrame(animate)
+    }
+    
+    // 启动动画循环
+    animationRef.current = requestAnimationFrame(animate)
+  }
+
+  // 停止自动滚动
+  const stopAutoScroll = (animationRef: React.MutableRefObject<number | null>) => {
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current)
+      animationRef.current = null
+    }
+  }
+
+  // 组件挂载后启动自动滚动
   useEffect(() => {
     setIsMounted(true)
     
-    const checkDevice = () => {
-      if (typeof window === 'undefined') return
-      const width = window.innerWidth
-      const height = window.innerHeight
-      // iPad检测
-      const isIPadDevice = (width >= 768 && width <= 1366 && height >= 768 && height <= 1366) &&
-                           !(width >= 1920 && height >= 1080)
-      // 移动设备检测（包括手机和iPad）
-      const isMobileDevice = width < 1024 || isIPadDevice
-      setIsIPad(isMobileDevice)
-    }
-    
-    // 设置统一滚动速度的函数
-    const updateScrollSpeed = () => {
-      if (typeof window === 'undefined') return
-      const width = window.innerWidth
-      const height = window.innerHeight
-      const isIPadDevice = (width >= 768 && width <= 1366 && height >= 768 && height <= 1366) &&
-                           !(width >= 1920 && height >= 1080)
-      const isMobileDevice = width < 1024 || isIPadDevice
-      
-      if (!isMobileDevice && newsScrollRef.current && encyclopediaScrollRef.current) {
-        // 获取第一个子元素的高度
-        const newsFirstItem = newsScrollRef.current.querySelector('a')
-        const encyclopediaFirstItem = encyclopediaScrollRef.current.querySelector('a')
-        
-        if (newsFirstItem && encyclopediaFirstItem) {
-          const newsItemHeight = newsFirstItem.offsetHeight
-          const encyclopediaItemHeight = encyclopediaFirstItem.offsetHeight
-          
-          // 计算总高度（项目数 × 项目高度）
-          const newsTotalHeight = newsList.length * newsItemHeight
-          const encyclopediaTotalHeight = encyclopedia.length * encyclopediaItemHeight
-          
-          // 根据内容高度和固定速度（30px/s）计算动画时长
-          const newsDuration = newsTotalHeight / SCROLL_SPEED_PX_PER_SEC
-          const encyclopediaDuration = encyclopediaTotalHeight / SCROLL_SPEED_PX_PER_SEC
-          
-          // 设置CSS变量
-          newsScrollRef.current.style.setProperty('--scroll-duration', `${newsDuration}s`)
-          encyclopediaScrollRef.current.style.setProperty('--scroll-duration', `${encyclopediaDuration}s`)
-        }
+    // 延迟启动，确保DOM已渲染
+    const timeoutId = setTimeout(() => {
+      if (newsScrollContainerRef.current) {
+        startAutoScroll(newsScrollContainerRef, newsIsUserScrollingRef, newsAutoScrollAnimationRef, newsLastScrollTimeRef)
       }
-    }
-    
-    checkDevice()
-    
-    // 延迟执行以确保DOM已渲染
-    const timeoutId = setTimeout(updateScrollSpeed, 300)
-    
-    window.addEventListener('resize', checkDevice)
-    window.addEventListener('resize', updateScrollSpeed)
-    window.addEventListener('orientationchange', checkDevice)
-    window.addEventListener('orientationchange', updateScrollSpeed)
+      if (encyclopediaScrollContainerRef.current) {
+        startAutoScroll(encyclopediaScrollContainerRef, encyclopediaIsUserScrollingRef, encyclopediaAutoScrollAnimationRef, encyclopediaLastScrollTimeRef)
+      }
+    }, 300)
     
     return () => {
       clearTimeout(timeoutId)
-      window.removeEventListener('resize', checkDevice)
-      window.removeEventListener('resize', updateScrollSpeed)
-      window.removeEventListener('orientationchange', checkDevice)
-      window.removeEventListener('orientationchange', updateScrollSpeed)
+      stopAutoScroll(newsAutoScrollAnimationRef)
+      stopAutoScroll(encyclopediaAutoScrollAnimationRef)
     }
-  }, [newsList, encyclopedia, SCROLL_SPEED_PX_PER_SEC])
+  }, [newsList.length, encyclopedia.length])
 
-  const blockVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  // 处理鼠标滚轮事件
+  const handleWheel = (
+    e: React.WheelEvent<HTMLDivElement>, 
+    containerRef: React.RefObject<HTMLDivElement>, 
+    isUserScrollingRef: React.MutableRefObject<boolean>,
+    timeoutRef: React.MutableRefObject<NodeJS.Timeout | null>
+  ) => {
+    const container = containerRef.current
+    if (!container) return
+
+    // 始终阻止事件冒泡，防止页面滚动（只要在滚动栏区域内）
+    e.preventDefault()
+    e.stopPropagation()
+
+    // 标记用户正在滚动，暂停自动滚动
+    isUserScrollingRef.current = true
+    
+    // 清除之前的定时器
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    
+    // 手动滚动
+    const delta = e.deltaY
+    const currentScroll = container.scrollTop
+    const maxScroll = container.scrollHeight - container.clientHeight
+    
+    // 计算新的滚动位置
+    let newScroll = currentScroll + delta
+    
+    // 实现"撞墙反弹"效果
+    if (newScroll < 0) {
+      // 到达顶部，反弹效果（反弹30%的距离）
+      newScroll = -delta * 0.3
+      if (newScroll < 0) newScroll = 0
+    } else if (newScroll > maxScroll) {
+      // 到达底部，反弹效果（反弹30%的距离）
+      const overscroll = newScroll - maxScroll
+      newScroll = maxScroll - overscroll * 0.3
+      if (newScroll > maxScroll) newScroll = maxScroll
+    }
+    
+    container.scrollTop = newScroll
+    
+    // 设置新的定时器，在停止滚动后恢复自动滚动
+    timeoutRef.current = setTimeout(() => {
+      isUserScrollingRef.current = false
+    }, 1500) // 1.5秒后恢复自动滚动
+  }
+
+  // 处理鼠标离开事件，恢复自动滚动
+  const handleMouseLeave = (
+    isUserScrollingRef: React.MutableRefObject<boolean>,
+    lastScrollTimeRef: React.MutableRefObject<number>
+  ) => {
+    // 恢复自动滚动
+    isUserScrollingRef.current = false
+    // 重置时间戳，避免突然跳跃
+    lastScrollTimeRef.current = performance.now()
   }
 
   return (
     <section className="relative section-padding">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <motion.div
-            variants={blockVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col"
-          >
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2 md:gap-0">
-              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">最新资讯</h3>
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-500">实时关注日本房产动态</span>
+          <div className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col insights-card">
+            <div className="flex flex-col mb-6 gap-2 insights-header pt-4 md:pt-0">
+              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">{t('home.insights.title')}</h3>
+              <div className="flex items-center gap-4 md:justify-between">
+                <span className="text-sm text-gray-500">{t('home.insights.subtitle')}</span>
                 <Link 
                   href="/news" 
                   className="text-sm text-navy-600 hover:text-navy-700 font-medium underline"
                 >
-                  查看全部
+                  {t('home.insights.viewAll')}
                 </Link>
               </div>
             </div>
@@ -153,15 +282,20 @@ const Insights = () => {
               <div ref={pinnedBarRef} className="mb-3 rounded-xl border-2 border-red-200 bg-red-50/80 backdrop-blur-sm">
                 {pinnedNewsList.map((item, index) => (
                   <Link
-                    key={`pinned-${item.title}-${index}`}
+                    key={`pinned-${item.slug}-${index}`}
                     href={`/news/${item.slug}`}
-                    className="flex items-start gap-3 px-4 py-3 hover:bg-red-100/50 transition-colors cursor-pointer"
+                    className={`flex items-start gap-3 px-4 py-3 hover:bg-red-100/50 transition-colors cursor-pointer insights-pinned-item ${index < pinnedNewsList.length - 1 ? 'border-b-2 border-red-300' : ''}`}
                   >
-                    <span className="mt-1 h-2 w-2 rounded-full bg-red-500 flex-shrink-0"></span>
                     <div className="flex-1">
                       <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
-                        {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
-                        {item.title}
+                        <span className={`font-semibold mr-2 ${
+                          item.category === '公司活动' ? 'text-green-600' :
+                          item.isNotice || item.category === '通知' ? 'text-red-600' :
+                          'text-blue-600'
+                        }`}>
+                          {getCategoryLabel(item)}
+                        </span>
+                        <span suppressHydrationWarning>{isMounted ? getNewsTitle(item.slug) : ''}</span>
                       </p>
                       <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                     </div>
@@ -170,57 +304,41 @@ const Insights = () => {
               </div>
             )}
             <div 
-              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
-                isMounted && isIPad ? 'overflow-y-auto' : 'overflow-hidden'
-              }`} 
+              ref={newsScrollContainerRef}
+              className="relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto"
               style={{ 
                 height: '400px',
                 maxHeight: '400px',
-                minHeight: '400px'
+                minHeight: '400px',
+                willChange: 'scroll-position',
+                WebkitOverflowScrolling: 'touch',
+                overflowScrolling: 'touch'
               }}
+              onWheel={(e) => handleWheel(e, newsScrollContainerRef, newsIsUserScrollingRef, newsScrollTimeoutRef)}
+              onMouseLeave={() => handleMouseLeave(newsIsUserScrollingRef, newsLastScrollTimeRef)}
             >
               {newsList.length === 0 ? (
                 <div className="px-6 py-8 text-center text-gray-500">
-                  <p>暂无最新资讯</p>
-                </div>
-              ) : isMounted && isIPad ? (
-                // 移动设备（包括手机和iPad）: 使用手动滚动
-                <div>
-                  {newsList.map((item, index) => (
-                    <Link
-                      key={`${item.title}-${index}`}
-                      href={`/news/${item.slug}`}
-                      className="flex items-start gap-3 px-6 py-4 border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
-                    >
-                      <span className="mt-1 h-2 w-2 rounded-full bg-navy-500 flex-shrink-0"></span>
-                      <div className="flex-1">
-                        <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
-                          {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
-                          {item.title}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">{item.date}</p>
-                      </div>
-                    </Link>
-                  ))}
+                  <p>{t('home.insights.noNews')}</p>
                 </div>
               ) : (
-                // 桌面端: 使用自动滚动动画
-                <div 
-                  ref={newsScrollRef}
-                  className="animate-vertical-scroll hover:[animation-play-state:paused]"
-                  style={{ '--scroll-duration': '20s' } as React.CSSProperties}
-                >
-                  {[...newsList, ...newsList].map((item, index) => (
+                <div style={{ paddingTop: '8px', paddingBottom: '8px' }}>
+                  {newsList.map((item, index) => (
                     <Link
-                      key={`${item.title}-${index}`}
+                      key={`${item.slug}-${index}`}
                       href={`/news/${item.slug}`}
-                      className="flex items-start gap-3 px-6 py-4 border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
+                      className="flex items-start gap-3 px-6 py-4 border-b-2 border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer insights-news-item"
                     >
-                      <span className="mt-1 h-2 w-2 rounded-full bg-navy-500 flex-shrink-0"></span>
                       <div className="flex-1">
                         <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
-                          {item.isNotice && <span className="text-red-600 font-semibold mr-2">通知</span>}
-                          {item.title}
+                          <span className={`font-semibold mr-2 ${
+                            item.category === '公司活动' ? 'text-green-600' :
+                            item.isNotice || item.category === '通知' ? 'text-red-600' :
+                            'text-blue-600'
+                          }`}>
+                            {getCategoryLabel(item)}
+                          </span>
+                          <span suppressHydrationWarning>{isMounted ? getNewsTitle(item.slug) : ''}</span>
                         </p>
                         <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                       </div>
@@ -229,76 +347,51 @@ const Insights = () => {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            variants={blockVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col"
-          >
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-2 md:gap-0">
-              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">日本房产投资百科</h3>
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-500">系统解读投资要点</span>
+          <div className="rounded-3xl bg-gradient-to-br from-white/80 via-white/80 to-gray-100/80 backdrop-blur-sm shadow-xl border border-gray-100 p-8 flex flex-col insights-card">
+            <div className="flex flex-col mb-6 gap-2 insights-header pt-4 md:pt-0">
+              <h3 className="text-2xl font-bold text-navy-700 whitespace-nowrap">{t('home.insights.encyclopediaTitle')}</h3>
+              <div className="flex items-center gap-4 md:justify-between">
+                <span className="text-sm text-gray-500">{t('home.insights.encyclopediaSubtitle')}</span>
                 <Link 
                   href="/encyclopedia" 
                   className="text-sm text-navy-600 hover:text-navy-700 font-medium underline"
                 >
-                  查看全部
+                  {t('home.insights.encyclopediaViewAll')}
                 </Link>
               </div>
             </div>
             <div 
-              className={`relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 ${
-                isMounted && isIPad ? 'overflow-y-auto' : 'overflow-hidden'
-              }`} 
+              ref={encyclopediaScrollContainerRef}
+              className="relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto"
               style={{ 
                 height: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
                 maxHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
-                minHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px'
+                minHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
+                willChange: 'scroll-position'
               }}
+              onWheel={(e) => handleWheel(e, encyclopediaScrollContainerRef, encyclopediaIsUserScrollingRef, encyclopediaScrollTimeoutRef)}
+              onMouseLeave={() => handleMouseLeave(encyclopediaIsUserScrollingRef, encyclopediaLastScrollTimeRef)}
             >
-              {isMounted && isIPad ? (
-                // 移动设备（包括手机和iPad）: 使用手动滚动
-                <div>
-                  {encyclopedia.map((item, index) => (
-                    <Link
-                      key={`${item.title}-${index}`}
-                      href={`/encyclopedia/${item.slug}`}
-                      className="block px-6 py-4 border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
-                    >
-                      <p className="text-gray-800 font-medium mb-1 hover:text-navy-700 transition-colors">{item.title}</p>
-                      <span className="inline-flex items-center px-3 py-1 text-xs rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-                        {item.tag}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                // 桌面端: 使用自动滚动动画
-                <div 
-                  ref={encyclopediaScrollRef}
-                  className="animate-vertical-scroll hover:[animation-play-state:paused]"
-                  style={{ '--scroll-duration': '20s' } as React.CSSProperties}
-                >
-                  {[...encyclopedia, ...encyclopedia].map((item, index) => (
-                    <Link
-                      key={`${item.title}-${index}`}
-                      href={`/encyclopedia/${item.slug}`}
-                      className="block px-6 py-4 border-b border-gray-50 hover:bg-gray-50 transition-colors cursor-pointer"
-                    >
-                      <p className="text-gray-800 font-medium mb-1 hover:text-navy-700 transition-colors">{item.title}</p>
-                      <span className="inline-flex items-center px-3 py-1 text-xs rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-                        {item.tag}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <div style={{ paddingTop: '8px', paddingBottom: '8px' }}>
+                {encyclopedia.map((item, index) => (
+                  <Link
+                    key={`${item.slug}-${index}`}
+                    href={`/encyclopedia/${item.slug}`}
+                      className="block px-6 py-4 border-b-2 border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer insights-encyclopedia-item"
+                  >
+                    <p className="text-gray-800 font-medium mb-1 hover:text-navy-700 transition-colors">
+                      <span suppressHydrationWarning>{isMounted ? getEncyclopediaTitle(item.slug, item.title) : ''}</span>
+                    </p>
+                    <span className="inline-flex items-center px-3 py-1 text-xs rounded-full bg-blue-50 text-blue-600 border border-blue-100" suppressHydrationWarning>
+                      {isMounted ? getEncyclopediaTag(item.slug, item.tag) : ''}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

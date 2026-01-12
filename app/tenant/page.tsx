@@ -4,89 +4,91 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, CreditCard, FileText, Shield, Wrench } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function TenantPage() {
+  const { t } = useLanguage()
   return (
     <PageLayout>
-      <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
+      <section className="relative pt-20 md:pt-28 pb-8 md:pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-            alt="租客专用"
+            alt={t('tenant.title')}
             fill
             className="object-cover opacity-30"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-navy-900/60"></div>
         </div>
-        <div className="relative z-10 container-custom">
-          <p className="text-sm text-blue-300 font-semibold mb-4 drop-shadow-md">Tenant Support</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">租客专用</h1>
-          <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
-            欢迎使用我们的租客服务。如果您是我们的租客，可以通过以下方式联系我们。
+        <div className="relative z-10 container-custom px-4">
+          <p className="text-sm text-blue-300 font-semibold mb-2 md:mb-4 drop-shadow-md">{t('tenant.subtitle')}</p>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-6 drop-shadow-lg">{t('tenant.title')}</h1>
+          <p className="text-base md:text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
+            {t('tenant.description')}
           </p>
         </div>
       </section>
         
-        <section className="relative pt-16 pb-16">
+        <section className="relative pt-6 md:pt-16 pb-6 md:pb-16">
           <div className="absolute inset-0 bg-white z-[5]"></div>
           
-          <div className="container-custom relative z-10">
-            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-12">
-              <div className="space-y-6">
-                <div className="border-l-4 border-blue-500 pl-6 flex items-start gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Phone className="w-6 h-6 text-navy-700" />
+          <div className="container-custom relative z-10 px-4">
+            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-4 md:p-12">
+              <div className="space-y-3 md:space-y-6">
+                <div className="border-l-4 border-blue-500 pl-3 md:pl-6 flex items-start gap-2 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <Phone className="w-5 h-5 md:w-6 md:h-6 text-navy-700" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-navy-900 mb-2">紧急报修</h2>
-                <p className="text-gray-700 leading-relaxed">24小时紧急报修热线：0120-559-989</p>
+                <h2 className="text-lg md:text-xl font-semibold text-navy-900 mb-1 md:mb-2">{t('tenant.services.emergency.title')}</h2>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.emergency.description')}</p>
               </div>
             </div>
             
-            <div className="border-l-4 border-green-500 pl-6 flex items-start gap-4">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <CreditCard className="w-6 h-6 text-green-600" />
+            <div className="border-l-4 border-green-500 pl-3 md:pl-6 flex items-start gap-2 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <CreditCard className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-navy-900 mb-2">租金缴纳</h2>
-                <p className="text-gray-700 leading-relaxed">请通过银行转账或在线支付方式缴纳租金。</p>
-                <p className="text-gray-700 leading-relaxed mt-2">租金缴纳咨询专线：03-6661-7745</p>
+                <h2 className="text-lg md:text-xl font-semibold text-navy-900 mb-1 md:mb-2">{t('tenant.services.payment.title')}</h2>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.payment.description')}</p>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed mt-1 md:mt-2">{t('tenant.services.payment.phone')}</p>
               </div>
             </div>
             
-            <div className="border-l-4 border-yellow-500 pl-6 flex items-start gap-4">
-              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Shield className="w-6 h-6 text-yellow-600" />
+            <div className="border-l-4 border-yellow-500 pl-3 md:pl-6 flex items-start gap-2 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <Shield className="w-5 h-5 md:w-6 md:h-6 text-yellow-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-navy-900 mb-2">更新 &amp; 保险</h2>
-                <p className="text-gray-700 leading-relaxed">租约更新、火灾保险续保等问题，请联系：03-6661-2588</p>
+                <h2 className="text-lg md:text-xl font-semibold text-navy-900 mb-1 md:mb-2">{t('tenant.services.renewal.title')}</h2>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.renewal.description')}</p>
               </div>
             </div>
 
-            <div className="border-l-4 border-purple-500 pl-6 flex items-start gap-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Wrench className="w-6 h-6 text-purple-600" />
+            <div className="border-l-4 border-purple-500 pl-3 md:pl-6 flex items-start gap-2 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <Wrench className="w-5 h-5 md:w-6 md:h-6 text-purple-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-navy-900 mb-2">日常维修</h2>
-                <p className="text-gray-700 leading-relaxed">如涉及设备保养、日常维修，请联系：03-6661-1848</p>
+                <h2 className="text-lg md:text-xl font-semibold text-navy-900 mb-1 md:mb-2">{t('tenant.services.maintenance.title')}</h2>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.maintenance.description')}</p>
               </div>
             </div>
 
-            <div className="border-l-4 border-navy-500 pl-6 flex items-start gap-4">
-              <div className="w-12 h-12 bg-navy-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-navy-900" />
+            <div className="border-l-4 border-navy-500 pl-3 md:pl-6 flex items-start gap-2 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-navy-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 md:w-6 md:h-6 text-navy-900" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-navy-900 mb-2">解约申请</h2>
-                <p className="text-gray-700 leading-relaxed">如需办理退租，请填写在线表单，我们会自动生成解约文件并发送至管理团队。</p>
+                <h2 className="text-lg md:text-xl font-semibold text-navy-900 mb-1 md:mb-2">{t('tenant.services.termination.title')}</h2>
+                <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.termination.description')}</p>
                 <Link
                   href="/tenant/kaiyaku"
-                  className="inline-flex items-center gap-2 text-navy-700 hover:text-blue-700 mt-3 font-medium"
+                  className="inline-flex items-center gap-2 text-navy-700 hover:text-blue-700 mt-2 md:mt-3 font-medium text-sm md:text-base"
                 >
-                  前往解约申请表
+                  {t('tenant.services.termination.link')}
                   <span aria-hidden>→</span>
                 </Link>
               </div>

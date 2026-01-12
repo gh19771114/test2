@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import PageLayout from '@/components/PageLayout'
 import { Calendar, MapPin, Tag, ArrowLeft, Building2, DollarSign, TrendingUp } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 // 金属光泽灰色背景样式
 const metallicGrayStyle = {
@@ -148,29 +149,6 @@ const caseDetails: Record<string, any> = {
       { label: '服务团队', value: '专业团队' },
     ],
   },
-  'xiaomi-japan-consulting': {
-    date: '2024/09/20',
-    type: '企业服务',
-    title: '小米日本分公司设立咨询服务',
-    location: '东京都',
-    category: '企业出海',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '提供市场进入策略与合规咨询，统筹办公选址、品牌本地化及通路合作伙伴对接。',
-    details: [
-      '成功完成小米日本分公司的设立咨询服务，服务日期：2024年9月20日',
-      '提供市场进入策略咨询，制定详细的日本市场进入计划',
-      '提供合规咨询，确保符合日本法律法规要求',
-      '统筹办公选址，协助选择最适合的办公地点',
-      '品牌本地化支持，协助品牌在日本市场的定位和推广',
-      '通路合作伙伴对接，建立销售渠道和合作伙伴网络',
-    ],
-    highlights: [
-      { label: '服务类型', value: '咨询服务' },
-      { label: '服务内容', value: '市场策略、合规咨询、办公选址、品牌本地化、合作伙伴对接' },
-      { label: '服务周期', value: '持续支持' },
-      { label: '服务团队', value: '专业团队' },
-    ],
-  },
   'shibuya-luxury-apartment': {
     date: '2024/03/15',
     type: '管理委托',
@@ -243,9 +221,39 @@ const caseDetails: Record<string, any> = {
 }
 
 export default function CaseDetailPage() {
+  const { t } = useLanguage()
   const params = useParams()
   const slug = params?.slug as string | undefined
-  const caseItem = slug ? caseDetails[slug] : undefined
+  
+  // 使用翻译数据
+  const caseItem = useMemo(() => {
+    if (!slug) return undefined
+    const baseCase = caseDetails[slug]
+    if (!baseCase) return undefined
+    
+    // 尝试从翻译文件中获取翻译
+    try {
+      const translatedCase = {
+        ...baseCase,
+        type: t(`cases.details.${slug}.type`, { returnObjects: false }) || baseCase.type,
+        title: t(`cases.details.${slug}.title`, { returnObjects: false }) || baseCase.title,
+        location: t(`cases.details.${slug}.location`, { returnObjects: false }) || baseCase.location,
+        category: t(`cases.details.${slug}.category`, { returnObjects: false }) || baseCase.category,
+        description: t(`cases.details.${slug}.description`, { returnObjects: false }) || baseCase.description,
+        details: (() => {
+          const translated = t(`cases.details.${slug}.details`, { returnObjects: true })
+          return Array.isArray(translated) ? translated : (Array.isArray(baseCase.details) ? baseCase.details : [])
+        })(),
+        highlights: (() => {
+          const translated = t(`cases.details.${slug}.highlights`, { returnObjects: true })
+          return Array.isArray(translated) ? translated : (Array.isArray(baseCase.highlights) ? baseCase.highlights : [])
+        })(),
+      }
+      return translatedCase
+    } catch {
+      return baseCase
+    }
+  }, [slug, t])
   
   // 所有 Hooks 必须在早期返回之前调用
   const [mapCoordinates, setMapCoordinates] = useState<{ lat: number; lng: number } | null>(null)
@@ -253,7 +261,8 @@ export default function CaseDetailPage() {
 
   // 自动搜索地址获取坐标
   useEffect(() => {
-    if (caseItem?.type === '销售' && caseItem?.location) {
+    const caseType = typeof caseItem?.type === 'string' ? caseItem.type : ''
+    if ((caseType === '销售' || caseType === 'Sale' || caseType === '売却') && caseItem?.location) {
       const searchAddress = async () => {
         try {
           // 使用 OpenStreetMap Nominatim API 搜索地址
@@ -302,11 +311,11 @@ export default function CaseDetailPage() {
     return (
       <PageLayout>
         <div className="container-custom py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">案例未找到</h1>
-          <p className="text-gray-600 mb-6">抱歉，找不到您要查看的案例。</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('cases.notFound.title')}</h1>
+          <p className="text-gray-600 mb-6">{t('cases.notFound.message')}</p>
           <Link href="/cases" className="btn-primary inline-flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
-            返回案例列表
+            {t('cases.notFound.back')}
           </Link>
         </div>
       </PageLayout>
@@ -317,11 +326,11 @@ export default function CaseDetailPage() {
     return (
       <PageLayout>
         <div className="container-custom py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">案例未找到</h1>
-          <p className="text-gray-600 mb-6">抱歉，找不到您要查看的案例。</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('cases.notFound.title')}</h1>
+          <p className="text-gray-600 mb-6">{t('cases.notFound.message')}</p>
           <Link href="/cases" className="btn-primary inline-flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
-            返回案例列表
+            {t('cases.notFound.back')}
           </Link>
         </div>
       </PageLayout>
@@ -349,7 +358,7 @@ export default function CaseDetailPage() {
               className="inline-flex items-center gap-2 text-blue-200 hover:text-white mb-4 transition-colors"
             >
               <ArrowLeft size={20} />
-              <span>返回案例列表</span>
+              <span>{t('cases.detail.backToList')}</span>
             </Link>
             <div className="flex items-center gap-3 mb-4">
               <span className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
@@ -394,28 +403,30 @@ export default function CaseDetailPage() {
 
                 {/* Description */}
                 <div className="bg-white rounded-2xl shadow-lg p-8">
-                  <h2 className="text-2xl font-bold text-navy-700 mb-4">项目概述</h2>
+                  <h2 className="text-2xl font-bold text-navy-700 mb-4">{t('cases.detail.overview')}</h2>
                   <p className="text-gray-700 leading-relaxed text-lg">{caseItem.description}</p>
                 </div>
 
                 {/* Details */}
-                <div className="bg-white rounded-2xl shadow-lg p-8">
-                  <h2 className="text-2xl font-bold text-navy-700 mb-6">项目详情</h2>
-                  <ul className="space-y-4">
-                    {caseItem.details.map((detail: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                        <p className="text-gray-700 leading-relaxed">{detail}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {Array.isArray(caseItem.details) && caseItem.details.length > 0 && (
+                  <div className="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 className="text-2xl font-bold text-navy-700 mb-6">{t('cases.detail.details')}</h2>
+                    <ul className="space-y-4">
+                      {caseItem.details.map((detail: string, index: number) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                          <p className="text-gray-700 leading-relaxed">{detail}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Map Section - Only for Sales Cases */}
-                {caseItem.type === '销售' && caseItem.location && (
+                {(caseItem.type === '销售' || caseItem.type === 'Sale' || caseItem.type === '売却') && caseItem.location && (
                   <div className="bg-white rounded-2xl shadow-lg p-8">
-                    <h2 className="text-2xl font-bold text-navy-700 mb-4">地理位置</h2>
-                    <p className="text-gray-600 mb-4">项目位于东京的以下位置：</p>
+                    <h2 className="text-2xl font-bold text-navy-700 mb-4">{t('cases.detail.location')}</h2>
+                    <p className="text-gray-600 mb-4">{t('cases.detail.locationDescription')}</p>
                     <div className="relative w-full h-96 rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
                       {mapLoading ? (
                         <div className="flex items-center justify-center h-full">
@@ -436,12 +447,12 @@ export default function CaseDetailPage() {
                             allowFullScreen
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            title={`${caseItem.title} 位置地图`}
+                            title={`${caseItem.title} ${t('cases.detail.map')}`}
                             className="pointer-events-none group-hover:opacity-90 transition-opacity"
                           ></iframe>
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center pointer-events-none">
                             <div className="bg-white/90 px-4 py-2 rounded-lg text-sm font-medium text-navy-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                              点击查看详细地图
+                              {t('cases.detail.clickToViewMap')}
                             </div>
                           </div>
                         </a>
@@ -456,7 +467,7 @@ export default function CaseDetailPage() {
                             <div className="text-center">
                               <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                               <p className="text-gray-600 mb-2">{caseItem.location}</p>
-                              <p className="text-sm text-gray-500">点击查看 Google 地图</p>
+                              <p className="text-sm text-gray-500">{t('cases.detail.clickToViewGoogleMap')}</p>
                             </div>
                           </div>
                         </a>
@@ -473,7 +484,7 @@ export default function CaseDetailPage() {
               <div className="space-y-6">
                 {/* Highlights */}
                 <div className="bg-white rounded-2xl shadow-lg p-6">
-                  <h3 className="text-xl font-bold text-navy-700 mb-4">项目亮点</h3>
+                  <h3 className="text-xl font-bold text-navy-700 mb-4">{t('cases.detail.highlights')}</h3>
                   <div className="space-y-4">
                     {caseItem.highlights.map((highlight: any, index: number) => (
                       <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
@@ -486,15 +497,15 @@ export default function CaseDetailPage() {
 
                 {/* CTA */}
                 <div className="bg-gradient-to-br from-blue-600 to-navy-700 rounded-2xl shadow-lg p-6 text-white">
-                  <h3 className="text-xl font-bold mb-4">想要了解更多？</h3>
+                  <h3 className="text-xl font-bold mb-4">{t('cases.detail.cta.title')}</h3>
                   <p className="text-blue-100 mb-6">
-                    我们的专业团队随时为您提供咨询服务，帮助您找到最适合的投资方案。
+                    {t('cases.detail.cta.description')}
                   </p>
                   <Link
                     href="/#contact"
                     className="block w-full bg-white text-blue-600 text-center font-semibold py-3 rounded-lg hover:bg-blue-50 transition-colors"
                   >
-                    联系我们
+                    {t('cases.detail.cta.button')}
                   </Link>
                 </div>
               </div>

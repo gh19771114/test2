@@ -1,15 +1,13 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef, useMemo, useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ExternalLink, Play } from 'lucide-react'
 import Image from 'next/image'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 const Works = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '200px' }) // 提前加载，减少延迟
+  const { t } = useLanguage()
   const [visibleCount, setVisibleCount] = useState(6) // 初始只显示6个案例
 
   // 使用 useMemo 缓存数据，避免每次渲染都重新创建
@@ -69,15 +67,6 @@ const Works = () => {
       description: '协助完成法人登记、签约日本大型不动产公司设立办公室，并搭建本地财务与招聘体系。'
     },
     {
-      id: 'xiaomi-japan-consulting',
-      title: '小米日本分公司设立咨询服务',
-      date: '2024/09/20',
-      type: '企业服务',
-      category: '企业出海',
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
-      description: '提供市场进入策略与合规咨询，统筹办公选址、品牌本地化及通路合作伙伴对接。'
-    },
-    {
       id: 'shibuya-luxury-apartment',
       title: '东京涩谷高端公寓',
       date: '2024/03/15',
@@ -106,137 +95,75 @@ const Works = () => {
     }
   ], [])
 
-  // 当滚动到底部时，加载更多案例
-  useEffect(() => {
-    if (!isInView || visibleCount >= works.length) return
-
-    const handleScroll = () => {
-      const scrollPosition = window.innerHeight + window.scrollY
-      const documentHeight = document.documentElement.scrollHeight
-      
-      // 当接近底部时，加载更多
-      if (scrollPosition >= documentHeight - 500 && visibleCount < works.length) {
-        setVisibleCount(prev => Math.min(prev + 3, works.length))
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [isInView, visibleCount, works.length])
+  // 首页只显示6个案例，不再滚动加载更多
 
   // 只渲染可见的案例
   const visibleWorks = useMemo(() => works.slice(0, visibleCount), [works, visibleCount])
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05 // 减少延迟，加快显示速度
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 }, // 减少移动距离
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3 // 减少动画时间
-      }
-    }
-  }
-
   return (
     <section id="works" className="relative section-padding scroll-mt-32">
       <div className="container-custom">
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="text-center mb-16"
-        >
-          <motion.a
+        <div className="text-center mb-16">
+          <Link
             href="/cases"
-            variants={itemVariants}
             className="text-3xl md:text-4xl font-bold text-white mb-4 hover:text-gray-200 transition-colors cursor-pointer inline-block"
+            suppressHydrationWarning
           >
-            案例展示
-          </motion.a>
-          <motion.p
-            variants={itemVariants}
+            {t('home.works.title')}
+          </Link>
+          <p 
             className="text-lg text-gray-200 max-w-2xl mx-auto"
+            suppressHydrationWarning
           >
-            以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务。
-          </motion.p>
-        </motion.div>
+            {t('home.works.subtitle')}
+          </p>
+        </div>
 
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {visibleWorks.map((work, index) => (
-            <motion.div
+            <div
               key={work.id}
-              variants={itemVariants}
-              className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-              style={{ contentVisibility: index > 5 ? 'auto' : undefined }}
+              className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg"
             >
-              <Link href={`/cases/${work.id}`}>
-                <div className="relative overflow-hidden">
-                  <div className="relative w-full h-64">
-                    <Image
-                      src={work.image}
-                      alt={work.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      priority={index < 3} // 只对前3张图片使用优先级加载
-                      loading={index < 3 ? undefined : "lazy"} // 后面的图片懒加载
-                      quality={70} // 进一步降低图片质量以加快加载
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="flex space-x-4">
-                      <div className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-colors duration-200">
-                        <ExternalLink size={20} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {work.category}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {work.type}
-                    </span>
-                  </div>
+              <div className="relative overflow-hidden">
+                <div className="relative w-full h-64">
+                  <Image
+                    src={work.image}
+                    alt={work.title}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    priority={index < 3} // 只对前3张图片使用优先级加载
+                    loading={index < 3 ? undefined : "lazy"} // 后面的图片懒加载
+                    quality={75} // 优化图片质量
+                  />
                 </div>
-                
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                    <span>{work.date}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-navy-700 mb-2 group-hover:text-navy-600 transition-colors duration-200">
-                    {work.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {work.description}
-                  </p>
+                <div className="absolute top-4 left-4">
+                  <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {work.category}
+                  </span>
                 </div>
-              </Link>
-            </motion.div>
+                <div className="absolute top-4 right-4">
+                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {work.type}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                  <span>{work.date}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-navy-700 mb-2">
+                  {work.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {work.description}
+                </p>
+              </div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* 移动端：横向滑动形式 */}
         <div className="md:hidden overflow-x-auto pb-4 scrollbar-hide" style={{ 
@@ -245,79 +172,62 @@ const Works = () => {
         }}>
           <div className="flex gap-4 px-4" style={{ minWidth: 'max-content' }}>
             {visibleWorks.map((work, index) => (
-              <motion.div
+              <div
                 key={work.id}
-                variants={itemVariants}
                 className="flex-shrink-0 w-[320px]"
                 style={{ scrollSnapAlign: 'center' }}
               >
-                <div className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
-                  <Link href={`/cases/${work.id}`}>
-                    <div className="relative overflow-hidden">
-                      <div className="relative w-full h-48">
-                        <Image
-                          src={work.image}
-                          alt={work.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                          sizes="320px"
-                          loading={index < 3 ? undefined : "lazy"}
-                          quality={70}
-                          placeholder="blur"
-                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                        />
-                      </div>
-                      <div className="absolute inset-0 bg-navy-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="flex space-x-4">
-                          <div className="bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-colors duration-200">
-                            <ExternalLink size={20} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                          {work.category}
-                        </span>
-                      </div>
-                      <div className="absolute top-4 right-4">
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                          {work.type}
-                        </span>
-                      </div>
+                <div className="group relative bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg h-full">
+                  <div className="relative overflow-hidden">
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={work.image}
+                        alt={work.title}
+                        fill
+                        className="object-cover"
+                        sizes="320px"
+                        loading={index < 3 ? undefined : "lazy"}
+                        quality={75}
+                      />
                     </div>
-                    
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                        <span>{work.date}</span>
-                      </div>
-                      <h3 className="text-xl font-semibold text-navy-700 mb-2 group-hover:text-navy-600 transition-colors duration-200 line-clamp-2">
-                        {work.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                        {work.description}
-                      </p>
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {work.category}
+                      </span>
                     </div>
-                  </Link>
+                    <div className="absolute top-4 right-4">
+                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {work.type}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="md:p-6" style={{ padding: '0.125rem' }}>
+                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                      <span>{work.date}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-navy-700 mb-2 line-clamp-2">
+                      {work.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                      {work.description}
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
 
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-16"
-        >
+        <div className="text-center mt-16">
           <Link
             href="/cases"
             className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-2 hover:scale-105 transform transition-all duration-200"
+            suppressHydrationWarning
           >
-            查看更多案例
+            {t('home.works.viewMore')}
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,0 +1,1998 @@
+{
+  "common": {
+    "language": "Language",
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact Us",
+    "required": "Required",
+    "submit": "Submit",
+    "viewAll": "View All",
+    "detailPage": "Details Page",
+    "backToHome": "Back to Home"
+  },
+  "hero": {
+    "headlineLine1": "Making Your",
+    "headlineLine2": "Real Estate Investment",
+    "headlineLine3": "in Japan Easier & More Valuable",
+    "subtext": "We focus on serving the Japanese market and Chinese communities in Japan, providing comprehensive support from property investment and management to business expansion, helping assets grow steadily."
+  },
+  "navigation": {
+    "business": "Services",
+    "maimai": "Real Estate Sales & Purchase",
+    "wuye": "Investment Property Management",
+    "qichu": "Business Expansion Support",
+    "touzi": "Investment Related",
+    "company": "About Us",
+    "cases": "Success Cases",
+    "news": "Latest News",
+    "encyclopedia": "Japan Real Estate Investment Guide",
+    "careers": "Careers",
+    "tenant": "For Tenants",
+    "contact": "Contact Us",
+    "maimaiSub": {
+      "sales": "Properties for Sale",
+      "process": "Japan Real Estate Transaction Process",
+      "fees": "Transaction Fees Overview",
+      "tools": "Property Tools"
+    },
+    "wuyeSub": {
+      "zulin": "Lease Management",
+      "shouzhi": "Income, Expenses & Tax",
+      "xiushan": "Repair & Maintenance",
+      "zengzhi": "Asset Value Enhancement",
+      "ruzhu": "Tenant Services",
+      "baoxian": "Related Insurance"
+    },
+    "qichuSub": {
+      "intro": "Service Introduction",
+      "services": "Related Services",
+      "partners": "Partners Network",
+      "cases": "Success Cases"
+    },
+    "companySub": {
+      "overview": "Company Overview",
+      "history": "Company History",
+      "philosophy": "Company Philosophy",
+      "ceo": "CEO Message",
+      "sns": "Company SNS"
+    }
+  },
+  "home": {
+    "insights": {
+      "title": "Latest News",
+      "subtitle": "Stay updated with Japan real estate trends",
+      "viewAll": "View All",
+      "encyclopediaTitle": "Japan Real Estate Investment Guide",
+      "encyclopediaSubtitle": "Systematic explanation of investment essentials",
+      "encyclopediaViewAll": "View All",
+      "noNews": "No latest news available"
+    },
+    "services": {
+      "title": "Main Services",
+      "subtitle": "From property selection and transactions to asset management and business expansion, we provide one-stop services to accompany you through every step of your investment and development in Japan.",
+      "wuye": {
+        "title": "Property Management",
+        "description": "Management services for assets in Japan and overseas owners, including lease management, income and expense tracking, interior maintenance, and tax filing, ensuring stable asset operation.",
+        "features": [
+          "Tenant Screening & Contracting",
+          "Rent Collection & Transparent Accounting",
+          "Regular Inspections & Emergency Repairs",
+          "Insurance & Tax Coordination"
+        ]
+      },
+      "maimai": {
+        "title": "Sales & Purchase Agency",
+        "description": "Full-process purchase and sale services for residential, apartments, whole buildings, and commercial properties, helping you efficiently match quality projects.",
+        "features": [
+          "Carefully Selected Investment Properties",
+          "One-on-One Consultant Support",
+          "Tax & Loan Coordination",
+          "Settlement & Legal Support"
+        ]
+      },
+      "qichu": {
+        "title": "Business Expansion Support",
+        "description": "Providing landing strategies, partner connections, and project execution support for companies looking to expand into the Japanese market, quickly adapting to local business environment.",
+        "features": [
+          "Market Research & Location Selection",
+          "Partner Connections",
+          "Registration & Compliance",
+          "Marketing & Brand Localization"
+        ]
+      },
+      "touzi": {
+        "title": "Asset Investment Operations",
+        "description": "Bourn Mark holds high-quality real estate and innovative company equity long-term, showcasing own capital operation results for business partners to understand group strength.",
+        "features": [
+          "Corporate Owned Assets Display",
+          "Long-term Stable Operation System",
+          "Multi-city Investment Layout",
+          "No External Investment Solicitation"
+        ]
+      },
+      "detailPage": "Details"
+    },
+    "works": {
+      "title": "Success Cases",
+      "viewAll": "View All Cases",
+      "subtitle": "Below are real cases we have successfully completed, covering various businesses such as property sales, purchases, and property management.",
+      "viewMore": "View More Cases"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Whether you're interested in personal property investment, asset management, or business expansion, just leave your needs and our consultants will contact you as soon as possible.",
+      "formTitle": "Contact Form",
+      "companyName": "Company Name",
+      "name": "Contact Name",
+      "email": "Email Address",
+      "message": "Message",
+      "required": "Required",
+      "submit": "Submit",
+      "consultation": "Contact Us for Consultation"
+    }
+  },
+  "news": {
+    "title": "Latest News",
+    "subtitle": "Stay updated with Japan real estate market trends, get the latest investment information and policy insights",
+    "backToHome": "Back to Home",
+    "category": {
+      "notice": "Notice",
+      "news": "News！",
+      "companyActivity": "Company Activity"
+    },
+    "items": {
+      "president-attends-saikai-awards-2025": {
+        "title": "President Gui Xiaochuan Attends Reiwa 7th Annual Saikai Awards Ceremony",
+        "content": "On January 7, 2026, the prestigious Japanese business magazine \"Saikai\" hosted the Reiwa 7th Annual \"Saikai Award\" and \"Business Leader Award\" ceremony at the Palace Hotel Tokyo. Our President Gui Xiaochuan was invited to attend the ceremony, joining Japan's business elites to witness the outstanding achievements of the award-winning business leaders and engage in in-depth discussions on new trends in Japanese industry development.\n\nAbout Saikai Magazine\nAs one of Japan's most influential comprehensive business magazines, \"Saikai\" has adhered to the core perspective that \"business management is about people\" since its founding in 1953 by Mikio Mitsuki. Through professional and in-depth business analysis and commentary, it has documented and promoted Japan's economic development. After more than 70 years of accumulation, it has become a recognized authoritative media benchmark in Japan's business community. The annual \"Saikai Award\" and \"Business Leader Award\" focus on economic figures who have made outstanding contributions to society and led Japan's economic growth globally, as well as business leaders with exceptional annual performance and innovative practices in areas such as talent development. The selection results are hailed as the \"annual barometer\" of Japan's economic field. President Gui Xiaochuan, who was invited to attend the ceremony, is a Chinese entrepreneur that \"Saikai\" has long followed and reported on. He has previously been featured in multiple special reports."
+      },
+      "president-lecture-meikai-university": {
+        "title": "President Gui Xiaochuan Lectures at Meikai University",
+        "content": "On December 16, 2025, Gui Xiaochuan, Representative Director and President of Bourn Mark CO., LTD., was invited to give a lecture at Meikai University.\n\nThis lecture focused on Japanese real estate investment practices, corporate overseas landing services, and other topics, sharing rich industry experience and practical cases with students.\n\nPresident Gui Xiaochuan introduced in detail the current situation and trends of the Japanese real estate market, as well as key considerations for companies conducting business in Japan. Through the explanation of actual cases, he helped students better understand the Japanese business environment and real estate investment practices.\n\nThe students at Meikai University responded enthusiastically to this lecture, expressing that they benefited greatly. Bourn Mark will continue to work with educational institutions to contribute to cultivating the next generation of business talents."
+      },
+      "2025-year-end-holiday-notice": {
+        "title": "2025 Year-End Holiday Notice",
+        "content": "Dear customers and partners:\n\nThank you for your continued support and trust in Bourn Mark.\n\nAccording to company arrangements, the 2025 year-end holiday schedule is as follows:\n\n【Holiday Period】\nWednesday, December 24, 2025 to Monday, January 6, 2026\n\n【Business Resumption】\nNormal business will resume from Tuesday, January 7, 2026\n\nDuring the holiday period, for urgent matters, please contact:\nEmergency hotline: 0120-559-989 (24 hours)\n\nWe apologize for any inconvenience caused. We wish you a Happy New Year and all the best!\n\nBourn Mark CO., LTD.\nDecember 20, 2025"
+      },
+      "japan-government-strengthens-foreign-buyer-regulation": {
+        "title": "Japan Government Strengthens Foreign Buyer Regulation, Multiple New Measures to Be Implemented",
+        "content": "On November 4, 2025, Japanese Prime Minister Takaichi Sanae presided over the \"Ministerial Conference on Foreign National Policy\" and proposed multiple regulatory measures targeting foreign property purchases.\n\nPurchasing forest land requires submitting a \"Forest Acquisition Declaration\" and mandatory filling of nationality and passport numbers to prevent foreign capital from using water source forest land for private or military purposes.\n\nAll real estate transfer transactions must fill out the \"Transfer Registration Application,\" adding a \"Nationality/Residence\" column, and overseas residents not legally residing in Japan need to additionally submit \"Foreign Asset Certificates\".\n\nLaunch a \"National Apartment Building Foreign Ownership Rate Census,\" focusing on Tokyo's 23 wards, Osaka, Okinawa, Hokkaido and other regions. If a building's foreign ownership ratio exceeds 30%, it will be listed as a \"Focus Object\".\n\nIncorporate coastal areas, upstream water sources, high-speed rail lines, etc. into \"Focus Areas\". In these areas, foreign nationals purchasing land must report to the Cabinet Office for prior review, with a maximum review period of 90 days, during which construction cannot begin.\n\nFor cases where foreign nationals purchase strategically important land, the government supports recovering land ownership through crowdfunding and other methods to maintain national security.\n\nThese measures aim to strengthen regulation of foreign property purchases and ensure national security and rational land use.\n\nData source: backchina.com"
+      },
+      "foreigner-real-estate-ownership-database-2027": {
+        "title": "Foreign Real Estate Ownership to Be Unified Management, Government Plans to Begin Operation in FY 2027",
+        "content": "The Japanese government is advancing the construction of a unified management database for foreign real estate ownership, planned to begin operation in FY 2027. This database will centrally manage real estate information held by foreign nationals through real estate registration, nationality registration, and other means.\n\nThe government will use the \"Real Estate Basic Registry\" being constructed by the Digital Agency to build this database. The Cabinet Secretariat, Ministry of Justice and other relevant departments are advancing discussions, with the goal of beginning operation in FY 2027.\n\nThe database's registration targets include real estate registration such as apartments, forests, agricultural land, large-scale land transactions based on the National Land Utilization Planning Law, and important land such as border islands and areas around defense-related facilities.\n\nCurrently, agricultural land requires registration of the acquirer's nationality, but real estate registration such as apartments does not, showing differences in systems for different real estate types. The government plans to unify declaration conditions as an opportunity from this database initiative.\n\nFor cases of acquiring real estate through foreign funds and establishing corporations in Japan, it will also be possible to grasp purchase situations. For forests and large-scale important land transactions, it is planned to require declaration of the nationality of major shareholders and directors of corporations.\n\nFor real estate acquisition by foreign nationals residing abroad, currently under the Foreign Exchange Law, there is a declaration obligation only for investment purposes and other cases, but it is expected to expand the target scope.\n\nThe background for promoting ownership transparency is that there are voices of concern among the public such as \"foreigners are buying Japanese land\" and \"water source land is being acquired and groundwater is being extracted\". There are also opinions pointing out that speculative purchases by foreigners have pushed up apartment prices.\n\nOnce nationality registration and management mechanisms are improved, it may be possible to set differences in real estate-related tax rates for Japanese and foreigners, or set regulatory conditions for acquisition itself. The government plans to summarize regulatory direction in the basic policy on foreign national policy to be formulated by January next year.\n\nData source: Yahoo! News, Yomiuri Shimbun Online"
+      },
+      "tokyo-23-wards-new-apartment-price-record": {
+        "title": "Tokyo 23 Wards New Apartment Average Price Breaks 116 Million Yen, Hits Record High",
+        "content": "In FY 2024, the average price of new apartments in Tokyo's 23 wards reached 116.32 million yen, a year-on-year increase of 11.2%, breaking the 100 million yen mark for the second consecutive year and hitting a record high.\n\nTokyo's highly concentrated population and capital have driven continuous price increases. Core locations have high-quality properties in short supply, and continued attention from overseas investors on Tokyo real estate has further pushed up market prices.\n\nFrom a regional analysis, core areas such as Minato Ward and Chiyoda Ward showed the most significant increases. Areas around commercial districts such as Shinjuku and Shibuya have strong apartment demand, and properties along convenient subway lines are highly favored.\n\nFor investors, it is recommended to focus on new projects in core locations, evaluate long-term holding value and rental returns, and seize the current market window period.\n\nData source: Japan Real Estate Economic Research Institute, newsonjapan.com"
+      },
+      "japan-real-estate-investment-record-foreign-capital": {
+        "title": "Japan Real Estate Investment Reaches Record High, Foreign Capital Exceeds 1 Trillion Yen for First Time",
+        "content": "In the first half of 2025, Japan's total real estate investment reached $21.3 billion, a year-on-year increase of 22%, hitting a record high. Among this, foreign capital accounted for 34%, exceeding 1 trillion yen for the first time.\n\nCommercial office property investment reached 890 billion yen, a year-on-year increase of 43%. Office properties accounted for 50% of total investment, becoming the hottest investment category. Regional cities such as Osaka, Fukuoka, and Nagoya show strong growth potential.\n\nGlobal institutional investors are increasing allocations to Japanese real estate. Asian investors, particularly Chinese and Singaporean capital, are active, and yen assets have become a global investment hotspot.\n\nTotal investment for 2025 is expected to continue growing. Competition for quality assets in core cities is intense, and investors are advised to focus on investment opportunities in regional cities.\n\nData source: Jones Lang LaSalle (JLL), livejapan.cn, bihainews.com"
+      },
+      "japan-land-price-increase-34-year-high": {
+        "title": "Japan Land Price Increase Hits 34-Year High, National Average Rises 2.7%",
+        "content": "According to a March 2025 survey by Japan's Ministry of Land, Infrastructure, Transport and Tourism, the national average price of residential and commercial land increased 2.7% year-on-year, hitting the highest growth rate in 34 years since the bubble economy collapsed in 1991.\n\nLand price increases in the three major metropolitan areas of Tokyo, Osaka, and Nagoya led the way. Regional cities also saw widespread land price increases, with commercial land increases higher than residential land.\n\nDriving factors include economic recovery driving increased commercial activity, low interest rate policies stimulating investment demand, and inbound consumption driving commercial real estate demand.\n\nRising land costs may push up new property prices, while existing property asset values increase. Investors need to pay attention to the impact of land price changes on investment returns.\n\nData source: Japan Ministry of Land, Infrastructure, Transport and Tourism, finance.ifeng.com"
+      },
+      "japan-mortgage-rate-historic-low-0-45": {
+        "title": "Japan Mortgage Rates Remain at Historic Low, Some Banks Launch 0.45% Ultra-Low Rate",
+        "content": "Although Japan's mortgage rates showed a slight upward trend in 2025, overall they remain at historic lows. Some banks have even launched ultra-low rate loan products at 0.45%, attracting many homebuyers and investors.\n\nThe Bank of Japan continues to implement low interest rate policies. Floating rates remain in the 0.3% to 0.6% range, with diverse fixed rate product options.\n\nFinancing advantages are clear, creating a favorable financing environment for property investment. Overseas investors can obtain financing support through Japanese banks, and investment loan approval conditions are relatively lenient.\n\nFor investors, it is recommended to pay attention to interest rate trends, seize financing windows, evaluate repayment capacity, reasonably plan investment scale, consult professional financial institutions to choose the most suitable loan products, and consider locking in long-term fixed rates to avoid interest rate rise risks.\n\nData source: xijia.jp"
+      },
+      "osaka-new-apartment-supply-expo-effect": {
+        "title": "Osaka New Apartment Supply Grows 15%, Expo Effect Continues",
+        "content": "As the 2025 Osaka Expo approaches, Osaka's new apartment supply increased 15% year-on-year, with significant growth in demand for commercial office properties in the bay area.\n\nCore location commercial office rents continue to rise. Rental demand mainly comes from international companies and related service industries, with the bay area becoming a new commercial hotspot.\n\nCommercial office property investment returns have improved, surrounding supporting facilities continue to improve, and new apartment projects are entering the market in concentration, providing more choices.\n\nOsaka Bay area has huge development potential. Transportation infrastructure continues to improve, and international company entry drives demand growth.\n\nIt should be noted that demand may decline after the Expo ends, and investors need to evaluate long-term holding strategies and pay attention to regional development plans and follow-up policies."
+      },
+      "fukuoka-high-rental-yield-tech-industry": {
+        "title": "Fukuoka Becomes High Rental Yield Hot City, Tech Industry Drives Demand",
+        "content": "Fukuoka has become a high rental yield hot city with the tech industry and influx of young professionals, attracting significant investor attention.\n\nRental yields are generally higher than Tokyo and Osaka. Tech companies are concentrated, young professionals gather, living costs are relatively low, and the living environment is excellent.\n\nInvestment advantages are clear, with relatively low investment thresholds, stable rental income, and considerable asset appreciation potential.\n\nRecommended areas include core commercial areas such as Hakata and Tenjin, convenient transportation areas along subway lines, and areas around universities with strong student apartment demand.\n\nInvestors need to pay attention to regional development plans, evaluate tenant structure and demand stability, and choose professional property management services.\n\nData source: bihainews.com"
+      },
+      "tokyo-23-wards-foreign-buyer-ratio-taiwan-dominant": {
+        "title": "Tokyo 23 Wards Foreign Buyer Ratio Rises, Taiwan Buyers Dominate",
+        "content": "According to a survey by Japan's Ministry of Land, Infrastructure, Transport and Tourism, in the first half of 2025, overseas residents' purchase of new apartments in Tokyo's 23 wards accounted for 3.5%, more than double the same period last year.\n\nAmong this, Taiwan buyers accounted for 62%, far exceeding China (20%) and the United States (14%). This trend reflects Taiwan investors' continued attention to Japan's real estate market.\n\nTokyo's core area property prices continue to rise, attracting many overseas investors. New apartment projects in core locations such as Minato Ward and Chiyoda Ward are particularly favored by overseas buyers.\n\nExpert analysis believes that yen depreciation, Japan's relatively stable real estate investment returns, and relatively lenient property purchase policies are the main reasons attracting overseas investors.\n\nData source: news.creaders.net"
+      },
+      "japanese-support-foreign-buyer-regulation-developer-restrictions": {
+        "title": "Nearly 90% of Japanese Support Government Regulation of Foreign Buyers, Developers Strengthen Restrictions",
+        "content": "A survey shows that approximately 87.9% of Japanese people believe that purchasing apartments for resale purposes is problematic and support government regulation of foreign property purchases.\n\nSome developers have taken measures, such as Mitsui Real Estate stipulating that if buyers resell before delivery, deposits will be confiscated and contracts terminated. This measure aims to prevent speculative property purchases.\n\nJapanese people's concerns about foreign property purchases mainly focus on rising prices and difficulty for locals to purchase homes. The government is considering stricter regulatory measures.\n\nIn the upcoming House of Councillors election, housing issues have become a focus for all parties. Some parties advocate imposing a \"vacant house tax\" on foreign speculative property purchases, or even comprehensively restricting foreign property purchases.\n\nData source: jpchinapress.com"
+      },
+      "foreign-speculation-tokyo-price-surge-government-investigation": {
+        "title": "Foreign Speculation Causes Tokyo Price Surge, Japanese Government Plans Investigation",
+        "content": "Tokyo property prices continue to rise, with views that foreign investor purchasing behavior is one of the main reasons. To understand the actual situation, Japan's Ministry of Land, Infrastructure, Transport and Tourism plans to use property transaction registration information to launch an investigation for the first time.\n\nThe investigation will analyze the proportion and trends of foreign buyers, focusing on core cities such as Tokyo's 23 wards and Osaka. This is the Japanese government's first systematic investigation of foreign property purchase situations.\n\nMinister of Land, Infrastructure, Transport and Tourism Nakano Hiroaki stated that Tokyo's property market has \"speculative transactions not based on actual demand\" and the government will take measures to respond.\n\nInvestigation results will be used to formulate more precise regulatory policies, balancing the relationship between attracting foreign capital and protecting local homebuyer rights.\n\nData source: worldjournal.com"
+      },
+      "foreign-capital-accelerates-japan-real-estate-government-concern": {
+        "title": "Foreign Capital Accelerates into Japan Real Estate, Government Concerned About Speculation",
+        "content": "Recently, large amounts of foreign capital have flooded into Japan's real estate market, pushing up property prices. Japan's Minister of Land, Infrastructure, Transport and Tourism Nakano Hiroaki stated that Tokyo's property market has \"speculative transactions not based on actual demand\" and the government will take measures to respond.\n\nData shows that in the first half of 2025, foreign capital accounted for 34% of Japan's total real estate investment, exceeding 1 trillion yen for the first time. Asian investors, particularly Chinese and Singaporean capital, are active.\n\nYen depreciation makes Japanese real estate more attractive to overseas investors, with property prices in Tokyo and other areas continuing to rise, and rental yields also relatively high.\n\nThe government is considering stricter regulation of foreign property purchases, including expanding declaration obligation scope and strengthening review mechanisms.\n\nData source: finance.sina.com.cn"
+      },
+      "japan-real-estate-attracts-investors-commercial-accommodation": {
+        "title": "Japan Real Estate Continues to Attract Investors, Commercial Accommodation Gains Attention",
+        "content": "A survey shows that 87.5% of investors believe now is a good time to invest in Japanese real estate, and high-yield real estate options such as commercial accommodation facilities are expected to attract more investor attention in the future.\n\nCommercial accommodation facilities, particularly tourist-oriented guesthouses and hotel-style apartments, are attracting investor attention for their higher rental yields.\n\nThe Japanese government has relaxed regulations related to guesthouse operations, providing more opportunities for investors. At the same time, the recovery of inbound tourism has also driven growth in accommodation facility demand.\n\nInvestors need to pay attention to relevant regulatory changes, choose properties that comply with regulations, and evaluate long-term holding value and operating costs.\n\nData source: jtzbw.com.cn"
+      },
+      "japan-real-estate-investment-growth-domestic-foreign": {
+        "title": "Japan Property Purchase Momentum Strong, Significant Growth in Domestic and Foreign Investment",
+        "content": "Data shows that in the first quarter of 2025, real estate investment in Japan's Tokyo Metropolitan Area increased 26% year-on-year to $4.8 billion, ranking second in the world.\n\nOverseas investor investment was approximately double the same period last year, reaching $2 billion, accounting for 30% of total investment. This growth is mainly due to yen depreciation and the stable performance of Japan's real estate market.\n\nCommercial office property investment grew significantly, with office properties accounting for 50% of total investment, becoming the hottest investment category.\n\nRegional cities such as Osaka, Fukuoka, and Nagoya show strong growth potential, attracting increasing investor attention.\n\nData source: seavisa.cn"
+      },
+      "tokyo-prime-location-price-surge-foreign-ownership-limits": {
+        "title": "Tokyo Prime Location Price Surge Sparks Calls for Foreign Ownership Limits",
+        "content": "Tokyo's core area property prices are surging, with some parties calling for restrictions on foreign property purchases to maintain national security and economic interests.\n\nProperty prices in prime locations such as Minato Ward and Chiyoda Ward continue to rise, with new apartment prices repeatedly hitting record highs. This trend has sparked discussions about the impact of foreign property purchases on local markets.\n\nSome parties advocate stricter restrictions on foreign property purchases, including raising down payment ratios, limiting purchase areas, and imposing additional taxes.\n\nThe government is balancing the relationship between attracting foreign capital and protecting local homebuyer rights, and is expected to formulate relevant policy guidelines before January next year.\n\nData source: yocajr.com"
+      },
+      "foreign-buyers-japan-too-easy-controversy": {
+        "title": "Foreign Buyers Purchasing in Japan Deemed \"Too Easy\", Sparks Controversy",
+        "content": "Japan's lenient policy on non-resident property purchases has made it too easy for foreigners to buy property. In major cities like Tokyo, surging prices have made it difficult for many Japanese to afford, with some pointing fingers at foreign buyers.\n\nJapan has almost no restrictions on non-resident property purchases, requiring only proof of identity and funding sources. This policy has attracted many overseas investors but has also sparked controversy.\n\nIn major cities like Tokyo, surging prices have made it difficult for many Japanese to afford, and some believe the influx of foreign buyers has pushed up prices.\n\nThe government is considering stricter regulatory measures, including expanding declaration obligation scope and strengthening review mechanisms, to balance attracting foreign capital with protecting local homebuyer rights.\n\nData source: news.sina.com.cn"
+      },
+      "chinese-wealthy-japan-real-estate-market-reaction": {
+        "title": "Chinese Wealthy Enter Japan Real Estate Industry, Market Reaction Mixed",
+        "content": "China's wealthy class has shown increasing interest in Japanese real estate, with some even organizing groups to purchase properties in Japan. This trend has brought mixed feelings to Japan's real estate market, bringing capital inflows while also raising concerns about price increases and market stability.\n\nChinese investors mainly focus on quality properties in core cities such as Tokyo and Osaka, particularly new apartment and commercial real estate projects.\n\nYen depreciation makes Japanese real estate more attractive to Chinese investors, while Japan's relatively stable investment environment and higher rental yields are also important factors.\n\nThis trend has driven activity in Japan's real estate market, but has also raised concerns among local residents about price increases. The government is closely monitoring market dynamics and considering whether regulatory measures are needed.\n\nData source: juwai.com"
+      }
+    }
+  },
+  "company": {
+    "overview": {
+      "title": "Company Overview",
+      "subtitle": "Company Profile",
+      "description1": "Bourn Mark CO., LTD. is rooted in Nihonbashi, Chuo-ku, Tokyo, adjacent to multiple subway lines and business hubs, with the ability to provide services covering the greater Tokyo area and throughout Japan.",
+      "description2": "We integrate real estate operations, business expansion, and own investment experience, and with a multilingual professional team and digital management system, provide transparent, efficient, and long-term comprehensive solutions for cross-border clients.",
+      "profileTitle": "Company Profile Overview",
+      "headquartersImageAlt": "Headquarters Exterior",
+      "profile": {
+        "companyName": "Company Name",
+        "establishmentDate": "Establishment Date",
+        "legalRepresentative": "Legal Representative",
+        "capital": "Capital",
+        "headquartersAddress": "Headquarters Address",
+        "subsidiary": "Subsidiary",
+        "businessContent": "Business Content",
+        "businessContentValue": "Real Estate Sales & Purchase Agency Business・Investment Property Management Business・Business Expansion Support Business",
+        "affiliatedGroups": "Affiliated Groups",
+        "affiliatedGroupsValue": "Public Interest Incorporated Foundation All Japan Real Estate Association, Public Interest Incorporated Foundation Guarantee Association, China Enterprises Association in Japan, Federation of China Enterprises Associations in Japan",
+        "qualifications": "Qualifications",
+        "qualificationsValue": "Real Estate Brokerage License Tokyo Metropolitan Governor (3) No. 98009\nRental Housing Management Business Registration Minister of Land, Infrastructure, Transport and Tourism (01) No. 004834\netc.",
+        "companyNameValue": "Bourn Mark CO., LTD. (川雨流痕股份有限公司)",
+        "establishmentDateValue": "June 1, 2009",
+        "legalRepresentativeValue": "Xiaochuan Gui",
+        "capitalValue": "25 million JPY",
+        "headquartersAddressValue": "1-2-12 Nihonbashi Ningyocho, Chuo-ku, Tokyo Bourn Mark Ningyocho BLD. 2F",
+        "subsidiaryValue": "Evolve Corporation"
+      },
+      "financialPartners": {
+        "bank1": { "name": "Sumitomo Mitsui Banking Corporation", "branch": "Ningyocho Branch" },
+        "bank2": { "name": "MUFG Bank", "branch": "Nippori Branch" },
+        "bank3": { "name": "Mizuho Bank", "branch": "Shimbashi Branch" },
+        "bank4": { "name": "Kira Bank", "branch": "Shinjuku Branch" },
+        "bank5": { "name": "Higashi-Nihon Bank", "branch": "Higashi-Nihonbashi Branch" },
+        "bank6": { "name": "Kansai Mirai Bank", "branch": "Tokyo Branch" },
+        "bank7": { "name": "Tokyo Shinkin Bank", "branch": "Nihonbashi Branch" },
+        "bank8": { "name": "Sugamo Shinkin Bank", "branch": "Nishi-Nippori Branch" }
+      },
+      "teamTitle": "Professional Team",
+      "team": {
+        "team1": {
+          "title": "Japan Real Estate Transaction Agent",
+          "count": "7 persons"
+        },
+        "team2": {
+          "title": "Rental Real Estate Management Agent",
+          "count": "4 persons"
+        },
+        "team3": {
+          "title": "Apartment Building Manager",
+          "count": "1 person"
+        },
+        "team4": {
+          "title": "Financial Planner Level 3",
+          "count": "2 persons"
+        },
+        "team5": {
+          "title": "Financial Planner Level 2",
+          "count": "1 person"
+        }
+      },
+      "partnersTitle": "Partners",
+      "partners": {
+        "partner1": {
+          "title": "External Advisor",
+          "count": "1 person"
+        },
+        "partner2": {
+          "title": "Advisor Law Firm",
+          "count": "2 firms"
+        },
+        "partner3": {
+          "title": "Cooperative Tax Accountant Office",
+          "count": "7 offices"
+        },
+        "partner4": {
+          "title": "Cooperative Bank",
+          "count": "10 banks"
+        },
+        "partner5": {
+          "title": "Cooperative Judicial Scriveners Office",
+          "count": "2 offices"
+        },
+        "partner6": {
+          "title": "Strategic Partner",
+          "count": "1 firm"
+        },
+        "partner7": {
+          "title": "Real Estate Investment Appraisal Office",
+          "count": "4 offices"
+        }
+      },
+      "financialPartnersTitle": "Main Cooperative Financial Institutions",
+      "assetsTitle": "Company Assets",
+      "assets": {
+        "noImage": "No Image"
+      }
+    },
+    "philosophy": {
+      "title": "Corporate Philosophy",
+      "subtitle": "Corporate Philosophy",
+      "description": "Bourn Mark is rooted in Japan and serves China-Japan relations. We seek long-term balance among real estate, corporate services, and capital operations, with integrity, professionalism, and cross-cultural understanding at the core, continuously promoting win-win outcomes in urban renewal, asset operations, and business cooperation. We accompany our clients through every stage with sincerity, enabling assets, enterprises, and teams to grow continuously in Japan, and continuously inject vitality into regional development.",
+      "ourPhilosophy": {
+        "title": "Our Philosophy",
+        "description": "We are deeply rooted in the Japanese market and committed to building bridges for China-Japan cooperation through professionalism and integrity. From real estate to corporate investment, we adhere to long-term value as our guide, closely integrating urban renewal, asset operations, and business integration to create sustainable growth space for clients and partners."
+      },
+      "values": {
+        "value1": {
+          "title": "China-Japan Bridge",
+          "description": "Rooted in Japan and serving the Chinese-speaking market, we build transparent and smooth communication and cooperation channels between Chinese and Japanese enterprises and investors."
+        },
+        "value2": {
+          "title": "Urban Renewal",
+          "description": "Focusing on urban renewal and asset operation value, we promote the long-term growth of communities and assets through refined management."
+        },
+        "value3": {
+          "title": "Integrity and Professionalism",
+          "description": "With integrity, compliance, and professional judgment as the baseline, we protect the trust and achievements of clients and partners over the long term."
+        },
+        "value4": {
+          "title": "Resource Integration",
+          "description": "We integrate diverse resources across cultures and fields to promote the common development of China-Japan enterprise exchanges, cooperation, and innovative business."
+        }
+      },
+      "mission": {
+        "title": "Our Mission",
+        "description": "\"Through cross-cultural collaboration, we enable Chinese-Japanese business and real estate services to achieve mutual success.\" Through transparent communication, professional judgment, and digital management, we help clients steadily expand their business in Japan while promoting partners to achieve value appreciation in the new ecosystem.",
+        "longTermValue": {
+          "title": "Long-term Value",
+          "description": "We prudently allocate assets and strengthen risk control to respond to customer expectations with sustainable returns and brand influence."
+        },
+        "collaborativeNetwork": {
+          "title": "Collaborative Network",
+          "description": "We integrate financial, legal, government, and industry partner resources to build an open and shared cross-border service platform."
+        }
+      }
+    },
+    "history": {
+      "title": "Company History",
+      "subtitle": "Company History",
+      "description": "Since its establishment in 2009, Bourn Mark has continuously deepened its footprint in Japanese real estate and cross-border services: from rental and sales, asset appreciation to corporate investment, growing together with Chinese and Japanese enterprises, and building solid urban operations and capital operation experience.",
+      "milestones": {
+        "milestone1": {
+          "year": "2009.06",
+          "title": "Company Establishment",
+          "description": "川雨流痕股份有限公司 (formerly known as 株式会社暖灯) was established in Tokyo, starting Japanese real estate business focused on Chinese-speaking customers.",
+          "imageAlt": "Office environment in the early stages"
+        },
+        "milestone2": {
+          "year": "2010.01",
+          "title": "Headquarters Establishment",
+          "description": "Established the headquarters in Arakawa Ward, Tokyo, built the initial rental and sales consultant team, and opened Nippori Station Front Store in October of the same year.",
+          "imageAlt": "Tokyo city street scene"
+        },
+        "milestone3": {
+          "year": "2012.01",
+          "title": "Regional Expansion",
+          "description": "Kawaguchi Store opened, expanding the service area to Saitama and the northern part of the metropolitan area; officially entered the Taiwan market in September of the same year.",
+          "imageAlt": "Cross-regional transportation hub"
+        },
+        "milestone4": {
+          "year": "2015.03",
+          "title": "Business Upgrade",
+          "description": "Developed real estate appreciation business and international real estate business, expanding service areas and market scope.",
+          "imageAlt": "Modern urban commercial buildings"
+        },
+        "milestone5": {
+          "year": "2015.08",
+          "title": "Overseas Expansion",
+          "description": "Established a local legal entity company in Shanghai, further expanding the Chinese market and establishing a cross-border business network.",
+          "imageAlt": "Shanghai business district"
+        },
+        "milestone6": {
+          "year": "2015.12",
+          "title": "Headquarters Building Purchase",
+          "description": "Purchased the company's own headquarters office building, establishing a solid foundation for the company in the Japanese market.",
+          "imageAlt": "Headquarters office building"
+        },
+        "milestone7": {
+          "year": "2016.03",
+          "title": "Headquarters Relocation",
+          "description": "Headquarters relocated to Chuo Ward, Tokyo, further approaching the Nihonbashi financial business district, strengthening the cross-border business base.",
+          "imageAlt": "Nihonbashi financial district"
+        },
+        "milestone8": {
+          "year": "2017.04",
+          "title": "Capital Strengthening",
+          "description": "Company's registered capital increased to 25 million yen, and launched the first own apartment project \"WARMLIGHT RESIDENCE\" in October.",
+          "imageAlt": "Modern apartment building"
+        },
+        "milestone9": {
+          "year": "2018.02",
+          "title": "Asset Expansion",
+          "description": "Acquired \"Kyoto Karasuma Rokujo Hotel\", entering the hotel and commercial asset operation field.",
+          "imageAlt": "Hotel lobby"
+        },
+        "milestone10": {
+          "year": "2021.04",
+          "title": "Strategic Collaboration",
+          "description": "Started business and capital cooperation with Helte Company, combining digital and community operation advantages.",
+          "imageAlt": "Team collaboration meeting"
+        },
+        "milestone11": {
+          "year": "2021.06",
+          "title": "Brand Renewal",
+          "description": "The company was officially renamed to 川雨流痕股份有限公司 (Bourn Mark CO., LTD.), establishing the corporate positioning of \"Rooted in Japan, Connecting China and Japan\".",
+          "imageAlt": "Brand launch event"
+        }
+      }
+    },
+    "ceo": {
+      "title": "CEO Message",
+      "subtitle": "President Message",
+      "description": "Through cross-cultural perspectives and professional practical experience, Bourn Mark's Representative Director and President Gui Xiaochuan leads the team to deeply cultivate the Japanese real estate market and continuously build bridges for China-Japan business cooperation.",
+      "tabs": {
+        "profile": "CEO Introduction",
+        "message": "President Message"
+      },
+      "profile": {
+        "name": "Gui Xiaochuan",
+        "introduction1": "Since founding Bourn Mark in 2009, I have led the team with cross-cultural perspectives and professional practical experience to deeply cultivate the Japanese real estate market, committed to building bridges for China-Japan business cooperation and promoting the synergistic development of asset operations, enterprise landing, and investment businesses.",
+        "introduction2": "Positioning the company as \"Rooted in Japan, Connecting China and Japan,\" with solid experience in rental management, asset appreciation, and corporate services, we continue to expand the company's business scope, and through long-term business philosophy, build a service system that combines international vision with local execution capabilities.",
+        "portraitAlt": "Portrait of Gui Xiaochuan",
+        "highlights": {
+          "birth": {
+            "label": "Birth",
+            "value": [
+              "September 1975",
+              "Guilin, China"
+            ]
+          },
+          "earlyExperience": {
+            "label": "Early Experience",
+            "value": [
+              "Worked at Bank of China Guilin Branch",
+              "Studied in Japan in 1997"
+            ]
+          },
+          "qualification": {
+            "label": "Professional Qualification",
+            "value": "Obtained Japanese Real Estate Transaction License in 1999"
+          },
+          "career": {
+            "label": "Career History",
+            "value": [
+              "Joined minimini Co., Ltd. in 2000",
+              "Founded 川雨流痕 Co., Ltd. in 2009",
+              "(formerly 株式会社暖灯)"
+            ]
+          },
+          "currentPosition": {
+            "label": "Current Position",
+            "value": "Representative Director and President, 川雨流痕股份有限公司"
+          },
+          "socialPosition": {
+            "label": "Social Position",
+            "value": [
+              "Standing Director of Chinese Enterprise Association",
+              "Director of Asset Resource Integration Committee"
+            ]
+          },
+          "media": {
+            "label": "Media Coverage",
+            "value": [
+              "Featured in media such as \"財界\", \"週刊ビル経営\"",
+              "\"日経新聞\" NHK \"クローズアップ現代\"",
+              "and other media outlets"
+            ]
+          }
+        }
+      },
+      "message": {
+        "title": "Message From President",
+        "subtitle": "Message From President",
+        "presidentTitle": "President / President",
+        "presidentName": "Gui Xiaochuan",
+        "imageAlt": "Photo of Gui Xiaochuan",
+        "paragraphs": {
+          "original": [
+            "In 1997, I came to Japan from China with entrepreneurial ideals, starting with real estate business, and established this company in 2009. With the changes of the times, we experienced the process from rapid business construction to continuous deep cultivation. The scope of business expansion covers leasing, management, sales, investment and other fields, and we have made great progress in business scale, operating performance, and service capabilities.",
+            "While focusing on business development, we constantly reflect on the meaning of the company's existence, returning to the basic concept that \"companies should be public instruments of society.\" The belief I have always held since coming to Japan—\"building bridges for China-Japan friendship\"—has been put into practice in this journey. I deeply understand that improving China-Japan relations is a long-term task that cannot be achieved by slogans alone, but I am willing to invest time and contribute to China-Japan friendship through business activities.",
+            "For a long time, we have joined hands with enterprises in the China-Japan economic field through real estate business, and together with excellent operators, actively promoted the construction of the Greater China Economic Circle. In the future, we will formally launch investment business, and while strengthening the core property management business, we will vigorously promote IT development and applications, promote digital and intelligent transformation, improve management and service capabilities, cultivate new business growth points, and strive to expand a broader business scope."
+          ],
+          "withBreaks": [
+            "In 1997, I came to Japan from China with entrepreneurial ideals, starting with real estate business,<br />and established this company in 2009. With the changes of the times, we experienced the process from rapid business construction to continuous deep cultivation.<br />The scope of business expansion covers leasing, management, sales, investment and other fields, and we have made great progress in business scale, operating performance, and service capabilities.",
+            "While focusing on business development, we constantly reflect on the meaning of the company's existence,<br />returning to the basic concept that \"companies should be public instruments of society.\" The belief I have always held since coming to Japan—\"building bridges for China-Japan friendship\"—has been put into practice in this journey.<br />I deeply understand that improving China-Japan relations is a long-term task that cannot be achieved by slogans alone,<br />but I am willing to invest time and contribute to China-Japan friendship through business activities.",
+            "For a long time, we have joined hands with enterprises in the China-Japan economic field through real estate business,<br />and together with excellent operators, actively promoted the construction of the Greater China Economic Circle. In the future, we will formally launch investment business, and while strengthening the core property management business, we will vigorously promote IT development and applications,<br />promote digital and intelligent transformation, improve management and service capabilities, cultivate new business growth points,<br />and strive to expand a broader business scope."
+          ]
+        }
+      }
+    },
+    "sns": {
+      "title": "Company SNS",
+      "subtitle": "Company SNS",
+      "description": "Follow our social media platforms to get the latest company updates, industry news, and video content.",
+      "latestVideo": "Latest Video",
+      "videoTitle": "Company Video",
+      "videoDescription": "Click the play button to watch our latest video content",
+      "followUs": "Follow Our Social Media",
+      "visitPlatform": "Visit Platform",
+      "platforms": {
+        "youtube": "Watch our YouTube video content",
+        "douyin": {
+          "name": "Douyin",
+          "description": "Browse our Douyin videos"
+        },
+        "xiaohongshu": {
+          "name": "Xiaohongshu",
+          "description": "View our Xiaohongshu content"
+        },
+        "wechat": {
+          "name": "WeChat Video Channel",
+          "description": "Follow our WeChat Video Channel"
+        },
+        "line": "View our Line Voom videos",
+        "facebook": "Browse our Facebook videos"
+      },
+      "loadingVideo": "Loading video...",
+      "scanQRCode": "Please scan the QR code with your mobile device"
+    }
+  },
+  "touzi": {
+    "title": "Asset Investment Operations",
+    "subtitle": "Asset Investment",
+    "description": "Based on market insights from the Tokyo Metropolitan Area, we invest company funds in scarce assets and centrally manage them through internal teams to ensure steady asset growth.",
+    "realEstateInvestment": {
+      "title": "Company Held Assets",
+      "description": "Based on market insights from the Tokyo Metropolitan Area, we invest company funds in scarce assets and centrally manage them through internal teams to ensure steady asset growth.",
+      "cards": {
+        "card1": {
+          "title": "Carefully Selected Investment Targets",
+          "description": "Focusing on core urban properties, distinctive assets, and high-growth areas to achieve long-term holding and reinvestment of returns."
+        },
+        "card2": {
+          "title": "Risk Assessment and Return Analysis",
+          "description": "The group's investment research center regularly reviews cash flow, tenant structure, and market fluctuations to maintain the health of the asset portfolio."
+        },
+        "card3": {
+          "title": "Asset Management Services",
+          "description": "We have built our own property management system and partner network to centrally supervise operations, renovations, and value enhancement plans."
+        }
+      },
+      "heldAssets": {
+        "title": "Company-Held Assets",
+        "description": "Presenting the real estate assets that Bourn Mark holds and operates long-term across Japan. All projects are independently managed by internal teams."
+      }
+    }
+  },
+  "wuye": {
+    "title": "Comprehensive Property Management Services",
+    "subtitle": "Property Management",
+    "description": "We provide full-process management services for individual and institutional property owners in Japan. Not only covering daily rental management, financial and tax matters, and maintenance, we also focus on continuously enhancing your property value and investment returns through professional asset appreciation strategies and rent increase negotiations, ensuring steady asset growth.",
+    "services": {
+      "title": "Service Content",
+      "regularTitle": "Regular Services",
+      "appreciationTitle": "Professional Asset Appreciation Services",
+      "regular": {
+        "zulin": "Rental Management",
+        "shouzhi": "Income & Tax",
+        "xiushan": "Maintenance & Repair",
+        "ruzhu": "Tenant Services",
+        "baoxian": "Related Insurance"
+      },
+      "appreciation": {
+        "marketResearch": "Market Research",
+        "consulting": "Business Consulting",
+        "rentNegotiation": "Rent Negotiation",
+        "majorRepair": "Major Repair",
+        "additionalIncome": "Related Additional Income"
+      }
+    },
+    "properties": {
+      "title": "Managed Properties",
+      "type": "Management Contract",
+      "property1": {
+        "title": "Tokyo Shibuya Luxury Apartment",
+        "location": "Shibuya Ward, Tokyo",
+        "category": "Luxury Apartment",
+        "description": "96% occupancy rate, maintenance response time reduced to within 12 hours through digital management system."
+      },
+      "property2": {
+        "title": "Yokohama Waterfront Complex",
+        "location": "Yokohama City, Kanagawa Prefecture",
+        "category": "Commercial Complex",
+        "description": "Commercial rent increased by 18% through zoning management and tenant reorganization."
+      },
+      "property3": {
+        "title": "Nagoya Student Apartment",
+        "location": "Nagoya City, Aichi Prefecture",
+        "category": "Student Apartment",
+        "description": "Smart access control and tenant community operations introduced, annual renewal rate maintained at 92%."
+      }
+    },
+    "stats": {
+      "units": "Units",
+      "totalProperties": "Total Managed Properties",
+      "amountValue": "Approx. 80 Billion",
+      "yen": "Yen",
+      "totalAssets": "Total Managed Assets"
+    },
+    "cta": {
+      "title": "Need Us to Manage Your Property in Japan?",
+      "description": "Whether you own a single apartment, an entire building, or a portfolio of assets in Japan, Bourn Mark can provide flexible management solutions and transparent financial reports.",
+      "button": "Contact Advisor"
+    },
+    "zulin": {
+      "title": "Rental Management Services",
+      "subtitle": "Rental Management",
+      "description": "Provide full-process management services from tenant screening, contract signing to move-in and move-out, ensuring your property is quickly rented and continues to generate stable income.",
+      "features": {
+        "fastResponse": "24-hour rapid response",
+        "occupancyRate": "96%+ average occupancy rate",
+        "quickMoveIn": "Fastest 2 weeks to complete move-in"
+      },
+      "timeline": {
+        "item1": {
+          "time": "Within 24 hours",
+          "title": "Tenant Screening and Background Check",
+          "description": "After a tenant submits a rental application, we will complete verification of the tenant's information and social credit investigation within 24 hours. We also contact guarantee companies to apply for guarantees, ensuring the tenant's qualifications meet requirements."
+        },
+        "item2": {
+          "time": "Within 1 week",
+          "title": "Move-in Procedures",
+          "description": "Complete all move-in procedures, including contract signing, deposit collection, key handover, etc. Notify tenants of specific move-in dates to ensure smooth process."
+        },
+        "item3": {
+          "time": "Fastest 2 weeks",
+          "title": "Complete Move-in",
+          "description": "From application to move-in, the entire process can be completed within 2 weeks at the fastest, allowing tenants to move in as soon as possible while ensuring all procedures are compliant and complete."
+        },
+        "item4": {
+          "time": "2 months before contract expiration",
+          "title": "Contract Renewal",
+          "description": "Contact tenants 2 months before contract expiration to prepare relevant procedures. Communicate renewal intentions in advance, negotiate rent adjustments, and ensure smooth renewal process."
+        },
+        "item5": {
+          "time": "Within 24 hours of receiving termination notice",
+          "title": "Termination",
+          "description": "Start relevant procedures within 24 hours of receiving termination notice. Determine room repairs and other work to ensure quick start of rental work, reduce vacancy time, and maximize asset returns."
+        }
+      },
+      "stats": {
+        "occupancyRate": {
+          "value": "96%+",
+          "label": "Average Occupancy Rate"
+        },
+        "fastResponse": {
+          "value": "24h",
+          "label": "Rapid Response"
+        },
+        "quickMoveIn": {
+          "value": "2 weeks",
+          "label": "Fastest Move-in Time"
+        },
+        "managedProperties": {
+          "value": "1300+",
+          "label": "Managed Properties"
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "Tenant Screening and Background Check",
+          "description": "Strict tenant screening process to ensure property safety",
+          "items": [
+            "Identity verification",
+            "Credit record investigation",
+            "Income proof review",
+            "Guarantee company guarantee application"
+          ]
+        },
+        "service2": {
+          "title": "Contract Signing and Rent Adjustment",
+          "description": "Professional contract management and rent optimization services",
+          "items": [
+            "Lease contract drafting and signing",
+            "Deposit and first month rent collection",
+            "Rent adjustment strategy development",
+            "Renewal negotiation and processing"
+          ]
+        },
+        "service3": {
+          "title": "Move-in and Move-out Procedures",
+          "description": "Comprehensive move-in and move-out process management",
+          "items": [
+            "Pre-move-in house inspection",
+            "Key handover and equipment instructions",
+            "Move-out inspection report",
+            "Deposit settlement and refund"
+          ]
+        }
+      },
+      "process": {
+        "step1": {
+          "title": "Tenant Application",
+          "description": "Tenant submits rental application, we immediately start the review process to ensure rapid response."
+        },
+        "step2": {
+          "title": "Background Check",
+          "description": "Complete identity verification, credit investigation and guarantee company guarantee application within 24 hours."
+        },
+        "step3": {
+          "title": "Contract Signing",
+          "description": "Complete contract drafting, signing and deposit collection, ensuring all procedures are compliant."
+        },
+        "step4": {
+          "title": "Move-in Handover",
+          "description": "Conduct house inspection, key handover and equipment instructions to ensure smooth tenant move-in."
+        }
+      }
+    },
+    "zengzhi": {
+      "title": "Asset Appreciation Services",
+      "subtitle": "Asset Appreciation",
+      "description": "Continuously enhance your property value and investment returns through rent optimization, major repairs, and additional income development. Professional team, data-driven, creating long-term value for you.",
+      "features": {
+        "experience": "15 years of industry experience",
+        "cases": "500+ success cases",
+        "rentIncrease": "Average rent increase of 25%+"
+      },
+      "stats": {
+        "rentIncrease": {
+          "value": "15%+",
+          "label": "Average Rent Increase Rate"
+        },
+        "successCases": {
+          "value": "500+",
+          "label": "Success Cases"
+        },
+        "satisfaction": {
+          "value": "98%",
+          "label": "Customer Satisfaction"
+        },
+        "experience": {
+          "value": "15 years",
+          "label": "Industry Experience"
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "Market Research",
+          "description": "In-depth analysis of market trends to provide data support for asset appreciation",
+          "items": [
+            "Analysis of surrounding market rent levels",
+            "Regional property value assessment",
+            "Competitive property research",
+            "Market trend forecasting"
+          ]
+        },
+        "service2": {
+          "title": "Rent Negotiation",
+          "description": "Professional rent adjustment services based on market data",
+          "items": [
+            "Market rent analysis",
+            "Rent adjustment strategy",
+            "Tenant negotiation",
+            "Contract terms optimization"
+          ]
+        },
+        "service3": {
+          "title": "Major Repair",
+          "description": "Large-scale repair and renovation projects to enhance property value",
+          "items": [
+            "Repair plan design",
+            "Construction management",
+            "Value enhancement assessment",
+            "Cost control optimization"
+          ]
+        },
+        "service4": {
+          "title": "Related Additional Income",
+          "description": "Develop diversified income sources to maximize asset returns",
+          "items": [
+            "Vending machine installation",
+            "Signal tower installation",
+            "Other income sources",
+            "Income optimization solutions"
+          ]
+        }
+      },
+      "process": {
+        "step1": {
+          "title": "Needs Analysis",
+          "description": "Deeply understand your asset status and appreciation goals, develop personalized solutions"
+        },
+        "step2": {
+          "title": "Market Research",
+          "description": "Comprehensively analyze regional market data to identify appreciation opportunities and potential risks"
+        },
+        "step3": {
+          "title": "Plan Development",
+          "description": "Based on professional analysis, develop detailed asset appreciation implementation plans"
+        },
+        "step4": {
+          "title": "Implementation",
+          "description": "Professional team follows up throughout to ensure efficient execution of plans"
+        },
+        "step5": {
+          "title": "Effect Evaluation",
+          "description": "Regularly evaluate appreciation effects and continuously optimize asset management strategies"
+        }
+      },
+      "cases": {
+        "title": "Success Cases",
+        "subtitle": "Real cases demonstrating our professional capabilities and service results",
+        "case1": {
+          "title": "Shinjuku Commercial Building Rent Optimization Project",
+          "location": "Shinjuku Ward, Tokyo",
+          "result": "Rent increased by 32%",
+          "description": "Through market analysis and professional negotiation, successfully increased the average rent of commercial buildings by 32%, with annual revenue increasing by approximately 250 million yen",
+          "category": "Rent Negotiation"
+        },
+        "case2": {
+          "title": "Shibuya Luxury Apartment Major Repair",
+          "location": "Shibuya Ward, Tokyo",
+          "result": "Asset value increased by 28%",
+          "description": "Completed comprehensive repair and renovation, improved property quality, asset valuation increased by 28%, rent yield significantly improved",
+          "category": "Major Repair"
+        },
+        "case3": {
+          "title": "Ikebukuro Complex Additional Income Development",
+          "location": "Toshima Ward, Tokyo",
+          "result": "Additional income increased by 5%",
+          "description": "Successfully developed diversified income sources by installing vending machines, signal towers and other facilities, with annual additional income increasing by 5%",
+          "category": "Additional Income"
+        }
+      },
+      "nextStep": "Next Step"
+    },
+    "xiushan": {
+      "title": "Maintenance & Repair Services",
+      "subtitle": "Maintenance & Repair",
+      "description": "Provide 24-hour emergency repair, regular inspection and consumable replacement, renovation and upgrade and other comprehensive maintenance services to ensure your property remains in good condition.",
+      "features": {
+        "emergencyResponse": "24-hour emergency response",
+        "professionalTeam": "Professional repair team",
+        "qualityGuarantee": "100% quality guarantee"
+      },
+      "timeline": {
+        "item1": {
+          "time": "Within 24 hours for residential properties / Within 5 business days for commercial properties",
+          "title": "Emergency Repair Response",
+          "description": "After receiving a repair request from a tenant, arrange for a repair technician to visit within 24 hours, and respond promptly to emergencies (such as water leaks, power outages, etc.)."
+        },
+        "item2": {
+          "time": "3-5 business days",
+          "title": "Repair Plan Confirmation",
+          "description": "Based on inspection results, develop a repair plan and provide a quote, arrange construction after owner confirmation."
+        },
+        "item3": {
+          "time": "Within 1-2 weeks",
+          "title": "Repair Completion",
+          "description": "Complete repair work, conduct quality acceptance, ensure problems are completely resolved."
+        }
+      },
+      "stats": {
+        "emergencyResponse": {
+          "value": "24h",
+          "label": "Emergency Response"
+        },
+        "quality": {
+          "value": "100%",
+          "label": "Quality Guarantee"
+        },
+        "team": {
+          "value": "Professional",
+          "label": "Repair Team"
+        },
+        "speed": {
+          "value": "Timely",
+          "label": "Response Speed"
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "24-Hour Emergency Repair",
+          "description": "Quick response to emergency repair needs, ensuring tenant safety",
+          "items": [
+            "Rapid response to emergencies",
+            "Professional repair team",
+            "Repair quality guarantee",
+            "24-hour on-call service"
+          ]
+        },
+        "service2": {
+          "title": "Regular Inspection and Consumable Replacement",
+          "description": "Preventive maintenance to extend equipment service life",
+          "items": [
+            "Equipment consumable replacement",
+            "Preventive maintenance",
+            "Regular inspection reports",
+            "Equipment status monitoring"
+          ]
+        },
+        "service3": {
+          "title": "Move-out Renovation and Construction Management",
+          "description": "Professional renovation and construction management services",
+          "items": [
+            "Renovation plan design",
+            "Construction progress management",
+            "Quality acceptance",
+            "Cost control optimization"
+          ]
+        }
+      },
+      "process": {
+        "step1": {
+          "title": "Repair Request Response",
+          "description": "After receiving a repair request from a tenant, arrange for a repair technician to visit within 24 hours, and respond promptly to emergencies."
+        },
+        "step2": {
+          "title": "Plan Confirmation",
+          "description": "Based on inspection results, develop a repair plan and provide a quote, arrange construction after owner confirmation."
+        },
+        "step3": {
+          "title": "Repair Completion",
+          "description": "Complete repair work, conduct quality acceptance, ensure problems are completely resolved."
+        }
+      },
+      "nextStep": "Next Step",
+      "timelineNote": "*Specific times may vary depending on the situation"
+    },
+    "shouzhi": {
+      "title": "Finance & Tax Management",
+      "subtitle": "Finance & Tax",
+      "description": "Provide transparent financial management and professional tax services, allowing you to keep track of asset operations at all times and ensure compliant operations.",
+      "features": {
+        "report": "Monthly report sent on the 20th",
+        "transparency": "100% financial transparency",
+        "taxService": "Professional tax services"
+      },
+      "timeline": {
+        "item1": {
+          "time": "End of each month",
+          "title": "Rent Collection",
+          "description": "Collect rent by the end of each month, and rent processing is also completed by the end of the month. If there is a delay, timely collection will be carried out to ensure rent is received on time."
+        },
+        "item2": {
+          "time": "20th of each month",
+          "title": "Financial Report Preparation",
+          "description": "Completed and sent on the 20th of each month. Complete monthly income and expense statistics, prepare detailed financial reports including rental income, various expense details, etc., and send them to owners via email or system."
+        },
+        "item3": {
+          "time": "By settlement month / December",
+          "title": "Tax Processing",
+          "description": "Corporations and individuals are handled separately. Corporations are processed according to the settlement month, and individuals start procedures in December. Provide tax advice based on financial reports, assist with relevant tax declarations, and ensure compliant operations."
+        }
+      },
+      "stats": {
+        "report": {
+          "value": "20th monthly",
+          "label": "Report Sent"
+        },
+        "transparency": {
+          "value": "100%",
+          "label": "Transparency"
+        },
+        "monitoring": {
+          "value": "Real-time",
+          "label": "Financial Monitoring"
+        },
+        "taxService": {
+          "value": "Professional",
+          "label": "Tax Service"
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "Monthly Rent Collection and Follow-up",
+          "description": "Collect rent in a timely manner to ensure stable cash flow",
+          "items": [
+            "Regular rent collection",
+            "Delayed rent follow-up",
+            "Rent receipt confirmation",
+            "Fund flow tracking"
+          ]
+        },
+        "service2": {
+          "title": "Asset Reports and Tax Advice",
+          "description": "Detailed financial reports and professional tax optimization advice",
+          "items": [
+            "Monthly income and expense reports",
+            "Annual financial summary",
+            "Tax optimization advice",
+            "Compliance checks"
+          ]
+        },
+        "service3": {
+          "title": "Tax Declaration and Processing",
+          "description": "Professional tax services to ensure compliant operations",
+          "items": [
+            "Corporate tax processing",
+            "Individual tax processing",
+            "Tax declaration assistance",
+            "Tax consultation support"
+          ]
+        }
+      },
+      "process": {
+        "step1": {
+          "title": "Rent Collection",
+          "description": "Collect rent by the end of each month, ensure funds are received in time, and follow up promptly if there is a delay."
+        },
+        "step2": {
+          "title": "Financial Report Preparation",
+          "description": "Complete and send detailed financial reports on the 20th of each month, including income and expense details and fund flows."
+        },
+        "step3": {
+          "title": "Tax Processing",
+          "description": "Provide tax advice based on financial reports, assist with corporate or individual tax declarations, and ensure compliant operations."
+        }
+      },
+      "nextStep": "Next Step"
+    },
+    "ruzhu": {
+      "title": "Tenant Services",
+      "subtitle": "Tenant Services",
+      "description": "Provide thoughtful move-in services and ongoing life support for tenants to ensure a good tenant living experience and improve renewal rates and satisfaction.",
+      "features": {
+        "satisfaction": "98% tenant satisfaction",
+        "support": "24-hour customer service support",
+        "bilingual": "Chinese/English/Japanese bilingual service"
+      },
+      "stats": {
+        "satisfaction": {
+          "value": "98%",
+          "label": "Tenant Satisfaction"
+        },
+        "response": {
+          "value": "24h",
+          "label": "Customer Service Response"
+        },
+        "language": {
+          "value": "Bilingual",
+          "label": "Language Support"
+        },
+        "quality": {
+          "value": "Thoughtful",
+          "label": "Service Quality"
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "Move-in Welcome and Life Guide",
+          "description": "Thoughtful move-in welcome service to help tenants quickly adapt to their new environment",
+          "items": [
+            "Move-in guide",
+            "Surrounding facilities introduction",
+            "Community resource guide"
+          ]
+        },
+        "service2": {
+          "title": "Chinese/Japanese Customer Service and Complaint Response",
+          "description": "Bilingual customer service support, quick response to tenant needs",
+          "items": [
+            "Bilingual customer service support",
+            "Quick complaint response",
+            "Problem coordination and resolution",
+            "24-hour customer service hotline"
+          ]
+        },
+        "service3": {
+          "title": "Daily Support Coordination During Residence",
+          "description": "Ongoing life support to enhance tenant living experience",
+          "items": [
+            "Life consultation assistance",
+            "Community activity organization"
+          ]
+        }
+      },
+      "process": {
+        "step1": {
+          "title": "Move-in Welcome",
+          "description": "Provide move-in welcome package and life guide manual to help tenants quickly understand the surrounding environment and community resources."
+        },
+        "step2": {
+          "title": "Customer Service Support",
+          "description": "Provide Chinese/English/Japanese bilingual customer service support, quickly respond to tenant inquiries and complaints, and ensure timely problem resolution."
+        },
+        "step3": {
+          "title": "Ongoing Support",
+          "description": "Regular care follow-ups, organize community activities, provide life consultation assistance, and continuously improve tenant living experience."
+        }
+      },
+      "nextStep": "Next Step"
+    },
+    "baoxian": {
+      "title": "Related Insurance Services",
+      "subtitle": "Insurance",
+      "description": "Configure comprehensive insurance coverage for your property, including fire insurance, earthquake insurance, rent compensation insurance, etc., to ensure asset safety and peace of mind.",
+      "timeline": {
+        "item1": {
+          "time": "At property handover",
+          "title": "Insurance Needs Assessment",
+          "description": "When taking over a property, assess the property condition and risks to determine the types and amounts of insurance needed."
+        },
+        "item2": {
+          "time": "Within 1 week",
+          "title": "Insurance Plan Development",
+          "description": "Based on assessment results, develop an insurance configuration plan, including fire insurance, earthquake insurance, rent compensation insurance, etc., and explain to the owner."
+        },
+        "item3": {
+          "time": "Within 2 weeks",
+          "title": "Insurance Completion",
+          "description": "Complete all insurance applications and procedures to ensure comprehensive property coverage."
+        },
+        "item4": {
+          "time": "Before annual renewal",
+          "title": "Renewal Reminder and Assistance",
+          "description": "Remind owners in advance before insurance expiration, assist with renewal procedures to ensure uninterrupted coverage."
+        },
+        "item5": {
+          "time": "When a claim occurs",
+          "title": "Claim Assistance",
+          "description": "If an insurance incident occurs, promptly assist owners with claim applications to ensure quick compensation."
+        }
+      },
+      "services": {
+        "service1": {
+          "title": "Fire and Earthquake Insurance Configuration",
+          "items": [
+            "Fire and earthquake insurance and liability insurance configuration",
+            "Coverage optimization advice"
+          ]
+        },
+        "service2": {
+          "title": "Claim Assistance and Renewal Reminders",
+          "items": [
+            "Claim application assistance",
+            "Renewal reminder service",
+            "Insurance plan optimization"
+          ]
+        }
+      }
+    }
+  },
+  "tenant": {
+    "title": "Tenant Support",
+    "subtitle": "Tenant Support",
+    "description": "Welcome to our tenant services. If you are our tenant, you can contact us through the following methods.",
+    "services": {
+      "emergency": {
+        "title": "Emergency Repair",
+        "description": "24-hour emergency repair hotline: 0120-559-989"
+      },
+      "payment": {
+        "title": "Rent Payment",
+        "description": "Please pay rent through bank transfer or online payment.",
+        "phone": "Rent payment consultation hotline: 03-6661-7745"
+      },
+      "renewal": {
+        "title": "Renewal & Insurance",
+        "description": "For lease renewal, fire insurance renewal and other issues, please contact: 03-6661-2588"
+      },
+      "maintenance": {
+        "title": "Daily Maintenance",
+        "description": "For equipment maintenance and daily repairs, please contact: 03-6661-1848"
+      },
+      "termination": {
+        "title": "Termination Application",
+        "description": "If you need to move out, please fill out the online form, and we will automatically generate termination documents and send them to the management team.",
+        "link": "Go to Termination Application Form"
+      },
+      "kaiyaku": {
+        "title": "Termination Application",
+        "subtitle": "Tenant Support",
+        "description": "Fill in the following information and submit to automatically generate a PDF file of the Japanese termination notice.\nIf you have any questions, please contact the property management team (03-6661-1848).",
+        "sections": {
+          "propertyInfo": "I. Property Information",
+          "schedule": "II. Schedule",
+          "facilities": "III. Facility Usage",
+          "bankAccount": "IV. Refund Account",
+          "reasonAndMove": "V. Termination Reason & Moving Information"
+        },
+        "fields": {
+          "propertyName": "Property Name",
+          "roomNumber": "Room Number",
+          "propertyAddress": "Property Address",
+          "contractHolder": "Contract Holder Name",
+          "cancelDate": "Termination Date",
+          "moveOutDate": "Expected Move-out Date",
+          "inspectionDateTime": "Preferred Inspection Date & Time",
+          "bankName": "Bank",
+          "bankBranch": "Branch",
+          "accountType": "Account Type",
+          "accountNumber": "Account Number",
+          "accountHolder": "Account Holder Name",
+          "reason": "Termination Reason",
+          "phoneNumber": "Phone"
+        },
+        "placeholders": {
+          "propertyName": "Example: Bourn Mark Nihonbashi Ningyocho",
+          "roomNumber": "Example: 502",
+          "propertyAddress": "Please enter the complete address of the property (for writing in the Japanese termination notice)",
+          "contractHolder": "Please enter the name as stated in the lease contract",
+          "bankName": "Example: Mitsubishi UFJ Bank",
+          "bankBranch": "Please enter branch name",
+          "accountType": "Please select or enter account type",
+          "accountNumber": "Please enter account number",
+          "accountHolder": "Please enter account holder name (full-width katakana or name as registered with the bank)",
+          "newAddress": "If undecided, you may temporarily enter \"Undecided\", but must inform at the move-out inspection",
+          "newBuildingAndRoom": "Example: XX Mansion Room 101",
+          "phoneNumber": "Please enter phone number (without country code)",
+          "reasonOther": "Please enter specific reason",
+          "autoLockDial": "Please enter the currently set number",
+          "deliveryBoxNumber": "Delivery box number"
+        },
+        "labels": {
+          "bicycleParking": "Bicycle Parking Usage",
+          "mailbox": "Mailbox Opening Method",
+          "mailboxNote": "Please refer to the existing mailbox lock settings: (Left / Right) ○ turns ○ number × 2 groups.",
+          "mailboxGroup1": "Group 1:",
+          "mailboxGroup2": "Group 2:",
+          "direction": "Direction",
+          "turns": "turns",
+          "number": "number",
+          "turnsPlaceholder": "turns",
+          "numberPlaceholder": "number",
+          "carParking": "Car Parking Usage",
+          "autoLock": "Auto Lock",
+          "autoLockType": "Type:",
+          "autoLockNumber": "Number:",
+          "bikeSpace": "Motorcycle Parking Usage",
+          "deliveryBox": "Delivery Box",
+          "deliveryBoxType": "Type:",
+          "deliveryBoxNumber": "Number:",
+          "reason": "Termination Reason",
+          "newAddress": "New Address",
+          "newAddressNote": "※ If undecided, please inform at the termination inspection.",
+          "newBuildingAndRoom": "Building Name & Room Number",
+          "phone": "Phone",
+          "signerName": "Signer Name (PDF bottom right)"
+        },
+        "options": {
+          "yes": "Yes",
+          "no": "No",
+          "left": "Left",
+          "right": "Right",
+          "keyType": "Key Type",
+          "dial": "Dial",
+          "cardType": "Card Type"
+        },
+        "reasons": {
+          "進学": "Further Education",
+          "就職": "Employment",
+          "転勤": "Job Transfer",
+          "自宅購入": "Home Purchase",
+          "帰国": "Return to Home Country",
+          "家賃金額": "Rent Amount",
+          "契約期間満了": "Contract Period Expired",
+          "その他": "Other"
+        },
+        "validation": {
+          "pleaseSelect": "Please select {field}",
+          "pleaseFill": "Please fill in {field}",
+          "pleaseFillOtherReason": "Please fill in the specific reason for \"Other\"",
+          "cancelDateMustBeFuture": "Termination date must be after today, please select a future date",
+          "moveOutDateMustBeFuture": "Expected move-out date must be after today, please select a future date",
+          "inspectionDateTimeMustBeFuture": "Preferred inspection date & time cannot be today, please select tomorrow or later",
+          "phoneDigits": "Phone number digits are incorrect. {country} phone numbers should be {min}{max} digits.\nExample: {example}",
+          "phoneMinDigits": "Phone number digits are incorrect, please enter at least 8 digits"
+        },
+        "buttons": {
+          "submit": "Preview",
+          "reset": "Reset"
+        },
+        "preview": {
+          "title": "Content Confirmation",
+          "description": "Please confirm the following information is correct before submitting. After submission, the system will generate a Japanese PDF termination notice based on this content.",
+          "contentTitle": "Termination Content Confirmation",
+          "loading": "Loading...",
+          "alt": "Termination Application",
+          "submitSuccess": "Termination application has been submitted. The system will generate a Japanese PDF termination notice and send it to the management company.",
+          "submitFailed": "Submission failed: {error}",
+          "submitFailedRetry": "Submission failed: {error}. Please check your network connection and try again, or contact customer service.",
+          "networkError": "Network error or server unresponsive",
+          "submitting": "Submitting...",
+          "confirmSubmit": "Confirm Submission",
+          "note": "After submission, the system will generate a Japanese PDF termination notice based on the above content and send it to the management company's designated email. We recommend saving a screenshot or printout for your records."
+        },
+        "notes": {
+          "inspectionDateTime": "※Until termination date",
+          "inspectionNote": "Property management will confirm the final move-out inspection time with you based on your preferred time.",
+          "submitNote": "After submission, you will enter the content confirmation page. After confirmation, the system will generate a Japanese PDF (Termination Notice) and send it to the management company's designated email."
+        },
+        "sidebar": {
+          "downloadTitle": "Download Termination Form",
+          "downloadDescription": "You can also download the official Japanese form, fill it out by hand, and send it by fax or mail.",
+          "downloadButton": "Download Termination Application Form (PDF)",
+          "noticeTitle": "Move-out Notes (Please cooperate)",
+          "notice1": "1. Please cancel electricity, water, and gas on the move-out day to arrange equipment inspection on the same day.",
+          "notice2": "2. When moving out, please do not leave garbage or waste in rooms, balconies, corridors, etc. For large items, please consult the ward office for disposal methods. If items remain, disposal fees will be charged.",
+          "notice3": "3. If insurance, utilities, etc. need to continue, please contact the insurance company listed on the policy to change the address. If cancellation is needed, please call to complete the procedures yourself.",
+          "notice4": "4. If you cannot complete the move-out or on-site confirmation before the termination date due to personal reasons, extension fees may be charged. Please pay attention to the schedule.",
+          "notice5": "5. The date for the move-out on-site confirmation will be contacted by a specialist later. If you need to change it, please communicate directly with them. Please be on time on the confirmation day.",
+          "notice6": "6. For damage and wear caused by intentional, negligent, or improper use at move-out, the restoration costs must be borne by the tenant."
+        },
+        "phoneFormat": {
+          "+81": "Japanese phone number format: 10-11 digits (e.g., 09012345678)",
+          "+86": "Chinese phone number format: 11 digits (e.g., 13800138000)",
+          "+1": "US/Canada phone number format: 10 digits (e.g., 1234567890)",
+          "+44": "UK phone number format: 10-11 digits",
+          "+61": "Australian phone number format: 9-10 digits",
+          "+82": "Korean phone number format: 9-11 digits",
+          "+65": "Singapore phone number format: 8 digits",
+          "+852": "Hong Kong phone number format: 8 digits",
+          "+886": "Taiwan phone number format: 9-10 digits",
+          "other": "Please enter a valid phone number",
+          "countries": {
+            "japan": "Japan",
+            "china": "China",
+            "usCanada": "US/Canada",
+            "uk": "UK",
+            "australia": "Australia",
+            "korea": "Korea",
+            "singapore": "Singapore",
+            "hongkong": "Hong Kong",
+            "taiwan": "Taiwan",
+            "france": "France",
+            "germany": "Germany",
+            "italy": "Italy",
+            "spain": "Spain",
+            "russia": "Russia",
+            "india": "India",
+            "brazil": "Brazil",
+            "mexico": "Mexico",
+            "other": "Other"
+          }
+        }
+      }
+    }
+  },
+  "footer": {
+    "followUs": "Follow Us",
+    "companyInfo": "Deeply rooted in the Japanese market for over twenty years, we provide one-stop services including property trading, property management, and overseas expansion support for individual investors and corporate clients, helping assets grow steadily.",
+    "quickLinks": "Site Navigation",
+    "services": "Services",
+    "contactInfo": "Contact Information",
+    "workingHours": "Weekdays 10:00-18:00",
+    "copyright": "© 2024 Bourn Mark Co., Ltd. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "mobileVersion": "Mobile Version"
+  },
+  "maimai": {
+    "title": "Japan Real Estate Sales & Purchase Services",
+    "subtitle": "Buying & Selling",
+    "description": "We provide comprehensive services for individual and institutional investors, from project screening, due diligence, financing solutions to closing and delivery. Combined with our local resource network and legal team, we help you secure better prices and lower risks.",
+    "currency": {
+      "JPY": "Japanese Yen",
+      "USD": "US Dollar",
+      "CNY": "Chinese Yuan",
+      "TWD": "Taiwan Dollar",
+      "HKD": "Hong Kong Dollar",
+      "MOP": "Macau Pataca",
+      "EUR": "Euro",
+      "GBP": "British Pound",
+      "AUD": "Australian Dollar",
+      "KRW": "Korean Won",
+      "CAD": "Canadian Dollar",
+      "NZD": "New Zealand Dollar",
+      "man": "10,000",
+      "approx": "Approx.",
+      "other": "Other",
+      "select": "Please Select",
+      "updating": "Updating exchange rates...",
+      "updateTime": "Last updated:",
+      "baseNote": "Exchange rates are converted in real-time based on Japanese Yen"
+    },
+    "properties": {
+      "title": "Properties for Sale",
+      "noFee": "No Brokerage Fee",
+      "withFee": "Brokerage Fee Required",
+      "noFeeTitle": "No Fee Properties",
+      "withFeeTitle": "Properties with Fee",
+      "viewDetails": "View Details",
+      "jpyPrice": "JPY Price"
+    },
+    "deals": {
+      "deal1": {
+        "title": "Tokyo Minato Ward · High-Rise Ocean View Apartment",
+        "price": "Transaction Price: ¥128 million",
+        "highlight": "Annual Rental Yield: 5.6%",
+        "detail": "Full-service loan approval and tax planning, completed closing within 4 weeks."
+      },
+      "deal2": {
+        "title": "Osaka Umeda · Premium Commercial Property",
+        "price": "Transaction Price: ¥236 million",
+        "highlight": "8-Year Stable Lease",
+        "detail": "Assisted client in renegotiating lease terms, added 12% revenue share."
+      },
+      "deal3": {
+        "title": "Kyoto Gion · Machiya Guesthouse",
+        "price": "Transaction Price: ¥71.5 million",
+        "highlight": "Guesthouse License & Operation Plan Included",
+        "detail": "Provided renovation design and compliance consulting, expected annual return 8.2%."
+      }
+    },
+    "stats": {
+      "transactionAmount": "2023 Annual Transaction Volume",
+      "transactionAmountValue": "¥8.64 billion",
+      "customers": "Clients Served",
+      "customersValue": "312 groups",
+      "avgCycle": "Average Closing Cycle",
+      "avgCycleValue": "28 days",
+      "approvalRate": "Loan Approval Rate",
+      "approvalRateValue": "92%"
+    },
+    "process": {
+      "title": "Japan Real Estate Transaction Process"
+    },
+    "steps": {
+      "step1": {
+        "title": "Needs Consultation",
+        "desc": "Understand your investment goals, budget, and preferences"
+      },
+      "step2": {
+        "title": "Property Screening",
+        "desc": "Match quality projects based on criteria, provide detailed information"
+      },
+      "step3": {
+        "title": "Property Viewing",
+        "desc": "Arrange viewings, accompany and explain surrounding environment and investment value"
+      },
+      "step4": {
+        "title": "Price Negotiation",
+        "desc": "Assist in price negotiations, secure optimal transaction terms"
+      },
+      "step5": {
+        "title": "Contract Preparation",
+        "desc": "Prepare contract documents, conduct legal review and risk assessment"
+      },
+      "step6": {
+        "title": "Loan Application",
+        "desc": "Assist in mortgage applications, coordinate bank approval process"
+      },
+      "step7": {
+        "title": "Closing Procedures",
+        "desc": "Handle property registration, tax payment, and key handover"
+      },
+      "step8": {
+        "title": "Follow-up Services",
+        "desc": "Provide ongoing support including property management and tax planning"
+      }
+    },
+    "fees": {
+      "title": "Transaction Fees Overview",
+      "description": "※Transaction fees vary depending on factors such as property age, condition, government policies, etc.<br />Generally, fees are approximately <span className=\"font-bold text-white\">10%</span> of the property transaction amount. The specific amounts below are for reference only.",
+      "buyingTitle": "Buying Fees",
+      "sellingTitle": "Selling Fees",
+      "buy": "Buy",
+      "sell": "Sell",
+      "clickToView": "Click to View",
+      "referenceAmount": "Reference Amount",
+      "capitalGainsTax": "10%~30% of the income obtained from the sale",
+      "back": "Back",
+      "nonResidentNote": "※In addition to the above fees, if the holder is a non-resident, an additional withholding tax must be paid to the government. The amount is approximately <span className=\"font-semibold text-green-700\">10.21%</span> of the transaction price. This tax can be refunded in the following year.",
+      "disclaimer": "※The specific amount varies depending on the transaction. For details, please contact us for more information.",
+      "buying": {
+        "fee1": {
+          "item": "Brokerage Fee",
+          "rate": "(Consumption tax additional)",
+          "note": "Transaction price × 3% + ¥60,000"
+        },
+        "fee2": {
+          "item": "Real Estate Acquisition Tax",
+          "rate": "(1.5% for residential land)",
+          "note": "Fixed asset tax assessed value × 3%"
+        },
+        "fee3": {
+          "item": "Registration Fee",
+          "rate": "(Based on property price)",
+          "note": "Approx. ¥100,000-200,000"
+        },
+        "fee4": {
+          "item": "Judicial Scrivener Fee",
+          "rate": "(Registration procedure handling fee)",
+          "note": "Approx. ¥50,000-150,000"
+        },
+        "fee5": {
+          "item": "Stamp Tax",
+          "rate": "Based on contract amount",
+          "note": "Generally ¥10,000-480,000"
+        },
+        "fee6": {
+          "item": "Loan-Related Fees",
+          "rate": "(Varies depending on bank, loan type, and transaction amount)",
+          "note": "Approx. ¥200,000-500,000"
+        },
+        "fee7": {
+          "item": "Fire & Earthquake Insurance",
+          "rate": "(Insurance premium varies based on property type, size, building age, etc.)",
+          "note": "Approx. ¥50,000-150,000/year"
+        }
+      },
+      "selling": {
+        "fee1": {
+          "item": "Brokerage Fee",
+          "rate": "Transaction price × 3% + ¥60,000",
+          "note": "(Consumption tax additional)"
+        },
+        "fee2": {
+          "item": "Fixed Asset Tax",
+          "rate": "Proportional to holding period",
+          "note": "(Annual tax calculated proportionally)"
+        },
+        "fee3": {
+          "item": "Capital Gains Tax",
+          "rate": "",
+          "note": ""
+        },
+        "fee4": {
+          "item": "Registration Fee",
+          "rate": "Approx. ¥100,000-200,000",
+          "note": "(Deregistration, etc.)"
+        }
+      }
+    },
+    "tools": {
+      "title": "Property Tools",
+      "subtitle": "Quickly calculate mortgage payments and rental yields",
+      "openMenu": "Open Tools Menu",
+      "closeMenu": "Close Menu",
+      "loan": {
+        "title": "Mortgage Payment Calculator",
+        "amount": "Loan Amount (JPY)",
+        "interestRate": "Annual Interest Rate (%)",
+        "years": "Loan Term (Years)",
+        "monthlyPayment": "Monthly Payment",
+        "inputPrompt": "Please enter loan information to calculate"
+      },
+      "rental": {
+        "title": "Rental Yield Calculator",
+        "price": "Property Price (JPY)",
+        "yieldRate": "Annual Yield Rate (%)",
+        "annualIncome": "Annual Rental Income",
+        "monthlyIncome": "Monthly Rental Income",
+        "inputPrompt": "Please enter property information to calculate"
+      },
+      "currency": {
+        "title": "Currency Converter",
+        "inputAmount": "Enter Amount",
+        "result": "Converted Result",
+        "swap": "Swap Currencies",
+        "currentRate": "Current Exchange Rate"
+      }
+    },
+    "propertyDetail": {
+      "backToPrevious": "Back to Previous Page",
+      "subtitle": "Real Estate Investment Property Introduction",
+      "photos": "Property Photos",
+      "overview": "Property Overview",
+      "investmentPoints": "Investment & Operation Points",
+      "investmentPortfolio": "1F Investment Portfolio Overview",
+      "surroundings": "Surrounding Facilities & Environment",
+      "floor1": "1st Floor",
+      "tableHeaders": {
+        "roomNumber": "Room No.",
+        "floor": "Floor",
+        "expectedRent": "Expected Rent",
+        "notes": "Notes"
+      },
+      "location": "Location",
+      "targetClients": "Target Clients",
+      "notes": "Notes",
+      "labels": {
+        "area": "Exclusive Area",
+        "type": "Layout",
+        "nearestStation": "Nearest Station",
+        "price": "Price / Expected Rent",
+        "priceRent": "Reference Rent Level",
+        "address": "Location",
+        "access": "Transportation Access",
+        "transport": "Transportation",
+        "structure": "Structure & Scale",
+        "floor": "Corresponding Floor",
+        "equipment": "Equipment & Features",
+        "appearance": "Exterior Image",
+        "exterior": "Building Exterior",
+        "surroundings": "Surrounding Environment",
+        "interior": "Interior Image",
+        "expectedRent": "Expected Rent:",
+        "perMonth": "Approx. {amount}0,000 JPY/month",
+        "approxPing": " (Approx. {ping} tsubo)",
+        "pleaseConfirm": "※Please confirm actual use classification and recruitment conditions",
+        "basedOnPast": "※Based on past recruitment examples / current conditions require confirmation",
+        "referenceTime": "※Travel times are approximate for weekday afternoons. Transfer and waiting times are not included."
+      },
+      "categories": {
+        "life": "Life Facilities",
+        "education": "Education & Culture",
+        "transport": "Transportation & Access"
+      },
+      "properties": {
+        "shin-nakano-ekijou-plaza-304": {
+          "title": "Shin-Nakano Ekijou Plaza 3F",
+          "description": "A station-connected apartment directly above Tokyo Metro Marunouchi Line \"Shin-Nakano\" Station. A highly visible building facing Ome Kaido, connecting central Tokyo and Nakano area - a <strong>compact investment property</strong>, an attractive one-room unit.",
+          "area": "25.42 m²",
+          "areaPing": "7.7",
+          "type": "1R",
+          "station": "Marunouchi Line \"Shin-Nakano\" Station 1 min walk",
+          "stationNote": "Directly above Station Exit 2, along Ome Kaido",
+          "price": "19.40 million JPY",
+          "expectedRent": "8-10",
+          "address": "4-48-17 Honcho, Nakano-ku, Tokyo",
+          "buildingName": "Shin-Nakano Ekijou Plaza",
+          "access1": "Tokyo Metro Marunouchi Line \"Shin-Nakano\" Station 1 min walk (directly above Station Exit 2)",
+          "access2": "JR Chuo Line \"Nakano\" Station approx. 12 min walk",
+          "access3": "Bus service also available (along Ome Kaido)",
+          "structure": "Reinforced concrete structure (SRC) 12 stories above ground / Completed June 1974",
+          "floorInfo": "3F (residential / office use assumed)",
+          "equipmentInfo": "Station-connected / along Ome Kaido / 2 elevators / individual air conditioning / 24-hour use possible / separate men's and women's toilets (common areas) etc.",
+          "point1Title": "Overwhelming convenience unique to \"above station\" location",
+          "point1Desc": "Located directly above Shin-Nakano Station Exit 2, providing a route that is less likely to get wet even on rainy days. Can meet a wide range of needs including commuting, school attendance, remote work bases, and satellite offices.",
+          "point2Title": "Good access to Nakano and Shinjuku areas",
+          "point2Desc": "Direct access to Shinjuku and Otemachi via the Marunouchi Line. Chuo Line \"Nakano\" Station is also within walking distance, covering both central Tokyo and residential areas.",
+          "point3Title": "Flexibility suitable for residential and office combined use",
+          "point3Desc": "There are examples of residential and office use on other floors of the building, making it easy to consider operating as a SOHO or small office. (※Please confirm actual use permission, management regulations, and recruitment conditions)",
+          "point4Title": "Stable rental demand in a convenient living area",
+          "point4Desc": "The surrounding area has a concentration of convenient daily life stores such as restaurants, supermarkets, and drugstores. Stable rental demand can be expected from singles, DINKS, and small business operators.",
+          "life1": "Supermarket",
+          "life2": "Convenience store",
+          "life3": "Drugstore",
+          "life4": "Various restaurants",
+          "education1": "Nakano Ward Library",
+          "education2": "Various schools and cram schools",
+          "education3": "Sports facilities",
+          "transport1": "Approx. 8 min to Shinjuku Station",
+          "transport2": "Approx. 15 min to Otemachi / Tokyo Station",
+          "transport3": "Nakano Station area commercial facilities",
+          "locationDesc": "A station-connected apartment built along Ome Kaido. Easy access to Nakano-dori and Nakano-sakaue directions, a location that combines both living convenience and business convenience.",
+          "location1": "To Shinjuku Station… Approx. 8 min (via Marunouchi Line)",
+          "location2": "Otemachi / Tokyo Station direction… Direct access via Marunouchi Line",
+          "location3": "Nakano Station area… Walking + Chuo Line to various central Tokyo locations",
+          "target1": "Individual business owners seeking a home-office in an area close to central Tokyo",
+          "target2": "Small offices for startups or freelancers",
+          "target3": "Individual investors who value mid-to-long-term rental income",
+          "notesText": "This page is created based on building overview that can be confirmed from publicly available information. Conditions such as exclusive area, layout, price, and management fees for 3F cannot be confirmed on the internet, so please be sure to enter and correct values based on current recruitment materials and important matter explanations.",
+          "imageAlt": "Shin-Nakano Ekijou Plaza exterior"
+        }
+      }
+    }
+  },
+  "qichu": {
+    "title": "Enterprise Overseas Expansion & Landing Services",
+    "subtitle": "Enterprise Support",
+    "description": "For enterprises planning to enter the Japanese market, we provide market entry strategies, partner connections, compliance handling, and brand localization support, helping teams quickly establish local operations and reduce challenges from cultural and institutional differences.",
+    "intro": {
+      "title": "Service Introduction",
+      "description1": "With years of operating experience in Japan and a local resource network, Bourn Mark provides one-stop landing support services for enterprises looking to expand into the Japanese market.",
+      "description2": "From market research, location recommendations, and partner connections, to registration, compliance handling, and brand localization, we use our professional team and practical experience to help enterprises enter the Japanese market quickly and compliantly."
+    },
+    "services": {
+      "title": "Related Services",
+      "service1": {
+        "title": "Market Research & Location Selection",
+        "description": "Deeply understand the target market, provide location recommendations and regional analysis to help enterprises make informed decisions."
+      },
+      "service2": {
+        "title": "Partner Connections",
+        "description": "Leverage local resource networks to connect with quality partners and establish reliable business relationships."
+      },
+      "service3": {
+        "title": "Registration & Compliance",
+        "description": "Assist in completing company registration, tax registration, visa processing, and other compliance procedures to ensure legal operations."
+      },
+      "service4": {
+        "title": "Marketing & Brand Localization",
+        "description": "Provide brand positioning advice and localization strategies to help enterprises better integrate into the Japanese market."
+      },
+      "related": {
+        "service1": {
+          "name": "Commercial Real Estate Leasing",
+          "desc": "Provide leasing services for various commercial properties including shops, offices, factories, and warehouses in the Tokyo area."
+        },
+        "service2": {
+          "name": "Interior Design & Furnishing",
+          "desc": "Provide interior design, furnishing, and execution based on brand positioning to create a unified spatial experience."
+        },
+        "service3": {
+          "name": "Office Equipment Procurement & Setup",
+          "desc": "Integrate procurement channels for IT equipment, office furniture, etc., and handle delivery, installation, and setup."
+        },
+        "service4": {
+          "name": "Corporate Event Management",
+          "desc": "Planning and on-site execution support for business events such as opening ceremonies and exhibition setups."
+        },
+        "service5": {
+          "name": "Advertising & Marketing Planning",
+          "desc": "Integrate online and offline media resources to develop brand localization marketing and promotion strategies."
+        }
+      },
+      "subtitle": "Comprehensive landing support services for enterprises, from location selection to operations, a one-stop solution"
+    },
+    "partners": {
+      "title": "Partners Network",
+      "subtitle": "Partners Network",
+      "description": "We have established close partnerships with professional institutions in various fields in Japan, providing comprehensive support services for enterprises",
+      "list": [
+        {
+          "name": "Major Japanese Financial Institutions",
+          "desc": "Provide corporate account opening, fund settlement and financial advisory services, offering local financial support for newly established legal entities."
+        },
+        {
+          "name": "Chinese Enterprise Association in Japan",
+          "desc": "Connect Chinese enterprise resources in Japan, providing policy interpretation, activity exchanges and member support."
+        },
+        {
+          "name": "Federation of Chinese Enterprise Associations in Japan",
+          "desc": "Coordinate resources of Chinese chambers of commerce in various regions, providing cross-regional business linkage and channel expansion.",
+          "wide": true
+        },
+        {
+          "name": "Comprehensive Legal and Accounting Firms",
+          "desc": "One-stop solutions covering company registration, tax planning, labor regulations and intellectual property protection."
+        },
+        {
+          "name": "JETRO (Japan External Trade Organization)",
+          "desc": "Provide official resources such as market intelligence, subsidy applications, and exhibition connections to assist enterprises in entering the Japanese market.",
+          "wide": true
+        },
+        {
+          "name": "Suzhou Industrial Park",
+          "desc": "Connect high-quality enterprises from Jiangsu and Zhejiang for development in Japan, providing cross-border setup, business activities and investment promotion services.",
+          "link": "#小程序://苏州工业园区东京商务中心/6pgYUElzfmOA17s"
+        },
+        {
+          "name": "Major Guarantee Companies",
+          "desc": "Have agency rights for related businesses of 32 Japanese guarantee companies."
+        },
+        {
+          "name": "Major Japanese Renovation Companies",
+          "desc": "Undertake various interior renovation businesses."
+        },
+        {
+          "name": "Major Japanese Insurance Companies",
+          "desc": "Handle various insurance businesses including small-amount short-term, fire, earthquake insurance, etc."
+        }
+      ],
+      "centerText": "Net"
+    },
+    "cases": {
+      "title": "Success Cases",
+      "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
+      "project1": {
+        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+        "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
+      },
+      "comingSoon1": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      },
+      "comingSoon2": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      },
+      "comingSoon3": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      },
+      "notFound": {
+        "title": "Case Not Found",
+        "message": "Sorry, the case you are looking for could not be found.",
+        "back": "Back to Case List"
+      },
+      "detail": {
+        "backToList": "Back to Case List",
+        "overview": "Project Overview",
+        "details": "Project Details",
+        "location": "Location",
+        "locationDescription": "The project is located at the following address in Tokyo:",
+        "map": "Location Map",
+        "clickToViewMap": "Click to view detailed map",
+        "clickToViewGoogleMap": "Click to view Google Maps",
+        "highlights": "Project Highlights",
+        "cta": {
+          "title": "Want to Learn More?",
+          "description": "Our professional team is always available to provide consulting services and help you find the most suitable investment solution.",
+          "button": "Contact Us"
+        }
+      },
+      "details": {
+        "grand-maison-asakusa-1302": {
+          "type": "Sale",
+          "title": "Grand Maison Asakusa Hanakawado 13F",
+          "location": "Asakusa Hanakawado, Taito-ku, Tokyo",
+          "category": "Luxury Apartment",
+          "description": "Successfully completed the sale transaction of a luxury apartment unit in Asakusa Hanakawado, providing professional sales services to the client.",
+          "details": [
+            "Successfully completed sale transaction on August 25, 2025",
+            "Provided professional sales consultation and transaction services to the client",
+            "Excellent location, only 5 minutes walk to Senso-ji Temple",
+            "Convenient transportation with multiple subway lines accessible",
+            "Successfully completed all transaction procedures with high client satisfaction"
+          ],
+          "highlights": [
+            { "label": "Floor Area", "value": "Approx. 65㎡" },
+            { "label": "Layout", "value": "2LDK" },
+            { "label": "Year Built", "value": "2018" },
+            { "label": "Floor", "value": "13F" }
+          ]
+        },
+        "park-tower-nishishinjuku-101-201": {
+          "type": "Sale",
+          "title": "Park Tower Nishishinjuku Facility Building 1F",
+          "location": "Nishishinjuku, Shinjuku-ku, Tokyo",
+          "category": "Commercial Facility",
+          "description": "Successfully completed the sale transaction of two commercial facility units in the core area of Nishishinjuku.",
+          "details": [
+            "Successfully completed sale transaction on September 25, 2025",
+            "Includes two units on the 1st floor with a total area of approximately 200㎡",
+            "Provided professional commercial facility sales services to the client",
+            "Located in Shinjuku's core business district with high commercial value",
+            "Successfully completed all transaction procedures with client recognition"
+          ],
+          "highlights": [
+            { "label": "Total Area", "value": "Approx. 200㎡" },
+            { "label": "Number of Units", "value": "2 units" },
+            { "label": "Year Built", "value": "2015" },
+            { "label": "Usage", "value": "Commercial Facility" }
+          ]
+        },
+        "my-castle-yoyogi-1203": {
+          "type": "Sale",
+          "title": "My Castle Yoyogi 12F",
+          "location": "Yoyogi, Shibuya-ku, Tokyo",
+          "category": "Apartment",
+          "description": "Successfully completed the sale transaction of a quality apartment unit in the Yoyogi area.",
+          "details": [
+            "Successfully completed sale transaction on May 16, 2025",
+            "Provided professional apartment sales services to the client",
+            "Premium location in Yoyogi area with excellent living environment",
+            "Surrounded by Yoyogi Park with beautiful scenery",
+            "Successfully completed all transaction procedures with high client satisfaction"
+          ],
+          "highlights": [
+            { "label": "Floor Area", "value": "Approx. 55㎡" },
+            { "label": "Layout", "value": "1LDK" },
+            { "label": "Year Built", "value": "2020" },
+            { "label": "Floor", "value": "12F" }
+          ]
+        },
+        "shinjuku-daikan-plaza-a-201": {
+          "type": "Asset Purchase",
+          "title": "Shinjuku Daikan Plaza Building A 2F",
+          "location": "Shinjuku-ku, Tokyo",
+          "category": "Commercial Facility",
+          "description": "Company successfully purchased commercial facility asset in Shinjuku's core business district.",
+          "details": [
+            "Company asset purchase completed on October 23, 2025",
+            "Shinjuku core business district with extremely high commercial value",
+            "High foot traffic with strong commercial atmosphere",
+            "Convenient transportation with multiple subway lines accessible",
+            "Held as company asset for long-term operation and management"
+          ],
+          "highlights": [
+            { "label": "Floor Area", "value": "Approx. 150㎡" },
+            { "label": "Year Built", "value": "2017" },
+            { "label": "Floor", "value": "2F" },
+            { "label": "Usage", "value": "Commercial Facility" }
+          ]
+        },
+        "abc-hall-management": {
+          "type": "Management Contract",
+          "title": "ABC Hall Management Contract",
+          "location": "Tokyo",
+          "category": "Property Management",
+          "description": "Successfully accepted property management contract for ABC Hall, providing comprehensive asset management services.",
+          "details": [
+            "Management contract started on October 23, 2025",
+            "Providing comprehensive property management services",
+            "Including rental management, maintenance management, financial management, etc.",
+            "Improving asset operation efficiency and optimizing revenue structure",
+            "Continuously improving client satisfaction"
+          ],
+          "highlights": [
+            { "label": "Management Area", "value": "Approx. 500㎡" },
+            { "label": "Management Type", "value": "Mixed Facility" },
+            { "label": "Service Team", "value": "Professional Team" }
+          ]
+        }
+      }
+    }
+  },
+  "careers": {
+    "title": "Careers",
+    "subtitle": "Join us and create the future together",
+    "noPositions": "Currently no positions available",
+    "viewDetails": "View Details",
+    "jobDescription": "Job Description",
+    "responsibilities": "Key Responsibilities",
+    "requirements": "Qualifications",
+    "benefits": "Benefits & Perks",
+    "howToApply": "How to Apply",
+    "positions": [
+      {
+        "title": "Property Management Associate",
+        "location": "Nihonbashi Ningyocho, Chuo-ku, Tokyo",
+        "workType": "Full-time",
+        "salary": "Salary: Negotiable",
+        "summary": "Manage daily property operations including tenant communications, maintenance coordination, and lease administration. Bilingual Chinese and Japanese communication skills required.",
+        "description": "We are seeking a Property Management Associate to handle daily property management operations, including tenant communications, property maintenance coordination, and lease administration.\n\nAs a real estate company specializing in serving Chinese clients, this role plays a crucial part in delivering exceptional customer service. The ideal candidate will be bilingual in Chinese and Japanese, with a strong commitment to professional property management.",
+        "responsibilities": [
+          "Manage daily communication and business coordination with Chinese-speaking clients",
+          "Conduct property maintenance management and regular inspections",
+          "Prepare, update, and manage lease contracts",
+          "Respond promptly to tenant inquiries and service requests",
+          "Coordinate and communicate with vendors and service providers",
+          "Organize and maintain business documents and records"
+        ],
+        "requirements": [
+          "Native Chinese speaker or fluent Chinese communication skills (Required)",
+          "Japanese language proficiency N2 or above, able to communicate in daily work (Required)",
+          "Real estate management or related industry experience preferred",
+          "Excellent communication skills and strong service orientation",
+          "Proficient in Microsoft Office suite",
+          "Relevant certifications preferred (e.g., Real Estate Transaction Specialist license)"
+        ],
+        "benefits": [
+          "Full transportation reimbursement",
+          "Annual bonus",
+          "No relocation required",
+          "No overtime culture",
+          "5-minute walk from station",
+          "Paid annual leave",
+          "Comprehensive training program",
+          "Professional certification support",
+          "Experienced candidates welcome",
+          "Certified professionals welcome",
+          "Utilize Chinese language skills",
+          "Health insurance",
+          "Employee pension",
+          "Employment insurance",
+          "Workers' compensation insurance",
+          "Fixed working hours"
+        ],
+        "contact": "To apply, please send your resume to info@bournmark.jp. For inquiries, please call 03-XXXX-XXXX"
+      }
+    ]
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backToHome": "Back to Home"
+  },
+  "encyclopedia": {
+    "items": {
+      "japan-home-buying-process": {
+        "title": "Japan Home Buying Process: Contract, Settlement and Registration Guide",
+        "tag": "Basic Guide"
+      },
+      "fixed-asset-tax-calculation": {
+        "title": "How to Calculate Fixed Asset Tax and City Planning Tax",
+        "tag": "Tax"
+      },
+      "rental-contract-important-clauses": {
+        "title": "Important Clauses and Common Risks in Rental Contracts",
+        "tag": "Rental Management"
+      },
+      "apartment-management-fee-composition": {
+        "title": "Composition of Apartment Management Fees and Repair Funds",
+        "tag": "Asset Maintenance"
+      },
+      "non-resident-mortgage-application-2025": {
+        "title": "How Non-Residents Can Apply for Mortgages in Japan (2025 Latest Guide)",
+        "tag": "Financing"
+      },
+      "japan-property-tax-optimization-2025": {
+        "title": "2025 Japan Property Investment Tax Optimization Strategies",
+        "tag": "Tax"
+      }
+    }
+  }
+}

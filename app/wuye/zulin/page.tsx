@@ -5,112 +5,11 @@ import Image from 'next/image'
 import ServiceTimeline from '@/components/ServiceTimeline'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { ClipboardCheck, Users, FileCheck, Key, TrendingUp, CheckCircle2, Clock, Building2, Sparkles, ArrowRight } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
-const timelineItems = [
-  {
-    time: '24小时内',
-    title: '租客筛选与背景调查',
-    description: '租客提交承租申请后，我们将在24小时内完成对租客提供信息的真伪验证和社会信用调查。同时联系保证公司申请担保，确保租客资质符合要求。',
-  },
-  {
-    time: '1周内',
-    title: '办理入住手续',
-    description: '完成所有入住手续的办理，包括合同签署、押金收取、钥匙交接等。通知租客具体入住日期，确保流程顺畅。',
-  },
-  {
-    time: '最快2周',
-    title: '完成入住',
-    description: '从申请到入住，最快可在2周内完成整个流程，让租客尽快入住，同时确保所有手续合规完整。',
-  },
-  {
-    time: '契约到期前2个月',
-    title: '契约更新',
-    description: '在契约到期前2个月的时间联系租客，准备相关手续。提前沟通续约意向，协商租金调整，确保续约流程顺畅进行。',
-  },
-  {
-    time: '收到解约通知24小时内',
-    title: '解约',
-    description: '在收到解约通知的24小时之内开始相关手续办理。确定房间的修缮等工作，确保尽快着手招租工作，减少空置时间，最大化资产收益。',
-  },
-]
-
-const stats = [
-  { value: '96%+', label: '平均入住率', icon: TrendingUp },
-  { value: '24h', label: '快速响应', icon: Clock },
-  { value: '2周', label: '最快入住时间', icon: CheckCircle2 },
-  { value: '1000+', label: '管理房产', icon: Building2 },
-]
-
-const services = [
-  {
-    title: '租客筛选与背景调查',
-    icon: Users,
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '严格的租客筛选流程，确保房产安全',
-    items: [
-      '身份信息验证',
-      '信用记录调查',
-      '收入证明审核',
-      '保证公司担保申请',
-    ],
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    title: '合同签署与租金调整',
-    icon: FileCheck,
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '专业的合同管理与租金优化服务',
-    items: [
-      '租赁合同起草与签署',
-      '押金与首月租金收取',
-      '租金调整策略制定',
-      '续约协商与处理',
-    ],
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    title: '入住退房手续',
-    icon: Key,
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '完善的入住退房流程管理',
-    items: [
-      '入住前房屋检查',
-      '钥匙交接与设备说明',
-      '退房时验房报告',
-      '押金结算与返还',
-    ],
-    color: 'from-purple-500 to-purple-600',
-  },
-]
-
-const processSteps = [
-  {
-    step: '01',
-    title: '租客申请',
-    description: '租客提交承租申请，我们立即开始审核流程，确保快速响应。',
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '02',
-    title: '背景调查',
-    description: '24小时内完成身份验证、信用调查和保证公司担保申请。',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '03',
-    title: '合同签署',
-    description: '完成合同起草、签署和押金收取，确保所有手续合规。',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '04',
-    title: '入住交接',
-    description: '进行房屋检查、钥匙交接和设备说明，确保租客顺利入住。',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-]
+// 这些数据将在组件内从多语言文件读取
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -134,6 +33,7 @@ const itemVariants = {
 }
 
 export default function ZulinPage() {
+  const { t } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -143,6 +43,96 @@ export default function ZulinPage() {
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isProcessInView = useInView(processRef, { once: true, margin: '-100px' })
+  
+  // 从多语言文件读取数据
+  const timelineItems = useMemo(() => [
+    {
+      time: t('wuye.zulin.timeline.item1.time'),
+      title: t('wuye.zulin.timeline.item1.title'),
+      description: t('wuye.zulin.timeline.item1.description'),
+    },
+    {
+      time: t('wuye.zulin.timeline.item2.time'),
+      title: t('wuye.zulin.timeline.item2.title'),
+      description: t('wuye.zulin.timeline.item2.description'),
+    },
+    {
+      time: t('wuye.zulin.timeline.item3.time'),
+      title: t('wuye.zulin.timeline.item3.title'),
+      description: t('wuye.zulin.timeline.item3.description'),
+    },
+    {
+      time: t('wuye.zulin.timeline.item4.time'),
+      title: t('wuye.zulin.timeline.item4.title'),
+      description: t('wuye.zulin.timeline.item4.description'),
+    },
+    {
+      time: t('wuye.zulin.timeline.item5.time'),
+      title: t('wuye.zulin.timeline.item5.title'),
+      description: t('wuye.zulin.timeline.item5.description'),
+    },
+  ], [t])
+  
+  const stats = useMemo(() => [
+    { value: t('wuye.zulin.stats.occupancyRate.value'), label: t('wuye.zulin.stats.occupancyRate.label'), icon: TrendingUp },
+    { value: t('wuye.zulin.stats.fastResponse.value'), label: t('wuye.zulin.stats.fastResponse.label'), icon: Clock },
+    { value: t('wuye.zulin.stats.quickMoveIn.value'), label: t('wuye.zulin.stats.quickMoveIn.label'), icon: CheckCircle2 },
+    { value: t('wuye.zulin.stats.managedProperties.value'), label: t('wuye.zulin.stats.managedProperties.label'), icon: Building2 },
+  ], [t])
+  
+  const services = useMemo(() => [
+    {
+      title: t('wuye.zulin.services.service1.title'),
+      icon: Users,
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.zulin.services.service1.description'),
+      items: (t('wuye.zulin.services.service1.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      title: t('wuye.zulin.services.service2.title'),
+      icon: FileCheck,
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.zulin.services.service2.description'),
+      items: (t('wuye.zulin.services.service2.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      title: t('wuye.zulin.services.service3.title'),
+      icon: Key,
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.zulin.services.service3.description'),
+      items: (t('wuye.zulin.services.service3.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-purple-500 to-purple-600',
+    },
+  ], [t])
+  
+  const processSteps = useMemo(() => [
+    {
+      step: '01',
+      title: t('wuye.zulin.process.step1.title'),
+      description: t('wuye.zulin.process.step1.description'),
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '02',
+      title: t('wuye.zulin.process.step2.title'),
+      description: t('wuye.zulin.process.step2.description'),
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '03',
+      title: t('wuye.zulin.process.step3.title'),
+      description: t('wuye.zulin.process.step3.description'),
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '04',
+      title: t('wuye.zulin.process.step4.title'),
+      description: t('wuye.zulin.process.step4.description'),
+      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+  ], [t])
 
   return (
     <PageLayout>
@@ -176,11 +166,11 @@ export default function ZulinPage() {
               >
                 <ClipboardCheck className="w-8 h-8 text-blue-300" />
               </motion.div>
-              <p className="text-sm text-blue-300 font-semibold drop-shadow-md">Rental Management</p>
+              <p className="text-sm text-blue-300 font-semibold drop-shadow-md">{t('wuye.zulin.subtitle')}</p>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">租赁管理服务</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">{t('wuye.zulin.title')}</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8 drop-shadow-md">
-              提供从租客筛选、合同签署到入住退房的全流程管理服务，确保您的房产快速出租并持续产生稳定收益。
+              {t('wuye.zulin.description')}
             </p>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -190,15 +180,15 @@ export default function ZulinPage() {
             >
               <div className="flex items-center gap-2 text-blue-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">24小时快速响应</span>
+                <span className="text-sm">{t('wuye.zulin.features.fastResponse')}</span>
               </div>
               <div className="flex items-center gap-2 text-blue-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">96%+平均入住率</span>
+                <span className="text-sm">{t('wuye.zulin.features.occupancyRate')}</span>
               </div>
               <div className="flex items-center gap-2 text-blue-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">最快2周完成入住</span>
+                <span className="text-sm">{t('wuye.zulin.features.quickMoveIn')}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -247,11 +237,11 @@ export default function ZulinPage() {
             >
               <div className="inline-flex items-center gap-2 mb-4">
                 <Sparkles className="w-6 h-6 text-blue-500" />
-                <p className="text-sm text-blue-400 font-semibold">Our Services</p>
+                <p className="text-sm text-blue-400 font-semibold">{t('wuye.services.title')}</p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">专业服务内容</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                全方位的租赁管理服务，从租客筛选到退房交接，全程专业支持
+                {t('wuye.zulin.description')}
               </p>
             </motion.div>
 
@@ -276,11 +266,6 @@ export default function ZulinPage() {
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
-                    <div className="absolute top-4 left-4">
-                      <div className="w-14 h-14 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <service.icon className={`w-7 h-7 bg-gradient-to-br ${service.color} bg-clip-text text-transparent`} style={{ filter: 'none' }} />
-                      </div>
-                    </div>
                     <div className="absolute bottom-4 left-4 right-4">
                       <h3 className="text-xl font-bold text-white mb-1">{service.title}</h3>
                       <p className="text-sm text-white/90">{service.description}</p>
@@ -306,22 +291,6 @@ export default function ZulinPage() {
         <section ref={processRef} className="section-padding bg-gradient-to-b from-navy-900 to-gray-900">
           <div className="container-custom">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isProcessInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <ClipboardCheck className="w-6 h-6 text-blue-400" />
-                <p className="text-sm text-blue-300 font-semibold">Our Process</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">服务流程</h2>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                从租客申请到入住交接，四步流程确保快速高效完成
-              </p>
-            </motion.div>
-
-            <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isProcessInView ? 'visible' : 'hidden'}
@@ -343,11 +312,6 @@ export default function ZulinPage() {
                         sizes="(min-width: 768px) 50vw, 100vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-navy-900/40"></div>
-                      <div className="absolute top-4 left-4">
-                        <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                          <span className="text-2xl font-bold text-white">{step.step}</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div className="flex-1 w-full">
@@ -358,12 +322,6 @@ export default function ZulinPage() {
                       <h3 className="text-2xl md:text-3xl font-bold text-white">{step.title}</h3>
                     </div>
                     <p className="text-lg text-gray-300 leading-relaxed">{step.description}</p>
-                    {index < processSteps.length - 1 && (
-                      <div className="mt-6 flex items-center gap-2 text-blue-400">
-                        <ArrowRight className="w-5 h-5" />
-                        <span className="text-sm font-medium">下一步</span>
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               ))}
@@ -374,7 +332,6 @@ export default function ZulinPage() {
         {/* Timeline Section */}
         <section className="section-padding">
           <div className="container-custom max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">服务流程时间线</h2>
             <ServiceTimeline items={timelineItems} />
           </div>
         </section>

@@ -1,0 +1,56 @@
+# ============================================
+# 环境变量配置文件模板
+# ============================================
+# 
+# 使用方法：
+# 1. 将此文件内容复制到项目根目录的 .env.local 文件中
+# 2. 填写实际的值（不要提交 .env.local 到 Git）
+# 3. 重启开发服务器
+#
+# 注意：.env.local 文件已添加到 .gitignore，不会被提交到 Git
+#
+
+# ============================================
+# YouTube API 配置
+# ============================================
+# 用于企业SNS页面自动获取最新视频
+# 频道ID: UC217cs4dB9SRDAgpHzaD49w
+# 频道用户名: @bournmark
+# 详细配置说明请参考 YOUTUBE_API_SETUP.md
+
+YOUTUBE_API_KEY=your_youtube_api_key_here
+
+# 可选：如果不使用API自动获取，可以手动指定视频ID
+# YOUTUBE_LATEST_VIDEO_ID=your_video_id_here
+
+# ============================================
+# 邮件配置 (SMTP)
+# ============================================
+# 用于联系表单和解约申请表单的邮件发送功能
+# 详细配置说明请参考 EMAIL_CONFIG.md
+
+# SMTP_HOST=smtp.gmail.com
+# SMTP_PORT=465
+# SMTP_SECURE=true
+# SMTP_USER=your-email@gmail.com
+# SMTP_PASS=your-app-password
+# MAIL_TO=info@bournmark.jp
+
+# ============================================
+# reCAPTCHA 配置
+# ============================================
+# 用于表单验证，防止机器人提交
+# 详细配置说明请参考 RECAPTCHA_SETUP.md
+
+# NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+# RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
+
+# ============================================
+# 定时任务配置
+# ============================================
+# 用于自动生成新闻的API端点认证
+# 详细配置说明请参考 CRON_SETUP.md
+
+# CRON_SECRET=your-secret-key-here
+
+

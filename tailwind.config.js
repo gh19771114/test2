@@ -7,6 +7,24 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        // 移动设备（手机竖版）
+        'mobile': {'max': '767px'},
+        // 平板设备（iPad竖版、手机横版）
+        'tablet': {'min': '768px', 'max': '1023px'},
+        // 平板横版/小桌面（iPad横版、iPad Pro竖版）
+        'tablet-lg': {'min': '1024px', 'max': '1279px'},
+        // 桌面版
+        'desktop': {'min': '1280px'},
+        // iPad竖版（包含iPad Pro 11"）
+        'ipad-portrait': {'min': '768px', 'max': '1023px', 'raw': '(orientation: portrait)'},
+        // iPad横版
+        'ipad-landscape': {'min': '768px', 'max': '1023px', 'raw': '(orientation: landscape)'},
+        // iPad Pro竖版（1024px-1279px竖屏）
+        'ipad-pro-portrait': {'min': '1024px', 'max': '1279px', 'raw': '(orientation: portrait)'},
+        // iPad Pro横版/小桌面
+        'ipad-pro-landscape': {'min': '1024px', 'max': '1279px', 'raw': '(orientation: landscape)'},
+      },
       fontFamily: {
         'noto': ['Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'sans-serif'],
         'inter': ['Inter', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'sans-serif'],

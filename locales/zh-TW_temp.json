@@ -1,0 +1,306 @@
+{
+  "common": {
+    "language": "語言",
+    "home": "首頁",
+    "about": "關於我們",
+    "services": "服務",
+    "contact": "聯絡我們",
+    "required": "必填",
+    "submit": "提交",
+    "viewAll": "查看全部",
+    "detailPage": "詳細頁面",
+    "backToHome": "返回首頁"
+  },
+  "hero": {
+    "headlineLine1": "讓您在日本的",
+    "headlineLine2": "房產投資",
+    "headlineLine3": "更省心 更增值",
+    "subtext": "我們專注於服務日本市場與在日華人，為您提供從購房投資、物業管理到企業拓展的全鏈條支持，助力資產穩健增值。"
+  },
+  "navigation": {
+    "business": "業務介紹",
+    "maimai": "不動產買賣仲介",
+    "wuye": "投資不動產管理",
+    "qichu": "企業出海助力",
+    "touzi": "投資相關",
+    "company": "關於我們",
+    "cases": "成功案例",
+    "news": "最新資訊",
+    "encyclopedia": "日本房產投資百科",
+    "tenant": "租客專用",
+    "contact": "聯絡我們",
+    "maimaiSub": {
+      "sales": "銷售中房產",
+      "process": "日本房產買賣交易流程",
+      "fees": "交易費用一覽",
+      "tools": "房產實用工具"
+    },
+    "wuyeSub": {
+      "zulin": "租賃管理",
+      "shouzhi": "收支與稅務",
+      "xiushan": "修繕維護",
+      "zengzhi": "資產增值",
+      "ruzhu": "入住者服務",
+      "baoxian": "相關保險"
+    },
+    "qichuSub": {
+      "intro": "服務介紹",
+      "services": "相關服務",
+      "partners": "合作夥伴網絡",
+      "cases": "成功案例"
+    },
+    "companySub": {
+      "overview": "企業概要",
+      "history": "企業沿革",
+      "philosophy": "企業理念",
+      "ceo": "社長介紹",
+      "sns": "企業SNS"
+    }
+  },
+  "home": {
+    "insights": {
+      "title": "最新資訊",
+      "subtitle": "實時關注日本房產動態",
+      "viewAll": "查看全部",
+      "encyclopediaTitle": "日本房產投資百科",
+      "encyclopediaSubtitle": "系統解讀投資要點",
+      "encyclopediaViewAll": "查看全部",
+      "noNews": "暫無最新資訊"
+    },
+    "services": {
+      "title": "主要業務",
+      "subtitle": "從選房買賣到資產運營，再到企業落地，我們以一站式服務陪伴您在日本的每一步投資與發展。",
+      "wuye": {
+        "title": "物業管理",
+        "description": "面向在日資產及海外業主的託管服務，包括租賃管理、收支統計、內裝修繕、稅務申報，確保資產穩健運營。",
+        "features": [
+          "租客篩選與簽約",
+          "租金收取與帳目透明",
+          "定期巡檢與應急維修",
+          "保險與稅費協辦"
+        ]
+      },
+      "maimai": {
+        "title": "買賣仲介",
+        "description": "針對住宅、公寓、整棟樓宇及商用物業提供全流程購置與出售服務，助您高效匹配優質項目。",
+        "features": [
+          "嚴選投資房源",
+          "一對一顧問陪同",
+          "稅務與貸款協調",
+          "交割與法律支持"
+        ]
+      },
+      "qichu": {
+        "title": "企業出海助力",
+        "description": "為有意拓展日本市場的企業提供落地策略、夥伴對接與項目執行支持，快速適配當地商業環境。",
+        "features": [
+          "市場調研與選址",
+          "合作夥伴對接",
+          "註冊與合規辦理",
+          "宣傳與品牌本地化"
+        ]
+      },
+      "touzi": {
+        "title": "資產投資運營",
+        "description": "Bourn Mark 長期持有優質不動產與創新企業股權，展示自有資本運營成果，供業務夥伴了解集團實力。",
+        "features": [
+          "企業自有資產展示",
+          "長期穩健運營體系",
+          "跨城市投資布局",
+          "不對外提供投資募集"
+        ]
+      },
+      "detailPage": "詳細頁面"
+    },
+    "works": {
+      "title": "成功案例",
+      "viewAll": "查看全部案例",
+      "subtitle": "以下是我們已成功完成的真實案例，涵蓋房產銷售、購入及物業管理等各類業務。",
+      "viewMore": "查看更多案例"
+    },
+    "contact": {
+      "title": "聯絡我們",
+      "subtitle": "無論您關注個人房產投資、資產託管還是企業拓展，只需留下需求，我們的顧問會盡快與您取得聯絡。",
+      "formTitle": "留言表單",
+      "companyName": "公司名稱",
+      "name": "聯絡人姓名",
+      "email": "郵箱地址",
+      "message": "留言",
+      "required": "必填",
+      "submit": "提交",
+      "consultation": "聯絡我們預約諮詢"
+    }
+  },
+  "news": {
+    "title": "最新資訊",
+    "subtitle": "實時關注日本房產市場動態，獲取最新投資資訊和政策解讀",
+    "backToHome": "返回首頁",
+    "category": {
+      "notice": "通知",
+      "news": "News！",
+      "companyActivity": "公司活動"
+    }
+  },
+  "company": {
+    "overview": {
+      "title": "企業概要",
+      "subtitle": "Company Profile",
+      "description1": "川雨流痕股份有限公司（Bourn Mark CO., LTD.）扎根東京中央區日本橋，毗鄰多條地鐵與商務樞紐，具備覆蓋首都圈乃至日本全國的服務能力。",
+      "description2": "我們整合不動產運營、企業落地與自有投資經驗，憑藉多語種專業團隊與數字化管理體系，為跨境客戶提供透明、高效、長週期的綜合解決方案。",
+      "profileTitle": "公司概況一覽",
+      "headquartersImageAlt": "公司總部外觀",
+      "profile": {
+        "companyName": "公司名",
+        "establishmentDate": "成立日期",
+        "legalRepresentative": "法人代表",
+        "capital": "資本金",
+        "headquartersAddress": "總部地址",
+        "subsidiary": "子公司",
+        "businessContent": "業務內容",
+        "businessContentValue": "不動產買賣仲介業務・投資不動產管理業務・企業出海助力業務",
+        "affiliatedGroups": "加盟團體",
+        "affiliatedGroupsValue": "公益財團法人 全日本不動產協會、公益財團法人 保證協會、在日中國企業協會、全日本中國企業協會聯合會",
+        "qualifications": "資格認證",
+        "qualificationsValue": "宅地建物取引業免許 東京都知事（3）第98009號\n賃貸住宅管理業者登記 國土交通大臣（01）第004834號\n等"
+      },
+      "teamTitle": "專業團隊",
+      "team": {
+        "team1": {
+          "title": "日本不動產交易士",
+          "count": "7名"
+        },
+        "team2": {
+          "title": "租賃不動產經營管理士",
+          "count": "4名"
+        },
+        "team3": {
+          "title": "公寓樓管理士",
+          "count": "1名"
+        },
+        "team4": {
+          "title": "Financial Planner 3級",
+          "count": "2名"
+        },
+        "team5": {
+          "title": "Financial Planner 2級",
+          "count": "1名"
+        }
+      },
+      "partnersTitle": "合作夥伴",
+      "partners": {
+        "partner1": {
+          "title": "外部顧問",
+          "count": "1名"
+        },
+        "partner2": {
+          "title": "顧問律師事務所",
+          "count": "2所"
+        },
+        "partner3": {
+          "title": "合作稅理士事務所",
+          "count": "7所"
+        },
+        "partner4": {
+          "title": "合作銀行",
+          "count": "10家"
+        },
+        "partner5": {
+          "title": "合作司法書士事務所",
+          "count": "2所"
+        },
+        "partner6": {
+          "title": "戰略合作夥伴",
+          "count": "1所"
+        },
+        "partner7": {
+          "title": "不動產投資鑑定事務所",
+          "count": "4所"
+        }
+      },
+      "financialPartnersTitle": "主要合作金融機構"
+    },
+    "philosophy": {
+      "title": "企業理念",
+      "subtitle": "Corporate Philosophy",
+      "description": "Bourn Mark 根植日本、服務中日。我們在不動產、企業服務與資本運營之間尋找長期平衡，以誠信、專業與跨文化理解為核心，持續推進城市更新、資產運營與商務合作的共贏。我們以誠摯的態度陪伴客戶走過每一個階段，讓資產、企業與團隊在日本不斷成長，並持續為地區發展注入活力。",
+      "ourPhilosophy": {
+        "title": "我們的理念",
+        "description": "我們深耕日本市場，致力於用專業與誠信搭建中日合作的橋樑。從不動產到企業投資，我們堅持以長期價值為導向，將城市更新、資產運營與商務整合緊密結合，為客戶與夥伴創造可持續的成長空間。"
+      },
+      "values": {
+        "value1": {
+          "title": "中日橋樑",
+          "description": "根植日本、服務華語市場，搭建中日企業與投資者之間透明順暢的溝通與合作渠道。"
+        },
+        "value2": {
+          "title": "城市更新",
+          "description": "關注城市更新與資產運營價值，用精細化管理推動社區與資產的長期成長。"
+        },
+        "value3": {
+          "title": "誠信專業",
+          "description": "以誠信、合規與專業判斷為底線，長期守護客戶與夥伴的信任與成果。"
+        },
+        "value4": {
+          "title": "資源整合",
+          "description": "跨文化、跨領域整合多方資源，推動中日企業交流合作與創新業務的共同發展。"
+        }
+      },
+      "mission": {
+        "title": "我們的使命",
+        "description": "「通過跨文化協作，讓中日商務與不動產服務互相成就。」我們以透明溝通、專業判斷與數字化管理，幫助客戶穩健拓展在日業務，同時推動合作夥伴在新生態中實現價值遞增。",
+        "longTermValue": {
+          "title": "長期價值",
+          "description": "審慎配置資產、強化風險控制，以可持續收益與品牌影響力回應客戶期待。"
+        },
+        "collaborativeNetwork": {
+          "title": "協同網絡",
+          "description": "整合金融、法律、政府與行業夥伴資源，打造開放共享的跨境服務平台。"
+        }
+      }
+    },
+    "history": {
+      "title": "",
+      "subtitle": "Company History",
+      "description": "",
+      "milestones": {}
+    }
+  },
+  "touzi": {
+    "title": "資產投資運營",
+    "subtitle": "Asset Investment",
+    "description": "長期投入自有資本於優良資產的投資與運營。本頁旨在展示既有投資項目與管理實力，相關資訊僅供業務介紹之用，不面向客戶提供任何資產投資或募集服務。",
+    "realEstateInvestment": {
+      "title": "不動產投資資產",
+      "description": "依托東京、關西與北海道等核心城市的市場洞察，我們以自有資金投資稀缺型物業，並由內部團隊統籌運營，確保資產穩健成長。",
+      "cards": {
+        "card1": {
+          "title": "精選投資標的",
+          "description": "聚焦城市核心物業、特色資產與高成長區域，實現長期持有與收益再投入。"
+        },
+        "card2": {
+          "title": "風險評估與回報分析",
+          "description": "集團投研中心定期審視現金流、租客結構與市場波動，維持資產組合的健康度。"
+        },
+        "card3": {
+          "title": "資產管理服務",
+          "description": "自建物業管理體系與合作夥伴網絡，統一監管營運、改裝與增值計劃。"
+        }
+      },
+      "heldAssets": {
+        "title": "企業持有資產",
+        "description": "呈現 Bourn Mark 在日本各地持有並長期運營的物業資產，所有項目均由內部團隊自主管理。"
+      }
+    }
+  },
+  "footer": {
+    "followUs": "關注我們",
+    "companyInfo": "深耕日本市場十餘年，為個人投資者與企業客戶提供買賣仲介、物業管理與出海落地等一站式服務，幫助資產穩健增值。",
+    "quickLinks": "站點導航",
+    "services": "服務項目",
+    "contactInfo": "聯絡方式",
+    "workingHours": "工作日 10:00-18:00",
+    "copyright": "© 2024 Bourn Mark Co., Ltd. 保留所有權利。",
+    "privacyPolicy": "隱私政策",
+    "mobileVersion": "移動版"
+  }
+}

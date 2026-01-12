@@ -3,109 +3,113 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
-const milestones = [
+export default function CompanyHistoryPage() {
+  const { t } = useLanguage()
+  
+  const milestones = useMemo(() => [
   {
-    year: '2009.06',
-    title: '公司成立',
-    description: '川雨流痕股份有限公司（当时社名：株式会社暖灯）在东京成立，开启专注华语客户的日本不动产业务。',
+    year: t('company.history.milestones.milestone1.year'),
+    title: t('company.history.milestones.milestone1.title'),
+    description: t('company.history.milestones.milestone1.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '初创阶段的办公环境',
+      alt: t('company.history.milestones.milestone1.imageAlt'),
     },
   },
   {
-    year: '2010.01',
-    title: '总部设立',
-    description: '在东京都荒川区设立总公司，构建最初的租赁与买卖顾问团队，并同年 10 月开设日暮里站前店。',
+    year: t('company.history.milestones.milestone2.year'),
+    title: t('company.history.milestones.milestone2.title'),
+    description: t('company.history.milestones.milestone2.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1467043237213-65f2da53396f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '东京城区街景',
+      alt: t('company.history.milestones.milestone2.imageAlt'),
     },
   },
   {
-    year: '2012.01',
-    title: '区域拓展',
-    description: '川口店开业，服务圈扩大至埼玉及首都圈北部；同年 9 月正式进入台湾市场。',
+    year: t('company.history.milestones.milestone3.year'),
+    title: t('company.history.milestones.milestone3.title'),
+    description: t('company.history.milestones.milestone3.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1499916078039-922301b0eb9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '跨区域交通枢纽',
+      alt: t('company.history.milestones.milestone3.imageAlt'),
     },
   },
   {
-    year: '2015.03',
-    title: '业务升级',
-    description: '开拓不动产增值业务与国际不动产业务，拓展服务领域与市场范围。',
+    year: t('company.history.milestones.milestone4.year'),
+    title: t('company.history.milestones.milestone4.title'),
+    description: t('company.history.milestones.milestone4.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '现代城市商务楼宇',
+      alt: t('company.history.milestones.milestone4.imageAlt'),
     },
   },
   {
-    year: '2015.08',
-    title: '海外拓展',
-    description: '在上海设立当地法人公司，进一步拓展中国市场，建立跨境业务网络。',
+    year: t('company.history.milestones.milestone5.year'),
+    title: t('company.history.milestones.milestone5.title'),
+    description: t('company.history.milestones.milestone5.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '上海商务区',
+      alt: t('company.history.milestones.milestone5.imageAlt'),
     },
   },
   {
-    year: '2015.12',
-    title: '购入总部大楼',
-    description: '购入自有总部办公大楼，确立公司在日本市场的稳固根基。',
+    year: t('company.history.milestones.milestone6.year'),
+    title: t('company.history.milestones.milestone6.title'),
+    description: t('company.history.milestones.milestone6.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      alt: '总部办公大楼',
+      alt: t('company.history.milestones.milestone6.imageAlt'),
     },
   },
   {
-    year: '2016.03',
-    title: '总部迁移',
-    description: '总部迁至东京都中央区，进一步贴近日本桥金融商务区，夯实跨境业务据点。',
+    year: t('company.history.milestones.milestone7.year'),
+    title: t('company.history.milestones.milestone7.title'),
+    description: t('company.history.milestones.milestone7.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1467043237213-65f2da53396f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      alt: '日本桥金融区',
+      alt: t('company.history.milestones.milestone7.imageAlt'),
     },
   },
   {
-    year: '2017.04',
-    title: '资本强化',
-    description: '公司注册资本增资至 2,500 万日元，并在 10 月推出首个自有公寓项目 "WARMLIGHT RESIDENCE"。',
+    year: t('company.history.milestones.milestone8.year'),
+    title: t('company.history.milestones.milestone8.title'),
+    description: t('company.history.milestones.milestone8.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1505798577917-a65157d3320a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '现代公寓建筑',
+      alt: t('company.history.milestones.milestone8.imageAlt'),
     },
   },
   {
-    year: '2018.02',
-    title: '资产扩张',
-    description: '收购 "京都乌丸六条酒店"，进入酒店与商用资产运营领域。',
+    year: t('company.history.milestones.milestone9.year'),
+    title: t('company.history.milestones.milestone9.title'),
+    description: t('company.history.milestones.milestone9.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '酒店大堂',
+      alt: t('company.history.milestones.milestone9.imageAlt'),
     },
   },
   {
-    year: '2021.04',
-    title: '战略协同',
-    description: '与 Helte 公司展开业务及资本合作，结合数字化与社区运营优势。',
+    year: t('company.history.milestones.milestone10.year'),
+    title: t('company.history.milestones.milestone10.title'),
+    description: t('company.history.milestones.milestone10.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '团队协作会议',
+      alt: t('company.history.milestones.milestone10.imageAlt'),
     },
   },
   {
-    year: '2021.06',
-    title: '品牌焕新',
-    description: '公司正式更名为川雨流痕股份有限公司（Bourn Mark CO., LTD.），确立"根植日本、连接中日"的企业定位。',
+    year: t('company.history.milestones.milestone11.year'),
+    title: t('company.history.milestones.milestone11.title'),
+    description: t('company.history.milestones.milestone11.description'),
     image: {
       src: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      alt: '品牌发布活动',
+      alt: t('company.history.milestones.milestone11.imageAlt'),
     },
   },
-]
+  ], [t])
 
 // 单独的里程碑组件，用于懒加载
 function MilestoneItem({ milestone, index, isLast }: { milestone: typeof milestones[0], index: number, isLast: boolean }) {
@@ -180,17 +184,16 @@ function MilestoneItem({ milestone, index, isLast }: { milestone: typeof milesto
   )
 }
 
-export default function CompanyHistoryPage() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
     <PageLayout>
-      <section className="relative pt-28 pb-16 bg-gradient-to-br from-teal-800 via-teal-700 to-navy-800 overflow-hidden">
+        <section className="relative pt-28 pb-16 bg-gradient-to-br from-teal-800 via-teal-700 to-navy-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=60"
-            alt="企业沿革"
+            alt={t('company.history.title')}
             fill
             className="object-cover opacity-30"
             priority
@@ -199,10 +202,10 @@ export default function CompanyHistoryPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-teal-900/80 to-navy-900/60"></div>
         </div>
         <div className="relative z-10 container-custom">
-          <p className="text-sm text-teal-300 font-semibold mb-4">Company History</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">企业沿革</h1>
+          <p className="text-sm text-teal-300 font-semibold mb-4">{t('company.history.subtitle')}</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">{t('company.history.title')}</h1>
           <p className="text-lg text-gray-200 max-w-4xl leading-relaxed text-balance">
-            自 2009 年成立以来，Bourn Mark 持续深化日本不动产与跨境服务版图：从租赁买卖、资产增值到企业投资，与中日企业共同成长，构建扎实的城市运营与资本运作经验。
+            {t('company.history.description')}
           </p>
         </div>
       </section>

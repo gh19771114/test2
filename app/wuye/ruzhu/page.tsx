@@ -4,78 +4,12 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { Users, Gift, MessageCircle, Heart, CheckCircle2, Clock, Globe, Sparkles, ArrowRight } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
-const stats = [
-  { value: '98%', label: '租客满意度', icon: Heart },
-  { value: '24h', label: '客服响应', icon: Clock },
-  { value: '双语', label: '语言支持', icon: Globe },
-  { value: '贴心', label: '服务品质', icon: CheckCircle2 },
-]
-
-const services = [
-  {
-    title: '入住欢迎与生活指南',
-    icon: Gift,
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '贴心的入住欢迎服务，帮助租客快速适应新环境',
-    items: [
-      '入住欢迎包',
-      '生活指南手册',
-      '周边设施介绍',
-      '社区资源指南',
-    ],
-    color: 'from-teal-500 to-teal-600',
-  },
-  {
-    title: '中文/日文客服与投诉响应',
-    icon: MessageCircle,
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '双语客服支持，快速响应租客需求',
-    items: [
-      '双语客服支持',
-      '快速投诉响应',
-      '问题协调解决',
-      '24小时客服热线',
-    ],
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    title: '居住期间日常支援协调',
-    icon: Heart,
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    description: '持续的生活支援，提升租客居住体验',
-    items: [
-      '定期关怀回访',
-      '生活咨询协助',
-      '社区活动组织',
-      '居住问题协调',
-    ],
-    color: 'from-purple-500 to-purple-600',
-  },
-]
-
-const processSteps = [
-  {
-    step: '01',
-    title: '入住欢迎',
-    description: '提供入住欢迎包和生活指南手册，帮助租客快速了解周边环境和社区资源。',
-    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '02',
-    title: '客服支持',
-    description: '提供中英日双语客服支持，快速响应租客咨询和投诉，确保问题及时解决。',
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    step: '03',
-    title: '持续支援',
-    description: '定期关怀回访，组织社区活动，提供生活咨询协助，持续提升租客居住体验。',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-  },
-]
+// 这些数据将在组件内从多语言文件读取
+// 这些数据将在组件内从多语言文件读取
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -99,6 +33,7 @@ const itemVariants = {
 }
 
 export default function RuzhuPage() {
+  const { t } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -108,6 +43,62 @@ export default function RuzhuPage() {
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isProcessInView = useInView(processRef, { once: true, margin: '-100px' })
+  
+  // 从多语言文件读取数据
+  const stats = useMemo(() => [
+    { value: t('wuye.ruzhu.stats.satisfaction.value'), label: t('wuye.ruzhu.stats.satisfaction.label'), icon: Heart },
+    { value: t('wuye.ruzhu.stats.response.value'), label: t('wuye.ruzhu.stats.response.label'), icon: Clock },
+    { value: t('wuye.ruzhu.stats.language.value'), label: t('wuye.ruzhu.stats.language.label'), icon: Globe },
+    { value: t('wuye.ruzhu.stats.quality.value'), label: t('wuye.ruzhu.stats.quality.label'), icon: CheckCircle2 },
+  ], [t])
+  
+  const services = useMemo(() => [
+    {
+      title: t('wuye.ruzhu.services.service1.title'),
+      icon: Gift,
+      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.ruzhu.services.service1.description'),
+      items: (t('wuye.ruzhu.services.service1.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-teal-500 to-teal-600',
+    },
+    {
+      title: t('wuye.ruzhu.services.service2.title'),
+      icon: MessageCircle,
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.ruzhu.services.service2.description'),
+      items: (t('wuye.ruzhu.services.service2.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      title: t('wuye.ruzhu.services.service3.title'),
+      icon: Heart,
+      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      description: t('wuye.ruzhu.services.service3.description'),
+      items: (t('wuye.ruzhu.services.service3.items', { returnObjects: true }) as string[]) || [],
+      color: 'from-purple-500 to-purple-600',
+    },
+  ], [t])
+  
+  const processSteps = useMemo(() => [
+    {
+      step: '01',
+      title: t('wuye.ruzhu.process.step1.title'),
+      description: t('wuye.ruzhu.process.step1.description'),
+      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '02',
+      title: t('wuye.ruzhu.process.step2.title'),
+      description: t('wuye.ruzhu.process.step2.description'),
+      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+    {
+      step: '03',
+      title: t('wuye.ruzhu.process.step3.title'),
+      description: t('wuye.ruzhu.process.step3.description'),
+      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    },
+  ], [t])
 
   return (
     <PageLayout>
@@ -141,11 +132,11 @@ export default function RuzhuPage() {
               >
                 <Users className="w-8 h-8 text-teal-300" />
               </motion.div>
-              <p className="text-sm text-teal-300 font-semibold drop-shadow-md">Tenant Services</p>
+              <p className="text-sm text-teal-300 font-semibold drop-shadow-md">{t('wuye.ruzhu.subtitle')}</p>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">入住者服务</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">{t('wuye.ruzhu.title')}</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8 drop-shadow-md">
-              为租客提供贴心的入住服务和持续的生活支援，确保租客居住体验，提高续租率和满意度。
+              {t('wuye.ruzhu.description')}
             </p>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -155,15 +146,15 @@ export default function RuzhuPage() {
             >
               <div className="flex items-center gap-2 text-teal-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">98%租客满意度</span>
+                <span className="text-sm">{t('wuye.ruzhu.features.satisfaction')}</span>
               </div>
               <div className="flex items-center gap-2 text-teal-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">24小时客服支持</span>
+                <span className="text-sm">{t('wuye.ruzhu.features.support')}</span>
               </div>
               <div className="flex items-center gap-2 text-teal-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">中英日双语服务</span>
+                <span className="text-sm">{t('wuye.ruzhu.features.bilingual')}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -214,9 +205,9 @@ export default function RuzhuPage() {
                 <Sparkles className="w-6 h-6 text-teal-500" />
                 <p className="text-sm text-teal-400 font-semibold">Our Services</p>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">专业服务内容</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                全方位的入住者服务，从入住欢迎到持续支援，提升租客居住体验
+                {t('wuye.ruzhu.description')}
               </p>
             </motion.div>
 
@@ -241,11 +232,6 @@ export default function RuzhuPage() {
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
-                    <div className="absolute top-4 left-4">
-                      <div className="w-14 h-14 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <service.icon className={`w-7 h-7 bg-gradient-to-br ${service.color} bg-clip-text text-transparent`} style={{ filter: 'none' }} />
-                      </div>
-                    </div>
                     <div className="absolute bottom-4 left-4 right-4">
                       <h3 className="text-xl font-bold text-white mb-1">{service.title}</h3>
                       <p className="text-sm text-white/90">{service.description}</p>
@@ -271,22 +257,6 @@ export default function RuzhuPage() {
         <section ref={processRef} className="section-padding bg-gradient-to-b from-navy-900 to-gray-900">
           <div className="container-custom">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isProcessInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Users className="w-6 h-6 text-teal-400" />
-                <p className="text-sm text-teal-300 font-semibold">Our Process</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">服务流程</h2>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                从入住欢迎到持续支援，三步流程确保租客获得最佳居住体验
-              </p>
-            </motion.div>
-
-            <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isProcessInView ? 'visible' : 'hidden'}
@@ -308,11 +278,6 @@ export default function RuzhuPage() {
                         sizes="(min-width: 768px) 50vw, 100vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 to-navy-900/40"></div>
-                      <div className="absolute top-4 left-4">
-                        <div className="w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                          <span className="text-2xl font-bold text-white">{step.step}</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div className="flex-1 w-full">
@@ -323,12 +288,6 @@ export default function RuzhuPage() {
                       <h3 className="text-2xl md:text-3xl font-bold text-white">{step.title}</h3>
                     </div>
                     <p className="text-lg text-gray-300 leading-relaxed">{step.description}</p>
-                    {index < processSteps.length - 1 && (
-                      <div className="mt-6 flex items-center gap-2 text-teal-400">
-                        <ArrowRight className="w-5 h-5" />
-                        <span className="text-sm font-medium">下一步</span>
-                      </div>
-                    )}
                   </div>
                 </motion.div>
               ))}

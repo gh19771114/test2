@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState, type MouseEvent } from 'react'
-import { Menu, X, Globe2, Check, ChevronDown } from 'lucide-react'
+import { useEffect, useRef, useState, useMemo, type MouseEvent } from 'react'
+import { Menu, X, Globe2, Check, ChevronDown, Monitor } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import logo from '@/imgs/横向logo1-无背景-preview.png'
 import { usePathname, useRouter } from 'next/navigation'
-import { Locale } from '@/data/locales'
+import { useLanguage, type Language } from '@/contexts/LanguageContext'
 
 // 使用 Unicode 转义序列确保在所有系统上都能正确显示
 const languages = [
@@ -33,10 +33,31 @@ type NavItem = {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLanguageOpen, setIsLanguageOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0])
+  const { language, setLanguage, t } = useLanguage()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null)
   const [hoveredChild, setHoveredChild] = useState<string | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
+  
+  // 组件挂载后标记为已挂载
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  
+  // 根据当前语言找到对应的language对象
+  // 在客户端挂载前，始终使用中文，避免 hydration 不匹配
+  const selectedLanguage = languages.find(lang => {
+    if (!isMounted) {
+      // 服务器端和客户端首次渲染时，都使用中文
+      return lang.code === 'zh-CN'
+    }
+    if (language === 'zh') return lang.code === 'zh-CN'
+    if (language === 'zh-TW') return lang.code === 'zh-TW'
+    if (language === 'zh-HK') return lang.code === 'zh-HK'
+    if (language === 'ja') return lang.code === 'ja-JP'
+    if (language === 'en') return lang.code === 'en'
+    return lang.code === 'zh-CN'
+  }) || languages[0]
 
   const languageMenuRef = useRef<HTMLDivElement>(null)
   const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -105,8 +126,16 @@ const Header = () => {
     }
   }, [openDropdown])
 
-  const handleLanguageSelect = (language: typeof languages[number]) => {
-    setSelectedLanguage(language)
+  const handleLanguageSelect = (lang: typeof languages[number]) => {
+    // 将语言代码转换为Language类型
+    let langCode: Language = 'zh'
+    if (lang.code === 'zh-CN') langCode = 'zh'
+    else if (lang.code === 'zh-TW') langCode = 'zh-TW'
+    else if (lang.code === 'zh-HK') langCode = 'zh-HK'
+    else if (lang.code === 'ja-JP') langCode = 'ja'
+    else if (lang.code === 'en') langCode = 'en'
+    
+    setLanguage(langCode)
     setIsLanguageOpen(false)
   }
 
@@ -124,61 +153,62 @@ const Header = () => {
     }
   }
 
-  const navigation: NavItem[] = [
+  const navigation: NavItem[] = useMemo(() => [
     {
       key: 'business',
-      name: '业务介绍',
+      name: t('navigation.business'),
       children: [
         {
-          name: '买卖中介',
+          name: t('navigation.maimai'),
           href: '/maimai',
           subChildren: [
-            { name: '销售中房产', href: '/maimai' },
-            { name: '日本房产买卖交易流程', href: '/maimai#process' },
-            { name: '交易费用一览', href: '/maimai#fees' },
-            { name: '房产实用工具', href: '/maimai#tools' },
+            { name: t('navigation.maimaiSub.sales'), href: '/maimai' },
+            { name: t('navigation.maimaiSub.process'), href: '/maimai#process' },
+            { name: t('navigation.maimaiSub.fees'), href: '/maimai#fees' },
+            { name: t('navigation.maimaiSub.tools'), href: '/maimai#tools' },
           ],
         },
         {
-          name: '物业管理',
+          name: t('navigation.wuye'),
           href: '/wuye',
           subChildren: [
-            { name: '租赁管理', href: '/wuye/zulin' },
-            { name: '收支与税务', href: '/wuye/shouzhi' },
-            { name: '修缮维护', href: '/wuye/xiushan' },
-            { name: '资产增值', href: '/wuye/zengzhi' },
-            { name: '入住者服务', href: '/wuye/ruzhu' },
-            { name: '相关保险', href: '/wuye/baoxian' },
+            { name: t('navigation.wuyeSub.zulin'), href: '/wuye/zulin' },
+            { name: t('navigation.wuyeSub.shouzhi'), href: '/wuye/shouzhi' },
+            { name: t('navigation.wuyeSub.xiushan'), href: '/wuye/xiushan' },
+            { name: t('navigation.wuyeSub.zengzhi'), href: '/wuye/zengzhi' },
+            { name: t('navigation.wuyeSub.ruzhu'), href: '/wuye/ruzhu' },
+            { name: t('navigation.wuyeSub.baoxian'), href: '/wuye/baoxian' },
           ],
         },
         {
-          name: '企业出海助力',
+          name: t('navigation.qichu'),
           href: '/qichu',
           subChildren: [
-            { name: '服务介绍', href: '/qichu' },
-            { name: '相关服务', href: '/qichu#services' },
-            { name: '合作伙伴网络', href: '/qichu#partners' },
-            { name: '成功案例', href: '/qichu#cases' },
+            { name: t('navigation.qichuSub.intro'), href: '/qichu' },
+            { name: t('navigation.qichuSub.services'), href: '/qichu#services' },
+            { name: t('navigation.qichuSub.partners'), href: '/qichu#partners' },
+            { name: t('navigation.qichuSub.cases'), href: '/qichu#cases' },
           ],
         },
-        { name: '投资相关', href: '/touzi' },
+        { name: t('navigation.touzi'), href: '/touzi' },
       ],
     },
-    { key: 'cases', name: '案例展示', href: '/cases' },
+    { key: 'cases', name: t('navigation.cases'), href: '/cases' },
     {
       key: 'company',
-      name: '企业介绍',
+      name: t('navigation.company'),
       children: [
-        { name: '企业概要', href: '/company/overview' },
-        { name: '企业沿革', href: '/company/history' },
-        { name: '企业理念', href: '/company/philosophy' },
-        { name: '社长介绍', href: '/company/ceo' },
-        { name: '企业SNS', href: '/company/sns' },
+        { name: t('navigation.companySub.overview'), href: '/company/overview' },
+        { name: t('navigation.companySub.history'), href: '/company/history' },
+        { name: t('navigation.companySub.philosophy'), href: '/company/philosophy' },
+        { name: t('navigation.companySub.ceo'), href: '/company/ceo' },
+        { name: t('navigation.companySub.sns'), href: '/company/sns' },
       ],
     },
-    { key: 'tenant', name: '租客专用', href: '/tenant' },
-    { key: 'contact', name: '联系我们', href: '/#contact' },
-  ]
+    { key: 'careers', name: t('navigation.careers'), href: '/careers' },
+    { key: 'tenant', name: t('navigation.tenant'), href: '/tenant' },
+    { key: 'contact', name: t('navigation.contact'), href: '/#contact' },
+  ], [t])
 
   return (
     <motion.header
@@ -199,7 +229,7 @@ const Header = () => {
             <a href="/" aria-label="Bourn Mark" className="flex items-center h-full">
               <Image
                 src={logo}
-                alt="Bourn Mark 标志"
+                alt="Bourn Mark"
                 priority
                 className="h-10 sm:h-12 lg:h-14 w-auto object-contain"
                 width={200}
@@ -296,6 +326,9 @@ const Header = () => {
                                 }
                                 if (child.subChildren) {
                                   setHoveredChild(child.name)
+                                } else {
+                                  // 当鼠标进入没有子菜单的项时，立即关闭其他子菜单
+                                  setHoveredChild(null)
                                 }
                               }}
                               onMouseLeave={() => {
@@ -386,6 +419,18 @@ const Header = () => {
                   transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                   className="text-sm xl:text-base text-gray-700 hover:text-navy-700 font-medium transition-colors duration-200 relative group px-2 py-1"
                   onClick={(e) => handleNavClick(e, item.href!)}
+                  onMouseEnter={() => {
+                    // 当鼠标进入没有下拉菜单的项时，关闭所有下拉菜单
+                    if (openDropdown) {
+                      setOpenDropdown(null)
+                      setHoveredChild(null)
+                    }
+                    // 清除任何待关闭的定时器
+                    if (hoverTimeoutRef.current) {
+                      clearTimeout(hoverTimeoutRef.current)
+                      hoverTimeoutRef.current = null
+                    }
+                  }}
                 >
                   {item.name}
                   <span className="absolute -bottom-1 left-2 right-2 h-0.5 bg-navy-700 transition-all duration-200 group-hover:w-full w-0"></span>
@@ -395,10 +440,22 @@ const Header = () => {
             <div className="relative ml-2" ref={languageMenuRef}>
               <button
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
+                onMouseEnter={() => {
+                  // 当鼠标进入语言选择按钮时，关闭所有下拉菜单
+                  if (openDropdown) {
+                    setOpenDropdown(null)
+                    setHoveredChild(null)
+                  }
+                  // 清除任何待关闭的定时器
+                  if (hoverTimeoutRef.current) {
+                    clearTimeout(hoverTimeoutRef.current)
+                    hoverTimeoutRef.current = null
+                  }
+                }}
                 className="flex items-center gap-1.5 xl:gap-2 px-2 xl:px-3 py-1.5 xl:py-2 text-gray-700 hover:text-navy-700 hover:bg-gray-100 rounded-full transition-colors duration-200"
               >
-                <span className="text-base xl:text-lg flag-emoji">{selectedLanguage.flag}</span>
-                <span className="text-xs xl:text-sm font-medium hidden xl:inline">{selectedLanguage.label}</span>
+                <span className="text-base xl:text-lg flag-emoji" suppressHydrationWarning>{selectedLanguage.flag}</span>
+                <span className="text-xs xl:text-sm font-medium hidden xl:inline" suppressHydrationWarning>{selectedLanguage.label}</span>
                 <Globe2 size={16} className="xl:w-[18px] xl:h-[18px]" />
               </button>
               <AnimatePresence>
@@ -528,6 +585,23 @@ const Header = () => {
                     </motion.a>
                   )
                 })}
+                {/* 切换到PC版按钮 */}
+                <div className="border-t border-gray-200 pt-3 pb-2">
+                  <button
+                    onClick={() => {
+                      // 设置viewport为desktop宽度
+                      const viewport = document.querySelector('meta[name="viewport"]')
+                      if (viewport) {
+                        viewport.setAttribute('content', 'width=1280')
+                      }
+                      setIsMenuOpen(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-base font-medium text-navy-700 bg-navy-50 hover:bg-navy-100 rounded-md transition-colors duration-200"
+                  >
+                    <Monitor size={20} />
+                    <span>切换到PC版</span>
+                  </button>
+                </div>
                 <div className="border-t border-gray-200 pt-3">
                   {languages.map((lang, index) => (
                     <motion.button

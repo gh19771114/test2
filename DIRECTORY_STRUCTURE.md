@@ -132,7 +132,7 @@
 │   │   ├── background.png
 │   │   ├── wechat_icon_130789.svg
 │   │   ├── xiaohongshu-seeklogo.svg
-│   │   └── 图标 无背景.png
+│   │   └── icon no back.png
 │   ├── masks/                     # 遮罩文件
 │   │   └── ceo-fade-mask.svg      # CEO 图片渐变遮罩
 │   ├── movie/                     # 公共视频

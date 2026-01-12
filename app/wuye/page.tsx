@@ -4,129 +4,132 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Briefcase, Hand, Hammer, Coins, Building2 } from 'lucide-react'
-
-const regularServices = [
-  {
-    title: '租赁管理',
-    link: '/wuye/zulin',
-    icon: ClipboardCheck,
-  },
-  {
-    title: '收支与税务',
-    link: '/wuye/shouzhi',
-    icon: DollarSign,
-  },
-  {
-    title: '修缮维护',
-    link: '/wuye/xiushan',
-    icon: Wrench,
-  },
-  {
-    title: '入住者服务',
-    link: '/wuye/ruzhu',
-    icon: Users,
-  },
-  {
-    title: '相关保险',
-    link: '/wuye/baoxian',
-    icon: Shield,
-  },
-]
-
-const assetAppreciationServices = [
-  {
-    title: '市场调查',
-    link: '/wuye/zengzhi',
-    icon: Search,
-  },
-  {
-    title: '企业咨询',
-    link: '/wuye/zengzhi',
-    icon: Briefcase,
-  },
-  {
-    title: '租金交涉',
-    link: '/wuye/zengzhi',
-    icon: Hand,
-  },
-  {
-    title: '大规模修缮',
-    link: '/wuye/zengzhi',
-    icon: Hammer,
-  },
-  {
-    title: '相关附加收益',
-    link: '/wuye/zengzhi',
-    icon: Coins,
-  },
-]
-
-const managedProperties = [
-  {
-    id: 'shibuya-luxury-apartment',
-    date: '2024/03/15',
-    type: '管理委托',
-    title: '东京涩谷高端公寓',
-    location: '东京都涩谷区',
-    category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '入住率 96%，通过数字化管理系统将维修响应时间缩短至 12 小时内。',
-  },
-  {
-    id: 'yokohama-waterfront-complex',
-    date: '2024/06/20',
-    type: '管理委托',
-    title: '横滨海滨综合体',
-    location: '神奈川县横滨市',
-    category: '商业综合体',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '通过分区管理与租客重组，商业租金提升 18%。',
-  },
-  {
-    id: 'nagoya-student-apartment',
-    date: '2024/09/10',
-    type: '管理委托',
-    title: '名古屋学生公寓',
-    location: '爱知县名古屋市',
-    category: '学生公寓',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '引入智能门禁与租客社群运营，每年续约率保持在 92%。',
-  },
-]
+import { useLanguage } from '@/contexts/LanguageContext'
+import { useMemo } from 'react'
 
 export default function WuYePage() {
+  const { t } = useLanguage()
+
+  const regularServices = useMemo(() => [
+    {
+      title: t('wuye.services.regular.zulin'),
+      link: '/wuye/zulin',
+      icon: ClipboardCheck,
+    },
+    {
+      title: t('wuye.services.regular.shouzhi'),
+      link: '/wuye/shouzhi',
+      icon: DollarSign,
+    },
+    {
+      title: t('wuye.services.regular.xiushan'),
+      link: '/wuye/xiushan',
+      icon: Wrench,
+    },
+    {
+      title: t('wuye.services.regular.ruzhu'),
+      link: '/wuye/ruzhu',
+      icon: Users,
+    },
+    {
+      title: t('wuye.services.regular.baoxian'),
+      link: '/wuye/baoxian',
+      icon: Shield,
+    },
+  ], [t])
+
+  const assetAppreciationServices = useMemo(() => [
+    {
+      title: t('wuye.services.appreciation.marketResearch'),
+      link: '/wuye/zengzhi',
+      icon: Search,
+    },
+    {
+      title: t('wuye.services.appreciation.consulting'),
+      link: '/wuye/zengzhi',
+      icon: Briefcase,
+    },
+    {
+      title: t('wuye.services.appreciation.rentNegotiation'),
+      link: '/wuye/zengzhi',
+      icon: Hand,
+    },
+    {
+      title: t('wuye.services.appreciation.majorRepair'),
+      link: '/wuye/zengzhi',
+      icon: Hammer,
+    },
+    {
+      title: t('wuye.services.appreciation.additionalIncome'),
+      link: '/wuye/zengzhi',
+      icon: Coins,
+    },
+  ], [t])
+
+  const managedProperties = useMemo(() => [
+    {
+      id: 'shibuya-luxury-apartment',
+      date: '2024/03/15',
+      type: t('wuye.properties.type'),
+      title: t('wuye.properties.property1.title'),
+      location: t('wuye.properties.property1.location'),
+      category: t('wuye.properties.property1.category'),
+      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      description: t('wuye.properties.property1.description'),
+    },
+    {
+      id: 'yokohama-waterfront-complex',
+      date: '2024/06/20',
+      type: t('wuye.properties.type'),
+      title: t('wuye.properties.property2.title'),
+      location: t('wuye.properties.property2.location'),
+      category: t('wuye.properties.property2.category'),
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      description: t('wuye.properties.property2.description'),
+    },
+    {
+      id: 'nagoya-student-apartment',
+      date: '2024/09/10',
+      type: t('wuye.properties.type'),
+      title: t('wuye.properties.property3.title'),
+      location: t('wuye.properties.property3.location'),
+      category: t('wuye.properties.property3.category'),
+      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      description: t('wuye.properties.property3.description'),
+    },
+  ], [t])
   return (
     <PageLayout>
       <div className="relative">
-        {/* Hero Section with Background Image */}
-        <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
+          {/* Hero Section with Background Image */}
+          <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-              alt="物业管理"
+              alt={t('wuye.title')}
               fill
               className="object-cover opacity-30"
               priority
             />
           </div>
           <div className="relative z-10 container-custom">
-            <p className="text-sm text-blue-300 font-semibold mb-4">Property Management</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">全方位物业管理服务</h1>
+            <p className="text-sm text-blue-300 font-semibold mb-4">{t('wuye.subtitle')}</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">{t('wuye.title')}</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed">
-              为在日本持有房产的个人与机构业主提供全流程托管服务，不仅涵盖日常租赁管理、财务税务与维修维护，更专注于通过专业的资产增值策略和租金增长交涉，持续提升您的房产价值与投资回报率，让资产稳健成长。
+              {t('wuye.description')}
             </p>
           </div>
         </section>
 
       <section id="tenant-services" className="section-padding">
         <div className="container-custom">
-          <h2 className="text-2xl font-bold text-white mb-8">服务内容</h2>
+          <h2 className="text-2xl font-bold text-white mb-8">{t('wuye.services.title')}</h2>
           
           {/* 左右两个大方块 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* 常规服务 - 左侧大方块 */}
             <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-8 md:p-10 border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">常规服务</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">{t('wuye.services.regularTitle')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {regularServices.map((item) => {
                   const Icon = item.icon
@@ -148,7 +151,7 @@ export default function WuYePage() {
 
             {/* 专业资产增值服务 - 右侧大方块 */}
             <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-8 md:p-10 border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
-              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">专业资产增值服务</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">{t('wuye.services.appreciationTitle')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {assetAppreciationServices.map((item) => {
                   const Icon = item.icon
@@ -173,17 +176,17 @@ export default function WuYePage() {
 
       <section className="section-padding">
         <div className="container-custom">
-          <h2 className="text-2xl font-bold text-white mb-6">管理房产</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">{t('wuye.properties.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {managedProperties.map((property) => (
-              <Link key={property.id} href={`/cases/${property.id}`} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+              <div key={property.id} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card">
                 <div className="relative overflow-hidden">
-                  <div className="relative w-full h-64">
+                  <div className="relative w-full wuye-property-image">
                     <Image
                       src={property.image}
                       alt={property.title}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-cover"
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                   </div>
@@ -199,23 +202,23 @@ export default function WuYePage() {
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="wuye-property-content">
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                     <Calendar size={16} />
                     <span>{property.date}</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-navy-700 mb-2 group-hover:text-navy-600 transition-colors duration-200">
+                  <h3 className="text-xl font-semibold text-navy-700 mb-2 wuye-property-title">
                     {property.title}
                   </h3>
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                     <MapPin size={16} />
                     <span>{property.location}</span>
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 wuye-property-description">
                     {property.description}
                   </p>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 
@@ -228,9 +231,9 @@ export default function WuYePage() {
                 </div>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
-                    <span>1,300</span><span className="ml-2">户</span>
+                    <span>1,300</span><span className="ml-2">{t('wuye.stats.units')}</span>
                   </h3>
-                  <p className="text-base md:text-lg text-gray-700 font-medium">管理房产总数</p>
+                  <p className="text-base md:text-lg text-gray-700 font-medium">{t('wuye.stats.totalProperties')}</p>
                 </div>
               </div>
             </div>
@@ -242,9 +245,9 @@ export default function WuYePage() {
                 </div>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
-                    <span>約800億</span><span className="ml-2">日元</span>
+                    <span>{t('wuye.stats.amountValue')}</span><span className="ml-2">{t('wuye.stats.yen')}</span>
                   </h3>
-                  <p className="text-base md:text-lg text-gray-700 font-medium">管理资产总额</p>
+                  <p className="text-base md:text-lg text-gray-700 font-medium">{t('wuye.stats.totalAssets')}</p>
                 </div>
               </div>
             </div>
@@ -254,12 +257,12 @@ export default function WuYePage() {
 
       <section className="section-padding">
         <div className="container-custom text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">需要我们接管您的在日资产吗？</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">{t('wuye.cta.title')}</h2>
           <p className="text-gray-200 max-w-2xl mx-auto mb-6 leading-relaxed">
-            无论您在日本拥有单套公寓、整栋楼宇或组合资产，Bourn Mark 都能提供灵活的托管方案与透明的财务报告。
+            {t('wuye.cta.description')}
           </p>
           <a href="/#contact" className="btn-primary inline-flex items-center gap-2">
-            联系顾问
+            {t('wuye.cta.button')}
           </a>
         </div>
       </section>

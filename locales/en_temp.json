@@ -1,0 +1,306 @@
+{
+  "common": {
+    "language": "Language",
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact Us",
+    "required": "Required",
+    "submit": "Submit",
+    "viewAll": "View All",
+    "detailPage": "Details Page",
+    "backToHome": "Back to Home"
+  },
+  "hero": {
+    "headlineLine1": "Making Your",
+    "headlineLine2": "Real Estate Investment",
+    "headlineLine3": "in Japan Easier & More Valuable",
+    "subtext": "We focus on serving the Japanese market and Chinese communities in Japan, providing comprehensive support from property investment and management to business expansion, helping assets grow steadily."
+  },
+  "navigation": {
+    "business": "Services",
+    "maimai": "Real Estate Sales & Purchase",
+    "wuye": "Investment Property Management",
+    "qichu": "Business Expansion Support",
+    "touzi": "Investment Related",
+    "company": "About Us",
+    "cases": "Success Cases",
+    "news": "Latest News",
+    "encyclopedia": "Japan Real Estate Investment Guide",
+    "tenant": "For Tenants",
+    "contact": "Contact Us",
+    "maimaiSub": {
+      "sales": "Properties for Sale",
+      "process": "Japan Real Estate Transaction Process",
+      "fees": "Transaction Fees Overview",
+      "tools": "Property Tools"
+    },
+    "wuyeSub": {
+      "zulin": "Lease Management",
+      "shouzhi": "Income, Expenses & Tax",
+      "xiushan": "Repair & Maintenance",
+      "zengzhi": "Asset Value Enhancement",
+      "ruzhu": "Tenant Services",
+      "baoxian": "Related Insurance"
+    },
+    "qichuSub": {
+      "intro": "Service Introduction",
+      "services": "Related Services",
+      "partners": "Partners Network",
+      "cases": "Success Cases"
+    },
+    "companySub": {
+      "overview": "Company Overview",
+      "history": "Company History",
+      "philosophy": "Company Philosophy",
+      "ceo": "CEO Message",
+      "sns": "Company SNS"
+    }
+  },
+  "home": {
+    "insights": {
+      "title": "Latest News",
+      "subtitle": "Stay updated with Japan real estate trends",
+      "viewAll": "View All",
+      "encyclopediaTitle": "Japan Real Estate Investment Guide",
+      "encyclopediaSubtitle": "Systematic explanation of investment essentials",
+      "encyclopediaViewAll": "View All",
+      "noNews": "No latest news available"
+    },
+    "services": {
+      "title": "Main Services",
+      "subtitle": "From property selection and transactions to asset management and business expansion, we provide one-stop services to accompany you through every step of your investment and development in Japan.",
+      "wuye": {
+        "title": "Property Management",
+        "description": "Management services for assets in Japan and overseas owners, including lease management, income and expense tracking, interior maintenance, and tax filing, ensuring stable asset operation.",
+        "features": [
+          "Tenant Screening & Contracting",
+          "Rent Collection & Transparent Accounting",
+          "Regular Inspections & Emergency Repairs",
+          "Insurance & Tax Coordination"
+        ]
+      },
+      "maimai": {
+        "title": "Sales & Purchase Agency",
+        "description": "Full-process purchase and sale services for residential, apartments, whole buildings, and commercial properties, helping you efficiently match quality projects.",
+        "features": [
+          "Carefully Selected Investment Properties",
+          "One-on-One Consultant Support",
+          "Tax & Loan Coordination",
+          "Settlement & Legal Support"
+        ]
+      },
+      "qichu": {
+        "title": "Business Expansion Support",
+        "description": "Providing landing strategies, partner connections, and project execution support for companies looking to expand into the Japanese market, quickly adapting to local business environment.",
+        "features": [
+          "Market Research & Location Selection",
+          "Partner Connections",
+          "Registration & Compliance",
+          "Marketing & Brand Localization"
+        ]
+      },
+      "touzi": {
+        "title": "Asset Investment Operations",
+        "description": "Bourn Mark holds high-quality real estate and innovative company equity long-term, showcasing own capital operation results for business partners to understand group strength.",
+        "features": [
+          "Corporate Owned Assets Display",
+          "Long-term Stable Operation System",
+          "Multi-city Investment Layout",
+          "No External Investment Solicitation"
+        ]
+      },
+      "detailPage": "Details"
+    },
+    "works": {
+      "title": "Success Cases",
+      "viewAll": "View All Cases",
+      "subtitle": "Below are real cases we have successfully completed, covering various businesses such as property sales, purchases, and property management.",
+      "viewMore": "View More Cases"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Whether you're interested in personal property investment, asset management, or business expansion, just leave your needs and our consultants will contact you as soon as possible.",
+      "formTitle": "Contact Form",
+      "companyName": "Company Name",
+      "name": "Contact Name",
+      "email": "Email Address",
+      "message": "Message",
+      "required": "Required",
+      "submit": "Submit",
+      "consultation": "Contact Us for Consultation"
+    }
+  },
+  "news": {
+    "title": "Latest News",
+    "subtitle": "Stay updated with Japan real estate market trends, get the latest investment information and policy insights",
+    "backToHome": "Back to Home",
+    "category": {
+      "notice": "Notice",
+      "news": "News！",
+      "companyActivity": "Company Activity"
+    }
+  },
+  "company": {
+    "overview": {
+      "title": "Company Overview",
+      "subtitle": "Company Profile",
+      "description1": "Bourn Mark CO., LTD. is rooted in Nihonbashi, Chuo-ku, Tokyo, adjacent to multiple subway lines and business hubs, with the ability to provide services covering the greater Tokyo area and throughout Japan.",
+      "description2": "We integrate real estate operations, business expansion, and own investment experience, and with a multilingual professional team and digital management system, provide transparent, efficient, and long-term comprehensive solutions for cross-border clients.",
+      "profileTitle": "Company Profile Overview",
+      "headquartersImageAlt": "Headquarters Exterior",
+      "profile": {
+        "companyName": "Company Name",
+        "establishmentDate": "Establishment Date",
+        "legalRepresentative": "Legal Representative",
+        "capital": "Capital",
+        "headquartersAddress": "Headquarters Address",
+        "subsidiary": "Subsidiary",
+        "businessContent": "Business Content",
+        "businessContentValue": "Real Estate Sales & Purchase Agency Business・Investment Property Management Business・Business Expansion Support Business",
+        "affiliatedGroups": "Affiliated Groups",
+        "affiliatedGroupsValue": "Public Interest Incorporated Foundation All Japan Real Estate Association, Public Interest Incorporated Foundation Guarantee Association, China Enterprises Association in Japan, Federation of China Enterprises Associations in Japan",
+        "qualifications": "Qualifications",
+        "qualificationsValue": "Real Estate Brokerage License Tokyo Metropolitan Governor (3) No. 98009\nRental Housing Management Business Registration Minister of Land, Infrastructure, Transport and Tourism (01) No. 004834\netc."
+      },
+      "teamTitle": "Professional Team",
+      "team": {
+        "team1": {
+          "title": "Japan Real Estate Transaction Agent",
+          "count": "7 persons"
+        },
+        "team2": {
+          "title": "Rental Real Estate Management Agent",
+          "count": "4 persons"
+        },
+        "team3": {
+          "title": "Apartment Building Manager",
+          "count": "1 person"
+        },
+        "team4": {
+          "title": "Financial Planner Level 3",
+          "count": "2 persons"
+        },
+        "team5": {
+          "title": "Financial Planner Level 2",
+          "count": "1 person"
+        }
+      },
+      "partnersTitle": "Partners",
+      "partners": {
+        "partner1": {
+          "title": "External Advisor",
+          "count": "1 person"
+        },
+        "partner2": {
+          "title": "Advisor Law Firm",
+          "count": "2 firms"
+        },
+        "partner3": {
+          "title": "Cooperative Tax Accountant Office",
+          "count": "7 offices"
+        },
+        "partner4": {
+          "title": "Cooperative Bank",
+          "count": "10 banks"
+        },
+        "partner5": {
+          "title": "Cooperative Judicial Scriveners Office",
+          "count": "2 offices"
+        },
+        "partner6": {
+          "title": "Strategic Partner",
+          "count": "1 firm"
+        },
+        "partner7": {
+          "title": "Real Estate Investment Appraisal Office",
+          "count": "4 offices"
+        }
+      },
+      "financialPartnersTitle": "Main Cooperative Financial Institutions"
+    },
+    "philosophy": {
+      "title": "Corporate Philosophy",
+      "subtitle": "Corporate Philosophy",
+      "description": "Bourn Mark is rooted in Japan and serves China-Japan relations. We seek long-term balance among real estate, corporate services, and capital operations, with integrity, professionalism, and cross-cultural understanding at the core, continuously promoting win-win outcomes in urban renewal, asset operations, and business cooperation. We accompany our clients through every stage with sincerity, enabling assets, enterprises, and teams to grow continuously in Japan, and continuously inject vitality into regional development.",
+      "ourPhilosophy": {
+        "title": "Our Philosophy",
+        "description": "We are deeply rooted in the Japanese market and committed to building bridges for China-Japan cooperation through professionalism and integrity. From real estate to corporate investment, we adhere to long-term value as our guide, closely integrating urban renewal, asset operations, and business integration to create sustainable growth space for clients and partners."
+      },
+      "values": {
+        "value1": {
+          "title": "China-Japan Bridge",
+          "description": "Rooted in Japan and serving the Chinese-speaking market, we build transparent and smooth communication and cooperation channels between Chinese and Japanese enterprises and investors."
+        },
+        "value2": {
+          "title": "Urban Renewal",
+          "description": "Focusing on urban renewal and asset operation value, we promote the long-term growth of communities and assets through refined management."
+        },
+        "value3": {
+          "title": "Integrity and Professionalism",
+          "description": "With integrity, compliance, and professional judgment as the baseline, we protect the trust and achievements of clients and partners over the long term."
+        },
+        "value4": {
+          "title": "Resource Integration",
+          "description": "We integrate diverse resources across cultures and fields to promote the common development of China-Japan enterprise exchanges, cooperation, and innovative business."
+        }
+      },
+      "mission": {
+        "title": "Our Mission",
+        "description": "\"Through cross-cultural collaboration, we enable Chinese-Japanese business and real estate services to achieve mutual success.\" Through transparent communication, professional judgment, and digital management, we help clients steadily expand their business in Japan while promoting partners to achieve value appreciation in the new ecosystem.",
+        "longTermValue": {
+          "title": "Long-term Value",
+          "description": "We prudently allocate assets and strengthen risk control to respond to customer expectations with sustainable returns and brand influence."
+        },
+        "collaborativeNetwork": {
+          "title": "Collaborative Network",
+          "description": "We integrate financial, legal, government, and industry partner resources to build an open and shared cross-border service platform."
+        }
+      }
+    },
+    "history": {
+      "title": "",
+      "subtitle": "Company History",
+      "description": "",
+      "milestones": {}
+    }
+  },
+  "touzi": {
+    "title": "Asset Investment Operations",
+    "subtitle": "Asset Investment",
+    "description": "We continuously invest our own capital in high-quality assets for investment and operations. This page is intended to showcase existing investment projects and management capabilities. Related information is for business introduction purposes only and does not provide any asset investment or fundraising services to customers.",
+    "realEstateInvestment": {
+      "title": "Real Estate Investment Assets",
+      "description": "Based on market insights from key cities such as Tokyo, Kansai, and Hokkaido, we invest our own funds in scarce properties and centrally manage them through internal teams to ensure steady asset growth.",
+      "cards": {
+        "card1": {
+          "title": "Carefully Selected Investment Targets",
+          "description": "Focusing on core urban properties, distinctive assets, and high-growth areas to achieve long-term holding and reinvestment of returns."
+        },
+        "card2": {
+          "title": "Risk Assessment and Return Analysis",
+          "description": "The group's investment research center regularly reviews cash flow, tenant structure, and market fluctuations to maintain the health of the asset portfolio."
+        },
+        "card3": {
+          "title": "Asset Management Services",
+          "description": "We have built our own property management system and partner network to centrally supervise operations, renovations, and value enhancement plans."
+        }
+      },
+      "heldAssets": {
+        "title": "Company-Held Assets",
+        "description": "Presenting the real estate assets that Bourn Mark holds and operates long-term across Japan. All projects are independently managed by internal teams."
+      }
+    }
+  },
+  "footer": {
+    "followUs": "Follow Us",
+    "companyInfo": "For over a decade, we have been deeply rooted in the Japanese market, providing one-stop services such as sales and purchase agency, property management, and business expansion support to individual investors and corporate clients, helping assets grow steadily.",
+    "quickLinks": "Site Navigation",
+    "services": "Services",
+    "contactInfo": "Contact Information",
+    "workingHours": "Weekdays 10:00-18:00",
+    "copyright": "© 2024 Bourn Mark Co., Ltd. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "mobileVersion": "Mobile Version"
+  }
+}

@@ -5,8 +5,10 @@ import { useInView } from 'framer-motion'
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { Building2, ClipboardCheck, Globe2, TrendingUp, Rocket } from 'lucide-react'
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 const Services = () => {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const pieChartRef = useRef(null)
   const mobilePieChartRef = useRef<HTMLDivElement>(null)
@@ -15,7 +17,7 @@ const Services = () => {
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const isPieChartInView = useInView(pieChartRef, { once: true, margin: '200px' }) // 提前加载
   const isMobilePieChartInView = useInView(mobilePieChartRef, { once: true, margin: '100px' }) // 移动端饼图
-  const [hoveredService, setHoveredService] = useState<string | null>(null)
+  const [hoveredService, setHoveredService] = useState<string | null>(null) // 使用 service.link 作为标识符，而不是 title
   // 初始状态设为false，避免在iPad上初始渲染时显示
   const [shouldRenderPieChart, setShouldRenderPieChart] = useState(false)
   
@@ -65,19 +67,25 @@ const Services = () => {
                            !(width >= 1920 && height >= 1080) // 排除大桌面屏幕
       // 检查是否为手机端（宽度 < 1024）
       const isMobile = width < 1024
+      // 检测是否为触摸设备（真正的iPad/平板）
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      // 小屏幕电脑（宽度>=1024但<=1366，且非触摸设备）应该显示桌面版饼图
+      const isSmallDesktop = width >= 1024 && width <= 1366 && !isTouchDevice
       
       // 如果之前已经检测到是iPad，保持为true，避免滚动时状态变化导致opacity闪烁
       // 一旦检测到是iPad，就始终保持为true，不会因为滚动而改变
-      if (isIPadDeviceRef.current) {
-        // 如果之前是iPad，保持为true，不更新（避免滚动时状态变化）
+      if (isIPadDeviceRef.current && isTouchDevice) {
+        // 如果之前是iPad（触摸设备），保持为true，不更新（避免滚动时状态变化）
         setIsIPad(true)
         setShouldShowDesktopChart(false)
       } else {
         // 之前不是iPad，根据当前检测结果更新
-        isIPadDeviceRef.current = isIPadDevice
-        setIsIPad(isIPadDevice)
-        // 只有在不是iPad且不是手机端时才显示桌面版饼图
-        setShouldShowDesktopChart(!isIPadDevice && !isMobile)
+        // 只有真正的触摸设备iPad才被认为是iPad
+        const realIPadDevice = isIPadDevice && isTouchDevice
+        isIPadDeviceRef.current = realIPadDevice
+        setIsIPad(realIPadDevice)
+        // 只有在不是iPad且不是手机端时才显示桌面版饼图，或者小屏幕电脑也显示
+        setShouldShowDesktopChart((!realIPadDevice && !isMobile) || isSmallDesktop)
       }
       
       // 直接操作DOM，强制隐藏桌面版饼图（优先级最高，使用!important）
@@ -245,44 +253,44 @@ const Services = () => {
   // 移动端和iPad饼图始终渲染，不需要复杂的检查逻辑
   
 
-  const services = [
+  const services = useMemo(() => [
     {
       icon: ClipboardCheck,
-      title: '物业管理',
+      title: t('home.services.wuye.title'),
       percentage: 60,
       color: '#3b82f6', // blue
-      description: '面向在日资产及海外业主的托管服务，包括租赁管理、收支统计、内装修缮、税务申报，确保资产稳健运营。',
-      features: ['租客筛选与签约', '租金收取与账目透明', '定期巡检与应急维修', '保险与税费协办'],
+      description: t('home.services.wuye.description'),
+      features: (t('home.services.wuye.features', { returnObjects: true }) as string[]) || [],
       link: '/wuye'
     },
     {
       icon: Building2,
-      title: '买卖中介',
+      title: t('home.services.maimai.title'),
       percentage: 20,
       color: '#10b981', // green
-      description: '针对住宅、公寓、整栋楼宇及商用物业提供全流程购置与出售服务，助您高效匹配优质项目。',
-      features: ['严选投资房源', '一对一顾问陪同', '税务与贷款协调', '交割与法律支持'],
+      description: t('home.services.maimai.description'),
+      features: t('home.services.maimai.features', { returnObjects: true }) as string[],
       link: '/maimai'
     },
     {
       icon: Globe2,
-      title: '企业出海助力',
+      title: t('home.services.qichu.title'),
       percentage: 12.5,
       color: '#f59e0b', // amber
-      description: '为有意拓展日本市场的企业提供落地策略、伙伴对接与项目执行支持，快速适配当地商业环境。',
-      features: ['市场调研与选址', '合作伙伴对接', '注册与合规办理', '宣传与品牌本地化'],
+      description: t('home.services.qichu.description'),
+      features: t('home.services.qichu.features', { returnObjects: true }) as string[],
       link: '/qichu'
     },
     {
       icon: TrendingUp,
-      title: '资产投资运营',
+      title: t('home.services.touzi.title'),
       percentage: 7.5,
       color: '#8b5cf6', // purple
-      description: 'Bourn Mark 长期持有优质不动产与创新企业股权，展示自有资本运营成果，供业务伙伴了解集团实力。',
-      features: ['企业自有资产展示', '长期稳健运营体系', '跨城市投资布局', '不对外提供投资募集'],
+      description: t('home.services.touzi.description'),
+      features: t('home.services.touzi.features', { returnObjects: true }) as string[],
       link: '/touzi'
     },
-  ]
+  ], [t])
 
   // 计算饼图的路径和文字位置（使用固定精度避免 hydration 错误）
   const calculatePieData = (percentage: number, startAngle: number) => {
@@ -375,13 +383,15 @@ const Services = () => {
         >
           <h2
             className="text-3xl md:text-4xl font-bold text-white mb-2"
+            suppressHydrationWarning
           >
-            主要业务
+            {t('home.services.title')}
           </h2>
           <p
             className="text-lg text-gray-200 max-w-2xl mx-auto"
+            suppressHydrationWarning
           >
-            从选房买卖到资产运营，再到企业落地，我们以一站式服务陪伴您在日本的每一步投资与发展。
+            {t('home.services.subtitle')}
           </p>
         </div>
 
@@ -432,14 +442,15 @@ const Services = () => {
                     const { service } = pieData
                     // 完全使用ref来判断，不依赖任何state，确保滚动时状态稳定
                     // 移除对isMounted的依赖，因为isMounted在滚动时可能变化
+                    // 使用 service.link 作为标识符，而不是 title，确保多语言版本正常工作
                     const isIPadMode = isIPadDeviceRef.current
-                    const isSelected = isIPadMode && clickedIPadServiceRef.current === service.title
+                    const isSelected = isIPadMode && clickedIPadServiceRef.current === service.link
                     // 修复opacity逻辑：完全使用ref来判断，避免滚动时state变化导致opacity闪烁
                     // 只在iPad模式下，且有选中的服务，且当前服务不是选中的服务时，才变暗
                     const hasActiveService = clickedIPadServiceRef.current !== null
-                    const shouldDim = isIPadMode && hasActiveService && clickedIPadServiceRef.current !== service.title
+                    const shouldDim = isIPadMode && hasActiveService && clickedIPadServiceRef.current !== service.link
                     return (
-                      <g key={service.title}>
+                      <g key={service.link || service.title}>
                         <path
                           d={pieData.path}
                           fill={service.color}
@@ -453,21 +464,30 @@ const Services = () => {
                           onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            // 移动端（包括手机和iPad）点击时，设置选中状态用于显示下方说明框
-                            // 完全使用ref来判断，确保滚动时也能正常工作
                             if (typeof window === 'undefined') return
-                            const width = window.innerWidth
-                            const isMobileDevice = width < 1024 || isIPadDeviceRef.current
+
+                            // 小屏/移动版饼图：点击应“弹出说明框”（手机竖版、iPad、小屏桌面都需要）
+                            // - 手机/平板（触摸设备）：点击弹出
+                            // - 小屏桌面（窗口宽度 < 1024）：点击也弹出（避免“点不开/没有弹窗”）
+                            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+                            const isSmallLayout = window.innerWidth < 1024
+                            const shouldUsePopup = isTouchDevice || isSmallLayout
                             
-                            if (isMobileDevice) {
+                            if (shouldUsePopup) {
+                              // 使用 service.link 作为标识符，而不是 title，确保多语言版本正常工作
                               const currentService = clickedIPadServiceRef.current
-                              const newService = currentService === service.title ? null : service.title
+                              const newService = currentService === service.link ? null : service.link
                               // 先更新ref，确保状态立即生效
                               clickedIPadServiceRef.current = newService
                               // 然后更新state，触发重新渲染
                               setClickedIPadService(newService)
                               // 强制阻止任何可能的导航
                               return false
+                            } else {
+                              // 大屏桌面：直接导航
+                              if (service.link) {
+                                window.location.href = service.link
+                              }
                             }
                           }}
                         />
@@ -477,8 +497,8 @@ const Services = () => {
                           className="fill-white pointer-events-none"
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          stroke={service.title === '物业管理' || service.title === '企业出海助力' ? '#000000' : 'none'}
-                          strokeWidth={service.title === '物业管理' || service.title === '企业出海助力' ? '2' : '0'}
+                          stroke={(service.percentage === 60 || service.percentage === 12.5) ? '#000000' : 'none'}
+                          strokeWidth={(service.percentage === 60 || service.percentage === 12.5) ? '2' : '0'}
                           paintOrder="stroke fill"
                             style={{
                             fontSize: `${(() => {
@@ -497,6 +517,7 @@ const Services = () => {
                             fontWeight: '600',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                           }}
+                          suppressHydrationWarning
                         >
                           {service.title}
                         </text>
@@ -511,10 +532,11 @@ const Services = () => {
           {/* 移动端和iPad：说明框 - 显示在饼图下方 */}
           {(() => {
             // 优先使用ref，因为它不会因为滚动而改变
-            const activeServiceTitle = clickedIPadServiceRef.current || clickedIPadService
+            // 使用 service.link 作为标识符，而不是 title，确保多语言版本正常工作
+            const activeServiceLink = clickedIPadServiceRef.current || clickedIPadService
             
             // 如果没有选中的服务，不显示说明框
-            if (!activeServiceTitle) return null
+            if (!activeServiceLink) return null
             
             // 检测是否为移动设备（包括手机和iPad）
             // 修复运算符优先级：确保条件判断正确
@@ -524,10 +546,11 @@ const Services = () => {
               (isIPad || isIPadDeviceRef.current)
             )
             
-            // 如果说明框已经打开（有activeServiceTitle），就显示它，不管isMobileMode如何
+            // 如果说明框已经打开（有activeServiceLink），就显示它，不管isMobileMode如何
             // 这样可以避免滚动时说明框闪烁
             
-            const activeService = services.find(s => s.title === activeServiceTitle)
+            // 使用 service.link 来查找服务，而不是 title
+            const activeService = services.find(s => s.link === activeServiceLink)
             if (!activeService) return null
             
             return (
@@ -560,6 +583,10 @@ const Services = () => {
                             </li>
                           ))}
                         </ul>
+                        <div className="flex items-center justify-end mt-3 text-sm" style={{ color: activeService.color }}>
+                          <span>{t('home.services.detailPage')}</span>
+                          <span className="ml-1">→</span>
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -575,14 +602,17 @@ const Services = () => {
             className={`desktop-pie-chart-container relative w-full overflow-visible`} 
             style={{ 
               minHeight: '400px', 
-              padding: '0'
+              padding: '0',
+              pointerEvents: 'auto',
+              position: 'relative',
+              zIndex: 20
             }}
           >
             {/* 桌面端：业务说明列表 - 从饼图后方滑出（非iPad） */}
             {isMounted && (
               <div className="absolute pointer-events-none" style={{ zIndex: 10, width: '1800px', height: '1550px', left: '50%', top: '50%', transform: 'translate(calc(-50% + 50px), calc(-50% - 450px))', overflow: 'visible' }}>
                 {services.map((service, index) => {
-                  const isHovered = hoveredService === service.title
+                  const isHovered = hoveredService === service.link // 使用 link 作为标识符，而不是 title
                   const pieData = pieDataList[index]
                   
                   // 物业管理（index 0）在右侧，其他在左侧
@@ -628,7 +658,7 @@ const Services = () => {
                   
                   return (
                     <motion.div
-                      key={service.title}
+                      key={service.link}
                       initial={{ 
                         opacity: 0,
                         scale: 0.85,
@@ -651,6 +681,7 @@ const Services = () => {
                         transform: 'translate(-50%, -50%)', // 让弹窗以中心点定位
                         transformOrigin: 'center center',
                       }}
+                      onMouseLeave={() => setHoveredService(null)}
                     >
                       <Link href={service.link} className="block pointer-events-auto h-full">
                         <div
@@ -678,6 +709,10 @@ const Services = () => {
                                 </li>
                               ))}
                             </ul>
+                            <div className="flex items-center justify-end mt-3 text-sm" style={{ color: service.color }}>
+                              <span>{t('home.services.detailPage')}</span>
+                              <span className="ml-1">→</span>
+                            </div>
                           </div>
                         </div>
                       </Link>
@@ -696,11 +731,14 @@ const Services = () => {
             ref={pieChartRef}
             className={`relative mx-auto`}
             style={{ 
-              zIndex: 20, 
+              zIndex: 50, 
               minHeight: '300px', 
               width: '1700px', 
               height: '300px', 
-              transform: 'translate(250px, -450px)'
+              transform: 'translate(250px, -450px)',
+              pointerEvents: 'auto',
+              overflow: 'visible',
+              position: 'relative'
             }}
           >
             {shouldRenderPieChart ? (
@@ -709,6 +747,10 @@ const Services = () => {
                 height="720" 
                 viewBox="0 0 800 800" 
                 className="transform rotate-0 drop-shadow-2xl" 
+                style={{
+                  pointerEvents: 'auto',
+                  overflow: 'visible'
+                }}
               >
                 {/* 圆心优化 - 添加白色圆形遮罩，与内圆半径一致 */}
                 <circle cx="400" cy="400" r="70" fill="white" opacity="0.98" />
@@ -723,18 +765,41 @@ const Services = () => {
                     : percentage >= 10
                       ? 22  // 企业出海助力（放大以适配饼图大小）
                       : 18  // 资产投资运营
-                const isHovered = hoveredService === service.title
+                const isHovered = hoveredService === service.link // 使用 link 作为标识符，而不是 title
                 const scale = isHovered ? 1.08 : 1
                 
-                // 检测是否为触摸设备
-                const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+                // 检测是否为触摸设备（统一检测方法）
+                const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
                 
                 return (
-                  <g key={service.title} className="pie-segment-group">
+                  <g key={service.link} className="pie-segment-group" style={{ pointerEvents: 'auto' }}>
                     {shouldRenderPieChart ? (
-                      // 桌面端使用Link，可以跳转
-                      <Link 
+                      // 桌面端使用a标签，确保在所有浏览器和系统上都能正常工作
+                      <a 
                         href={service.link}
+                        onClick={(e) => {
+                          // 确保点击事件能正确触发
+                          e.stopPropagation()
+                          // 强制导航，确保在所有情况下都能正常工作
+                          if (service.link) {
+                            // 立即导航，不等待Link的默认行为
+                            try {
+                              window.location.href = service.link
+                            } catch (err) {
+                              window.location.assign(service.link)
+                            }
+                          }
+                        }}
+                        style={{ 
+                          pointerEvents: 'auto',
+                          display: 'block',
+                          position: 'relative',
+                          zIndex: 60,
+                          textDecoration: 'none',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          WebkitTapHighlightColor: 'transparent'
+                        }}
                       >
                         <path
                           d={pieData.path}
@@ -747,21 +812,32 @@ const Services = () => {
                             transformOrigin: '360px 360px',
                             transform: `scale(${scale})`,
                             transition: 'filter 0.2s ease, transform 0.2s ease',
+                            pointerEvents: 'auto',
+                            cursor: 'pointer',
                           }}
                           onMouseEnter={() => {
-                            // 只在非触摸设备上使用hover
+                            // 只在非触摸设备上使用hover，显示弹窗
+                            if (typeof window !== 'undefined') {
+                              const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
                             if (!isTouchDevice) {
-                              setHoveredService(service.title)
+                                setHoveredService(service.link) // 使用 link 作为标识符，而不是 title
+                              }
                             }
                           }}
-                          onMouseLeave={() => {
-                            // 只在非触摸设备上使用mouseLeave
-                            if (!isTouchDevice) {
-                              setHoveredService(null)
-                            }
+                          onClick={(e) => {
+                            // 桌面端点击：也显示弹窗（用户反馈“小屏幕电脑点不开/没有弹窗”）
+                            e.preventDefault()
+                            e.stopPropagation()
+                            setHoveredService((prev) => (prev === service.link ? null : service.link))
                           }}
+                          onTouchStart={(e) => {
+                            // 触摸设备：也显示弹窗（不直接跳转）
+                            e.stopPropagation()
+                            setHoveredService((prev) => (prev === service.link ? null : service.link))
+                          }}
+                          // 移除 onMouseLeave，弹窗不会因为离开饼图而消失
                         />
-                      </Link>
+                      </a>
                     ) : null}
                     <text
                       x={pieData.textX}
@@ -769,8 +845,8 @@ const Services = () => {
                       className="fill-white pointer-events-none transition-all duration-300"
                       textAnchor="middle"
                       dominantBaseline="middle"
-                      stroke={service.title === '物业管理' || service.title === '企业出海助力' ? '#000000' : 'none'}
-                      strokeWidth={service.title === '物业管理' || service.title === '企业出海助力' ? '2' : '0'}
+                      stroke={(service.percentage === 60 || service.percentage === 12.5) ? '#000000' : 'none'}
+                      strokeWidth={(service.percentage === 60 || service.percentage === 12.5) ? '2' : '0'}
                       paintOrder="stroke fill"
                       style={{
                         fontSize: `${baseFontSize * scale}px`,
@@ -802,8 +878,9 @@ const Services = () => {
           <a
             href="#contact"
             className="btn-primary text-lg px-8 py-4 inline-flex items-center gap-2 hover:scale-105 transform transition-all duration-200"
+            suppressHydrationWarning
           >
-            联系我们预约咨询
+            {t('home.contact.consultation')}
           </a>
         </div>
       </div>

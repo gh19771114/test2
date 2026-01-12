@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 // 注意：这里的结构要和「主申请页面」里的 TerminationForm 保持一致
 type TerminationForm = {
@@ -70,6 +71,7 @@ type TerminationForm = {
 }
 
 export default function TerminationPreviewPage() {
+  const { t } = useLanguage()
   const router = useRouter()
   const [formData, setFormData] = useState<TerminationForm | null>(null)
   const [loading, setLoading] = useState(false)
@@ -151,13 +153,12 @@ export default function TerminationPreviewPage() {
           statusText: res.statusText,
           data,
         })
-        setSubmitResult(`提交失败：${errorMsg}`)
+        setSubmitResult(t('tenant.kaiyaku.preview.submitFailed', { error: errorMsg }))
         return
       }
 
       setSubmitResult(
-        data.message ||
-          '解约申请已提交。系统将生成日文PDF解約通知書并发送至管理公司。'
+        data.message || t('tenant.kaiyaku.preview.submitSuccess')
       )
 
       // 提交成功后清掉缓存和 reCAPTCHA
@@ -168,9 +169,9 @@ export default function TerminationPreviewPage() {
       }
     } catch (err: any) {
       console.error('提交错误:', err)
-      const errorMsg = err.message || '网络错误或服务器无响应'
+      const errorMsg = err.message || t('tenant.kaiyaku.preview.networkError')
       setSubmitResult(
-        `提交失败：${errorMsg}。请检查网络连接后重试，或联系客服。`
+        t('tenant.kaiyaku.preview.submitFailedRetry', { error: errorMsg })
       )
     } finally {
       setLoading(false)
@@ -186,7 +187,7 @@ export default function TerminationPreviewPage() {
       <PageLayout>
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <p className="text-gray-600">正在加载...</p>
+            <p className="text-gray-600">{t('tenant.kaiyaku.preview.loading')}</p>
           </div>
         </div>
       </PageLayout>
@@ -217,7 +218,7 @@ export default function TerminationPreviewPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-              alt="解约申请"
+              alt={t('tenant.kaiyaku.preview.alt')}
               fill
               className="object-cover opacity-30"
               priority
@@ -226,13 +227,13 @@ export default function TerminationPreviewPage() {
           </div>
           <div className="relative z-10 container-custom">
             <p className="text-sm text-yellow-200 font-semibold mb-4">
-              Tenant Support
+              {t('tenant.kaiyaku.subtitle')}
             </p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              内容确认
+              {t('tenant.kaiyaku.preview.title')}
             </h1>
             <p className="text-lg text-gray-100 max-w-3xl leading-relaxed">
-              请确认以下信息无误后提交申请。提交后系统将根据这些内容生成日文版解約通知書PDF。
+              {t('tenant.kaiyaku.preview.description')}
             </p>
           </div>
         </section>
@@ -244,7 +245,7 @@ export default function TerminationPreviewPage() {
               {/* 顶部标题 */}
               <div>
                 <h2 className="text-2xl font-semibold text-navy-700">
-                  解约内容确认
+                  {t('tenant.kaiyaku.preview.contentTitle')}
                 </h2>
               </div>
 
@@ -492,7 +493,7 @@ export default function TerminationPreviewPage() {
                     disabled={loading || !recaptchaToken}
                     className="btn-primary w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {loading ? '提交中...' : '确认提交'}
+                    {loading ? t('tenant.kaiyaku.preview.submitting') : t('tenant.kaiyaku.preview.confirmSubmit')}
                   </button>
                   <button
                     onClick={handleBack}
@@ -517,7 +518,7 @@ export default function TerminationPreviewPage() {
               )}
               {!submitResult && (
                 <p className="text-sm text-gray-500">
-                  提交后，系统会根据以上内容生成日文解約通知書PDF，并发送到管理公司指定邮箱。建议您另行保存一份截图或打印件备查。
+                  {t('tenant.kaiyaku.preview.note')}
                 </p>
               )}
             </div>
