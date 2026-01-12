@@ -145,7 +145,7 @@ export default function LionsHigashiGinza2FPage() {
                         preload="auto"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       >
-                        <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                        <source src="/movie/higashiginza.mp4" type="video/mp4" />
                         您的浏览器不支持视频播放。
                       </video>
                     </div>
@@ -204,7 +204,7 @@ export default function LionsHigashiGinza2FPage() {
                     preload="auto"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   >
-                    <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                    <source src="/movie/higashiginza.mp4" type="video/mp4" />
                     您的浏览器不支持视频播放。
                   </video>
                 </div>
@@ -452,7 +452,7 @@ export default function LionsHigashiGinza2FPage() {
                 playsInline
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               >
-                <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                <source src="/movie/higashiginza.mp4" type="video/mp4" />
                 您的浏览器不支持视频播放。
               </video>
             </div>
