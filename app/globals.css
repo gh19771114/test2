@@ -5246,11 +5246,135 @@ article.saikai-awards-page section[class*="section-padding"] {
     max-width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    margin-bottom: 0.5rem !important; /* 从 mb-4 (1rem) 减少到 0.5rem */
   }
   
   .company-overview-mobile-image img {
     width: 100% !important;
     height: auto !important;
     object-fit: contain !important;
+  }
+  
+  /* 减少section的padding */
+  section.py-3 {
+    padding-top: 0.5rem !important; /* 从 py-3 (0.75rem) 减少 */
+    padding-bottom: 0.5rem !important;
+  }
+  
+  section.py-1 {
+    padding-top: 0.25rem !important; /* 从 py-1 (0.25rem) 进一步减少 */
+    padding-bottom: 0.25rem !important;
+  }
+  
+  /* 减少容器之间的gap */
+  .grid.gap-3 {
+    gap: 0.5rem !important; /* 从 gap-3 (0.75rem) 减少到 0.5rem */
+  }
+  
+  .grid.gap-1\.5 {
+    gap: 0.25rem !important; /* 从 gap-1.5 (0.375rem) 减少到 0.25rem */
+  }
+  
+  /* 减少容器内部的padding */
+  .bg-white.rounded-3xl.p-3 {
+    padding: 0.75rem !important; /* 从 p-3 (0.75rem) 保持，但可以进一步优化 */
+  }
+  
+  .bg-white.rounded-2xl.p-1\.5 {
+    padding: 0.5rem !important; /* 从 p-1.5 (0.375rem) 增加到 0.5rem 以放大内容 */
+  }
+  
+  .bg-gray-50.rounded-3xl.p-1\.5 {
+    padding: 0.5rem !important; /* 从 p-1.5 (0.375rem) 增加到 0.5rem */
+  }
+  
+  /* 放大专业团队和合作伙伴的内容 */
+  .bg-blue-50.rounded-xl,
+  .bg-green-50.rounded-xl {
+    padding: 0.375rem 0.5rem !important; /* 从 px-1 py-0.5 增加到稍大 */
+    font-size: 0.8125rem !important; /* 从 text-xs (0.75rem) 稍微放大 */
+  }
+  
+  /* 放大主要合作金融机构的内容 */
+  .bg-white.rounded-xl.px-1.py-0\.5 {
+    padding: 0.375rem 0.5rem !important;
+  }
+  
+  .bg-white.rounded-xl .w-6.h-6 {
+    width: 1.5rem !important; /* 从 w-6 (1.5rem) 保持 */
+    height: 1.5rem !important;
+  }
+  
+  .bg-white.rounded-xl .text-\[10px\] {
+    font-size: 0.625rem !important; /* 从 text-[10px] 稍微放大 */
+  }
+  
+  .bg-white.rounded-xl .text-\[11px\] {
+    font-size: 0.75rem !important; /* 从 text-[11px] 放大到 text-xs */
+  }
+  
+  /* 减少标题的margin-bottom */
+  h2.mb-2 {
+    margin-bottom: 0.5rem !important; /* 从 mb-2 (0.5rem) 保持 */
+  }
+  
+  h2.mb-0\.5 {
+    margin-bottom: 0.25rem !important; /* 从 mb-0.5 (0.125rem) 增加到 0.25rem */
+  }
+  
+  /* 减少container-custom的padding */
+  .container-custom {
+    padding-left: 0.75rem !important; /* 减少左右padding */
+    padding-right: 0.75rem !important;
+  }
+  
+  /* 企业持有资产卡片优化 - 参考iPad横版 */
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 {
+    padding-top: 1rem !important; /* 从 py-6 (1.5rem) 减少 */
+    padding-bottom: 1rem !important;
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 h2 {
+    margin-bottom: 1rem !important; /* 从 mb-6 (1.5rem) 减少 */
+    font-size: 1.5rem !important; /* 从 text-2xl (1.5rem) 保持 */
+  }
+  
+  /* 资产卡片优化 - 参考iPad横版，减少空白区域，放大内容 */
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex.gap-4 {
+    gap: 0.5rem !important; /* 从 gap-4 (1rem) 进一步减少到 0.5rem */
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0.w-64 {
+    width: 18rem !important; /* 从 w-64 (16rem) 放大到 18rem，放大内容 */
+    min-width: 18rem !important;
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 .h-48 {
+    height: 11rem !important; /* 从 h-48 (12rem) 减少到 11rem，但比之前稍大 */
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 .p-4 {
+    padding: 0.5rem !important; /* 从 p-4 (1rem) 进一步减少到 0.5rem */
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 h3 {
+    font-size: 1rem !important; /* 从 text-lg (1.125rem) 稍微减小但保持可读 */
+    margin-bottom: 0.25rem !important; /* 从 mb-2 (0.5rem) 进一步减少 */
+    line-height: 1.35 !important;
+  }
+  
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 p {
+    font-size: 0.8125rem !important; /* 从 text-sm (0.875rem) 稍微减小但保持可读 */
+    line-height: 1.4 !important;
+  }
+  
+  /* 减少资产卡片之间的gap */
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex {
+    gap: 0.5rem !important; /* 进一步减少gap */
+  }
+  
+  /* 减少卡片内部的border和shadow造成的视觉空隙 */
+  section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0.bg-white {
+    border-width: 1px !important; /* 确保border不会太粗 */
   }
 }

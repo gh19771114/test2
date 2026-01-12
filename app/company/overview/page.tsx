@@ -116,7 +116,7 @@ export default function CompanyOverviewPage() {
                     src="/imgs/honsha.png"
                     alt={t('company.overview.headquartersImageAlt')}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     priority={false}
                     sizes="256px"
                   />
@@ -215,7 +215,7 @@ export default function CompanyOverviewPage() {
                   src="/imgs/honsha.png"
                   alt={t('company.overview.headquartersImageAlt')}
                   fill
-                  className="object-contain xl:object-cover"
+                  className="object-contain"
                   priority={false}
                   sizes="(min-width: 1280px) 40vw, 80vw"
                 />
@@ -362,40 +362,44 @@ function AutoScrollAssets() {
         className="flex gap-4 md:gap-6 overflow-x-hidden scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {duplicatedAssets.map((property, index) => (
-          <div
-            key={`${property.title}-${index}`}
-            className="flex-shrink-0 w-64 md:w-80 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
-          >
-            <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
-              {property.image ? (
-                <Image
-                  src={property.image}
-                  alt={property.title}
-                  fill
-                  className={`object-cover transition-transform duration-300 group-hover:scale-105 ${
-                    property.image.includes('helte') || property.image.includes('LOGO') 
-                      ? 'object-contain p-4' 
-                      : ''
-                  }`}
-                  sizes="320px"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                  {t('company.overview.assets.noImage')}
-                </div>
-              )}
+        {duplicatedAssets.map((property, index) => {
+          const title = t(property.titleKey)
+          const location = t(property.locationKey)
+          return (
+            <div
+              key={`${property.titleKey}-${index}`}
+              className="flex-shrink-0 w-64 md:w-80 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
+            >
+              <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
+                {property.image ? (
+                  <Image
+                    src={property.image}
+                    alt={title}
+                    fill
+                    className={`object-cover transition-transform duration-300 group-hover:scale-105 ${
+                      property.image.includes('helte') || property.image.includes('LOGO') 
+                        ? 'object-contain p-4' 
+                        : ''
+                    }`}
+                    sizes="320px"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                    {t('company.overview.assets.noImage')}
+                  </div>
+                )}
+              </div>
+              <div className="p-4 md:p-5">
+                <h3 className="text-lg md:text-xl font-bold text-navy-800 mb-2 line-clamp-2">
+                  {title}
+                </h3>
+                <p className="text-sm md:text-base text-gray-600">
+                  {location}
+                </p>
+              </div>
             </div>
-            <div className="p-4 md:p-5">
-              <h3 className="text-lg md:text-xl font-bold text-navy-800 mb-2 line-clamp-2">
-                {property.title}
-              </h3>
-              <p className="text-sm md:text-base text-gray-600">
-                {property.location}
-              </p>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

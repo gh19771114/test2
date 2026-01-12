@@ -87,9 +87,11 @@ export default function NewsDetailClient({ news }: { news: any }) {
           <div className="container-custom max-w-4xl">
             <div className="prose prose-lg max-w-none">
               {(() => {
-                const content = t(`news.items.${news.slug}.content`, { defaultValue: '' })
+                const content: string = String(
+                  t(`news.items.${news.slug}.content`, { defaultValue: '' })
+                )
                 // 将内容按双换行符分割成段落
-                const paragraphs = content.split('\n\n').filter((p: string) => p.trim())
+                const paragraphs = content.split('\n\n').filter(p => p.trim())
                 const hasContentImage = news.contentImage || (!news.headerImage && !news.contentImage && news.image)
                 
                 // 如果有正文图片，图片和文字内容布局

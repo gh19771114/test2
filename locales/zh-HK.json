@@ -319,7 +319,31 @@
       "financialPartnersTitle": "主要合作金融機構",
       "assetsTitle": "企業持有資產",
       "assets": {
-        "noImage": "暫無圖片"
+        "noImage": "暫無圖片",
+        "property1": {
+          "title": "本社大樓",
+          "location": "中央區日本橋"
+        },
+        "property2": {
+          "title": "新宿大坎廣場",
+          "location": "新宿西口 步行1分"
+        },
+        "property3": {
+          "title": "諾亞澀谷",
+          "location": "澀谷區"
+        },
+        "property4": {
+          "title": "日興帕雷斯南麻布",
+          "location": "港區南麻布"
+        },
+        "property5": {
+          "title": "ライオンズマンション平河町",
+          "location": "千代田區平河町"
+        },
+        "property6": {
+          "title": "Helte株式會社",
+          "location": "IT企業・最大股東"
+        }
       }
     },
     "philosophy": {
@@ -1663,7 +1687,7 @@
           "typeNote": "開放式F層",
           "station": "日比谷線「築地」站 步行3–5分",
           "stationNote": "「東銀座」「築地市場」也在步行範圍內",
-          "price": "約118〜130萬日元/月",
+          "price": "約100〜110萬日元/月",
           "priceNote": "※基於過往募集信息／請確認現況條件",
           "address": "東京都中央區築地4丁目12-2",
           "buildingName": "ライオンズマンション東銀座",
@@ -1702,7 +1726,7 @@
           "target3": "海外投資者對東京中心部收益不動產的取得",
           "notesText": "本頁面的租金・條件是基於過往公開信息的參考值。實際的募集條件・買賣價格・各項費用等，請務必確認最新資料和管理公司・中介公司的介紹。",
           "imageAlt": "ライオンズマンション東銀座外觀",
-          "expectedRentText": "根據過往的募集信息，約118〜130萬日元／月（含共益費）左右。",
+          "expectedRentText": "根據過往的募集信息，約100〜110萬日元／月（含共益費）左右。",
           "usageSuggestion": "利用路面可見性和交通便利性的物販店鋪・展示廳・診所・沙龍・辦公室等適合的靈活平面。",
           "referenceRentNote": "※請務必確認最新的條件・出售價格。"
         }

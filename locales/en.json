@@ -319,7 +319,31 @@
       "financialPartnersTitle": "Main Cooperative Financial Institutions",
       "assetsTitle": "Company Assets",
       "assets": {
-        "noImage": "No Image"
+        "noImage": "No Image",
+        "property1": {
+          "title": "Headquarters Building",
+          "location": "Nihonbashi, Chuo Ward"
+        },
+        "property2": {
+          "title": "Shinjuku Daikan Plaza",
+          "location": "Shinjuku West Exit, 1 min walk"
+        },
+        "property3": {
+          "title": "Noah Shibuya",
+          "location": "Shibuya Ward"
+        },
+        "property4": {
+          "title": "Nikko Palace Minami-Azabu",
+          "location": "Minami-Azabu, Minato Ward"
+        },
+        "property5": {
+          "title": "Lions Mansion Hirakawacho",
+          "location": "Hirakawacho, Chiyoda Ward"
+        },
+        "property6": {
+          "title": "Helte Corporation",
+          "location": "IT Company・Largest Shareholder"
+        }
       }
     },
     "philosophy": {

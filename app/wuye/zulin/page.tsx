@@ -75,7 +75,6 @@ export default function ZulinPage() {
   
   const stats = useMemo(() => [
     { value: t('wuye.zulin.stats.occupancyRate.value'), label: t('wuye.zulin.stats.occupancyRate.label'), icon: TrendingUp },
-    { value: t('wuye.zulin.stats.fastResponse.value'), label: t('wuye.zulin.stats.fastResponse.label'), icon: Clock },
     { value: t('wuye.zulin.stats.quickMoveIn.value'), label: t('wuye.zulin.stats.quickMoveIn.label'), icon: CheckCircle2 },
     { value: t('wuye.zulin.stats.managedProperties.value'), label: t('wuye.zulin.stats.managedProperties.label'), icon: Building2 },
   ], [t])
@@ -180,10 +179,6 @@ export default function ZulinPage() {
             >
               <div className="flex items-center gap-2 text-blue-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">{t('wuye.zulin.features.fastResponse')}</span>
-              </div>
-              <div className="flex items-center gap-2 text-blue-200">
-                <CheckCircle2 className="w-5 h-5" />
                 <span className="text-sm">{t('wuye.zulin.features.occupancyRate')}</span>
               </div>
               <div className="flex items-center gap-2 text-blue-200">
@@ -201,13 +196,13 @@ export default function ZulinPage() {
               variants={containerVariants}
               initial="hidden"
               animate={isStatsInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8"
+              className="flex flex-wrap justify-center gap-6 md:gap-8"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 text-center group"
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 text-center group w-full sm:w-auto sm:min-w-[200px]"
                 >
                   <div className="flex justify-center mb-4">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">

@@ -1,38 +1,38 @@
 export type InvestmentProperty = {
-  title: string
-  location: string
+  titleKey: string
+  locationKey: string
   image: string | null
 }
 
 export const investmentProperties: InvestmentProperty[] = [
   {
-    title: '本社ビル',
-    location: '中央区日本橋',
-    image: '/imgs/hongxia.png',
+    titleKey: 'company.overview.assets.property1.title',
+    locationKey: 'company.overview.assets.property1.location',
+    image: '/imgs/honsha.png',
   },
   {
-    title: '新宿ダイカンプラザ',
-    location: '新宿西口 徒歩1分',
+    titleKey: 'company.overview.assets.property2.title',
+    locationKey: 'company.overview.assets.property2.location',
     image: '/imgs/kura.png',
   },
   {
-    title: 'ノア渋谷',
-    location: '渋谷区',
+    titleKey: 'company.overview.assets.property3.title',
+    locationKey: 'company.overview.assets.property3.location',
     image: null, // 没有照片
   },
   {
-    title: '日興パレス南麻布',
-    location: '港区南麻布',
+    titleKey: 'company.overview.assets.property4.title',
+    locationKey: 'company.overview.assets.property4.location',
     image: '/imgs/hiragamachi.png',
   },
   {
-    title: 'ライオンズマンション平河町',
-    location: '千代田区平河町',
+    titleKey: 'company.overview.assets.property5.title',
+    locationKey: 'company.overview.assets.property5.location',
     image: '/imgs/minamiazabu.png',
   },
   {
-    title: 'Helte株式会社',
-    location: 'IT企業・最大株主',
+    titleKey: 'company.overview.assets.property6.title',
+    locationKey: 'company.overview.assets.property6.location',
     image: '/imgs/helte LOGO.png',
   },
 ]
