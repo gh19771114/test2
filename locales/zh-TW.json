@@ -1511,7 +1511,7 @@
       "referenceAmount": "参考金额",
       "capitalGainsTax": "根据买卖时获取的收入的10%~30%收取",
       "back": "返回",
-      "nonResidentNote": "※除上述费用之外，持有人为非居住者的情况下，另外需要向政府缴纳源泉征收税。金额约为成交价的<span className=\"font-semibold text-green-700\">10.21%</span>。该项税费可在第二年申请退税。",
+      "nonResidentNote": "※除上述费用之外，持有人为非居住者的情况下，买主需要将买卖金额的<span className=\"font-semibold text-green-700\">10.21%</span>缴纳给税务局充当源泉征收税。卖主可以在第二年申请退税。",
       "disclaimer": "※不同的交易情况，具体金额有所不同。详情请联系我们获取详细信息。",
       "buying": {
         "fee1": {

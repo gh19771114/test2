@@ -3,9 +3,9 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Building2, Train, TrendingUp, Clock, ArrowLeft } from 'lucide-react'
+import { MapPin, Building2, Train, TrendingUp, Clock, ArrowLeft, X } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export default function LionsHigashiGinza2FPage() {
   const { t } = useLanguage()
@@ -13,6 +13,10 @@ export default function LionsHigashiGinza2FPage() {
   const labels = t('maimai.propertyDetail.labels', { returnObjects: true }) as any
   const categories = t('maimai.propertyDetail.categories', { returnObjects: true }) as any
   const [isMobileLandscape, setIsMobileLandscape] = useState(false)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+  const mobileVideoRef = useRef<HTMLVideoElement>(null)
+  const desktopVideoRef = useRef<HTMLVideoElement>(null)
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
   
   // 处理重复的"约"：如果面积中包含"约"，就去掉坪数中的"约"
   const getPingText = () => {
@@ -41,6 +45,63 @@ export default function LionsHigashiGinza2FPage() {
       window.removeEventListener('orientationchange', checkOrientation)
     }
   }, [])
+
+  // 处理视频自动播放和加载
+  useEffect(() => {
+    const setupVideo = (video: HTMLVideoElement | null) => {
+      if (!video) return
+      
+      video.muted = true
+      video.playsInline = true
+      video.setAttribute('playsinline', 'true')
+      video.setAttribute('webkit-playsinline', 'true')
+      video.setAttribute('x5-playsinline', 'true')
+      
+      const tryPlay = async () => {
+        try {
+          await video.play()
+        } catch (error) {
+          console.log('视频自动播放被阻止，等待用户交互')
+        }
+      }
+      
+      // 监听视频加载完成
+      const handleCanPlay = () => {
+        tryPlay()
+      }
+      
+      // 监听错误
+      const handleError = (e: Event) => {
+        console.error('视频加载错误:', e)
+      }
+      
+      video.addEventListener('canplay', handleCanPlay)
+      video.addEventListener('error', handleError)
+      
+      // 立即尝试播放
+      tryPlay()
+      
+      return () => {
+        video.removeEventListener('canplay', handleCanPlay)
+        video.removeEventListener('error', handleError)
+      }
+    }
+
+    const cleanup1 = mobileVideoRef.current ? setupVideo(mobileVideoRef.current) : undefined
+    const cleanup2 = desktopVideoRef.current ? setupVideo(desktopVideoRef.current) : undefined
+    
+    return () => {
+      cleanup1?.()
+      cleanup2?.()
+    }
+  }, [])
+
+  // 打开弹窗时播放视频
+  useEffect(() => {
+    if (isVideoModalOpen && modalVideoRef.current) {
+      modalVideoRef.current.play().catch(console.error)
+    }
+  }, [isVideoModalOpen])
   
   return (
     <PageLayout>
@@ -71,16 +132,22 @@ export default function LionsHigashiGinza2FPage() {
                 <div className="lions-higashiginza-video-info-container">
                   {/* 视频 - 手机竖版显示在介绍文案下面，iPad竖版显示在左边 */}
                   <div className="mt-6 lions-higashiginza-video-mobile-portrait">
-                    <div className="relative h-64 w-full overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
+                    <div 
+                      className="relative h-64 w-full overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg cursor-pointer"
+                      onClick={() => setIsVideoModalOpen(true)}
+                    >
                       <video
-                        src="/movie/higashiginza.mp4"
+                        ref={mobileVideoRef}
                         className="w-full h-full object-cover"
-                        autoPlay
                         loop
                         muted
                         playsInline
-                        preload="metadata"
-                      />
+                        preload="auto"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      >
+                        <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                        您的浏览器不支持视频播放。
+                      </video>
                     </div>
                   </div>
 
@@ -124,16 +191,22 @@ export default function LionsHigashiGinza2FPage() {
 
               {/* 右侧视频 - 桌面版和iPad横版 */}
               <div className="mt-8 flex-1 justify-center lg:flex lions-higashiginza-video-desktop">
-                <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
+                <div 
+                  className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg cursor-pointer"
+                  onClick={() => setIsVideoModalOpen(true)}
+                >
                   <video
-                    src="/movie/higashiginza.mp4"
+                    ref={desktopVideoRef}
                     className="w-full h-full object-cover"
-                    autoPlay
                     loop
                     muted
                     playsInline
-                    preload="metadata"
-                  />
+                    preload="auto"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  >
+                    <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                    您的浏览器不支持视频播放。
+                  </video>
                 </div>
               </div>
             </div>
@@ -354,6 +427,37 @@ export default function LionsHigashiGinza2FPage() {
             </div>
           </div>
         </section>
+
+        {/* 视频播放器弹窗 */}
+        {isVideoModalOpen && (
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99999] flex items-center justify-center p-4"
+            onClick={() => setIsVideoModalOpen(false)}
+          >
+            <div 
+              className="relative w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsVideoModalOpen(false)}
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-colors"
+                aria-label="关闭"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <video
+                ref={modalVideoRef}
+                className="w-full h-full object-contain"
+                controls
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              >
+                <source src="/movie/higashiginza_2.mp4" type="video/mp4" />
+                您的浏览器不支持视频播放。
+              </video>
+            </div>
+          </div>
+        )}
       </main>
     </PageLayout>
   )

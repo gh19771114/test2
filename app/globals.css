@@ -72,6 +72,20 @@
     min-height: 12rem !important;
   }
   
+  /* 确保视频元素在容器内正确显示 */
+  .lions-higashiginza-video-mobile-portrait video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    pointer-events: none !important; /* 让点击事件穿透到父容器 */
+  }
+  
+  /* 确保视频容器可以接收点击事件 */
+  .lions-higashiginza-video-mobile-portrait > div {
+    pointer-events: auto !important;
+  }
+  
   /* 减小视频和方块之间的间距 */
   .lions-higashiginza-video-info-container {
     margin-top: 0 !important;
