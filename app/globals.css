@@ -5228,3 +5228,29 @@ article.saikai-awards-page section[class*="section-padding"] {
     margin-top: var(--saikai-spacing-lg) !important;
   }
 }
+
+/* 企业概要页面：iPad版本公司大楼图放大到200% */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .company-overview-ipad-image {
+    width: 16rem !important; /* 从 w-32 (8rem) 放大到 16rem (200%) */
+    height: 16rem !important;
+    min-width: 16rem !important;
+    min-height: 16rem !important;
+  }
+}
+
+/* 企业概要页面：手机竖版公司大楼图全宽显示 */
+@media (max-width: 767px) and (orientation: portrait) {
+  .company-overview-mobile-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .company-overview-mobile-image img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+}

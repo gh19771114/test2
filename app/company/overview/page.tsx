@@ -97,21 +97,34 @@ export default function CompanyOverviewPage() {
           <div className="container-custom">
             <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-3 md:gap-6 items-stretch">
               <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-3 md:p-6 relative">
-                {/* 手机版和iPad版：公司大楼图片放在容器内右上方 */}
-                <div className="xl:hidden absolute top-3 right-3 w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden border border-blue-100 shadow-md z-10">
+                {/* 手机竖版：公司大楼图片放在容器上面 */}
+                <div className="md:hidden mb-4 w-full rounded-xl overflow-hidden border border-blue-100 shadow-md company-overview-mobile-image">
+                  <Image
+                    src="/imgs/honsha.png"
+                    alt={t('company.overview.headquartersImageAlt')}
+                    width={800}
+                    height={600}
+                    className="w-full h-auto object-contain"
+                    priority={false}
+                    sizes="100vw"
+                  />
+                </div>
+                
+                {/* iPad版：公司大楼图片放在容器内右上方 */}
+                <div className="hidden md:block xl:hidden absolute top-3 right-3 company-overview-ipad-image rounded-xl overflow-hidden border border-blue-100 shadow-md z-10">
                   <Image
                     src="/imgs/honsha.png"
                     alt={t('company.overview.headquartersImageAlt')}
                     fill
                     className="object-cover"
                     priority={false}
-                    sizes="128px"
+                    sizes="256px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-transparent to-transparent"></div>
                 </div>
                 
-                <h2 className="text-xl md:text-2xl font-bold text-navy-700 mb-2 md:mb-4 pr-28 md:pr-36 xl:pr-0">{t('company.overview.profileTitle')}</h2>
-                <div className="space-y-1.5 md:space-y-2.5 pr-28 md:pr-36 xl:pr-0">
+                <h2 className="text-xl md:text-2xl font-bold text-navy-700 mb-2 md:mb-4 md:pr-36 xl:pr-0">{t('company.overview.profileTitle')}</h2>
+                <div className="space-y-1.5 md:space-y-2.5 md:pr-36 xl:pr-0">
                   {corporateProfile.map((item, index) => {
                     const isCompanyName = (item as any).isCompanyName
                     const isHeadquartersAddress = item.label === t('company.overview.profile.headquartersAddress')
