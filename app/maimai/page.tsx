@@ -1148,7 +1148,7 @@ export default function MaiMaiPage() {
                   <>
                     <p className="text-sm text-gray-500 mb-2">{t('maimai.fees.referenceAmount')}</p>
                     <p className={`text-xl md:text-2xl font-bold ${
-                      selectedFee.type === 'buy' ? 'text-blue-700' : selectedFee.type === 'sell' ? 'text-green-700' : 'text-gray-700'
+                      selectedFee.type === 'buy' ? 'text-blue-700' : 'text-green-700'
                     }`}>
                       {selectedFee.rate}
                     </p>
