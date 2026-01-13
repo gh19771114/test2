@@ -1512,6 +1512,9 @@ section#partners.desktop-partners-network .yellow-network-container {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   .company-ceo-profile-intro {
@@ -1520,6 +1523,7 @@ section#partners.desktop-partners-network .yellow-network-container {
     gap: 1.25rem !important;
     align-items: start !important;
     padding: 1.5rem !important;
+    max-width: 100% !important;
   }
   
   .company-ceo-profile-intro-content {
@@ -1777,6 +1781,9 @@ section#partners.desktop-partners-network .yellow-network-container {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
+    max-width: 1000px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   
   .company-ceo-profile-intro {
@@ -1785,6 +1792,7 @@ section#partners.desktop-partners-network .yellow-network-container {
     gap: 1.25rem !important;
     align-items: start !important;
     padding: 1.5rem !important;
+    max-width: 100% !important;
   }
   
   .company-ceo-profile-intro-content {
@@ -2402,13 +2410,14 @@ section#partners.desktop-partners-network .yellow-network-container {
     
     .company-ceo-profile-intro {
       display: grid !important;
-      grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr) !important;
-      gap: 1rem !important;
-      align-items: stretch !important;
+      grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr) !important;
+      gap: 0.75rem !important;
+      align-items: start !important;
       width: 100% !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
-      overflow: hidden !important;
+      overflow: visible !important;
+      padding: 0.75rem !important;
     }
     
     .company-ceo-profile-intro-content {
@@ -2421,10 +2430,10 @@ section#partners.desktop-partners-network .yellow-network-container {
       opacity: 1 !important;
       max-width: 100% !important;
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       min-height: 0 !important;
-      aspect-ratio: unset !important;
-      align-self: stretch !important;
+      aspect-ratio: 3 / 4 !important;
+      align-self: start !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
       position: relative !important;
@@ -3251,55 +3260,43 @@ section#partners.desktop-partners-network .yellow-network-container {
       width: 100% !important;
     }
     
-    /* 手机竖版：董事长介绍页面 - 与iPad竖版一模一样的布局 */
+    /* 手机竖版：董事长介绍页面 - 照片放大，文案环绕包围 */
     .company-ceo-profile-container {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      gap: 0.75rem !important;
-      align-items: start !important;
+      display: block !important;
       width: 100% !important;
       max-width: 100% !important;
       padding-left: 1rem !important;
       padding-right: 1rem !important;
       box-sizing: border-box !important;
-      overflow: hidden !important;
+      overflow: visible !important;
     }
     
     .company-ceo-profile-intro {
-      display: grid !important;
-      grid-template-columns: minmax(0, 0.28fr) minmax(0, 0.72fr) !important;
-      gap: 1rem !important;
-      align-items: start !important;
+      display: block !important;
       width: 100% !important;
       max-width: 100% !important;
       padding: 1rem !important;
       box-sizing: border-box !important;
-      overflow: hidden !important;
+      overflow: visible !important;
     }
     
     .company-ceo-profile-intro-content {
-      display: contents !important;
+      display: block !important;
     }
     
     .company-ceo-profile-image {
       display: block !important;
-      max-width: 100% !important;
-      width: 100% !important;
+      max-width: 40% !important;
+      width: 40% !important;
       height: auto !important;
-      align-self: start !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
-      /* 覆盖Tailwind类 */
-      float: none !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      margin-bottom: 0 !important;
+      /* 浮动布局，让文案环绕 */
+      float: left !important;
+      margin-right: 1rem !important;
+      margin-bottom: 0.5rem !important;
       margin-top: 0 !important;
-      margin: 0 !important;
-      /* 覆盖max-w-sm和mx-auto */
-      max-width: 100% !important;
       margin-left: 0 !important;
-      margin-right: 0 !important;
       /* 确保aspect-ratio正确 */
       aspect-ratio: 3 / 4 !important;
     }
@@ -3311,9 +3308,8 @@ section#partners.desktop-partners-network .yellow-network-container {
     .company-ceo-profile-intro-text {
       width: 100% !important;
       max-width: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
+      display: block !important;
+      overflow: visible !important;
     }
     
     .company-ceo-profile-intro-text h2 {
