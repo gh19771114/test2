@@ -1735,14 +1735,14 @@ section#partners.desktop-partners-network .yellow-network-container {
     max-width: 100vw !important;
     overflow-x: hidden !important;
     position: relative !important;
-    min-height: 90vh !important;
     height: 90vh !important;
+    max-height: 90vh !important;
     overflow-y: hidden !important;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
   }
 
-  /* iPad横版：社长照片向右移动100px，向下移动20px，参考桌面版位置逻辑 */
+  /* iPad横版：社长照片向右移动100px，向下移动20px，参考桌面版位置逻辑，固定位置不缩放 */
   .ipad-landscape-message>div.absolute.inset-0.flex.justify-center {
     transform: translateX(100px) translateY(20px) !important;
     position: absolute !important;
@@ -1751,6 +1751,29 @@ section#partners.desktop-partners-network .yellow-network-container {
     right: 0 !important;
     bottom: 0 !important;
     z-index: 1 !important;
+    will-change: auto !important;
+  }
+  
+  /* iPad横版：确保人物图片容器固定尺寸，不缩放 */
+  .ipad-landscape-message>div.absolute.inset-0.flex.justify-center>div {
+    width: 100% !important;
+    max-width: 1120px !important;
+    height: 90vh !important;
+    transform: none !important;
+    scale: 1 !important;
+    will-change: auto !important;
+  }
+  
+  /* iPad横版：确保人物图片不缩放，固定尺寸 */
+  .ipad-landscape-message>div.absolute.inset-0.flex.justify-center>div img,
+  .ipad-landscape-message>div.absolute.inset-0.flex.justify-center>div span,
+  .ipad-landscape-message>div.absolute.inset-0.flex.justify-center>div span img {
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: bottom !important;
   }
 
   /* iPad横版：文案容器，参考桌面版位置逻辑 */
@@ -2042,8 +2065,11 @@ section#partners.desktop-partners-network .yellow-network-container {
 
   .ipad-portrait-message {
     display: block !important;
+    height: 90vh !important;
+    max-height: 90vh !important;
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
+    overflow-y: hidden !important;
   }
   
   /* iPad竖版：页尾位置固定，不随滚动移动 */
@@ -2051,6 +2077,27 @@ section#partners.desktop-partners-network .yellow-network-container {
   .ipad-portrait-message + footer {
     margin-top: 0 !important;
     position: relative !important;
+  }
+  
+  /* iPad竖版：确保人物图片容器固定transform，不随滚动变化 */
+  .ipad-portrait-message>div.absolute.inset-0.flex.justify-center>div {
+    transform: scale(2) translateX(-70px) translateY(-220px) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    will-change: auto !important;
+    position: relative !important;
+  }
+  
+  /* iPad竖版：确保人物图片不缩放，固定尺寸 */
+  .ipad-portrait-message>div.absolute.inset-0.flex.justify-center>div img,
+  .ipad-portrait-message>div.absolute.inset-0.flex.justify-center>div span,
+  .ipad-portrait-message>div.absolute.inset-0.flex.justify-center>div span img {
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: bottom !important;
   }
 
   /* iPad竖版：文字部分移到页面左边，避免遮挡图片 */
