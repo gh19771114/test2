@@ -59,7 +59,7 @@ export default function TouZiPage() {
                           {item.image ? (
                             <Image
                               src={item.image}
-                              alt={item.title}
+                              alt={t(item.titleKey)}
                               fill
                               className={item.image.includes('helte') ? "object-contain transition-transform duration-300 group-hover:scale-105 p-4" : "object-cover transition-transform duration-300 group-hover:scale-105"}
                               sizes="300px"
@@ -69,8 +69,8 @@ export default function TouZiPage() {
                           )}
                         </div>
                         <div className="p-5">
-                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{item.title}</h4>
-                          <p className="text-sm text-gray-600">{item.location}</p>
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{t(item.titleKey)}</h4>
+                          <p className="text-sm text-gray-600">{t(item.locationKey)}</p>
                         </div>
                       </div>
                     ))}

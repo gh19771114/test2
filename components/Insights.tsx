@@ -311,9 +311,8 @@ const Insights = () => {
                 maxHeight: '400px',
                 minHeight: '400px',
                 willChange: 'scroll-position',
-                WebkitOverflowScrolling: 'touch',
-                overflowScrolling: 'touch'
-              }}
+                WebkitOverflowScrolling: 'touch'
+              } as React.CSSProperties}
               onWheel={(e) => handleWheel(e, newsScrollContainerRef, newsIsUserScrollingRef, newsScrollTimeoutRef)}
               onMouseLeave={() => handleMouseLeave(newsIsUserScrollingRef, newsLastScrollTimeRef)}
             >
