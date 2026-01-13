@@ -70,7 +70,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
               <div className={`mt-6 md:mt-8 rounded-2xl overflow-hidden shadow-lg ${isSaikaiPage ? 'saikai-header-image' : ''}`}>
                 <div className={`relative w-full h-64 md:h-96 lg:h-[500px] ${isSaikaiPage ? 'saikai-header-image-container' : ''}`}>
                   <Image
-                    src={news.headerImage || news.image}
+                    src={news.headerImage || news.image || '/imgs/background.png'}
                     alt={t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
                     fill
                     className="object-cover"
@@ -129,7 +129,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                           {!news.headerImage && !news.contentImage && news.image && (
                             <div className="flex-shrink-0 w-full md:w-[32%] lg:w-[28%]">
                               <div className="rounded-lg overflow-hidden shadow-lg bg-gray-100">
-                                {news.image.includes('facebook.com') ? (
+                                {news.image && news.image.includes('facebook.com') ? (
                                   <img
                                     src={news.image}
                                     alt={t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
@@ -205,7 +205,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                         {!news.headerImage && !news.contentImage && news.image && (
                           <div className="flex-shrink-0 w-[32%] lg:w-[28%]">
                             <div className="rounded-lg overflow-hidden shadow-lg bg-gray-100">
-                              {news.image.includes('facebook.com') ? (
+                              {news.image && news.image.includes('facebook.com') ? (
                                 <img
                                   src={news.image}
                                   alt={t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
