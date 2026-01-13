@@ -1740,10 +1740,10 @@ section#partners.desktop-partners-network .yellow-network-container {
     overflow-y: hidden !important;
   }
 
-  /* iPad横版：社长照片向右移动100px，向下移动20px，固定位置 */
+  /* iPad横版：社长照片向右移动100px，向下移动20px，参考桌面版位置逻辑 */
   .ipad-landscape-message>div.absolute.inset-0.flex.justify-center {
     transform: translateX(100px) translateY(20px) !important;
-    position: fixed !important;
+    position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -1751,13 +1751,9 @@ section#partners.desktop-partners-network .yellow-network-container {
     z-index: 1 !important;
   }
 
-  /* iPad横版：文案容器固定位置，不随页尾移动 */
+  /* iPad横版：文案容器，参考桌面版位置逻辑 */
   .ipad-landscape-message .container-custom {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
+    position: relative !important;
     z-index: 10 !important;
   }
 
@@ -2082,7 +2078,7 @@ section#partners.desktop-partners-network .yellow-network-container {
     font-feature-settings: 'kern' 1, 'liga' 1 !important;
   }
 
-  /* iPad竖版：图片移到右边，避免与文字重叠，固定位置 */
+  /* iPad竖版：图片移到右边，避免与文字重叠，参考桌面版位置逻辑 */
   .ipad-portrait-message>div.absolute.inset-0.flex.justify-center {
     padding-left: 0 !important;
     justify-content: flex-end !important;
@@ -2090,7 +2086,7 @@ section#partners.desktop-partners-network .yellow-network-container {
     left: auto !important;
     right: 0 !important;
     width: 40% !important;
-    position: fixed !important;
+    position: absolute !important;
     z-index: 1 !important;
   }
 
