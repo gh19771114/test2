@@ -14,8 +14,21 @@ const metallicGrayStyle = {
   backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.04) 2px, rgba(255, 255, 255, 0.04) 4px), radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%)'
 }
 
+// 案例详情数据类型
+type CaseDetail = {
+  date: string
+  type: string
+  title: string
+  location: string
+  category: string
+  image: string
+  description: string
+  details: string[]
+  highlights: Array<{ label: string; value: string }>
+}
+
 // 案例详情数据
-const caseDetails: Record<string, any> = {
+const caseDetails: Record<string, CaseDetail> = {
   'grand-maison-asakusa-1302': {
     date: '2025/08/25',
     type: '销售',
@@ -486,7 +499,7 @@ export default function CaseDetailPage() {
                 <div className="bg-white rounded-2xl shadow-lg p-6">
                   <h3 className="text-xl font-bold text-navy-700 mb-4">{t('cases.detail.highlights')}</h3>
                   <div className="space-y-4">
-                    {caseItem.highlights.map((highlight: any, index: number) => (
+                    {caseItem.highlights.map((highlight: { label: string; value: string }, index: number) => (
                       <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
                         <span className="text-gray-600">{highlight.label}</span>
                         <span className="text-navy-700 font-semibold">{highlight.value}</span>

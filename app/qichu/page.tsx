@@ -4,7 +4,7 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, Users, Briefcase, Landmark, Globe, Calendar, Store, Palette, Monitor, Sparkles, Megaphone, Target, FileCheck, LifeBuoy } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
@@ -52,6 +52,17 @@ type Partner = {
 }
 
 type PartnerIcon = typeof Building2 | typeof Users | typeof Briefcase | typeof Globe | typeof Landmark
+
+type Project = {
+  title: string
+  result: string
+}
+
+type ProjectData = {
+  id: string
+  date: string
+  image: string
+}
 
 // 合作伙伴网络组件（带动画）
 function PartnersNetwork({ partners, partnerIcons, containerRef }: { partners: Partner[], partnerIcons: PartnerIcon[], containerRef: React.RefObject<HTMLDivElement> }) {
@@ -294,7 +305,30 @@ function PartnersNetworkContent({
   lineVariants,
   centerVariants,
   cardVariants
-}: any) {
+}: {
+  networkContainerRef: React.RefObject<HTMLDivElement>
+  ref: React.RefObject<SVGSVGElement>
+  shouldAnimate: boolean
+  containerVariants: Variants
+  containerWidth: number
+  containerHeight: number
+  networkScale: number
+  redBoxHeight: string
+  blueBoxHeight: string
+  blueBoxScale: number
+  yellowBoxScale: number
+  partners: Partner[]
+  partnerIcons: PartnerIcon[]
+  angleOffsets: number[]
+  centerX: number
+  centerY: number
+  baseRadius: number
+  cardWidth: number
+  cardHeight: number
+  lineVariants: Variants
+  centerVariants: Variants
+  cardVariants: Variants
+}) {
   return (
     <>
       {/* 黑白世界地图背景 - 白框，直接相对于绿框定位 */}
@@ -587,8 +621,15 @@ export default function QiChuPage() {
   
   // 从多语言文件读取合作伙伴数据
   const partners = useMemo(() => {
-    const partnersList = t('qichu.partners.list', { returnObjects: true }) as any[]
-    return partnersList.map((p: any) => ({
+    type PartnerFromLocale = {
+      name: string
+      desc: string
+      icon?: string | null
+      wide?: boolean
+      link?: string
+    }
+    const partnersList = t('qichu.partners.list', { returnObjects: true }) as PartnerFromLocale[]
+    return partnersList.map((p: PartnerFromLocale) => ({
       name: p.name,
       desc: p.desc,
       icon: null,
@@ -598,7 +639,7 @@ export default function QiChuPage() {
   }, [t])
   
   // 从多语言文件读取项目数据
-  const projects = useMemo(() => {
+  const projects = useMemo((): Project[] => {
     return [
       {
         title: t('qichu.cases.project1.title'),
@@ -1400,13 +1441,14 @@ export default function QiChuPage() {
                 <div className="flex gap-6 min-w-max">
                   {projects.map((project, index) => {
                     // 从案例展示页面获取对应的图片和日期
-                    const projectData = {
+                    const projectDataMap: Record<string, ProjectData> = {
                       '金山 WPS 日本子公司设立服务': {
                         id: 'kingsoft-wps-japan',
                         date: '2024/11/15',
                         image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
                       },
-                    }[project.title] || {
+                    }
+                    const projectData: ProjectData = projectDataMap[project.title] || {
                       id: `project-${index}`,
                       date: '2024/01/01',
                       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',

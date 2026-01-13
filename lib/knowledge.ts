@@ -80,9 +80,21 @@ export function extractDateFromWebString(dateStr: string, copyrightYear?: number
   return date.toISOString().split('T')[0]
 }
 
+// 最新资讯数据类型
+export type NewsItem = {
+  date: string
+  slug: string
+  isPinned?: boolean
+  isNotice?: boolean
+  category?: string
+  image?: string
+  headerImage?: string
+  contentImage?: string
+}
+
 // 最新资讯数据
 // 注意：title 和 content 现在通过翻译文件提供，使用翻译键：news.items.{slug}.title 和 news.items.{slug}.content
-export const latestNews = [
+export const latestNews: NewsItem[] = [
   {
     date: '2026-01-07',
     slug: 'president-attends-saikai-awards-2025',

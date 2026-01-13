@@ -5,12 +5,13 @@ import { Calendar, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { NewsItem } from '@/lib/knowledge'
 
-export default function NewsDetailClient({ news }: { news: any }) {
+export default function NewsDetailClient({ news }: { news: NewsItem }) {
   const { t } = useLanguage()
 
   // 获取分类标识
-  const getCategoryLabel = (news: any) => {
+  const getCategoryLabel = (news: NewsItem) => {
     if (news.category) {
       // 如果category是"公司活动"，需要翻译
       if (news.category === '公司活动') {

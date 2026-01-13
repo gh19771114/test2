@@ -2,7 +2,6 @@
 
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import ServiceTimeline from '@/components/ServiceTimeline'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useMemo } from 'react'
@@ -45,24 +44,7 @@ export default function XiushanPage() {
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isProcessInView = useInView(processRef, { once: true, margin: '-100px' })
   
-  // 从多语言文件读取数据
-  const timelineItems = useMemo(() => [
-    {
-      time: t('wuye.xiushan.timeline.item1.time'),
-      title: t('wuye.xiushan.timeline.item1.title'),
-      description: t('wuye.xiushan.timeline.item1.description'),
-    },
-    {
-      time: t('wuye.xiushan.timeline.item2.time'),
-      title: t('wuye.xiushan.timeline.item2.title'),
-      description: t('wuye.xiushan.timeline.item2.description'),
-    },
-    {
-      time: t('wuye.xiushan.timeline.item3.time'),
-      title: t('wuye.xiushan.timeline.item3.title'),
-      description: t('wuye.xiushan.timeline.item3.description'),
-    },
-  ], [t])
+  // 从多语言文件读取数据（时间线内容已整合到服务项目中）
   
   const stats = useMemo(() => [
     { value: t('wuye.xiushan.stats.emergencyResponse.value'), label: t('wuye.xiushan.stats.emergencyResponse.label'), icon: Clock },
@@ -71,32 +53,45 @@ export default function XiushanPage() {
     { value: t('wuye.xiushan.stats.speed.value'), label: t('wuye.xiushan.stats.speed.label'), icon: AlertCircle },
   ], [t])
   
-  const services = useMemo(() => [
-    {
-      title: t('wuye.xiushan.services.service1.title'),
-      icon: AlertCircle,
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      description: t('wuye.xiushan.services.service1.description'),
-      items: (t('wuye.xiushan.services.service1.items', { returnObjects: true }) as string[]) || [],
-      color: 'from-orange-500 to-orange-600',
-    },
-    {
-      title: t('wuye.xiushan.services.service2.title'),
-      icon: Settings,
-      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      description: t('wuye.xiushan.services.service2.description'),
-      items: (t('wuye.xiushan.services.service2.items', { returnObjects: true }) as string[]) || [],
-      color: 'from-blue-500 to-blue-600',
-    },
-    {
-      title: t('wuye.xiushan.services.service3.title'),
-      icon: Hammer,
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      description: t('wuye.xiushan.services.service3.description'),
-      items: (t('wuye.xiushan.services.service3.items', { returnObjects: true }) as string[]) || [],
-      color: 'from-purple-500 to-purple-600',
-    },
-  ], [t])
+  const services = useMemo(() => {
+    const baseServices = [
+      {
+        title: t('wuye.xiushan.services.service1.title'),
+        icon: AlertCircle,
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        description: t('wuye.xiushan.services.service1.description'),
+        items: (t('wuye.xiushan.services.service1.items', { returnObjects: true }) as string[]) || [],
+        timeline: {
+          time: t('wuye.xiushan.timeline.item1.time'),
+          title: t('wuye.xiushan.timeline.item1.title'),
+          description: t('wuye.xiushan.timeline.item1.description'),
+        },
+        color: 'from-orange-500 to-orange-600',
+      },
+      {
+        title: t('wuye.xiushan.services.service2.title'),
+        icon: Settings,
+        image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        description: t('wuye.xiushan.services.service2.description'),
+        items: (t('wuye.xiushan.services.service2.items', { returnObjects: true }) as string[]) || [],
+        timeline: {
+          time: t('wuye.xiushan.timeline.item2.time'),
+          title: t('wuye.xiushan.timeline.item2.title'),
+          description: t('wuye.xiushan.timeline.item2.description'),
+        },
+        color: 'from-blue-500 to-blue-600',
+      },
+      {
+        title: t('wuye.xiushan.services.service3.title'),
+        icon: Hammer,
+        image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        description: t('wuye.xiushan.services.service3.description'),
+        items: (t('wuye.xiushan.services.service3.items', { returnObjects: true }) as string[]) || [],
+        color: 'from-purple-500 to-purple-600',
+      },
+    ]
+    return baseServices
+  }, [t])
   
   const processSteps = useMemo(() => [
     {
@@ -240,31 +235,41 @@ export default function XiushanPage() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="group relative bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                  className="group relative bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-300 transition-all duration-300 hover:shadow-2xl"
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-xl font-bold text-white mb-1">{service.title}</h3>
-                      <p className="text-sm text-white/90">{service.description}</p>
+                  <div className="flex flex-col">
+                    <div className="relative w-full h-32 overflow-hidden">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <ul className="space-y-3">
-                      {service.items.map((item, itemIndex) => (
-                        <li key={itemIndex} className="flex items-start gap-3">
-                          <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
-                          <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="flex-1 p-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">{service.title}</h3>
+                      <p className="text-sm text-gray-600 mb-4">{service.description}</p>
+                      <ul className="space-y-2 mb-4">
+                        {service.items.map((item, itemIndex) => (
+                          <li key={itemIndex} className="flex items-start gap-3">
+                            <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
+                            <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      {service.timeline && (
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Clock className="w-4 h-4 text-gray-500" />
+                            <span className="text-xs font-semibold text-gray-500">{service.timeline.time}</span>
+                          </div>
+                          <h4 className="text-sm font-semibold text-gray-800 mb-1">{service.timeline.title}</h4>
+                          <p className="text-xs text-gray-600 leading-relaxed">{service.timeline.description}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -314,13 +319,6 @@ export default function XiushanPage() {
           </div>
         </section>
 
-        {/* Timeline Section */}
-        <section className="section-padding">
-          <div className="container-custom max-w-4xl mx-auto">
-            <ServiceTimeline items={timelineItems} />
-            <p className="text-sm text-gray-400 text-center mt-6">{t('wuye.xiushan.timelineNote')}</p>
-          </div>
-        </section>
       </div>
     </PageLayout>
   )

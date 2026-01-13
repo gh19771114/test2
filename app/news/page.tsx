@@ -10,7 +10,7 @@ export default function NewsListPage() {
   const { t } = useLanguage()
 
 // 获取分类标识
-  const getCategoryLabel = (news: any) => {
+  const getCategoryLabel = (news: { category?: string; isNotice?: boolean }) => {
   if (news.category) {
       // 如果category是"公司活动"，需要翻译
       if (news.category === '公司活动') {
