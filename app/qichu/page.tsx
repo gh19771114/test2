@@ -66,7 +66,7 @@ type ProjectData = {
 
 // 合作伙伴网络组件（带动画）
 function PartnersNetwork({ partners, partnerIcons, containerRef }: { partners: Partner[], partnerIcons: PartnerIcon[], containerRef: React.RefObject<HTMLDivElement> }) {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
   const networkContainerRef = useRef<HTMLDivElement>(null)
   const [hasAnimated, setHasAnimated] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
@@ -307,7 +307,7 @@ function PartnersNetworkContent({
   cardVariants
 }: {
   networkContainerRef: React.RefObject<HTMLDivElement>
-  ref: React.RefObject<SVGSVGElement>
+  ref: React.RefObject<HTMLDivElement>
   shouldAnimate: boolean
   containerVariants: Variants
   containerWidth: number
@@ -679,7 +679,7 @@ export default function QiChuPage() {
   const whiteBoxRef = useRef<HTMLDivElement>(null) // 白框（地图背景）的引用
   const networkContainerRef = useRef<HTMLDivElement>(null)
   const networkContentRef = useRef(null)
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   // 网络图相关变量（缩小5%）
   const shouldAnimate = true
