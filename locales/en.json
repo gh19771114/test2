@@ -343,6 +343,10 @@
         "property6": {
           "title": "Helte Corporation",
           "location": "IT Company・Largest Shareholder"
+        },
+        "property7": {
+          "title": "ボーンマークビルディング",
+          "location": "品川区東五反田"
         }
       }
     },
@@ -658,15 +662,15 @@
       "subtitle": "Rental Management",
       "description": "Provide full-process management services from tenant screening, contract signing to move-in and move-out, ensuring your property is quickly rented and continues to generate stable income.",
       "features": {
-        "fastResponse": "24-hour rapid response",
+        "fastResponse": "Rapid response",
         "occupancyRate": "96%+ average occupancy rate",
         "quickMoveIn": "Fastest 2 weeks to complete move-in"
       },
       "timeline": {
         "item1": {
-          "time": "Within 24 hours",
+          "time": "Promptly",
           "title": "Tenant Screening and Background Check",
-          "description": "After a tenant submits a rental application, we will complete verification of the tenant's information and social credit investigation within 24 hours. We also contact guarantee companies to apply for guarantees, ensuring the tenant's qualifications meet requirements."
+          "description": "After a tenant submits a rental application, we will complete verification of the tenant's information and social credit investigation as soon as possible. We also contact guarantee companies to apply for guarantees, ensuring the tenant's qualifications meet requirements."
         },
         "item2": {
           "time": "Within 1 week",
@@ -684,9 +688,9 @@
           "description": "Contact tenants 2 months before contract expiration to prepare relevant procedures. Communicate renewal intentions in advance, negotiate rent adjustments, and ensure smooth renewal process."
         },
         "item5": {
-          "time": "Within 24 hours of receiving termination notice",
+          "time": "After receiving termination notice",
           "title": "Termination",
-          "description": "Start relevant procedures within 24 hours of receiving termination notice. Determine room repairs and other work to ensure quick start of rental work, reduce vacancy time, and maximize asset returns."
+          "description": "Start relevant procedures promptly after receiving termination notice. Determine room repairs and other work to ensure quick start of rental work, reduce vacancy time, and maximize asset returns."
         }
       },
       "stats": {
@@ -695,8 +699,8 @@
           "label": "Average Occupancy Rate"
         },
         "fastResponse": {
-          "value": "24h",
-          "label": "Rapid Response"
+          "value": "—",
+          "label": "Response Speed"
         },
         "quickMoveIn": {
           "value": "2 weeks",
@@ -746,7 +750,7 @@
         },
         "step2": {
           "title": "Background Check",
-          "description": "Complete identity verification, credit investigation and guarantee company guarantee application within 24 hours."
+          "description": "Complete identity verification, credit investigation and guarantee company guarantee application promptly."
         },
         "step3": {
           "title": "Contract Signing",
@@ -1685,6 +1689,58 @@
           "target3": "Individual investors who value mid-to-long-term rental income",
           "notesText": "This page is created based on building overview that can be confirmed from publicly available information. Conditions such as exclusive area, layout, price, and management fees for 3F cannot be confirmed on the internet, so please be sure to enter and correct values based on current recruitment materials and important matter explanations.",
           "imageAlt": "Shin-Nakano Ekijou Plaza exterior"
+        },
+        "lions-higashiginza-2f": {
+          "title": "Lions Mansion Higashi-Ginza 2F",
+          "description": "A rare corner retail/office unit located between Ginza and Tsukiji—one of Tokyo's prime commercial areas. Facing Harumi-dori with strong street visibility, and within walking distance to multiple subway lines, it offers both <strong>high visibility</strong> and <strong>excellent commuter access</strong>.",
+          "area": "Approx. 127.6 m²",
+          "areaPing": "38.6",
+          "type": "Retail / Office",
+          "typeNote": "Open-plan floor",
+          "station": "Hibiya Line \"Tsukiji\" Station: 3–5 min walk",
+          "stationNote": "\"Higashi-Ginza\" and \"Tsukiji-Shijo\" are also within walking distance",
+          "price": "Approx. ¥1.0–1.1 million / month",
+          "priceNote": "※Based on past recruitment examples / current conditions require confirmation",
+          "address": "4-12-2 Tsukiji, Chuo-ku, Tokyo",
+          "buildingName": "Lions Mansion Higashi-Ginza",
+          "access1": "Tokyo Metro Hibiya Line \"Tsukiji\" Station: approx. 3–5 min walk",
+          "access2": "Tokyo Metro Hibiya Line / Toei Asakusa Line \"Higashi-Ginza\" Station: approx. 5–7 min walk",
+          "access3": "Toei Oedo Line \"Tsukiji-Shijo\" Station: approx. 5–8 min walk",
+          "access4": "Tokyo Metro Yurakucho Line \"Shintomicho\" Station: approx. 11 min walk",
+          "access5": "Toei Oedo Line \"Kachidoki\" Station: approx. 13 min walk",
+          "access6": "Tokyo Metro Ginza Line \"Ginza\" Station: approx. 13 min walk",
+          "structure": "SRC (partly S) / 12F above ground + 1F basement / Completed 1986",
+          "floorInfo": "2F (Retail/Office unit, open-plan)",
+          "equipmentInfo": "Approx. 127.6 m² (Approx. 38.6 tsubo)",
+          "point1Title": "Rare corner unit near the Ginza area",
+          "point1Desc": "Facing Harumi-dori and opposite Tsukiji Hongwan-ji, the unit has strong visibility from the sidewalk. It benefits from the customer draw of Ginza/Higashi-Ginza while keeping rent levels relatively balanced for the area.",
+          "point2Title": "Multi-line access (6+ lines) within walking distance",
+          "point2Desc": "Stations including Tsukiji, Higashi-Ginza, Tsukiji-Shijo, Shintomicho, and Ginza are all walkable—good for both staff commuting and customer access.",
+          "point3Title": "Flexible open-plan layout",
+          "point3Desc": "An open floor of approx. 38.6 tsubo enables diverse layout proposals for showrooms, offices, studios, schools, and more.",
+          "point4Title": "Stable demand expected in a prime mixed-use area",
+          "point4Desc": "Surrounded by office and commercial districts such as Ginza, Tsukiji Market, and Shiodome, the unit is suitable for long-term income property considerations.",
+          "life1": "Ginza Mitsukoshi / Matsuya Ginza",
+          "life2": "Tsukiji Outer Market",
+          "life3": "Specialty stores & restaurants",
+          "education1": "Tsukiji Hongwan-ji",
+          "education2": "Ginza & Tsukiji sightseeing spots",
+          "education3": "Museums & galleries",
+          "transport1": "Ginza / Higashi-Ginza office district",
+          "transport2": "Shiodome / Shinbashi business area",
+          "transport3": "Otemachi / Marunouchi area",
+          "locationDesc": "Along Harumi-dori, directly opposite Tsukiji Hongwan-ji. Weekdays bring office workers, shoppers, and tourists; at night the area becomes calm—an attractive rhythmic streetscape.",
+          "location1": "Ginza area… approx. 4 min by subway",
+          "location2": "Otemachi area… approx. 10 min by subway",
+          "location3": "Haneda Airport direction… good access via Toei Asakusa Line / Keikyu Line",
+          "target1": "Professional firms seeking a base near the Ginza area",
+          "target2": "Tenants valuing street visibility (restaurants, retail, showrooms)",
+          "target3": "Overseas investors acquiring income property in central Tokyo",
+          "notesText": "Rent levels and conditions on this page are reference values based on publicly available past information. Please confirm the latest recruitment conditions, sale price, and all fees with the management company or broker.",
+          "imageAlt": "Lions Mansion Higashi-Ginza exterior",
+          "expectedRentText": "Based on past recruitment examples, approx. ¥1.0–1.1 million / month (incl. common service fee).",
+          "usageSuggestion": "Suitable for flexible uses such as retail, showrooms, clinics, salons, and offices leveraging street visibility and transportation convenience.",
+          "referenceRentNote": "※Please confirm the latest conditions and sale price."
         }
       }
     }
@@ -1789,7 +1845,27 @@
     },
     "cases": {
       "title": "Success Cases",
-      "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
+      "project1": {
+        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+        "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
+      },
+      "comingSoon1": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      },
+      "comingSoon2": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      },
+      "comingSoon3": {
+        "title": "Case Coming Soon",
+        "result": "More success cases are being prepared, please stay tuned..."
+      }
+    }
+  },
+  "cases": {
+    "title": "Success Cases",
+    "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
       "project1": {
         "title": "Kingsoft WPS Japan Subsidiary Setup Service",
         "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
@@ -1926,9 +2002,105 @@
             { "label": "Management Type", "value": "Mixed Facility" },
             { "label": "Service Team", "value": "Professional Team" }
           ]
+        },
+        "kingsoft-wps-japan": {
+          "type": "Enterprise Service",
+          "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+          "location": "Tokyo",
+          "category": "Enterprise Expansion",
+          "description": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems.",
+          "details": [
+            "Successfully completed Kingsoft WPS Japan subsidiary setup service on November 15, 2024",
+            "Assisted in completing corporate registration procedures, ensuring compliant establishment",
+            "Signed with a major Japanese real estate company and successfully established an office",
+            "Built local finance system and established comprehensive financial management processes",
+            "Established recruitment system and assisted in forming local team",
+            "Providing ongoing enterprise expansion support services"
+          ],
+          "highlights": [
+            { "label": "Service Type", "value": "Corporate Setup" },
+            { "label": "Service Content", "value": "Corporate registration, office setup, finance system, recruitment system" },
+            { "label": "Service Period", "value": "Ongoing support" },
+            { "label": "Service Team", "value": "Professional Team" }
+          ]
+        },
+        "shibuya-luxury-apartment": {
+          "type": "Management Contract",
+          "title": "Tokyo Shibuya Luxury Apartment",
+          "location": "Shibuya Ward, Tokyo",
+          "category": "Luxury Apartment",
+          "description": "96% occupancy rate, reduced maintenance response time to within 12 hours through digital management system.",
+          "details": [
+            "Successfully accepted management contract on March 15, 2024",
+            "Maintained 96% occupancy rate, above market average",
+            "Reduced maintenance response time to within 12 hours through digital management system",
+            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
+            "Regularly providing detailed financial reports to ensure asset value preservation and growth",
+            "Professional property management team with extensive service experience"
+          ],
+          "highlights": [
+            { "label": "Management Type", "value": "Comprehensive Management" },
+            { "label": "Occupancy Rate", "value": "96%" },
+            { "label": "Maintenance Response Time", "value": "Within 12 hours" },
+            { "label": "Service Team", "value": "Professional Team" }
+          ]
+        },
+        "yokohama-waterfront-complex": {
+          "type": "Management Contract",
+          "title": "Yokohama Waterfront Complex",
+          "location": "Yokohama City, Kanagawa Prefecture",
+          "category": "Commercial Complex",
+          "description": "Commercial rent increased by 18% through zone management and tenant restructuring.",
+          "details": [
+            "Successfully accepted management contract on June 20, 2024",
+            "Optimized tenant mix through zone management strategy",
+            "Increased commercial rent by 18% through tenant restructuring",
+            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
+            "Regularly providing detailed financial reports to ensure asset value preservation and growth",
+            "Professional property management team with extensive service experience"
+          ],
+          "highlights": [
+            { "label": "Management Type", "value": "Comprehensive Management" },
+            { "label": "Rent Increase", "value": "18%" },
+            { "label": "Service Content", "value": "Rental, maintenance, finance" },
+            { "label": "Service Team", "value": "Professional Team" }
+          ]
+        },
+        "nagoya-student-apartment": {
+          "type": "Management Contract",
+          "title": "Nagoya Student Apartment",
+          "location": "Nagoya City, Aichi Prefecture",
+          "category": "Student Apartment",
+          "description": "Introduced smart access control and tenant community operations, maintaining annual renewal rate at 92%.",
+          "details": [
+            "Successfully accepted management contract on September 10, 2024",
+            "Introduced smart access control system, improving security and convenience",
+            "Enhanced tenant stickiness through tenant community operations",
+            "Maintained annual renewal rate at 92%, above market average",
+            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
+            "Professional property management team with extensive service experience"
+          ],
+          "highlights": [
+            { "label": "Management Type", "value": "Comprehensive Management" },
+            { "label": "Renewal Rate", "value": "92%" },
+            { "label": "Service Content", "value": "Rental, maintenance, finance, community operations" },
+            { "label": "Service Team", "value": "Professional Team" }
+          ]
         }
+      },
+      "page": {
+        "title": "Case Studies",
+        "subtitle": "Below are real cases we have successfully completed, covering real estate sales, purchases, property management, and other services, providing professional and efficient services to our clients.",
+        "filters": {
+          "all": "All Cases",
+          "maimai": "Sales & Purchase Brokerage",
+          "wuye": "Property Management",
+          "qichu": "Enterprise Expansion Support",
+          "touzi": "Asset Investment"
+        },
+        "scrollLeft": "Scroll Left",
+        "scrollRight": "Scroll Right"
       }
-    }
   },
   "careers": {
     "title": "Careers",

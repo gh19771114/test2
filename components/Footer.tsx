@@ -85,16 +85,15 @@ const Footer = () => {
     },
     { 
       type: 'wechat', 
-      href: isMobile ? 'weixin://' : '#', // 移动端直接打开微信，桌面端显示QR
+      href: '#', // 改为 #，点击时显示二维码弹窗
       label: '微信视频号', 
       bg: 'bg-[#07C160]', 
       hover: 'hover:bg-[#059a4d]',
-      qrImage: '/imgs/qrcode_for_gh_5f711e1371ba_258.jpg',
+      qrImage: '/imgs/gongzhonghaoQR.JPG',
       onClick: (e: React.MouseEvent) => {
-        if (!isMobile) {
-          e.preventDefault()
-          setShowQRModal('wechat')
-        }
+        // 所有设备都显示二维码弹窗
+        e.preventDefault()
+        setShowQRModal('wechat')
       }
     },
     { 
@@ -174,25 +173,15 @@ const Footer = () => {
         <div className="py-8 md:py-12 lg:py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full">
             {/* Company Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="lg:col-span-1"
-            >
+            <motion.div className="lg:col-span-1">
               <div>
                 <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.followUs')}</h4>
                 <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6">
-                  {socialLinks.map((social, index) => (
+                  {socialLinks.map((social) => (
                     <motion.a
                       key={social.label}
                       href={social.href}
                       onClick={social.onClick}
-                      initial={{ opacity: 0, scale: 0 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      viewport={{ once: true }}
                       className={`group w-14 h-14 md:w-16 md:h-16 rounded-xl md:rounded-2xl ${social.bg} ${social.hover} flex items-center justify-center transition-all duration-200 text-white shadow-xl hover:-translate-y-1`}
                       aria-label={social.label}
                       title={social.label}
@@ -207,22 +196,15 @@ const Footer = () => {
               </p>
             </motion.div>
 
+            {/* 手机竖版：站点导航 + 服务项目并列；其他端保持原 4 列布局 */}
+            <div className="footer-links-pair">
             {/* Quick Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, x: isDesktop ? 30 : 0 }}
-              whileInView={{ opacity: 1, y: 0, x: isDesktop ? 30 : 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
+              <motion.div>
+                <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
               <ul className="space-y-3">
-                {quickLinks.map((link, index) => (
+                  {quickLinks.map((link) => (
                   <motion.li
                     key={link.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true }}
                   >
                     <a
                       href={link.href}
@@ -236,21 +218,12 @@ const Footer = () => {
             </motion.div>
 
             {/* Services */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.services')}</h4>
+              <motion.div>
+                <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.services')}</h4>
               <ul className="space-y-3">
-                {services.map((service, index) => (
+                  {services.map((service) => (
                   <motion.li
                     key={service.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true }}
                   >
                     <a
                       href={service.href}
@@ -262,14 +235,10 @@ const Footer = () => {
                 ))}
               </ul>
             </motion.div>
+            </div>
 
             {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, x: isDesktop ? -20 : 0 }}
-              whileInView={{ opacity: 1, y: 0, x: isDesktop ? -20 : 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
+            <motion.div>
               <h4 className="text-xl md:text-lg font-semibold mb-4">{t('footer.contactInfo')}</h4>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
@@ -304,18 +273,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="border-t border-navy-800 py-6"
-        >
+        <motion.div className="border-t border-navy-800 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
               {t('footer.copyright')}
             </p>
-            <div className="flex items-center space-x-6 text-sm">
+            <div className="flex items-center space-x-6 text-sm footer-bottom-actions">
               <a href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
                 {t('footer.privacyPolicy')}
               </a>
@@ -360,7 +323,7 @@ const Footer = () => {
             </div>
             <div className="flex justify-center">
               <img 
-                src="/imgs/qrcode_for_gh_5f711e1371ba_258.jpg"
+                src="/imgs/gongzhonghaoQR.JPG"
                 alt="微信公众号二维码"
                 className="w-full h-auto rounded-lg"
               />

@@ -27,7 +27,7 @@ const Philosophy = () => {
       icon: Award,
       title: t('company.philosophy.values.value4.title'),
       description: t('company.philosophy.values.value4.description'),
-    },
+      },
   ], [t])
 
   return (

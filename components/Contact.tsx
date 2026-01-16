@@ -290,7 +290,6 @@ const Contact = () => {
                       className={`${isMobilePortrait ? 'w-[90%]' : 'w-full'} px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200 resize-none`}
                       placeholder="请描述您的需求或希望了解的服务内容"
                       suppressHydrationWarning
-                      style={isMobilePortrait ? { width: '90%' } : {}}
                     />
                   </div>
 
@@ -409,7 +408,7 @@ const Contact = () => {
               联系方式
             </h3>
 
-            <div className={`${isMobilePortrait ? 'space-y-1' : 'space-y-3 md:space-y-4 lg:space-y-6'} flex-1`}>
+            <div className={`${isMobilePortrait ? 'space-y-1.5' : 'space-y-3 md:space-y-4 lg:space-y-6'} flex-1`}>
               {contactInfo.map((info, index) => {
                 const copyKey = info.title === '电子邮箱' ? 'email' : info.title === '联系电话' ? 'phone' : info.title === '传真' ? 'fax' : info.title === '公司地址' ? 'address' : ''
                 const isCopied = copied === copyKey
@@ -438,23 +437,22 @@ const Contact = () => {
                   <div
                     key={info.title}
                     onClick={handleCardClick}
-                    className={`${isMobilePortrait ? 'py-1 px-2' : 'p-4 md:p-6'} bg-white/80 backdrop-blur-sm rounded-xl ${isMobilePortrait ? 'border-0 max-w-[95%] mx-auto' : 'border border-gray-100'} hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-start md:space-x-4 relative ${
+                    className={`${isMobilePortrait ? 'py-1.5 px-2' : 'p-4 md:p-6'} bg-white/80 backdrop-blur-sm rounded-xl ${isMobilePortrait ? 'border-0 max-w-[95%] mx-auto' : 'border border-gray-100'} hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-start md:space-x-4 relative ${
                       isMobilePortrait ? 'cursor-pointer' : ''
                     }`}
                     style={{ overflow: 'visible' }}
                   >
                     {/* 手机竖版：顶部横向布局 - icon(左) + 标题(中) + 复制按钮(右) */}
                     {isMobilePortrait ? (
-                      <div className="flex items-center mb-0.5 w-full relative" style={{ gap: '6px' }}>
+                      <div className="flex items-center mb-1 w-full relative" style={{ gap: '8px' }}>
                         {/* Icon - 左侧，缩小 */}
                         <div
-                          className="w-8 h-8 bg-navy-100 rounded-full flex items-center justify-center"
-                          style={{ flexShrink: 0 }}
+                          className="w-8 h-8 bg-navy-100 rounded-full flex items-center justify-center flex-shrink-0"
                         >
                           <info.icon className="w-4 h-4 text-navy-700" />
                         </div>
                         {/* 标题 - 居中 */}
-                        <h4 className="text-base font-semibold text-navy-700 flex-1 text-center absolute left-1/2 transform -translate-x-1/2" style={{ minWidth: 0 }}>
+                        <h4 className="text-sm font-semibold text-navy-700 flex-1 text-center" style={{ minWidth: 0 }}>
                           {info.title}
                         </h4>
                         {/* 复制按钮 - 右侧对齐 */}
@@ -463,11 +461,10 @@ const Contact = () => {
                               e.stopPropagation()
                               handleCopy(copyValue ?? '', copyKey)
                             }}
-                          className="text-gray-500 hover:text-gray-700 transition-colors absolute flex-shrink-0"
+                          className="text-gray-500 hover:text-gray-700 transition-colors flex-shrink-0"
                             style={{ 
-                            right: '-200px',
-                            width: '32px',
-                            height: '32px',
+                            width: '28px',
+                            height: '28px',
                               padding: '0',
                               margin: '0',
                               border: 'none',
@@ -480,7 +477,7 @@ const Contact = () => {
                             }}
                             title="复制"
                           >
-                            {isCopied ? <Check size={20} className="text-green-600" /> : <Copy size={20} />}
+                            {isCopied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
                           </button>
                       </div>
                     ) : (
@@ -527,13 +524,13 @@ const Contact = () => {
                       )}
                       {info.contentLines && (
                         <div 
-                          className={`text-navy-600 font-medium ${isMobilePortrait ? 'mb-0.5' : 'mb-1'} ${isAddress && isMobilePortrait ? 'flex flex-col gap-0.5' : ''}`}
+                          className={`text-navy-600 font-medium ${isMobilePortrait ? 'mb-0' : 'mb-1'} ${isAddress && isMobilePortrait ? 'flex flex-col gap-0' : ''}`}
                         >
                           {isAddress && isMobilePortrait ? (
-                            // 手机版地址：强制2行显示，文字缩小
+                            // 手机版地址：强制2行显示，文字大小18px
                             <>
-                              <p className="text-xs leading-tight">{info.contentLines[0]}</p>
-                              <p className="text-xs leading-tight">{info.contentLines[1]}</p>
+                              <p className="text-[18px] leading-tight">{info.contentLines[0]}</p>
+                              <p className="text-[18px] leading-tight">{info.contentLines[1]}</p>
                             </>
                           ) : (
                             // 桌面版：正常显示
@@ -619,4 +616,3 @@ const Contact = () => {
 }
 
 export default Contact
-

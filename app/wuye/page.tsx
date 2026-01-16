@@ -74,7 +74,7 @@ export default function WuYePage() {
       title: t('wuye.properties.property1.title'),
       location: t('wuye.properties.property1.location'),
       category: t('wuye.properties.property1.category'),
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      image: '/imgs/wuye/real/wuye-property-1.jpg',
       description: t('wuye.properties.property1.description'),
     },
     {
@@ -84,7 +84,7 @@ export default function WuYePage() {
       title: t('wuye.properties.property2.title'),
       location: t('wuye.properties.property2.location'),
       category: t('wuye.properties.property2.category'),
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      image: '/imgs/wuye/real/wuye-property-2.jpg',
       description: t('wuye.properties.property2.description'),
     },
     {
@@ -94,7 +94,7 @@ export default function WuYePage() {
       title: t('wuye.properties.property3.title'),
       location: t('wuye.properties.property3.location'),
       category: t('wuye.properties.property3.category'),
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      image: '/imgs/wuye/real/wuye-property-3.jpg',
       description: t('wuye.properties.property3.description'),
     },
   ], [t])
@@ -105,7 +105,7 @@ export default function WuYePage() {
           <section className="relative pt-28 pb-16 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/wuye-hero.jpg"
               alt={t('wuye.title')}
               fill
               className="object-cover opacity-30"
@@ -123,8 +123,6 @@ export default function WuYePage() {
 
       <section id="tenant-services" className="section-padding">
         <div className="container-custom">
-          <h2 className="text-2xl font-bold text-white mb-8">{t('wuye.services.title')}</h2>
-          
           {/* 左右两个大方块 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* 常规服务 - 左侧大方块 */}
@@ -135,12 +133,12 @@ export default function WuYePage() {
                   const Icon = item.icon
                   return (
                     <Link key={item.title} href={item.link} className="block">
-                      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-6 h-6 text-blue-600" />
+                      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item min-h-[96px]">
+                        <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-3 text-center md:text-left">
+                          <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-7 h-7 text-blue-600" />
                           </div>
-                          <h4 className="text-base font-semibold text-navy-700">{item.title}</h4>
+                          <h4 className="text-lg md:text-base font-semibold text-navy-700">{item.title}</h4>
                         </div>
                       </div>
                     </Link>
@@ -157,12 +155,12 @@ export default function WuYePage() {
                   const Icon = item.icon
                   return (
                     <Link key={item.title} href={item.link} className="block">
-                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-6 h-6 text-purple-600" />
+                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item min-h-[96px]">
+                        <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-3 text-center md:text-left">
+                          <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-7 h-7 text-purple-600" />
                           </div>
-                          <h4 className="text-base font-semibold text-navy-700">{item.title}</h4>
+                          <h4 className="text-lg md:text-base font-semibold text-navy-700">{item.title}</h4>
                         </div>
                       </div>
                     </Link>
@@ -177,11 +175,12 @@ export default function WuYePage() {
       <section className="section-padding">
         <div className="container-custom">
           <h2 className="text-2xl font-bold text-white mb-6">{t('wuye.properties.title')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* 桌面版：grid布局 */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {managedProperties.map((property) => (
               <div key={property.id} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card">
                 <div className="relative overflow-hidden">
-                  <div className="relative w-full wuye-property-image">
+                  <div className="relative w-full h-64 wuye-property-image">
                     <Image
                       src={property.image}
                       alt={property.title}
@@ -221,33 +220,81 @@ export default function WuYePage() {
               </div>
             ))}
           </div>
+          
+          {/* 手机版：横向滚动 */}
+          <div className="md:hidden wuye-properties-scroll-container overflow-x-auto scroll-smooth pb-4 scrollbar-hide">
+            <div className="flex gap-4 min-w-max wuye-properties-scroll-wrapper">
+              {managedProperties.map((property) => (
+                <div key={property.id} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card flex-shrink-0" style={{ width: '320px' }}>
+                  <div className="relative overflow-hidden">
+                    <div className="relative w-full wuye-property-image" style={{ height: '200px' }}>
+                      <Image
+                        src={property.image}
+                        alt={property.title}
+                        fill
+                        className="object-cover"
+                        sizes="320px"
+                      />
+                    </div>
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      {property.category}
+                    </span>
+                  </div>
+                  <div className="absolute top-4 right-4">
+                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      {property.type}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="wuye-property-content">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                    <Calendar size={16} />
+                    <span>{property.date}</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-navy-700 mb-2 wuye-property-title">
+                    {property.title}
+                  </h3>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                    <MapPin size={16} />
+                    <span>{property.location}</span>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 wuye-property-description">
+                    {property.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+            </div>
+          </div>
 
           {/* 统计信息 */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-200 shadow-lg">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto wuye-stats-grid">
+            <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-200 shadow-lg wuye-stat-btn">
+              <div className="flex items-center gap-4 wuye-stat-btn-inner">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 wuye-stat-btn-icon">
                   <Building2 className="w-8 h-8 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
+                <div className="wuye-stat-btn-text">
+                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1 wuye-stat-btn-value">
                     <span>1,300</span><span className="ml-2">{t('wuye.stats.units')}</span>
                   </h3>
-                  <p className="text-base md:text-lg text-gray-700 font-medium">{t('wuye.stats.totalProperties')}</p>
+                  <p className="text-base md:text-lg text-gray-700 font-medium wuye-stat-btn-label">{t('wuye.stats.totalProperties')}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 border-2 border-green-200 shadow-lg">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 border-2 border-green-200 shadow-lg wuye-stat-btn">
+              <div className="flex items-center gap-4 wuye-stat-btn-inner">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 wuye-stat-btn-icon">
                   <span className="text-white text-3xl font-bold">¥</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1">
+                <div className="wuye-stat-btn-text">
+                  <h3 className="text-2xl md:text-3xl font-bold text-navy-900 mb-1 wuye-stat-btn-value">
                     <span>{t('wuye.stats.amountValue')}</span><span className="ml-2">{t('wuye.stats.yen')}</span>
                   </h3>
-                  <p className="text-base md:text-lg text-gray-700 font-medium">{t('wuye.stats.totalAssets')}</p>
+                  <p className="text-base md:text-lg text-gray-700 font-medium wuye-stat-btn-label">{t('wuye.stats.totalAssets')}</p>
                 </div>
               </div>
             </div>

@@ -155,7 +155,7 @@ export default function MaiMaiPage() {
       type: '店舗・事務所',
       location: '東京都中央区築地',
       feature: t('maimai.properties.noFee'),
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/Lions Mansion Higashi-Ginza.jpeg',
       href: '/maimai/lions-higashiginza-2f'
     },
     {
@@ -677,33 +677,34 @@ export default function MaiMaiPage() {
                 </div>
               </div>
             </div>
-            <div className="mb-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
+            <div className="mb-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg maimai-properties-panel maimai-properties-panel--no-fee">
               <h3 className="text-xl font-semibold text-green-600 mb-4 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5" />
                 {t('maimai.properties.noFeeTitle')}
               </h3>
-              <div className="overflow-x-auto pb-4 -mx-2 px-2">
+              <div className="overflow-x-auto pb-4 -mx-2 px-2" id="maimai-properties-no-fee">
                 <div className="flex gap-6 min-w-max">
                   {propertiesNoFee.map((property, index) => (
                     property.href ? (
                       <Link
                         key={index}
                         href={property.href}
-                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col"
+                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col maimai-property-card"
                       >
-                        <div className="relative h-48 bg-gray-200">
+                        <div className="relative h-48 bg-gray-200 overflow-hidden">
                           <Image
                             src={property.image}
                             alt={property.title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                             sizes="320px"
+                            style={{ borderRadius: 0 }}
                           />
                           <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
                             {property.feature}
                           </div>
                         </div>
-                        <div className="p-2 md:p-3 flex flex-col flex-1">
+                        <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
                           <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.title}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
@@ -725,20 +726,21 @@ export default function MaiMaiPage() {
                         </div>
                       </Link>
                     ) : (
-                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                        <div className="relative h-48 bg-gray-200">
+                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col maimai-property-card">
+                        <div className="relative h-48 bg-gray-200 overflow-hidden">
                           <Image
                             src={property.image}
                             alt={property.title}
                             fill
                             className="object-cover"
                             sizes="320px"
+                            style={{ borderRadius: 0 }}
                           />
                           <div className="absolute top-3 right-3 bg-green-500 text-navy-900 px-3 py-1 rounded-full text-xs font-semibold">
                             {property.feature}
                           </div>
                         </div>
-                        <div className="p-2 md:p-3 flex flex-col flex-1">
+                        <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
@@ -824,19 +826,19 @@ export default function MaiMaiPage() {
             </div>
 
             {/* 需中介费房源 */}
-            <div ref={propertiesWithFeeRef} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6">
+            <div ref={propertiesWithFeeRef} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-200 shadow-lg mt-6 maimai-properties-panel maimai-properties-panel--with-fee">
               <h3 className="text-xl font-semibold text-orange-600 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 {t('maimai.properties.withFeeTitle')}
               </h3>
-              <div className="overflow-x-auto pb-4 -mx-2 px-2">
+              <div className="overflow-x-auto pb-4 -mx-2 px-2" id="maimai-properties-with-fee">
                 <div className="flex gap-6 min-w-max">
                   {propertiesWithFee.map((property, index) => (
                     property.href ? (
                       <Link
                         key={index}
                         href={property.href}
-                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col"
+                        className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer block group flex flex-col maimai-property-card"
                       >
                         <div className="relative h-48 bg-gray-200">
                           <Image
@@ -872,7 +874,7 @@ export default function MaiMaiPage() {
                         </div>
                       </Link>
                     ) : (
-                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                      <div key={index} className="flex-shrink-0 w-80 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col maimai-property-card">
                         <div className="relative h-48 bg-gray-200">
                           <Image
                             src={property.image}
@@ -951,43 +953,34 @@ export default function MaiMaiPage() {
               </div>
             </div>
 
-            {/* 移动端：垂直排列布局，箭头向下（桌面端箭头顺时针旋转90度） */}
+            {/* 手机 & iPad 竖版：横向可滚动，蓝色箭头样式与桌面版一致 */}
             <div className="lg:hidden pb-4">
-              <div className="flex flex-col items-center gap-0">
-                {transactionSteps.map((item, index) => (
-                  <div key={item.step} className="w-full max-w-sm">
-                    {/* 步骤卡片 - 桌面端箭头顺时针旋转90度：从右箭头变成下箭头 */}
-                    <div className="relative group">
-                      <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-12 w-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-visible"
-                        style={{
-                          clipPath: index < transactionSteps.length - 1 
-                            // 桌面端：polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%)
-                            // 顺时针旋转90度：原右箭头(→)变成下箭头(↓)
-                            // 顶部凹进：50% 24px（对应原左边凹进 24px 50%）
-                            // 底部凸出：50% 100%（对应原右边凸出 100% 50%）
-                            ? 'polygon(50% 24px, 0 0, 0 calc(100% - 24px), 50% 100%, 100% calc(100% - 24px), 100% 0)'
-                            // 最后一个：没有底部箭头，但保留顶部凹进（接收上一个的底部凸出）
-                            // 从左上角开始，顺时针：0 0 -> 50% 24px（凹进点）-> 100% 0 -> 100% 100% -> 0 100% -> 回到起点
-                            : 'polygon(0 0, 50% 24px, 100% 0, 100% 100%, 0 100%)',
-                        }}>
-                        <div className="flex flex-col items-center text-center h-full justify-center relative">
-                          {/* 步骤数字 - 居中在图标上方 */}
-                          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                            <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
-                              <span className="text-blue-700 font-extrabold text-base">{item.step}</span>
+              <div className="overflow-x-auto scrollbar-hide -mx-2 px-2">
+                <div className="flex items-center flex-nowrap min-w-max" style={{ gap: '-2px' }}>
+                  {transactionSteps.map((item) => (
+                    <div key={item.step} className="flex-shrink-0" style={{ width: 180, marginRight: '-2px' }}>
+                      <div className="relative group h-full">
+                        <div
+                          className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-10 h-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-visible"
+                          style={{
+                            clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%)',
+                            width: '100%',
+                          }}
+                        >
+                          <div className="flex flex-col items-center text-center h-full justify-center relative">
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
+                                <span className="text-blue-700 font-extrabold text-lg">{item.step}</span>
+                              </div>
                             </div>
+                            <div className="text-4xl mb-2 mt-6">{item.icon}</div>
+                            <h3 className="text-sm font-bold leading-tight px-1 mt-1 whitespace-nowrap">{item.title}</h3>
                           </div>
-                          {/* 图标 - 使用圆形背景，避免被clipPath裁剪 */}
-                          <div className="text-4xl md:text-5xl mb-2 mt-6 w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center">{item.icon}</div>
-                          {/* 标题 */}
-                          <h3 className="text-base md:text-lg font-bold leading-tight px-1 mt-1 whitespace-nowrap">{item.title}</h3>
-                          {/* 描述 */}
-                          <p className="text-sm md:text-base text-blue-100 mt-1 px-1">{item.desc}</p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1034,7 +1027,7 @@ export default function MaiMaiPage() {
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.buyingTitle')}</h3>
                   </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {buyingFees.map((fee, index) => (
                     <button
                       key={index}
@@ -1064,7 +1057,7 @@ export default function MaiMaiPage() {
                     <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.sellingTitle')}</h3>
                   </div>
                 <div className="flex-1 flex flex-col">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {sellingFees.map((fee, index) => (
                       <button
                         key={index}

@@ -35,6 +35,11 @@ export const investmentProperties: InvestmentProperty[] = [
     locationKey: 'company.overview.assets.property6.location',
     image: '/imgs/helte LOGO.png',
   },
+  {
+    titleKey: 'company.overview.assets.property7.title',
+    locationKey: 'company.overview.assets.property7.location',
+    image: '/imgs/bourn%20mark%20building.png',
+  },
 ]
 
 

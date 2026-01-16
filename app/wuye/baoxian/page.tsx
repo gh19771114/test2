@@ -25,7 +25,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-    },
+  },
   },
 }
 
@@ -42,7 +42,7 @@ export default function BaoxianPage() {
       {
         title: t('wuye.baoxian.services.service1.title'),
         icon: Shield,
-        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/baoxian-service-1.jpg',
         description: t('wuye.baoxian.services.service1.description'),
         items: (t('wuye.baoxian.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -51,18 +51,18 @@ export default function BaoxianPage() {
           description: t('wuye.baoxian.timeline.item1.description'),
         },
         color: 'from-red-500 to-red-600',
-      },
-      {
+  },
+  {
         title: t('wuye.baoxian.services.service2.title'),
         icon: Shield,
-        image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/baoxian-service-2.jpg',
         description: t('wuye.baoxian.services.service2.description'),
         items: (t('wuye.baoxian.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.baoxian.timeline.item4.time'),
           title: t('wuye.baoxian.timeline.item4.title'),
           description: t('wuye.baoxian.timeline.item4.description'),
-        },
+  },
         color: 'from-orange-500 to-orange-600',
       },
     ]
@@ -71,12 +71,12 @@ export default function BaoxianPage() {
 
   return (
     <PageLayout>
-      <div className="relative">
+      <div className="relative wuye-subpage">
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-red-800 via-red-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/baoxian-hero.jpg"
               alt={t('wuye.baoxian.title')}
               fill
               className="object-cover opacity-30"
@@ -99,7 +99,7 @@ export default function BaoxianPage() {
                 animate={isHeroInView ? { scale: 1, rotate: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <Shield className="w-8 h-8 text-red-300" />
+              <Shield className="w-8 h-8 text-red-300" />
               </motion.div>
               <p className="text-sm text-red-300 font-semibold drop-shadow-md">{t('wuye.baoxian.subtitle')}</p>
             </div>
@@ -119,11 +119,6 @@ export default function BaoxianPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-red-500" />
-                <p className="text-sm text-red-400 font-semibold">{t('wuye.services.title')}</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.baoxian.description')}
               </p>
@@ -160,9 +155,9 @@ export default function BaoxianPage() {
                           <li key={itemIndex} className="flex items-start gap-3">
                             <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
                             <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                          </li>
+                  </li>
                         ))}
-                      </ul>
+                </ul>
                       {service.timeline && (
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="flex items-center gap-2 mb-2">
@@ -173,8 +168,8 @@ export default function BaoxianPage() {
                           <p className="text-xs text-gray-600 leading-relaxed">{service.timeline.description}</p>
                         </div>
                       )}
-                    </div>
-                  </div>
+              </div>
+            </div>
                 </motion.div>
               ))}
             </motion.div>

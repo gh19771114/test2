@@ -16,21 +16,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // 使用函数初始化，确保服务器端和客户端都使用相同的初始值
   const [language, setLanguageState] = useState<Language>(() => {
-    // 服务器端始终使用 'zh'
-    if (typeof window === 'undefined') {
-      return 'zh'
-    }
-    // 客户端从 localStorage 读取，如果没有则使用 'zh'
-    const savedLanguageRaw = localStorage.getItem('language')
-    // 兼容历史值（Header 下拉里用过 zh-CN / ja-JP 等）
-    const normalized =
-      savedLanguageRaw === 'zh-CN' ? 'zh' :
-      savedLanguageRaw === 'ja-JP' ? 'ja' :
-      savedLanguageRaw
-    const savedLanguage = normalized as Language
-    if (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'zh-TW' || savedLanguage === 'zh-HK' || savedLanguage === 'ja' || savedLanguage === 'en')) {
-      return savedLanguage
-    }
+    // 关键：为了避免 Hydration mismatch（SSR 固定用 zh），客户端首次渲染也必须用 zh。
+    // 挂载后再从 localStorage/浏览器语言切换到用户语言（见下方 useEffect）。
     return 'zh'
   })
   
@@ -50,6 +37,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const savedLanguage = localStorage.getItem('language')
     if (savedLanguage) {
       // 如果用户已经手动选择过语言，就不自动设置
+      return
+    }
+
+    // 更强的保护：如果用户曾经手动选择过语言（我们记录一个标记），就永远不再用设备语言覆盖
+    const userSelected = localStorage.getItem('languageUserSelected')
+    if (userSelected === 'true') {
       return
     }
     
@@ -178,6 +171,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLanguageState(lang)
     if (typeof window !== 'undefined') {
       localStorage.setItem('language', lang)
+      // 标记：用户明确选择过语言，后续所有页面都以该语言为准，不再用设备语言覆盖
+      localStorage.setItem('languageUserSelected', 'true')
+      // 同时标记已自动/已设置过，避免设备语言逻辑再次触发
+      localStorage.setItem('languageAutoSet', 'true')
     }
   }
 

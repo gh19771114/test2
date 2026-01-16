@@ -49,32 +49,32 @@ export default function TouZiPage() {
               <div className="rounded-3xl p-8 md:p-12 border border-blue-100 shadow-lg">
                 <div className="overflow-x-auto">
                   <div className="flex gap-6 pb-4" style={{ minWidth: 'max-content' }}>
-                    {investmentProperties.map((item, index) => (
-                      <div
-                        key={index}
+                  {investmentProperties.map((item, index) => (
+                    <div
+                      key={index}
                         className="group relative rounded-2xl bg-white/80 backdrop-blur-sm shadow-md border border-blue-100 hover:border-blue-300 transition-all duration-300 overflow-hidden flex-shrink-0"
                         style={{ width: '300px' }}
-                      >
-                        <div className="relative h-56 bg-gray-100 flex items-center justify-center">
-                          {item.image ? (
-                            <Image
-                              src={item.image}
+                    >
+                      <div className="relative h-56 bg-gray-100 flex items-center justify-center">
+                        {item.image ? (
+                          <Image
+                            src={item.image}
                               alt={t(item.titleKey)}
-                              fill
+                            fill
                               className={item.image.includes('helte') ? "object-contain transition-transform duration-300 group-hover:scale-105 p-4" : "object-cover transition-transform duration-300 group-hover:scale-105"}
                               sizes="300px"
-                            />
-                          ) : (
-                            <div className="text-gray-400 text-sm">No Photo</div>
-                          )}
-                        </div>
-                        <div className="p-5">
+                          />
+                        ) : (
+                          <div className="text-gray-400 text-sm">No Photo</div>
+                        )}
+                      </div>
+                      <div className="p-5">
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{t(item.titleKey)}</h4>
                           <p className="text-sm text-gray-600">{t(item.locationKey)}</p>
                         </div>
                       </div>
                     ))}
-                  </div>
+                    </div>
                 </div>
               </div>
             </div></div>

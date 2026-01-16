@@ -56,7 +56,7 @@ export default function ZulinPage() {
       {
         title: t('wuye.zulin.services.service1.title'),
         icon: Users,
-        image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/zulin-service-1.jpg',
         description: t('wuye.zulin.services.service1.description'),
         items: (t('wuye.zulin.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -69,7 +69,7 @@ export default function ZulinPage() {
       {
         title: t('wuye.zulin.services.service2.title'),
         icon: FileCheck,
-        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/zulin-service-2.jpg',
         description: t('wuye.zulin.services.service2.description'),
         items: (t('wuye.zulin.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -82,7 +82,7 @@ export default function ZulinPage() {
       {
         title: t('wuye.zulin.services.service3.title'),
         icon: Key,
-        image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/zulin-service-3.jpg',
         description: t('wuye.zulin.services.service3.description'),
         items: (t('wuye.zulin.services.service3.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -101,36 +101,36 @@ export default function ZulinPage() {
       step: '01',
       title: t('wuye.zulin.process.step1.title'),
       description: t('wuye.zulin.process.step1.description'),
-      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zulin-process-1.jpg',
     },
     {
       step: '02',
       title: t('wuye.zulin.process.step2.title'),
       description: t('wuye.zulin.process.step2.description'),
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zulin-process-2.jpg',
     },
     {
       step: '03',
       title: t('wuye.zulin.process.step3.title'),
       description: t('wuye.zulin.process.step3.description'),
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zulin-process-3.jpg',
     },
     {
       step: '04',
       title: t('wuye.zulin.process.step4.title'),
       description: t('wuye.zulin.process.step4.description'),
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zulin-process-4.jpg',
     },
   ], [t])
 
   return (
     <PageLayout>
-      <div className="relative">
+      <div className="relative wuye-subpage">
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-blue-800 via-blue-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/zulin-hero.jpg"
               alt="租赁管理"
               fill
               className="object-cover opacity-30"
@@ -181,28 +181,28 @@ export default function ZulinPage() {
 
         {/* Stats Section */}
         <section ref={statsRef} className="section-padding bg-gradient-to-b from-gray-900 to-navy-900">
-          <div className="container-custom">
+          <div className="container-custom px-0 sm:px-6 md:px-0">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isStatsInView ? 'visible' : 'hidden'}
-              className="flex flex-wrap justify-center gap-6 md:gap-8"
+              className="grid grid-cols-3 gap-1 sm:flex sm:flex-wrap sm:justify-center sm:gap-6 md:gap-8"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 text-center group w-full sm:w-auto sm:min-w-[200px]"
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-2 sm:p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group w-full sm:w-auto sm:min-w-[200px] min-w-0 flex flex-col items-center justify-center text-center"
                 >
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <stat.icon className="w-8 h-8 text-white" />
+                  <div className="flex justify-center mb-1 sm:mb-4">
+                    <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <stat.icon className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
                     </div>
                   </div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                  <div className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-0.5 sm:mb-2 group-hover:text-blue-300 transition-colors whitespace-nowrap leading-tight">
                     {stat.value}
                   </div>
-                  <div className="text-sm md:text-base text-gray-300">
+                  <div className="text-[12px] sm:text-sm md:text-base text-gray-300 whitespace-nowrap leading-tight tracking-tight">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -213,18 +213,13 @@ export default function ZulinPage() {
 
         {/* Services Section */}
         <section ref={servicesRef} className="section-padding">
-          <div className="container-custom">
+          <div className="container-custom px-0 sm:px-6 md:px-0">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isServicesInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-blue-500" />
-                <p className="text-sm text-blue-400 font-semibold">{t('wuye.services.title')}</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.zulin.description')}
               </p>
@@ -234,7 +229,7 @@ export default function ZulinPage() {
               variants={containerVariants}
               initial="hidden"
               animate={isServicesInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-8"
             >
               {services.map((service, index) => (
                 <motion.div
@@ -243,35 +238,35 @@ export default function ZulinPage() {
                   className="group relative bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-2xl"
                 >
                   <div className="flex flex-col">
-                    <div className="relative w-full h-32 overflow-hidden">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
+                    <div className="relative w-full h-44 sm:h-32 overflow-hidden">
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
                     </div>
-                    <div className="flex-1 p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">{service.title}</h3>
-                      <p className="text-sm text-gray-600 mb-4">{service.description}</p>
-                      <ul className="space-y-2 mb-4">
-                        {service.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-3">
-                            <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
-                            <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="flex-1 p-2 sm:p-6 min-w-0">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2 text-center">{service.title}</h3>
+                      <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4 leading-snug text-center">{service.description}</p>
+                      <ul className="space-y-1 mb-3 sm:mb-4">
+                      {service.items.map((item, itemIndex) => (
+                        <li key={itemIndex} className="flex items-start gap-2">
+                          <div className={`mt-1 w-2.5 h-2.5 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
+                          <span className="text-sm sm:text-base text-gray-800 leading-snug">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                       {service.timeline && (
-                        <div className="mt-4 pt-4 border-t border-gray-200">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Clock className="w-4 h-4 text-gray-500" />
-                            <span className="text-xs font-semibold text-gray-500">{service.timeline.time}</span>
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <div className="flex items-center justify-center gap-2 mb-2">
+                            <Clock className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                            <span className="text-xs sm:text-sm font-semibold text-gray-500 whitespace-nowrap">{service.timeline.time}</span>
                           </div>
-                          <h4 className="text-sm font-semibold text-gray-800 mb-1">{service.timeline.title}</h4>
-                          <p className="text-xs text-gray-600 leading-relaxed">{service.timeline.description}</p>
+                          <h4 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 text-center">{service.timeline.title}</h4>
+                          <p className="text-xs sm:text-sm text-gray-600 leading-snug text-center">{service.timeline.description}</p>
                         </div>
                       )}
                     </div>

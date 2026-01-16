@@ -25,7 +25,7 @@ export default function NewsListPage() {
       return t('news.category.notice')
   }
     return t('news.category.news')
-  }
+}
 
   // 按时间排序，最新的在前
   const sortedNews = [...latestNews].sort((a, b) => {

@@ -32,10 +32,10 @@ const caseDetails: Record<string, CaseDetail> = {
   'grand-maison-asakusa-1302': {
     date: '2025/08/25',
     type: '销售',
-    title: 'グランドメゾン浅草花川戸13楼',
+    title: 'グランドメゾン浅草花川戸13F',
     location: '东京都台东区浅草花川戸',
     category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    image: '/imgs/Grand Maison Asakusa Hanakawado.jpeg',
     description: '成功完成浅草花川戸高级公寓单元的销售交易，为客户提供专业的销售服务。',
     details: [
       '成功完成销售交易，交易日期：2025年8月25日',
@@ -54,14 +54,14 @@ const caseDetails: Record<string, CaseDetail> = {
   'park-tower-nishishinjuku-101-201': {
     date: '2025/09/25',
     type: '销售',
-    title: 'パークタワー西新宿施設棟1楼',
+    title: 'パークタワー西新宿施設棟1F',
     location: '东京都新宿区西新宿',
     category: '商业设施',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
     description: '成功完成西新宿核心地段商业设施两个单元的销售交易。',
     details: [
       '成功完成销售交易，交易日期：2025年9月25日',
-      '包含1楼两个单元，总面积约200㎡',
+      '包含1F两个单元，总面积约200㎡',
       '为客户提供专业的商业设施销售服务',
       '位于新宿核心商业区，商业价值高',
       '顺利完成所有交易手续，获得客户认可',
@@ -76,10 +76,10 @@ const caseDetails: Record<string, CaseDetail> = {
   'my-castle-yoyogi-1203': {
     date: '2025/05/16',
     type: '销售',
-    title: 'マイキャスル代々木12楼',
+    title: 'マイキャスル代々木12F',
     location: '东京都涩谷区代代木',
     category: '公寓',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    image: '/imgs/My Castle Yoyogi.jpeg',
     description: '成功完成代代木地区优质公寓单元的销售交易。',
     details: [
       '成功完成销售交易，交易日期：2025年5月16日',
@@ -98,7 +98,7 @@ const caseDetails: Record<string, CaseDetail> = {
   'shinjuku-daikan-plaza-a-201': {
     date: '2025/10/23',
     type: '资产购入',
-    title: '新宿ダイカンプラザA館2楼',
+    title: '新宿ダイカンプラザA館2F',
     location: '东京都新宿区',
     category: '商业设施',
     image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -145,7 +145,7 @@ const caseDetails: Record<string, CaseDetail> = {
     title: '金山 WPS 日本子公司设立服务',
     location: '东京都',
     category: '企业出海',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    image: '/imgs/WPS.jpeg',
     description: '协助完成法人登记、签约日本大型不动产公司设立办公室，并搭建本地财务与招聘体系。',
     details: [
       '成功完成金山 WPS 日本子公司的设立服务，服务日期：2024年11月15日',
@@ -362,6 +362,7 @@ export default function CaseDetailPage() {
               fill
               className="object-cover opacity-30"
               priority
+              unoptimized={caseItem.image.startsWith('/imgs/')}
             />
             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-navy-900/60"></div>
           </div>
@@ -411,6 +412,7 @@ export default function CaseDetailPage() {
                     fill
                     className="object-cover"
                     priority
+                    unoptimized={caseItem.image.startsWith('/imgs/')}
                   />
                 </div>
 

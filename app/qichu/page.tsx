@@ -9,6 +9,7 @@ import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { caseImages, caseDates } from '@/lib/casesData'
 
 const relatedServices = [
   {
@@ -1444,8 +1445,8 @@ export default function QiChuPage() {
                     const projectDataMap: Record<string, ProjectData> = {
                       '金山 WPS 日本子公司设立服务': {
                         id: 'kingsoft-wps-japan',
-                        date: '2024/11/15',
-                        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                        date: caseDates['kingsoft-wps-japan'],
+                        image: caseImages['kingsoft-wps-japan'],
                       },
                     }
                     const projectData: ProjectData = projectDataMap[project.title] || {

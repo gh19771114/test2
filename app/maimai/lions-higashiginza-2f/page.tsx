@@ -153,41 +153,41 @@ export default function LionsHigashiGinza2FPage() {
 
                   {/* 四个方块 */}
                   <dl className={`mt-6 grid gap-4 text-xs lions-higashiginza-info-grid ${isMobileLandscape ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}>
-                    <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
                       <dt className="text-slate-500">{labels.area}</dt>
-                      <dd className="mt-1 font-semibold text-slate-900">
+                    <dd className="mt-1 font-semibold text-slate-900">
                         {p.area}
                         <span className="block text-[11px] text-slate-500">（{getPingText()}）</span>
-                      </dd>
-                    </div>
-                    <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
                       <dt className="text-slate-500">{labels.equipment}</dt>
-                      <dd className="mt-1 font-semibold text-slate-900">
+                    <dd className="mt-1 font-semibold text-slate-900">
                         {p.type}
                         <span className="block text-[11px] text-slate-500">{p.typeNote}</span>
-                      </dd>
-                    </div>
-                    <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
                       <dt className="text-slate-500">{labels.nearestStation}</dt>
-                      <dd className="mt-1 font-semibold text-slate-900">
+                    <dd className="mt-1 font-semibold text-slate-900">
                         {p.station}
-                        <span className="block text-[11px] text-slate-500">
+                      <span className="block text-[11px] text-slate-500">
                           {p.stationNote}
-                        </span>
-                      </dd>
-                    </div>
-                    <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                      </span>
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
                       <dt className="text-slate-500">{labels.priceRent}</dt>
-                      <dd className="mt-1 font-semibold text-slate-900">
+                    <dd className="mt-1 font-semibold text-slate-900">
                         {p.price}
-                        <span className="block text-[11px] text-amber-600">
+                      <span className="block text-[11px] text-amber-600">
                           {p.priceNote}
-                        </span>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
+                      </span>
+                    </dd>
+                  </div>
+                </dl>
               </div>
+                  </div>
 
               {/* 右侧视频 - 桌面版和iPad横版 */}
               <div className="mt-8 flex-1 justify-center lg:flex lions-higashiginza-video-desktop">
@@ -221,7 +221,7 @@ export default function LionsHigashiGinza2FPage() {
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div className="relative h-64 overflow-hidden rounded-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="/imgs/Lions Mansion Higashi-Ginza.jpeg"
                     alt={labels.exterior || labels.appearance || p.title}
                     fill
                     className="object-cover"

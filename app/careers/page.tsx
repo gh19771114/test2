@@ -166,16 +166,14 @@ export default function CareersPage() {
                       <Heart size={20} className="text-red-500" />
                       {t('careers.benefits')}
                     </h3>
-                    <div className="flex flex-wrap gap-2">
+                    <ul className="space-y-2 text-gray-700">
                       {positions[selectedPosition].benefits.map((benefit: string, idx: number) => (
-                        <span
-                          key={idx}
-                          className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium"
-                        >
-                          {benefit}
-                        </span>
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-indigo-600 mt-1">•</span>
+                          <span className="leading-relaxed">{benefit}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 )}
 

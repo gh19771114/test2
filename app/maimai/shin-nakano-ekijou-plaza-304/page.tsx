@@ -70,15 +70,16 @@ export default function ShinNakanoPlaza304Page() {
                 </dl>
               </div>
 
-              {/* 右侧图片 */}
+              {/* 右侧视频 */}
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
-                  <Image
-                    src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                    alt={p.imageAlt || p.title || labels.appearance}
-                    fill
-                    className="object-cover"
-                    priority
+                  <video
+                    src="/movie/shinnagano.mp4"
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent" />
                   <div className="absolute bottom-3 left-4 text-xs text-slate-50 drop-shadow">

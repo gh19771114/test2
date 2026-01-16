@@ -54,3 +54,27 @@ YOUTUBE_API_KEY=your_youtube_api_key_here
 # CRON_SECRET=your-secret-key-here
 
 
+# ============================================
+# wuye 写实场景图片生成（Google / nano banana pro API）
+# ============================================
+# 说明：
+# - 仅用于本地脚本生成图片（不会在前端暴露）
+# - 真实 key 请只放在 .env.local，切勿提交
+#
+# 使用脚本：
+#   node version2/scripts/generate-wuye-real-images.js
+#   node version2/scripts/replace-wuye-images.js --apply
+#
+# 必填：
+# NANO_BANANA_API_KEY=your_google_api_key_here
+# NANO_BANANA_MODEL=your_image_capable_model_id
+#
+# 可选：让模型返回图片模态（不同模型要求不同）
+# NANO_BANANA_RESPONSE_MODALITIES=["IMAGE"]
+#
+# 可选：按模型文档填写 generationConfig（JSON 字符串）
+# NANO_BANANA_GENERATION_CONFIG_JSON={"temperature":0.2}
+#
+# 并发与重试
+# NANO_BANANA_CONCURRENCY=2
+# NANO_BANANA_MAX_RETRIES=2

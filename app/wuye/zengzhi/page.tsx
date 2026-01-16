@@ -4,7 +4,7 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef, useMemo } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
 import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -34,7 +34,7 @@ export default function ZengzhiPage() {
     {
       title: t('wuye.zengzhi.services.service1.title'),
       icon: Search,
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-service-1.jpg',
       description: t('wuye.zengzhi.services.service1.description'),
       items: (t('wuye.zengzhi.services.service1.items', { returnObjects: true }) as string[]) || [],
       color: 'from-blue-500 to-blue-600',
@@ -42,7 +42,7 @@ export default function ZengzhiPage() {
     {
       title: t('wuye.zengzhi.services.service2.title'),
       icon: Hand,
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-service-2.jpg',
       description: t('wuye.zengzhi.services.service2.description'),
       items: (t('wuye.zengzhi.services.service2.items', { returnObjects: true }) as string[]) || [],
       color: 'from-green-500 to-green-600',
@@ -50,7 +50,7 @@ export default function ZengzhiPage() {
     {
       title: t('wuye.zengzhi.services.service3.title'),
       icon: Hammer,
-      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-service-3.jpg',
       description: t('wuye.zengzhi.services.service3.description'),
       items: (t('wuye.zengzhi.services.service3.items', { returnObjects: true }) as string[]) || [],
       color: 'from-orange-500 to-orange-600',
@@ -58,7 +58,7 @@ export default function ZengzhiPage() {
     {
       title: t('wuye.zengzhi.services.service4.title'),
       icon: Coins,
-      image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-service-4.jpg',
       description: t('wuye.zengzhi.services.service4.description'),
       items: (t('wuye.zengzhi.services.service4.items', { returnObjects: true }) as string[]) || [],
       color: 'from-amber-500 to-amber-600',
@@ -70,31 +70,31 @@ export default function ZengzhiPage() {
       step: '01',
       title: t('wuye.zengzhi.process.step1.title'),
       description: t('wuye.zengzhi.process.step1.description'),
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zengzhi-process-1.jpg',
     },
     {
       step: '02',
       title: t('wuye.zengzhi.process.step2.title'),
       description: t('wuye.zengzhi.process.step2.description'),
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zengzhi-process-2.jpg',
     },
     {
       step: '03',
       title: t('wuye.zengzhi.process.step3.title'),
       description: t('wuye.zengzhi.process.step3.description'),
-      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zengzhi-process-3.jpg',
     },
     {
       step: '04',
       title: t('wuye.zengzhi.process.step4.title'),
       description: t('wuye.zengzhi.process.step4.description'),
-      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zengzhi-process-4.jpg',
     },
     {
       step: '05',
       title: t('wuye.zengzhi.process.step5.title'),
       description: t('wuye.zengzhi.process.step5.description'),
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/zengzhi-process-5.jpg',
     },
   ], [t])
 
@@ -104,7 +104,7 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case1.location'),
       result: t('wuye.zengzhi.cases.case1.result'),
       description: t('wuye.zengzhi.cases.case1.description'),
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-case-1.jpg',
       category: t('wuye.zengzhi.cases.case1.category'),
     },
     {
@@ -112,7 +112,7 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case2.location'),
       result: t('wuye.zengzhi.cases.case2.result'),
       description: t('wuye.zengzhi.cases.case2.description'),
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-case-2.jpg',
       category: t('wuye.zengzhi.cases.case2.category'),
     },
     {
@@ -120,10 +120,76 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case3.location'),
       result: t('wuye.zengzhi.cases.case3.result'),
       description: t('wuye.zengzhi.cases.case3.description'),
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/zengzhi-case-3.jpg',
       category: t('wuye.zengzhi.cases.case3.category'),
     },
   ], [t])
+
+  const mobileCasesRef = useRef<HTMLDivElement>(null)
+
+  // 手机端：鼠标/手指拖动横向滚动 + 自动滚动（不交互时）
+  useEffect(() => {
+    const el = mobileCasesRef.current
+    if (!el) return
+
+    let raf: number | null = null
+    let isPaused = false
+    let isDragging = false
+    let startX = 0
+    let startScrollLeft = 0
+    const speed = 0.5 // px / frame
+
+    const tick = () => {
+      if (!isPaused && !isDragging) {
+        const max = el.scrollWidth - el.clientWidth
+        el.scrollLeft += speed
+        if (el.scrollLeft >= max - 2) {
+          el.scrollLeft = 0
+        }
+      }
+      raf = requestAnimationFrame(tick)
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      isDragging = true
+      isPaused = true
+      startX = e.clientX
+      startScrollLeft = el.scrollLeft
+      el.setPointerCapture?.(e.pointerId)
+    }
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      const dx = e.clientX - startX
+      el.scrollLeft = startScrollLeft - dx
+    }
+    const endDrag = () => {
+      if (!isDragging) return
+      isDragging = false
+      isPaused = false
+    }
+    const onEnter = () => (isPaused = true)
+    const onLeave = () => {
+      if (!isDragging) isPaused = false
+    }
+
+    el.addEventListener('pointerdown', onPointerDown, { passive: true })
+    el.addEventListener('pointermove', onPointerMove, { passive: true })
+    el.addEventListener('pointerup', endDrag, { passive: true })
+    el.addEventListener('pointercancel', endDrag, { passive: true })
+    el.addEventListener('mouseenter', onEnter)
+    el.addEventListener('mouseleave', onLeave)
+
+    raf = requestAnimationFrame(tick)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      el.removeEventListener('pointerdown', onPointerDown as any)
+      el.removeEventListener('pointermove', onPointerMove as any)
+      el.removeEventListener('pointerup', endDrag as any)
+      el.removeEventListener('pointercancel', endDrag as any)
+      el.removeEventListener('mouseenter', onEnter)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -148,12 +214,12 @@ export default function ZengzhiPage() {
 
   return (
     <PageLayout>
-      <div className="relative">
+      <div className="relative wuye-subpage">
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-purple-800 via-purple-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/zengzhi-hero.jpg"
               alt="资产增值"
               fill
               className="object-cover opacity-30"
@@ -249,11 +315,6 @@ export default function ZengzhiPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-purple-500" />
-                <p className="text-sm text-purple-400 font-semibold">Our Services</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.zengzhi.description')}
               </p>
@@ -352,21 +413,61 @@ export default function ZengzhiPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Target className="w-6 h-6 text-purple-500" />
-                <p className="text-sm text-purple-400 font-semibold">Success Cases</p>
-              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.zengzhi.cases.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.zengzhi.cases.subtitle')}
               </p>
             </motion.div>
 
+            {/* 手机竖版：可拖动横向滚动 + 自动滚动 */}
+            <div className="md:hidden">
+              <div
+                ref={mobileCasesRef}
+                className="flex gap-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing pb-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-y' as any }}
+              >
+                {[...successCases, ...successCases].map((caseItem, index) => (
+                  <div
+                    key={`m-${index}-${caseItem.title}`}
+                    className="flex-shrink-0 w-72 bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200"
+                  >
+                    <div className="relative h-44 overflow-hidden">
+                      <Image
+                        src={caseItem.image}
+                        alt={caseItem.title}
+                        fill
+                        className="object-cover"
+                        sizes="288px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-navy-900/40"></div>
+                      <div className="absolute top-3 left-3">
+                        <span className="px-2.5 py-1 bg-purple-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
+                          {caseItem.category}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-3 left-3 right-3">
+                        <h3 className="text-base font-bold text-white mb-0.5">{caseItem.title}</h3>
+                        <p className="text-xs text-white/90">{caseItem.location}</p>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="w-5 h-5 text-green-600" />
+                        <span className="text-base font-bold text-green-600">{caseItem.result}</span>
+                      </div>
+                      <p className="text-sm text-gray-700 leading-relaxed">{caseItem.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 桌面/平板：保持原来的三列卡片 */}
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isCasesInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8"
             >
               {successCases.map((caseItem, index) => (
                 <motion.div

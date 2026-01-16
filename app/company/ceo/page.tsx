@@ -89,16 +89,16 @@ export default function CompanyCeoPage() {
                   </div>
                   <div className="company-ceo-profile-intro-image">
                     <Image src={ceoPortrait2} alt={t('company.ceo.profile.name')} fill className="object-cover" sizes="(max-width: 767px) 45vw, 28vw" />
-                  </div>
+              </div>
                   <div className="company-ceo-profile-intro-text">
                     <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-navy-800">{t('company.ceo.profile.name')}</h2>
                     <div className="space-y-2 md:space-y-3">
                       <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
                         {t('company.ceo.profile.introduction1')}
-                      </p>
+                    </p>
                       <p className="text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
                         {t('company.ceo.profile.introduction2')}
-                      </p>
+                    </p>
                     </div>
                   </div>
                 </div>
@@ -110,15 +110,15 @@ export default function CompanyCeoPage() {
                       <div className="flex flex-row items-start justify-between md:justify-start gap-3">
                         <p className="text-sm font-semibold text-indigo-600 flex-shrink-0 md:w-32 lg:w-40">{item.label}</p>
                         <div className="flex-1 text-right">
-                          {Array.isArray(item.value) ? (
-                            <div className="space-y-1">
+                      {Array.isArray(item.value) ? (
+                        <div className="space-y-1">
                               {item.value.map((line, lineIndex) => (
                                 <p key={lineIndex} className="text-gray-700 leading-relaxed text-sm md:text-base text-right">{line}</p>
-                              ))}
-                            </div>
-                          ) : (
+                          ))}
+                        </div>
+                      ) : (
                             <p className="text-gray-700 leading-relaxed text-sm md:text-base text-right break-words">{item.value}</p>
-                          )}
+                      )}
                         </div>
                       </div>
                     </div>
@@ -131,20 +131,11 @@ export default function CompanyCeoPage() {
           <>
             {/* 桌面版 */}
             <section className="desktop-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
-                  <Image
-                    src={ceoPortrait1}
-                    alt="桂小川人物照片"
-                    fill
-                    className="object-contain object-bottom"
-                    priority={false}
-                    sizes="100vw"
-                  />
-                </div>
-              </div>
-              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-                <div className="max-w-[620px] text-slate-900 space-y-6">
+              <div className="container-custom relative z-10 py-16 md:py-20 desktop-message-wrap">
+                <div className="desktop-message-text text-slate-900 space-y-6">
+                  {/* 桌面版寄语：文字环绕“红色图片区域”的占位块（实际图片用绝对定位渲染） */}
+                  <div className="desktop-message-portrait-spacer" aria-hidden="true" />
+
                   <div>
                     <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
@@ -161,13 +152,27 @@ export default function CompanyCeoPage() {
                     <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
+
+                {/* 实际人物图：必须紧贴页尾（section 底部），并放大到 170% */}
+                <div className="desktop-message-portrait-abs" aria-hidden="true">
+                  <div className="desktop-message-portrait-abs-inner">
+                    <Image
+                      src={ceoPortrait1}
+                      alt="桂小川人物照片"
+                      fill
+                      className="object-contain object-bottom"
+                      priority={false}
+                      sizes="42vw"
+                    />
+                  </div>
+                </div>
               </div>
             </section>
 
             {/* iPad横版 */}
             <section className="ipad-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                <div className="relative w-full max-w-[1120px] h-full min-h-[90vh] overflow-hidden">
                   <Image
                     src={ceoPortrait1}
                     alt="桂小川人物照片"
@@ -202,7 +207,7 @@ export default function CompanyCeoPage() {
             {/* iPad竖版 */}
             <section className="ipad-portrait-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="absolute inset-0 flex justify-center" style={{ paddingLeft: '8%' }}>
-                <div className="relative w-full max-w-[1120px] h-[90vh] overflow-hidden">
+                <div className="relative w-full max-w-[1120px] h-full min-h-[90vh] overflow-hidden">
                   <Image
                     src={ceoPortrait1}
                     alt="桂小川人物照片"
@@ -237,15 +242,15 @@ export default function CompanyCeoPage() {
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-landscape-message-content relative">
                   <div className="mobile-landscape-message-image-wrapper">
-                    <Image
-                      src={ceoPortrait1}
-                      alt="桂小川人物照片"
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
                       width={400}
                       height={600}
                       className="mobile-landscape-message-image"
-                      priority={false}
+                    priority={false}
                       sizes="40vw"
-                    />
+                  />
                   </div>
                   <div className="mobile-landscape-message-text">
                     <div>
@@ -253,12 +258,12 @@ export default function CompanyCeoPage() {
                       <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-slate-500 mt-1 md:mt-2">{t('company.ceo.message.subtitle')}</p>
                     </div>
                     <div className="space-y-3 md:space-y-5 text-sm md:text-[1.05rem] leading-relaxed">
-                      {messageParagraphsOriginal.map((paragraph, index) => (
-                        <p key={index} className="text-balance">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
+                    {messageParagraphsOriginal.map((paragraph, index) => (
+                      <p key={index} className="text-balance">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
                     <div className="pt-2 md:pt-4">
                       <p className="text-sm md:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
                       <p className="text-lg md:text-2xl font-semibold text-navy-800 mt-1 md:mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
@@ -273,15 +278,15 @@ export default function CompanyCeoPage() {
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-portrait-message-content relative">
                   <div className="mobile-portrait-message-image-wrapper">
-                    <Image
-                      src={ceoPortrait1}
-                      alt="桂小川人物照片"
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
                       width={300}
                       height={450}
                       className="mobile-portrait-message-image"
-                      priority={false}
+                    priority={false}
                       sizes="45vw"
-                    />
+                  />
                   </div>
                   <div className="mobile-portrait-message-text">
                     <div>
@@ -289,10 +294,10 @@ export default function CompanyCeoPage() {
                       <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-slate-500 mt-1 md:mt-2">{t('company.ceo.message.subtitle')}</p>
                     </div>
                     <div className="space-y-3 md:space-y-5 text-sm md:text-[1.05rem] leading-relaxed">
-                      {messageParagraphs.map((paragraph, index) => (
-                        <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
-                      ))}
-                    </div>
+                    {messageParagraphs.map((paragraph, index) => (
+                      <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                    ))}
+                  </div>
                     <div className="pt-2 md:pt-4">
                       <p className="text-sm md:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
                       <p className="text-lg md:text-2xl font-semibold text-navy-800 mt-1 md:mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>

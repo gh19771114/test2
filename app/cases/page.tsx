@@ -2,126 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PageLayout from '@/components/PageLayout'
 import { Calendar, MapPin, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
-
-// 案例数据
-const cases = [
-  // 买卖中介
-  {
-    id: 'grand-maison-asakusa-1302',
-    date: '2025/08/25',
-    type: '销售',
-    categoryGroup: '买卖中介',
-    title: 'グランドメゾン浅草花川戸13楼',
-    location: '东京都台东区浅草',
-    category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '成功完成浅草花川戸高级公寓单元的销售交易，为客户提供专业的销售服务。',
-  },
-  {
-    id: 'park-tower-nishishinjuku-101-201',
-    date: '2025/09/25',
-    type: '销售',
-    categoryGroup: '买卖中介',
-    title: 'パークタワー西新宿施設棟1楼',
-    location: '东京都新宿区西新宿',
-    category: '商业设施',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '成功完成西新宿核心地段商业设施两个单元的销售交易。',
-  },
-  {
-    id: 'my-castle-yoyogi-1203',
-    date: '2025/05/16',
-    type: '销售',
-    categoryGroup: '买卖中介',
-    title: 'マイキャスル代々木12楼',
-    location: '东京都涩谷区代代木',
-    category: '公寓',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '成功完成代代木地区优质公寓单元的销售交易。',
-  },
-  // 物业管理
-  {
-    id: 'abc-hall-management',
-    date: '2025/10/23',
-    type: '管理委托',
-    categoryGroup: '物业管理',
-    title: 'ABC館管理委托',
-    location: '东京都',
-    category: '物业管理',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '成功接受ABC館的物业管理委托，开始提供全方位的资产管理服务。',
-  },
-  {
-    id: 'shibuya-luxury-apartment',
-    date: '2024/03/15',
-    type: '管理委托',
-    categoryGroup: '物业管理',
-    title: '东京涩谷高端公寓',
-    location: '东京都涩谷区',
-    category: '高级公寓',
-    image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '入住率 96%，通过数字化管理系统将维修响应时间缩短至 12 小时内。',
-  },
-  {
-    id: 'yokohama-waterfront-complex',
-    date: '2024/06/20',
-    type: '管理委托',
-    categoryGroup: '物业管理',
-    title: '横滨海滨综合体',
-    location: '神奈川县横滨市',
-    category: '商业综合体',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '通过分区管理与租客重组，商业租金提升 18%。',
-  },
-  {
-    id: 'nagoya-student-apartment',
-    date: '2024/09/10',
-    type: '管理委托',
-    categoryGroup: '物业管理',
-    title: '名古屋学生公寓',
-    location: '爱知县名古屋市',
-    category: '学生公寓',
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '引入智能门禁与租客社群运营，每年续约率保持在 92%。',
-  },
-  // 企业出海助力
-  {
-    id: 'kingsoft-wps-japan',
-    date: '2024/11/15',
-    type: '企业服务',
-    categoryGroup: '企业出海助力',
-    title: '金山 WPS 日本子公司设立服务',
-    location: '东京都',
-    category: '企业出海',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '协助完成法人登记、签约日本大型不动产公司设立办公室，并搭建本地财务与招聘体系。',
-  },
-  // 资产投资
-  {
-    id: 'shinjuku-daikan-plaza-a-201',
-    date: '2025/10/23',
-    type: '资产购入',
-    categoryGroup: '资产投资',
-    title: '新宿ダイカンプラザA館2楼',
-    location: '东京都新宿区',
-    category: '商业设施',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    description: '公司成功购入新宿核心商业区商业设施资产。',
-  },
-]
-
-// 分类配置
-const categoryGroups = [
-  { id: '买卖中介', name: '买卖中介', order: 1 },
-  { id: '物业管理', name: '物业管理', order: 2 },
-  { id: '企业出海助力', name: '企业出海助力', order: 3 },
-  { id: '资产投资', name: '资产投资', order: 4 },
-]
+import { useLanguage } from '@/contexts/LanguageContext'
+import { caseIds, caseDates, caseImages, caseCategoryGroups } from '@/lib/casesData'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -145,15 +32,37 @@ const itemVariants = {
 }
 
 export default function CasesPage() {
+  const { t } = useLanguage()
   const ref = useRef(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const [selectedCategory, setSelectedCategory] = useState<string>('全部案例')
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+
+  // 构建案例数据（使用翻译）
+  const cases = useMemo(() => {
+    return caseIds.map((id) => {
+      const detail = t(`cases.details.${id}`, { returnObjects: true }) as any
+      return {
+        id,
+        date: caseDates[id],
+        type: detail?.type || '',
+        categoryGroup: caseCategoryGroups[id],
+        title: detail?.title || '',
+        location: detail?.location || '',
+        category: detail?.category || '',
+        image: caseImages[id],
+        description: detail?.description || '',
+      }
+    })
+  }, [t])
 
   // 筛选案例
-  const filteredCases = selectedCategory === '全部案例' 
-    ? cases 
-    : cases.filter((caseItem) => caseItem.categoryGroup === selectedCategory)
+  const filteredCases = useMemo(() => {
+    if (selectedCategory === 'all') {
+      return cases
+    }
+    return cases.filter((caseItem) => caseItem.categoryGroup === selectedCategory)
+  }, [cases, selectedCategory])
 
   // 滚动函数
   const scroll = (direction: 'left' | 'right') => {
@@ -168,7 +77,7 @@ export default function CasesPage() {
 
   return (
     <PageLayout>
-        <div className="relative min-h-screen">
+        <div className="relative min-h-screen cases-page">
           {/* Hero Section */}
         <section className="relative pt-28 pb-16 bg-gradient-to-br from-cyan-800 via-cyan-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -183,9 +92,9 @@ export default function CasesPage() {
           </div>
           <div className="relative z-10 container-custom">
             <p className="text-sm text-cyan-300 font-semibold mb-4 drop-shadow-md">Case Studies</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">案例展示</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">{t('cases.page.title')}</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
-              以下是我们已成功完成的真实案例，涵盖房产销售、购入及物业管理等各类业务，为客户提供专业、高效的服务。
+              {t('cases.page.subtitle')}
             </p>
           </div>
         </section>
@@ -195,17 +104,23 @@ export default function CasesPage() {
           
           <div className="container-custom relative z-10">
             <div className="flex flex-wrap items-center gap-4">
-              {['全部案例', '买卖中介', '物业管理', '企业出海助力', '资产投资'].map((category) => (
+              {[
+                { id: 'all', key: 'all' },
+                { id: 'maimai', key: 'maimai' },
+                { id: 'wuye', key: 'wuye' },
+                { id: 'qichu', key: 'qichu' },
+                { id: 'touzi', key: 'touzi' },
+              ].map((category) => (
                 <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
                   className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                    selectedCategory === category
+                    selectedCategory === category.id
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {category}
+                  {t(`cases.page.filters.${category.key}`)}
                 </button>
               ))}
             </div>
@@ -220,7 +135,7 @@ export default function CasesPage() {
               <button
                 onClick={() => scroll('left')}
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
-                aria-label="向左滚动"
+                aria-label={t('cases.page.scrollLeft')}
               >
                 <ChevronLeft size={24} className="text-navy-900" />
               </button>
@@ -229,7 +144,7 @@ export default function CasesPage() {
               <button
                 onClick={() => scroll('right')}
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
-                aria-label="向右滚动"
+                aria-label={t('cases.page.scrollRight')}
               >
                 <ChevronRight size={24} className="text-navy-900" />
               </button>
@@ -251,39 +166,42 @@ export default function CasesPage() {
                     <motion.div
                       key={caseItem.id}
                       variants={itemVariants}
-                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0"
+                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card"
                       style={{ width: '380px' }}
                     >
                       <div className="relative overflow-hidden">
-                        <div className="relative w-full h-64">
+                        <div className="relative w-full h-64 cases-card-media">
                           <Image
                             src={caseItem.image}
                             alt={caseItem.title}
                             fill
                             className="object-cover"
                             sizes="380px"
+                            unoptimized={caseItem.image.startsWith('/imgs/')}
                           />
                         </div>
                         <div className="absolute top-4 right-4">
-                          <span className="bg-blue-600 text-navy-900 px-3 py-1 rounded-full text-sm font-medium">
+                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                             {caseItem.type}
                           </span>
                         </div>
                       </div>
 
-                      <div className="p-6">
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                      <div className="p-6 cases-card-body">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
                           <Calendar size={16} />
                           <span>{caseItem.date}</span>
                         </div>
-                        <h3 className="text-xl font-semibold text-navy-900 mb-2">
-                          {caseItem.title}
-                        </h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-700 mb-3">
+                        <Link href={`/cases/${caseItem.id}`}>
+                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title">
+                            {caseItem.title}
+                          </h3>
+                        </Link>
+                        <div className="flex items-center gap-2 text-sm text-gray-700 mb-3 cases-card-location">
                           <MapPin size={16} />
                           <span>{caseItem.location}</span>
                         </div>
-                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
+                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
                           {caseItem.description}
                         </p>
                       </div>

@@ -83,9 +83,9 @@ export default function CompanySNSPage() {
       name: t('company.sns.platforms.wechat.name'),
       icon: Video,
       color: 'bg-[#07C160]',
-      href: isMobile ? 'weixin://' : '#',
+      href: '#', // 改为 #，点击时显示二维码弹窗
       description: t('company.sns.platforms.wechat.description'),
-      qrImage: '/imgs/qrcode_for_gh_5f711e1371ba_258.jpg',
+      qrImage: '/imgs/gongzhonghaoQR.JPG',
     },
     {
       name: 'Line',
@@ -164,8 +164,8 @@ export default function CompanySNSPage() {
             {snsPlatforms.map((platform) => {
               const Icon = platform.icon
               const handleClick = (e: React.MouseEvent) => {
-                // 如果是桌面端且有QR码，显示QR码弹窗
-                if (!isMobile && platform.qrImage && platform.href === '#') {
+                // 如果有QR码且链接为 #，显示QR码弹窗（包括微信，所有设备都显示）
+                if (platform.qrImage && platform.href === '#') {
                   e.preventDefault()
                   setShowQRModal(platform.name)
                 } else if (platform.href === '#') {

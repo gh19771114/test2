@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" rx="48" fill="url(#bg)"/>
+  <path d="M 0 130 C 240 40, 520 220, 760 120 C 980 30, 1100 60, 1200 140 L 1200 0 L 0 0 Z" fill="url(#shine)"/>
+  <g opacity="0.16" fill="#fff">
+    <circle cx="160" cy="650" r="110"/>
+    <circle cx="1040" cy="170" r="90"/>
+    <circle cx="980" cy="680" r="55"/>
+  </g>
+
+  <g transform="translate(110,120)" filter="url(#shadow)">
+    <rect x="0" y="0" width="980" height="560" rx="44" fill="#0b1220" fill-opacity="0.25" stroke="#fff" stroke-opacity="0.22"/>
+    <g transform="translate(96,110)">
+      <g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 98a38 38 0 1 0 0-76a38 38 0 0 0 0 76z"/>
+    <path d="M64 98c-40 0-58 22-58 46v10h116v-10c0-24-18-46-58-46z"/>
+    <path d="M168 92a28 28 0 1 0 0-56a28 28 0 0 0 0 56z"/>
+    <path d="M168 92c-18 0-32 6-40 14"/>
+  </g>
+    </g>
+    <g transform="translate(96,360)" fill="#fff">
+      <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" font-size="56" font-weight="800">咨询响应</text>
+      <text x="0" y="64" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="600" opacity="0.9">快速处理住户问题</text>
+    </g>
+  </g>
+
+  <g transform="translate(110,720)" fill="#fff" opacity="0.85">
+    <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Noto Sans', sans-serif" font-size="22">Bourn Mark • Investment Property Management</text>
+  </g>
+</svg>

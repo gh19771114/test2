@@ -56,7 +56,7 @@ export default function RuzhuPage() {
     {
       title: t('wuye.ruzhu.services.service1.title'),
       icon: Gift,
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/ruzhu-service-1.jpg',
       description: t('wuye.ruzhu.services.service1.description'),
       items: (t('wuye.ruzhu.services.service1.items', { returnObjects: true }) as string[]) || [],
       color: 'from-teal-500 to-teal-600',
@@ -64,7 +64,7 @@ export default function RuzhuPage() {
     {
       title: t('wuye.ruzhu.services.service2.title'),
       icon: MessageCircle,
-      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/ruzhu-service-2.jpg',
       description: t('wuye.ruzhu.services.service2.description'),
       items: (t('wuye.ruzhu.services.service2.items', { returnObjects: true }) as string[]) || [],
       color: 'from-blue-500 to-blue-600',
@@ -72,7 +72,7 @@ export default function RuzhuPage() {
     {
       title: t('wuye.ruzhu.services.service3.title'),
       icon: Heart,
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/imgs/wuye/real/ruzhu-service-3.jpg',
       description: t('wuye.ruzhu.services.service3.description'),
       items: (t('wuye.ruzhu.services.service3.items', { returnObjects: true }) as string[]) || [],
       color: 'from-purple-500 to-purple-600',
@@ -84,30 +84,30 @@ export default function RuzhuPage() {
       step: '01',
       title: t('wuye.ruzhu.process.step1.title'),
       description: t('wuye.ruzhu.process.step1.description'),
-      image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/ruzhu-process-1.jpg',
     },
     {
       step: '02',
       title: t('wuye.ruzhu.process.step2.title'),
       description: t('wuye.ruzhu.process.step2.description'),
-      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/ruzhu-process-2.jpg',
     },
     {
       step: '03',
       title: t('wuye.ruzhu.process.step3.title'),
       description: t('wuye.ruzhu.process.step3.description'),
-      image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/ruzhu-process-3.jpg',
     },
   ], [t])
 
   return (
     <PageLayout>
-      <div className="relative">
+      <div className="relative wuye-subpage">
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-teal-800 via-teal-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/ruzhu-hero.jpg"
               alt="入住者服务"
               fill
               className="object-cover opacity-30"
@@ -201,11 +201,6 @@ export default function RuzhuPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-teal-500" />
-                <p className="text-sm text-teal-400 font-semibold">Our Services</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.ruzhu.description')}
               </p>

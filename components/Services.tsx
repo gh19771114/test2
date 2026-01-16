@@ -33,6 +33,11 @@ const Services = () => {
   // 初始值设为false，在客户端挂载后再检测，避免hydration错误
   const isIPadDeviceRef = useRef<boolean>(false)
   const [shouldShowDesktopChart, setShouldShowDesktopChart] = useState(false)
+  // 检测是否为“手机横屏”（注意：很多手机横屏 width 会超过 767px，所以不能用 width<=767 判断）
+  // 判定策略：横屏 + 触摸设备 + 短边足够小（排除 iPad/平板）
+  const [isMobileLandscape, setIsMobileLandscape] = useState(false)
+  // 手机横版：点击后将饼图精准移动到页面左侧（用像素计算，避免写死的 vw 位移在不同机型失效）
+  const [mobileLandscapeShiftX, setMobileLandscapeShiftX] = useState(0)
   
   // 强制同步：确保 ref 始终是最新的，state 只是用于触发重新渲染
   useEffect(() => {
@@ -61,14 +66,23 @@ const Services = () => {
       if (typeof window === 'undefined') return
       const width = window.innerWidth
       const height = window.innerHeight
+      
       // 更精确的iPad检测：包括横屏和竖屏，排除桌面端大屏幕
       // iPad检测：宽度或高度在768-1366之间，且另一个维度在合理范围内，排除大桌面屏幕
       const isIPadDevice = (width >= 768 && width <= 1366 && height >= 768 && height <= 1366) &&
                            !(width >= 1920 && height >= 1080) // 排除大桌面屏幕
+      
+      // 检测手机横版（仅手机，不含 iPad）：
+      // - 横屏：width > height
+      // - 触摸设备：pointer coarse / maxTouchPoints
+      // - 短边阈值：多数手机短边 < 600；iPad 短边通常 >= 768
+      // 检测是否为触摸设备（真正的iPad/平板/手机）
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      const isPhoneLike = Math.min(width, height) < 600
+      const isMobileLandscapeMode = width > height && isTouchDevice && isPhoneLike && !isIPadDevice
+      setIsMobileLandscape(isMobileLandscapeMode)
       // 检查是否为手机端（宽度 < 1024）
       const isMobile = width < 1024
-      // 检测是否为触摸设备（真正的iPad/平板）
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
       // 小屏幕电脑（宽度>=1024但<=1366，且非触摸设备）应该显示桌面版饼图
       const isSmallDesktop = width >= 1024 && width <= 1366 && !isTouchDevice
       
@@ -151,6 +165,40 @@ const Services = () => {
       }
     }
   }, [])
+
+  // 手机横版：当弹窗打开时，计算饼图需要左移的像素值（让饼图贴近页面左边）
+  useEffect(() => {
+    if (!isMobileLandscape) {
+      if (mobileLandscapeShiftX !== 0) setMobileLandscapeShiftX(0)
+      return
+    }
+
+    // 只在“有选中服务（弹窗出现）”时移动
+    const activeServiceLink = clickedIPadServiceRef.current || clickedIPadService
+    if (!activeServiceLink) {
+      if (mobileLandscapeShiftX !== 0) setMobileLandscapeShiftX(0)
+      return
+    }
+
+    const computeShift = () => {
+      const el = mobilePieChartRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const desiredLeft = 16 // 与页面边缘保持 16px 间距
+      const shift = desiredLeft - rect.left
+      setMobileLandscapeShiftX(shift)
+    }
+
+    // 等待本次渲染完成后再测量
+    const raf = requestAnimationFrame(computeShift)
+    window.addEventListener('resize', computeShift)
+    window.addEventListener('orientationchange', computeShift)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', computeShift)
+      window.removeEventListener('orientationchange', computeShift)
+    }
+  }, [isMobileLandscape, clickedIPadService, mobileLandscapeShiftX])
 
   // 同步ref和state，确保状态在滚动时保持
   // 只在state变化时更新ref，避免覆盖用户操作
@@ -397,14 +445,53 @@ const Services = () => {
 
           <div
             ref={ref}
-            className="flex flex-col items-center gap-4 relative"
+            className="flex flex-col items-center gap-4 relative mobile-services-container"
             style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}
+          >
+          {/* 手机横版：包装容器，用于横向布局 */}
+          {(() => {
+            // 优先使用ref，因为它不会因为滚动而改变
+            const activeServiceLink = clickedIPadServiceRef.current || clickedIPadService
+            return (
+              <div 
+                className={`mobile-landscape-wrapper w-full ${activeServiceLink ? 'has-description-box' : ''}`}
+                style={isMobileLandscape ? {
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  // 未点击：饼图在屏幕中央；点击后：饼图靠左、弹窗在右
+                  justifyContent: activeServiceLink ? 'flex-start' : 'center',
+                  gap: activeServiceLink ? '1rem' : '0',
+                  // 在 container-custom 内做“全宽铺满”，让横版布局真正贴近屏幕两边
+                  width: '100vw',
+                  marginLeft: 'calc(50% - 50vw)',
+                  marginRight: 'calc(50% - 50vw)',
+                  paddingLeft: '16px',
+                  paddingRight: '16px',
+                  position: 'relative',
+                  overflow: 'visible',
+                } : {}}
           >
           {/* 移动端和iPad：饼图 */}
           <div 
             ref={mobilePieChartRef} 
-            className="w-full flex justify-center mb-0 mobile-pie-chart-container ipad-pie-chart-wrapper"
-            style={{ minHeight: '400px' }}
+            className="w-full flex justify-center mb-0 mobile-pie-chart-container ipad-pie-chart-wrapper mobile-pie-chart-wrapper"
+            style={isMobileLandscape && activeServiceLink ? {
+              minHeight: 'auto',
+              transform: `translateX(${mobileLandscapeShiftX}px)`,
+              transition: 'transform 0.25s ease-in-out',
+              width: 'auto',
+              maxWidth: 'none',
+              flexShrink: 0,
+              justifyContent: 'flex-start',
+            } : isMobileLandscape ? {
+              minHeight: 'auto',
+              // 横屏未点击：保持居中
+              width: '100%',
+              maxWidth: 'none',
+              flexShrink: 0,
+              justifyContent: 'center',
+            } : { minHeight: '400px' }}
           >
             <div 
               ref={mobilePieChartInnerRef}
@@ -418,7 +505,7 @@ const Services = () => {
                 }),
                 flexShrink: 0,
                 willChange: 'auto',
-                transform: 'translate3d(0, 0, 0)',
+                // 移除 transform，让CSS控制移动效果
                 backfaceVisibility: 'hidden',
               }}
             >
@@ -554,7 +641,24 @@ const Services = () => {
             if (!activeService) return null
             
             return (
-              <div className="w-full flex justify-center ipad-description-box mb-4 -mt-4">
+              <div 
+                className="w-full flex justify-center ipad-description-box mb-[3.5rem] -mt-4 mobile-landscape-description-box"
+                style={isMobileLandscape ? {
+                  flex: 1,
+                  minWidth: 0,
+                  maxWidth: '50%',
+                  width: 'auto',
+                  marginTop: 0,
+                  // 横屏：弹窗在右侧时，下方留出更多空间，避免贴近下方“联系我们预约咨询”按钮
+                  marginBottom: '1.5rem',
+                  marginLeft: '1rem',
+                  marginRight: 0,
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  order: 2,
+                } : {}}
+              >
                 <div className="w-full max-w-[600px]">
                   <Link href={activeService.link} className="block">
                     <div
@@ -594,6 +698,10 @@ const Services = () => {
               </div>
             )
           })()}
+              </div>
+            )
+          })()}
+          {/* 手机横版：包装容器结束 */}
 
           {/* 桌面端：饼图容器 - 包含饼图和弹窗（仅大屏幕桌面端，非iPad） */}
           {/* 在iPad上完全不渲染，避免闪现 - 使用shouldShowDesktopChart状态控制 */}
@@ -889,4 +997,3 @@ const Services = () => {
 }
 
 export default Services
-

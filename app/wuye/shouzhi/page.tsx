@@ -58,7 +58,7 @@ export default function ShouzhiPage() {
       {
         title: t('wuye.shouzhi.services.service1.title'),
         icon: DollarSign,
-        image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/shouzhi-service-1.jpg',
         description: t('wuye.shouzhi.services.service1.description'),
         items: (t('wuye.shouzhi.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -71,7 +71,7 @@ export default function ShouzhiPage() {
       {
         title: t('wuye.shouzhi.services.service2.title'),
         icon: FileText,
-        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/shouzhi-service-2.jpg',
         description: t('wuye.shouzhi.services.service2.description'),
         items: (t('wuye.shouzhi.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -84,7 +84,7 @@ export default function ShouzhiPage() {
       {
         title: t('wuye.shouzhi.services.service3.title'),
         icon: Calculator,
-        image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        image: '/imgs/wuye/real/shouzhi-service-3.jpg',
         description: t('wuye.shouzhi.services.service3.description'),
         items: (t('wuye.shouzhi.services.service3.items', { returnObjects: true }) as string[]) || [],
         timeline: {
@@ -103,30 +103,30 @@ export default function ShouzhiPage() {
       step: '01',
       title: t('wuye.shouzhi.process.step1.title'),
       description: t('wuye.shouzhi.process.step1.description'),
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/shouzhi-process-1.jpg',
     },
     {
       step: '02',
       title: t('wuye.shouzhi.process.step2.title'),
       description: t('wuye.shouzhi.process.step2.description'),
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/shouzhi-process-2.jpg',
     },
     {
       step: '03',
       title: t('wuye.shouzhi.process.step3.title'),
       description: t('wuye.shouzhi.process.step3.description'),
-      image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+      image: '/imgs/wuye/real/shouzhi-process-3.jpg',
     },
   ], [t])
 
   return (
     <PageLayout>
-      <div className="relative">
+      <div className="relative wuye-subpage">
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-green-800 via-green-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+              src="/imgs/wuye/real/shouzhi-hero.jpg"
               alt="收支与税务"
               fill
               className="object-cover opacity-30"
@@ -220,11 +220,6 @@ export default function ShouzhiPage() {
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <div className="inline-flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-green-500" />
-                <p className="text-sm text-green-400 font-semibold">Our Services</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t('wuye.services.title')}</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
                 {t('wuye.shouzhi.description')}
               </p>
@@ -244,26 +239,26 @@ export default function ShouzhiPage() {
                 >
                   <div className="flex flex-col">
                     <div className="relative w-full h-32 overflow-hidden">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
                     </div>
                     <div className="flex-1 p-6">
                       <h3 className="text-xl font-bold text-gray-800 mb-2">{service.title}</h3>
                       <p className="text-sm text-gray-600 mb-4">{service.description}</p>
                       <ul className="space-y-2 mb-4">
-                        {service.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="flex items-start gap-3">
-                            <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
-                            <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {service.items.map((item, itemIndex) => (
+                        <li key={itemIndex} className="flex items-start gap-3">
+                          <div className={`mt-1 w-2 h-2 rounded-full bg-gradient-to-br ${service.color} flex-shrink-0`}></div>
+                          <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                       {service.timeline && (
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="flex items-center gap-2 mb-2">

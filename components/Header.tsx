@@ -65,7 +65,7 @@ const Header = () => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const scrollToHash = (hash: string) => {
+  const scrollToHash = (hash: string, behavior: ScrollBehavior = 'smooth') => {
     if (!hash) return
     const targetId = hash.startsWith('#') ? hash.substring(1) : hash
     const element = document.getElementById(targetId)
@@ -73,7 +73,7 @@ const Header = () => {
       const headerOffset = 104 // approx. header height with padding
       const elementPosition = element.getBoundingClientRect().top + window.scrollY
       const offsetPosition = elementPosition - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+      window.scrollTo({ top: offsetPosition, behavior })
     }
   }
 
@@ -103,7 +103,8 @@ const Header = () => {
       const hashToScroll = pendingHash || currentHash
       if (hashToScroll) {
         setTimeout(() => {
-          scrollToHash(hashToScroll)
+          // 从其他页面跳回首页：取消中间“下拉/滚动动画”，直接定位到锚点
+          scrollToHash(hashToScroll, 'auto')
           if (pendingHash) sessionStorage.removeItem('pendingHash')
         }, 100)
       }
@@ -144,7 +145,8 @@ const Header = () => {
       event.preventDefault()
       const hash = href.split('#')[1]
       if (pathname === '/') {
-        scrollToHash(hash)
+        // 首页内点击：保持原有 smooth（仅“从其他页面跳回首页”取消动画）
+        scrollToHash(hash, 'smooth')
       } else {
         sessionStorage.setItem('pendingHash', hash)
         router.push(href)
@@ -211,21 +213,11 @@ const Header = () => {
   ], [t])
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-[10000] bg-white shadow-sm"
-    >
+    <motion.header className="fixed top-0 left-0 right-0 z-[10000] bg-white shadow-sm">
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex-shrink-0 flex items-center"
-          >
+          <motion.div className="flex-shrink-0 flex items-center">
             <a href="/" aria-label="Bourn Mark" className="flex items-center h-full">
               <Image
                 src={logo}
@@ -246,9 +238,6 @@ const Header = () => {
                   <motion.div
                     key={item.key}
                     className="relative"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                     ref={(node) => {
                       if (node) {
                         dropdownRefs.current[item.key] = node
@@ -296,10 +285,6 @@ const Header = () => {
                     <AnimatePresence>
                       {openDropdown === item.key && (
                         <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
                           className="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-xl shadow-lg overflow-visible z-[10000]"
                           onMouseEnter={() => {
                             // 清除任何待关闭的定时器
@@ -362,10 +347,6 @@ const Header = () => {
                                 <AnimatePresence>
                                   {hoveredChild === child.name && (
                                     <motion.div
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      exit={{ opacity: 0, x: -10 }}
-                                      transition={{ duration: 0.2 }}
                                       className="absolute left-full top-0 ml-1 w-56 bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden z-[10001] min-w-[224px]"
                                       onMouseEnter={() => {
                                         if (hoverTimeoutRef.current) {
@@ -414,9 +395,6 @@ const Header = () => {
                 <motion.a
                   key={item.key}
                   href={item.href}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                   className="text-sm xl:text-base text-gray-700 hover:text-navy-700 font-medium transition-colors duration-200 relative group px-2 py-1"
                   onClick={(e) => handleNavClick(e, item.href!)}
                   onMouseEnter={() => {
@@ -461,10 +439,6 @@ const Header = () => {
               <AnimatePresence>
                 {isLanguageOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-[10000]"
                   >
                     {languages.map((lang, index) => (
@@ -494,9 +468,6 @@ const Header = () => {
 
           {/* Mobile menu button */}
           <motion.button
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:hidden p-2 rounded-md text-gray-700 hover:text-navy-700 hover:bg-gray-100"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -508,10 +479,6 @@ const Header = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
               className="lg:hidden bg-white border-t border-gray-200"
             >
               <div className="px-2 pt-2 pb-3 space-y-1">
@@ -521,9 +488,6 @@ const Header = () => {
                     return (
                       <motion.div
                         key={item.key}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
                         className="border border-gray-100 rounded-lg overflow-hidden"
                       >
                         <button
@@ -539,10 +503,6 @@ const Header = () => {
                         <AnimatePresence initial={false}>
                           {expanded && (
                             <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
                               className="bg-gray-50"
                             >
                               {item.children.map((child) => (
@@ -572,9 +532,6 @@ const Header = () => {
                     <motion.a
                       key={item.key}
                       href={item.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
                       className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-navy-700 hover:bg-gray-50 rounded-md transition-colors duration-200"
                       onClick={(e) => {
                         handleNavClick(e, item.href!)
@@ -606,9 +563,6 @@ const Header = () => {
                   {languages.map((lang, index) => (
                     <motion.button
                       key={lang.code}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 * index }}
                       className={`w-full flex items-center gap-3 px-3 py-2 text-base rounded-md transition-colors duration-200 ${lang.code === selectedLanguage.code ? 'bg-navy-50 text-navy-700' : 'text-gray-700 hover:text-navy-700 hover:bg-gray-50'}`}
                       onClick={() => {
                         handleLanguageSelect(lang)

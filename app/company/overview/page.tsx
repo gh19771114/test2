@@ -194,8 +194,8 @@ export default function CompanyOverviewPage() {
                                       ) : (
                                         line
                                       )}
-                                    </div>
-                                  ))}
+                    </div>
+                  ))}
                                 </div>
                               ) : (
                                 <p className="text-balance whitespace-pre-line">{item.value}</p>
@@ -303,9 +303,12 @@ function AutoScrollAssets() {
     const scrollSpeed = 1 // 滚动速度（像素/帧）
     let animationFrameId: number | null = null
     let isPaused = false
+    let isDragging = false
+    let startX = 0
+    let startScrollLeft = 0
 
     const scroll = () => {
-      if (isPaused) {
+      if (isPaused || isDragging) {
         animationFrameId = requestAnimationFrame(scroll)
         return
       }
@@ -332,8 +335,33 @@ function AutoScrollAssets() {
       }
     }
 
+    // 鼠标/触摸拖动滚动
+    const onPointerDown = (e: PointerEvent) => {
+      isDragging = true
+      isPaused = true
+      startX = e.clientX
+      startScrollLeft = container.scrollLeft
+      container.setPointerCapture?.(e.pointerId)
+    }
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      const dx = e.clientX - startX
+      container.scrollLeft = startScrollLeft - dx
+    }
+    const endDrag = () => {
+      if (!isDragging) return
+      isDragging = false
+      // 更新 scrollPosition 为当前实际滚动位置，避免回弹
+      scrollPosition = container.scrollLeft
+      isPaused = false
+    }
+
     container.addEventListener('mouseenter', handleMouseEnter)
     container.addEventListener('mouseleave', handleMouseLeave)
+    container.addEventListener('pointerdown', onPointerDown, { passive: true })
+    container.addEventListener('pointermove', onPointerMove, { passive: true })
+    container.addEventListener('pointerup', endDrag, { passive: true })
+    container.addEventListener('pointercancel', endDrag, { passive: true })
 
     // 开始滚动
     animationFrameId = requestAnimationFrame(scroll)
@@ -344,6 +372,10 @@ function AutoScrollAssets() {
       }
       container.removeEventListener('mouseenter', handleMouseEnter)
       container.removeEventListener('mouseleave', handleMouseLeave)
+      container.removeEventListener('pointerdown', onPointerDown as any)
+      container.removeEventListener('pointermove', onPointerMove as any)
+      container.removeEventListener('pointerup', endDrag as any)
+      container.removeEventListener('pointercancel', endDrag as any)
     }
   }, [])
 
@@ -359,7 +391,7 @@ function AutoScrollAssets() {
       
       <div
         ref={scrollContainerRef}
-        className="flex gap-4 md:gap-6 overflow-x-hidden scrollbar-hide"
+        className="flex gap-4 md:gap-6 overflow-x-hidden scrollbar-hide cursor-grab active:cursor-grabbing"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {duplicatedAssets.map((property, index) => {
