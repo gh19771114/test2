@@ -5,10 +5,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Briefcase, Hand, Hammer, Coins, Building2 } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
 
 export default function WuYePage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+  const propertiesScrollRef = useRef<HTMLDivElement | null>(null)
 
   const regularServices = useMemo(() => [
     {
@@ -66,38 +68,137 @@ export default function WuYePage() {
     },
   ], [t])
 
-  const managedProperties = useMemo(() => [
-    {
-      id: 'shibuya-luxury-apartment',
-      date: '2024/03/15',
+  const managedProperties = useMemo(() => {
+    return activeManagedPropertyCards.map((card) => ({
+      id: card.id,
       type: t('wuye.properties.type'),
-      title: t('wuye.properties.property1.title'),
-      location: t('wuye.properties.property1.location'),
-      category: t('wuye.properties.property1.category'),
-      image: '/imgs/wuye/real/wuye-property-1.jpg',
-      description: t('wuye.properties.property1.description'),
-    },
-    {
-      id: 'yokohama-waterfront-complex',
-      date: '2024/06/20',
-      type: t('wuye.properties.type'),
-      title: t('wuye.properties.property2.title'),
-      location: t('wuye.properties.property2.location'),
-      category: t('wuye.properties.property2.category'),
-      image: '/imgs/wuye/real/wuye-property-2.jpg',
-      description: t('wuye.properties.property2.description'),
-    },
-    {
-      id: 'nagoya-student-apartment',
-      date: '2024/09/10',
-      type: t('wuye.properties.type'),
-      title: t('wuye.properties.property3.title'),
-      location: t('wuye.properties.property3.location'),
-      category: t('wuye.properties.property3.category'),
-      image: '/imgs/wuye/real/wuye-property-3.jpg',
-      description: t('wuye.properties.property3.description'),
-    },
-  ], [t])
+      title: getManagedPropertyTitle(card, language),
+      image: card.image,
+    }))
+  }, [t, language])
+
+  // 管理房产：用于无缝自动滚动（渲染两份，滚动到一半回绕）
+  const managedPropertiesLoop = useMemo(() => {
+    return [...managedProperties, ...managedProperties]
+  }, [managedProperties])
+
+  // 管理房产：自动滚动 + 鼠标/触摸拖拽（参照 /company/overview 的 AutoScrollAssets 逻辑）
+  useEffect(() => {
+    const container = propertiesScrollRef.current
+    if (!container) return
+
+    let scrollPosition = 0
+    // 参照企业概要页：用“像素/帧”推进，体感更稳定；这里调快一些
+    const scrollSpeed = 2.8 // px/frame（约 168px/s @60fps）
+    let animationFrameId: number | null = null
+    let isPaused = false
+    let isDragging = false
+    let startX = 0
+    let startScrollLeft = 0
+
+    const scroll = () => {
+      if (isPaused || isDragging) {
+        animationFrameId = requestAnimationFrame(scroll)
+        return
+      }
+
+      scrollPosition += scrollSpeed
+      const maxScroll = container.scrollWidth - container.clientWidth
+      if (scrollPosition >= maxScroll) {
+        scrollPosition = 0
+      }
+      container.scrollLeft = scrollPosition
+      animationFrameId = requestAnimationFrame(scroll)
+    }
+
+    const handleMouseEnter = () => {
+      isPaused = true
+    }
+    const handleMouseLeave = () => {
+      isPaused = false
+      if (animationFrameId === null) {
+        animationFrameId = requestAnimationFrame(scroll)
+      }
+    }
+
+    // 触摸板/鼠标滚轮：将 deltaX/deltaY 映射为横向滚动，并阻止页面上下滚动“抢手势”
+    const onWheel = (e: WheelEvent) => {
+      const maxScroll = container.scrollWidth - container.clientWidth
+      if (maxScroll <= 0) return
+
+      // 暂停自动滚动，避免抢夺
+      isPaused = true
+
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (delta === 0) return
+
+      // 需要 non-passive 才能 preventDefault
+      e.preventDefault()
+      e.stopPropagation()
+      container.scrollLeft += delta
+      scrollPosition = container.scrollLeft
+
+      // 循环：到末尾回到开头
+      if (container.scrollLeft >= maxScroll) {
+        container.scrollLeft = 0
+        scrollPosition = 0
+      } else if (container.scrollLeft < 0) {
+        container.scrollLeft = maxScroll
+        scrollPosition = maxScroll
+      }
+
+      window.setTimeout(() => {
+        isPaused = false
+      }, 600)
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      // 只对主键（左键）/触摸开始拖拽
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      isDragging = true
+      isPaused = true
+      startX = e.clientX
+      startScrollLeft = container.scrollLeft
+      container.setPointerCapture?.(e.pointerId)
+    }
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      // 非 passive listener 下可阻止默认滚动，避免页面上下移动
+      e.preventDefault()
+      const dx = e.clientX - startX
+      container.scrollLeft = startScrollLeft - dx
+    }
+    const endDrag = () => {
+      if (!isDragging) return
+      isDragging = false
+      // 同步 scrollPosition，避免松手后“跳回”或速度突变
+      scrollPosition = container.scrollLeft
+      isPaused = false
+    }
+
+    container.addEventListener('mouseenter', handleMouseEnter)
+    container.addEventListener('mouseleave', handleMouseLeave)
+    // 关键：pointermove 必须 non-passive，才能 preventDefault 阻止页面滚动
+    container.addEventListener('pointerdown', onPointerDown, { passive: false })
+    container.addEventListener('pointermove', onPointerMove, { passive: false })
+    container.addEventListener('pointerup', endDrag, { passive: true })
+    container.addEventListener('pointercancel', endDrag, { passive: true })
+    // 关键：wheel 必须 non-passive，才能接管触摸板横向手势
+    container.addEventListener('wheel', onWheel, { passive: false })
+
+    animationFrameId = requestAnimationFrame(scroll)
+
+    return () => {
+      if (animationFrameId !== null) cancelAnimationFrame(animationFrameId)
+      container.removeEventListener('mouseenter', handleMouseEnter)
+      container.removeEventListener('mouseleave', handleMouseLeave)
+      container.removeEventListener('pointerdown', onPointerDown as any)
+      container.removeEventListener('pointermove', onPointerMove as any)
+      container.removeEventListener('pointerup', endDrag as any)
+      container.removeEventListener('pointercancel', endDrag as any)
+      container.removeEventListener('wheel', onWheel as any)
+    }
+  }, [])
   return (
     <PageLayout>
       <div className="relative">
@@ -133,12 +234,12 @@ export default function WuYePage() {
                   const Icon = item.icon
                   return (
                     <Link key={item.title} href={item.link} className="block">
-                      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item min-h-[96px]">
+                      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item h-[112px] overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-3 text-center md:text-left">
                           <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                             <Icon className="w-7 h-7 text-blue-600" />
                           </div>
-                          <h4 className="text-lg md:text-base font-semibold text-navy-700">{item.title}</h4>
+                          <h4 className="text-lg md:text-base font-semibold text-navy-700 whitespace-pre-line leading-snug break-words line-clamp-2 min-w-0">{item.title}</h4>
                         </div>
                       </div>
                     </Link>
@@ -155,12 +256,12 @@ export default function WuYePage() {
                   const Icon = item.icon
                   return (
                     <Link key={item.title} href={item.link} className="block">
-                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item min-h-[96px]">
+                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item h-[112px] overflow-hidden">
                         <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-3 text-center md:text-left">
                           <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
                             <Icon className="w-7 h-7 text-purple-600" />
                           </div>
-                          <h4 className="text-lg md:text-base font-semibold text-navy-700">{item.title}</h4>
+                          <h4 className="text-lg md:text-base font-semibold text-navy-700 whitespace-pre-line leading-snug break-words line-clamp-2 min-w-0">{item.title}</h4>
                         </div>
                       </div>
                     </Link>
@@ -175,97 +276,50 @@ export default function WuYePage() {
       <section className="section-padding">
         <div className="container-custom">
           <h2 className="text-2xl font-bold text-white mb-6">{t('wuye.properties.title')}</h2>
-          {/* 桌面版：grid布局 */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {managedProperties.map((property) => (
-              <div key={property.id} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card">
-                <div className="relative overflow-hidden">
-                  <div className="relative w-full h-64 wuye-property-image">
-                    <Image
-                      src={property.image}
-                      alt={property.title}
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    />
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.category}
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.type}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="wuye-property-content">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                    <Calendar size={16} />
-                    <span>{property.date}</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-navy-700 mb-2 wuye-property-title">
-                    {property.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                    <MapPin size={16} />
-                    <span>{property.location}</span>
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 wuye-property-description">
-                    {property.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* 手机版：横向滚动 */}
-          <div className="md:hidden wuye-properties-scroll-container overflow-x-auto scroll-smooth pb-4 scrollbar-hide">
-            <div className="flex gap-4 min-w-max wuye-properties-scroll-wrapper">
-              {managedProperties.map((property) => (
-                <div key={property.id} className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card flex-shrink-0" style={{ width: '320px' }}>
+          {/* 全端：横向滚动（使用 imgs/2 生成的卡片） */}
+          <div
+            ref={propertiesScrollRef}
+            className="wuye-properties-scroll-container overflow-x-hidden pb-4 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              // 让浏览器把该区域识别为“横向手势区域”，减少页面竖向滚动抢手势
+              touchAction: 'pan-x',
+              overscrollBehavior: 'contain',
+            }}
+          >
+            <div className="flex gap-4 min-w-max wuye-properties-scroll-wrapper px-1">
+              {managedPropertiesLoop.map((property, index) => (
+                <div
+                  key={`${property.id}-${index < managedProperties.length ? 'a' : 'b'}`}
+                  className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg transition-all duration-300 wuye-property-card flex-shrink-0 w-[300px] sm:w-[320px] md:w-[360px] lg:w-[380px]"
+                >
                   <div className="relative overflow-hidden">
-                    <div className="relative w-full wuye-property-image" style={{ height: '200px' }}>
+                    <div className="relative w-full h-[200px] md:h-[220px] wuye-property-image">
                       <Image
                         src={property.image}
                         alt={property.title}
                         fill
                         className="object-cover"
-                        sizes="320px"
+                        sizes="(min-width: 1024px) 380px, (min-width: 768px) 360px, 320px"
+                        unoptimized={property.image.startsWith('/imgs/')}
+                        priority={index < 6}
                       />
                     </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.category}
-                    </span>
+                    <div className="absolute top-4 right-4">
+                      <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {property.type}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.type}
-                    </span>
-                  </div>
-                </div>
 
-                <div className="wuye-property-content">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                    <Calendar size={16} />
-                    <span>{property.date}</span>
+                  <div className="p-4 md:p-5">
+                    <h3 className="text-lg md:text-xl font-semibold text-navy-700 wuye-property-title line-clamp-2">
+                      {property.title}
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-semibold text-navy-700 mb-2 wuye-property-title">
-                    {property.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                    <MapPin size={16} />
-                    <span>{property.location}</span>
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 wuye-property-description">
-                    {property.description}
-                  </p>
                 </div>
-              </div>
-            ))}
+              ))}
             </div>
           </div>
 

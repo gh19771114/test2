@@ -534,6 +534,53 @@
     padding-right: 0.75rem !important;
   }
 
+  /* 修复文字溢出问题：确保所有文字内容不会溢出屏幕右侧 */
+  .wuye-subpage p,
+  .wuye-subpage span,
+  .wuye-subpage li,
+  .wuye-subpage div {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+  }
+
+  /* 关键：flex 子元素默认 min-width:auto 可能导致无法收缩，从而出现右侧溢出 */
+  .wuye-subpage .flex,
+  .wuye-subpage [class*="flex-"] {
+    min-width: 0 !important;
+  }
+
+  .wuye-subpage .flex-1,
+  .wuye-subpage [class*="flex-1"] {
+    min-width: 0 !important;
+  }
+
+  /* 兜底：任何地方把页面撑宽时，直接裁掉横向溢出，避免“文字跑出屏幕右侧” */
+  .wuye-subpage,
+  .wuye-subpage section,
+  .wuye-subpage .container-custom {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 确保卡片和容器内的文字不会溢出 */
+  .wuye-subpage section .container-custom > *,
+  .wuye-subpage section .container-custom > div > *,
+  .wuye-subpage section .container-custom > div > div > * {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 确保列表项文字不会溢出 */
+  .wuye-subpage ul li,
+  .wuye-subpage ol li {
+    max-width: 100% !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
   /* 统计方块：减少内边距，文字居中，避免省略号 */
   .wuye-subpage section.section-padding.bg-gradient-to-b .bg-white\/5.backdrop-blur-sm.rounded-2xl {
     padding: 0.75rem !important;
@@ -683,8 +730,23 @@
     flex-wrap: nowrap !important;
   }
 
+  /* 两个方块设置成一样大小，参考"约800亿日元"的方块大小 */
+  .wuye-stats-grid > div {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* 确保两个方块宽度一致 */
+  .wuye-stats-grid > div:first-child,
+  .wuye-stats-grid > div:last-child {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
   .wuye-stat-btn {
-    width: fit-content !important;
+    width: 100% !important;
     max-width: 100% !important;
     padding: 0.75rem 0.9rem !important;
     border-radius: 1rem !important;
@@ -724,6 +786,46 @@
     line-height: 1.1 !important;
     margin: 0 !important;
     white-space: nowrap !important;
+  }
+}
+
+/* 手机竖版：企业出海助力页面成功案例卡片图片放大到边缘，消除图片距离卡片边缘之间的空隙 */
+@media (max-width: 767px) and (orientation: portrait) {
+  /* 关键：Next/Image 结构是 span(定位) + img。需要同时处理 span 和 img，避免出现细缝/留白 */
+  section#cases a[href*="/cases/"] .qichu-case-image {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+  }
+
+  section#cases a[href*="/cases/"] .qichu-case-image > span {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  section#cases a[href*="/cases/"] .qichu-case-image img {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    object-fit: cover !important;
+    /* 轻微放大，彻底消除圆角/抗锯齿产生的边缘细缝 */
+    transform: scale(1.02) !important;
+    transform-origin: center center !important;
+  }
+
+  /* 确保卡片图片区域自身没有 padding */
+  section#cases a[href*="/cases/"] > div:first-child {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }
 
@@ -2080,10 +2182,165 @@ section#partners.desktop-partners-network .yellow-network-container {
   display: none !important;
 }
 
+/* iPad（含外接键盘/触控板）寄语：通过 JS 注入的 data 属性稳定切换版本，避免 any-pointer/hover 误判 */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message {
+  display: block !important;
+}
+html[data-device="ipad"][data-orientation="landscape"] .desktop-message,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-portrait-message,
+html[data-device="ipad"][data-orientation="landscape"] .mobile-landscape-message,
+html[data-device="ipad"][data-orientation="landscape"] .mobile-portrait-message {
+  display: none !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message {
+  display: none !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message,
+html[data-device="ipad"][data-orientation="portrait"] .ipad-landscape-message,
+html[data-device="ipad"][data-orientation="portrait"] .mobile-landscape-message,
+html[data-device="ipad"][data-orientation="portrait"] .mobile-portrait-message {
+  display: none !important;
+}
+
+/* iPad 竖版：寄语按桌面版渲染 */
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message {
+  display: block !important;
+}
+
+/* iPad 竖版：桌面版寄语样式兜底（iPad 是 coarse pointer，不会命中桌面媒体查询；必须单独补齐“贴页尾”规则） */
+html[data-device="ipad"][data-orientation="portrait"] section.desktop-message {
+  position: relative !important;
+  min-height: 90vh !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-wrap {
+  position: relative !important;
+  min-height: 90vh !important; /* 关键：让人物图 bottom:0 参照的容器撑到页尾 */
+  padding-bottom: 0 !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-portrait-spacer {
+  float: right !important;
+  width: 55% !important;
+  max-width: 55% !important;
+  height: 70vh !important;
+  margin-top: 18vh !important;
+  margin-left: 1.25rem !important;
+  margin-bottom: 0 !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-portrait-abs {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 55% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-portrait-abs-inner {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-portrait-abs-inner img,
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message .desktop-message-portrait-abs-inner span img {
+  object-fit: contain !important;
+  object-position: right bottom !important;
+  transform: scale(1.25) !important;
+  transform-origin: right bottom !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] body:has(section.desktop-message) footer {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* iPad 寄语：人物图右移与文案宽度（按你的需求数值） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ceo-message-text {
+  width: 70% !important;
+  max-width: 70% !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-text {
+  /* iPad 竖版：文案宽度调整为当前的 200%（50% -> 100%） */
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* iPad 竖版：董事长介绍（Profile）—— 避免人物图占满正文（回到之前“图在左/文在右”的状态） */
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-intro {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.28fr) minmax(0, 0.72fr) !important;
+  align-items: start !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-intro-image {
+  display: none !important; /* 避免 fill 图层覆盖正文 */
+}
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-image {
+  /* 按桌面版：不对图片做硬性限宽，交由父级两列比例控制 */
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  align-self: start !important;
+}
+/* iPad 竖版：明确指定 grid 列，避免文案掉到图片下方 */
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-intro .company-ceo-profile-image {
+  grid-column: 1 !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-intro .company-ceo-profile-intro-text {
+  grid-column: 2 !important;
+  align-self: start !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .company-ceo-profile-intro-content {
+  display: contents !important; /* 与桌面版一致：让图片/文案作为 grid item 直接参与排版 */
+}
+
+/* iPad 竖版：寄语（Message）文案高度缩小到当前的 70%（进一步收紧段落节奏/行高，不压扁字体） */
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-paragraphs > *:not(:first-child) {
+  margin-top: 0.9em !important; /* 1.3em * 0.7 ≈ 0.91em */
+}
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-paragraphs {
+  margin-bottom: 0.9em !important;
+  line-height: 1.25 !important; /* 从 1.45 再收紧到更接近 70% 的“高度感” */
+}
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-signature .mt-2,
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-signature [class*="mt-2"] {
+  margin-top: 0.45em !important; /* 0.65em * 0.7 ≈ 0.455em */
+}
+
+/* iPad 竖版：寄语（Message）文案下方空隙过大 —— 上调页尾（缩短 section 高度） */
+html[data-device="ipad"][data-orientation="portrait"] section.ipad-portrait-message {
+  min-height: 70vh !important; /* 原来 90vh 会在文案缩短后产生大空隙 */
+}
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message > div.absolute.inset-0.flex.justify-center {
+  min-height: 70vh !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ipad-message-portrait-inner {
+  min-height: 70vh !important;
+}
+
+/* 右移按“人物图宽度的80%”：对图片自身做 translateX(80%)，并保留放大 */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-message-portrait-inner img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-message-portrait-inner span img {
+  transform: translateX(80%) scale(1.25) !important;
+  transform-origin: right bottom !important;
+}
+
 /* 桌面版（Mac/PC）：用 pointer: fine 区分 iPad（避免窗口宽度 1024–1369 时误命中 iPad 布局） */
 @media (min-width: 1024px) and (any-pointer: fine) and (hover: hover) {
   .desktop-message {
     display: block !important;
+  }
+
+  /* 桌面版寄语：保持文案与人物图的相对距离不变，整体向右移动 50px */
+  .desktop-message .desktop-message-wrap {
+    transform: translateX(50px) !important;
   }
   
   /* 桌面版：确保人物图片紧贴页尾顶部边缘 */
@@ -2210,79 +2467,152 @@ section.desktop-message {
     position: relative !important;
   }
 
-  /* 桌面版寄语：文字环绕人物图（右浮动），且不紧贴页尾 */
-  /* section 本身的底部间距缩小到原来的20% */
-  section.desktop-message {
-    margin-bottom: calc(5rem * 0.2) !important; /* 缩小到原来的20% */
-    padding-bottom: calc(5rem * 0.2) !important; /* 缩小到原来的20% */
+  /* 桌面版寄语：文字环绕人物图（右浮动），尽可能减少文案底部到Footer的间距 */
+  /* section 本身的底部间距尽可能小 */
+  section.desktop-message,
+  section.desktop-message[class*="min-h"],
+  section.desktop-message.min-h-\[90vh\] {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: auto !important; /* 移除 min-h-[90vh]，让内容决定高度 */
+    height: auto !important; /* 确保高度由内容决定 */
   }
 
-  /* 覆盖 Tailwind 的 py-16 和 md:py-20，缩小底部间距到原来的20% */
+  /* 确保 main 标签没有额外的底部间距 */
+  main:has(section.desktop-message) {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* 覆盖 Tailwind 的 py-16 和 md:py-20，尽可能减少底部间距 */
+  /* 使用更具体的选择器，确保覆盖所有可能的Tailwind padding类 */
+  section.desktop-message > div.container-custom.desktop-message-wrap,
+  section.desktop-message > div[class*="container-custom"].desktop-message-wrap,
   .desktop-message .desktop-message-wrap.py-16,
   .desktop-message .desktop-message-wrap[class*="py-16"],
   .desktop-message .desktop-message-wrap[class*="py-20"],
+  .desktop-message .desktop-message-wrap[class*="md:py-20"],
   .desktop-message .desktop-message-wrap {
-    /* 以视口为基准做“比例布局”：图片底部必须贴住页尾，图片顶部留白=图片高度的40% */
+    /* 以视口为基准做"比例布局"：图片底部必须贴住页尾，图片顶部留白=图片高度的40% */
     position: relative !important;
-    min-height: 100vh !important;
-    padding-bottom: 1rem !important; /* 缩小到原来的20%（原来py-20是5rem，20%是1rem = 5rem * 0.2） */
-    margin-bottom: 0 !important; /* 确保 wrap 本身没有 margin-bottom */
+    min-height: auto !important; /* 改为 auto，让内容决定高度，避免产生额外空白 */
+    max-height: none !important; /* 移除任何最大高度限制 */
+    height: auto !important; /* 确保高度由内容决定 */
+    padding-bottom: 0 !important; /* 完全移除底部padding */
+    padding-top: 3rem !important; /* 保留顶部间距 */
+    margin-bottom: 0 !important;
+    /* 确保容器高度完全由内容决定，不产生额外空白 */
+    box-sizing: border-box !important;
     --ceo-scale: 1.7;
     --ceo-portrait-w: 50%;
     --ceo-visual-h: calc(100vh / 1.4);     /* 人物图视觉高度不再随文章高度缩水 */
     --ceo-top-gap: calc(var(--ceo-visual-h) * 0.4); /* 顶部留白=图片高度的40% */
   }
 
-  /* 缩小 Footer 的 margin-top 到原来的20%（如果 Footer 在 desktop-message 之后） */
-  /* 假设 Footer 有默认的 margin-top（比如 5rem），缩小到 1rem（20%） */
+  /* 覆盖 container-custom 本身的 padding */
+  section.desktop-message > div.container-custom,
+  section.desktop-message > div[class*="container-custom"] {
+    padding-bottom: 0 !important;
+  }
+
+  /* 尽可能减少 Footer 的 margin-top 和 padding-top */
   section.desktop-message + footer,
   .desktop-message + footer,
   body:has(section.desktop-message) footer {
-    margin-top: calc(5rem * 0.2) !important; /* 缩小到原来的20%（如果原来是5rem，现在就是1rem） */
+    margin-top: 0 !important; /* 完全移除 */
+    padding-top: 0 !important;
   }
 
-  /* 缩小 .desktop-message-wrap 内的 .container-custom 的 padding-bottom */
-  .desktop-message .desktop-message-wrap .container-custom {
-    padding-bottom: calc(5rem * 0.2) !important; /* 缩小到原来的20% */
+  /* 尽可能减少 .desktop-message-text 内部所有可能的底部间距 */
+  .desktop-message .desktop-message-text {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    max-width: 1080px !important; /* 放宽正文宽度，让前两段行长明显变长 */
+    font-size: 1.18rem !important; /* 文字适当放大 */
+    line-height: 1.85 !important;
+    /* 确保文本容器本身不产生额外高度 */
+    box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
-  /* 如果 Footer 没有 margin-top，检查是否来自其他元素的间距 */
-  /* 缩小 .desktop-message-text 内部所有可能的底部间距 */
+  /* 覆盖 space-y-6，移除所有子元素之间的间距 */
+  /* space-y-6 通过给子元素添加 margin-top 实现（除了第一个），我们需要覆盖它 */
+  .desktop-message .desktop-message-text.space-y-6 > * {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important; /* 也移除 margin-top，完全消除 space-y-6 的效果 */
+  }
+  
+  /* 但第一个元素可以保留 margin-top: 0，其他元素也设为 0 */
+  .desktop-message .desktop-message-text.space-y-6 > *:first-child {
+    margin-top: 0 !important;
+  }
+  
+  .desktop-message .desktop-message-text.space-y-6 > *:not(:first-child) {
+    margin-top: 0 !important; /* 完全移除 space-y-6 产生的间距 */
+  }
+
+  /* 确保最后一个元素完全没有底部间距 */
   .desktop-message .desktop-message-text > *:last-child {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
   }
 
-  /* 缩小 .desktop-message-text 的 space-y-6 产生的最后一个元素的底部间距 */
-  .desktop-message .desktop-message-text.space-y-6 > *:last-child {
-    margin-bottom: calc(1.5rem * 0.2) !important; /* space-y-6 会产生 1.5rem 间距，20% 就是 0.3rem */
-  }
-
-  /* 最后：如果所有间距都来自 min-height，缩小 section 的 min-height */
-  /* 但这可能不是正确的做法，因为 min-height 不影响实际间距 */
-
-  .desktop-message .desktop-message-text {
-    max-width: 1080px !important; /* 放宽正文宽度，让前两段行长明显变长 */
-    font-size: 1.18rem !important; /* 文字适当放大 */
-    line-height: 1.85 !important;
-    padding-bottom: 0 !important; /* 移除文案本身的 padding-bottom */
-    margin-bottom: 0 !important; /* 确保没有额外的margin影响底部间距 */
-  }
-
-  /* 缩小文案内部最后一个元素（签名部分）的底部间距到原来的20% */
+  /* 缩小最后一个签名div的 pt-4 和内部元素的间距 */
   .desktop-message .desktop-message-text > div:last-child.pt-4,
   .desktop-message .desktop-message-text > div:last-child[class*="pt-4"],
   .desktop-message .desktop-message-text > div:last-child {
-    padding-top: calc(1rem * 0.2) !important; /* 缩小到原来的20%（原来 pt-4 是 1rem，20%是 0.2rem） */
+    padding-top: 0.5rem !important; /* 从 pt-4 (1rem) 减小 */
     padding-bottom: 0 !important;
     margin-bottom: 0 !important;
   }
 
-  /* 清除浮动，避免底部签名区异常 */
+  /* 移除签名div内部最后一个元素的底部间距 */
+  .desktop-message .desktop-message-text > div:last-child > *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* 覆盖 space-y-6 在最后一个元素上产生的间距 */
+  .desktop-message .desktop-message-text.space-y-6 > *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* 段落容器中的 space-y-5：三个段落之间分别拉开1行高的距离 */
+  /* 使用 1em 作为1行高（基于当前字体大小 1.05rem，行高 1.85） */
+  .desktop-message .desktop-message-text .space-y-5 > * {
+    margin-bottom: 0 !important;
+  }
+  
+  .desktop-message .desktop-message-text .space-y-5 > *:first-child {
+    margin-top: 0 !important;
+  }
+  
+  /* 段落之间：1行高（1.85em，基于当前字体大小和行高） */
+  .desktop-message .desktop-message-text .space-y-5 > *:not(:first-child) {
+    margin-top: 1.85em !important; /* 1行高 */
+  }
+
+  /* 最下方的文字距离"董事长/President"之间拉开1行高的距离 */
+  /* 段落div和签名div之间的间距 */
+  .desktop-message .desktop-message-text > div.space-y-5 {
+    margin-bottom: 1.85em !important; /* 1行高 */
+  }
+
+  /* "董事长/President"与"桂小川"之间拉开0.5行高的距离 */
+  /* 签名div内部的 mt-2 改为 0.5行高 */
+  .desktop-message .desktop-message-text > div:last-child .mt-2,
+  .desktop-message .desktop-message-text > div:last-child [class*="mt-2"] {
+    margin-top: 0.925em !important; /* 0.5行高（1.85em / 2） */
+  }
+
+  /* 清除浮动，避免底部签名区异常 - 移除高度，避免产生间距 */
   .desktop-message .desktop-message-text::after {
     content: '' !important;
     display: block !important;
     clear: both !important;
+    height: 0 !important; /* 确保不产生高度 */
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
   }
 
   /* “红色图片区域”的占位块：从图片视觉顶部开始占位，让文字在上方满宽显示，下方环绕 */
@@ -2297,6 +2627,7 @@ section.desktop-message {
   }
 
   /* 实际人物图：绝对定位贴底（必须紧贴页尾），并放大到 170% */
+  /* 注意：绝对定位不会影响容器高度，所以不会产生额外间距 */
   .desktop-message .desktop-message-portrait-abs {
     position: absolute !important;
     right: 0 !important;
@@ -2306,7 +2637,9 @@ section.desktop-message {
     pointer-events: none !important;
     z-index: 1 !important;
     overflow: visible !important;
-    transform: translateX(-100%) !important; /* 向左移动一个“人物图宽度”的距离 */
+    transform: translateX(-100%) !important; /* 向左移动一个"人物图宽度"的距离 */
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .desktop-message .desktop-message-portrait-abs-inner {
@@ -2475,35 +2808,48 @@ section.desktop-message {
     display: block !important;
     position: relative !important;
     min-height: 90vh !important;
+    overflow: visible !important;
+  }
+
+  /* iPad横版：强制只显示 iPad 横版寄语（避免 iPad 外接键鼠时误显示 desktop 版本） */
+  .desktop-message,
+  .ipad-portrait-message,
+  .mobile-landscape-message,
+  .mobile-portrait-message {
+    display: none !important;
+  }
+  .ipad-landscape-message {
+    display: block !important;
   }
   
   /* iPad横版：人物图片容器改为float布局，让文案环绕 */
   .ipad-landscape-message > div.absolute.inset-0.flex.justify-center {
-    position: relative !important;
-    float: right !important;
-    width: 45% !important;
-    max-width: 45% !important;
-    margin-left: 2rem !important;
-    margin-right: 0 !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
+    /* 硬保证贴底：保持绝对定位覆盖整个 section，图片底部对齐到 section 底边（也就是 footer 顶边） */
+    position: absolute !important;
+    inset: 0 !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
     transform: none !important;
     z-index: 1 !important;
-    shape-outside: inset(0) !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
   }
   
+  /* iPad横版：文案宽度改为当前的 70%，避免遮挡人物图 */
+  .ipad-landscape-message .ceo-message-text {
+    width: 70% !important;
+    max-width: 70% !important;
+  }
+
   /* iPad横版：人物图片容器内部 */
   .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div {
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
-    min-height: 60vh !important;
+    height: 100% !important;
+    min-height: 0 !important;
     position: relative !important;
   }
   
@@ -2542,6 +2888,38 @@ section.desktop-message {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
+  }
+
+  /* iPad横版：寄语段落节奏对齐桌面版（段落间距=1行高，签名间距=1行高/0.5行高） */
+  .ipad-landscape-message .ceo-message-paragraphs > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .ipad-landscape-message .ceo-message-paragraphs > *:not(:first-child) {
+    margin-top: 1.85em !important;
+  }
+  .ipad-landscape-message .ceo-message-paragraphs {
+    margin-bottom: 1.85em !important;
+  }
+  .ipad-landscape-message .ceo-message-signature .mt-2,
+  .ipad-landscape-message .ceo-message-signature [class*="mt-2"] {
+    margin-top: 0.925em !important;
+  }
+
+  /* iPad横版：人物图向右移动=人物图宽度的80%，并保留放大效果 */
+  .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div img,
+  .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div span img {
+    transform: translateX(80%) scale(1.25) !important;
+    transform-origin: right bottom !important;
+  }
+
+  /* iPad横版：确保页尾与寄语 section 之间无额外空隙 */
+  section.ipad-landscape-message {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body:has(.ipad-landscape-message) footer {
+    margin-top: 0 !important;
   }
 
   /* iPad横版：隐藏background.png背景图 */
@@ -2834,35 +3212,49 @@ section.desktop-message {
     display: block !important;
     position: relative !important;
     min-height: 90vh !important;
+    overflow: visible !important;
+  }
+
+  /* iPad竖版：强制只显示 iPad 竖版寄语（避免误显示 desktop 版本） */
+  .desktop-message,
+  .ipad-landscape-message,
+  .mobile-landscape-message,
+  .mobile-portrait-message {
+    display: none !important;
+  }
+  .ipad-portrait-message {
+    display: block !important;
   }
   
   /* iPad竖版：人物图片容器改为float布局，让文案环绕 */
   .ipad-portrait-message > div.absolute.inset-0.flex.justify-center {
-    position: relative !important;
-    float: right !important;
-    width: 50% !important;
-    max-width: 50% !important;
-    margin-left: 1.5rem !important;
-    margin-right: 0 !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 2% !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
+    /* 硬保证贴底：保持绝对定位覆盖整个 section，图片底部对齐到 section 底边（也就是 footer 顶边） */
+    position: absolute !important;
+    inset: 0 !important;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
     transform: none !important;
     z-index: 1 !important;
-    shape-outside: inset(0) !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+  }
+
+  /* iPad竖版：文案宽度改为当前的 50%，避免遮挡人物图 */
+  .ipad-portrait-message .ceo-message-text {
+    /* iPad 竖版：文案宽度调整为当前的 200%（50% -> 100%） */
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   /* iPad竖版：人物图片容器内部 */
   .ipad-portrait-message > div.absolute.inset-0.flex.justify-center > div {
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
-    min-height: 60vh !important;
+    height: 100% !important;
+    min-height: 0 !important;
     position: relative !important;
   }
   
@@ -2885,7 +3277,8 @@ section.desktop-message {
     max-width: 100% !important;
     padding-left: calc(1rem + 8%) !important;
     padding-right: calc(1rem + 8%) !important;
-    padding-top: 2rem !important;
+    /* iPad 竖版：文案高度缩短到当前的 70%（进一步收紧） */
+    padding-top: 1rem !important; /* 1.4rem * 0.7 ≈ 0.98rem */
     padding-bottom: 0 !important;
     overflow: visible !important;
     transform: none !important;
@@ -2905,6 +3298,43 @@ section.desktop-message {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
+  }
+
+  /* iPad竖版：寄语段落节奏对齐桌面版 */
+  .ipad-portrait-message .ceo-message-paragraphs > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .ipad-portrait-message .ceo-message-paragraphs > *:not(:first-child) {
+    margin-top: 0.9em !important; /* 1.3em * 0.7 ≈ 0.91em */
+  }
+  .ipad-portrait-message .ceo-message-paragraphs {
+    margin-bottom: 0.9em !important;
+  }
+  .ipad-portrait-message .ceo-message-signature .mt-2,
+  .ipad-portrait-message .ceo-message-signature [class*="mt-2"] {
+    margin-top: 0.45em !important; /* 0.65em * 0.7 ≈ 0.455em */
+  }
+
+  /* iPad竖版：进一步压缩正文整体高度（不压扁字体，收紧行高） */
+  .ipad-portrait-message .ceo-message-paragraphs {
+    line-height: 1.25 !important;
+  }
+
+  /* iPad竖版：人物图轻微放大，贴近桌面版视觉 */
+  .ipad-portrait-message > div.absolute.inset-0.flex.justify-center > div img,
+  .ipad-portrait-message > div.absolute.inset-0.flex.justify-center > div span img {
+    transform: scale(1.2) !important;
+    transform-origin: right bottom !important;
+  }
+
+  /* iPad竖版：确保页尾与寄语 section 之间无额外空隙 */
+  section.ipad-portrait-message {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body:has(.ipad-portrait-message) footer {
+    margin-top: 0 !important;
   }
 
   /* iPad竖版：隐藏background.png背景图 */
@@ -3174,39 +3604,105 @@ section.desktop-message {
     box-sizing: border-box !important;
   }
 
+  /* 手机横版寄语：让人物图 absolute bottom:0 参照 section，而不是参照 container-custom（避免被 py-6 的 padding-bottom 顶起） */
+  .mobile-landscape-message > .container-custom {
+    position: static !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
   /* 手机横版：文字环绕人物图布局 */
   .mobile-landscape-message {
     min-height: 90vh !important;
   }
   
   .mobile-landscape-message-content {
-    position: relative !important;
+    /* 同容器：人物图 absolute 贴底 + 文案 float 占位环绕 */
+    position: static !important;
     width: 100% !important;
+    min-height: 90vh !important;
   }
   
   .mobile-landscape-message-image-wrapper {
-    float: right !important;
+    /* 关键：贴页尾（bottom:0） */
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
     width: 50% !important;
-    max-width: 50% !important;
-    margin-left: 1.5rem !important;
-    margin-right: 0 !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    shape-outside: inset(0) !important;
+    /* 让绕图只发生在图片真实高度范围内，剩余正文可回到全宽，显著减少“无用空白” */
+    height: clamp(240px, 72vh, 420px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
   }
   
   .mobile-landscape-message-image {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
+    max-height: 100% !important;
     object-fit: contain !important;
     object-position: bottom !important;
     display: block !important;
+    /* 轻微放大，贴近桌面版“更饱满”的人物图占比 */
+    transform: scale(1.3) !important;
+    transform-origin: right bottom !important;
+  }
+
+  /* 手机横版：真实 float 占位块（让文案环绕包围人物图，同时人物图仍可 absolute 贴底） */
+  .mobile-landscape-message-float-spacer {
+    float: right !important;
+    width: 50% !important;
+    /* 与图片占用同高：只在图片高度范围内绕图，之后回到全宽排版 */
+    height: clamp(240px, 72vh, 420px) !important;
+    margin-left: 1rem !important;
+    shape-outside: inset(0) !important;
+    shape-margin: 12px !important;
+  }
+  .mobile-landscape-message-text::after {
+    content: '' !important;
+    display: block !important;
+    clear: both !important;
+  }
+
+  /* 手机横版：确保页尾与寄语 section 之间无额外空隙 */
+  section.mobile-landscape-message {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body:has(.mobile-landscape-message) footer {
+    margin-top: 0 !important;
+  }
+
+  /* 手机横版：寄语段落节奏对齐桌面版（按当前字体行高） */
+  .mobile-landscape-message .ceo-message-paragraphs > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .mobile-landscape-message .ceo-message-paragraphs > *:not(:first-child) {
+    margin-top: 1.2em !important;
+  }
+  .mobile-landscape-message .ceo-message-paragraphs {
+    margin-bottom: 1.2em !important;
+  }
+
+  /* A 方案：以“文字环绕人物图”为最高优先级，不对单独段落设置固定宽度（避免破坏环绕与造成遮挡） */
+  .mobile-landscape-message .ceo-message-signature .mt-2,
+  .mobile-landscape-message .ceo-message-signature .mt-1,
+  .mobile-landscape-message .ceo-message-signature [class*="mt-2"] {
+    margin-top: 0.8em !important;
   }
   
   .mobile-landscape-message-text {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
+    position: relative !important;
+    z-index: 2 !important; /* 确保文案在人物图之上（即便浏览器渲染有重叠也不遮挡文字） */
+    /* A 方案：不强行挤窄整段容器（会导致标题竖排/排版极窄）；由段落内的 float-spacer 负责环绕 */
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
   }
   
   .mobile-landscape-message-text p {
@@ -3216,7 +3712,8 @@ section.desktop-message {
   }
 
   /* 手机横版：董事长介绍页面 - 照片已融合到介绍文字容器内 */
-  @media (max-width: 767px) and (orientation: landscape) {
+  /* 注意：很多手机横屏的 CSS 宽度会 > 767px（例如 812/844/896），所以这里用 1023px 覆盖所有手机横屏 */
+  @media (max-width: 1023px) and (orientation: landscape) and (any-pointer: coarse) {
     .company-ceo-profile-container {
       display: grid !important;
       grid-template-columns: 1fr !important;
@@ -3234,16 +3731,6 @@ section.desktop-message {
       display: grid !important;
       visibility: visible !important;
       opacity: 1 !important;
-    }
-    
-    .company-ceo-profile-highlights {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-    
-    .company-ceo-profile-intro {
-      display: grid !important;
       grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr) !important;
       gap: 0.75rem !important;
       align-items: start !important;
@@ -3254,32 +3741,46 @@ section.desktop-message {
       padding: 0.75rem !important;
     }
     
+    .company-ceo-profile-highlights {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    
     .company-ceo-profile-intro-content {
       display: contents !important;
     }
     
+    /* 限制图片大小，防止占满整个屏幕 */
     .company-ceo-profile-image {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
-      max-width: 100% !important;
-      width: 100% !important;
-      height: auto !important;
+      /* 用“固定高度 + aspect-ratio”锁定容器尺寸，避免 contain 产生左右留白 */
+      height: 62vh !important;
+      width: auto !important;
+      max-width: 42vw !important;
       min-height: 0 !important;
-      aspect-ratio: 3 / 4 !important;
+      /* ceo2.png 实际尺寸 400x542：匹配图片本身比例，才能做到“完整显示 + 无空隙” */
+      aspect-ratio: 400 / 542 !important;
       align-self: start !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
       position: relative !important;
+      background: transparent !important;
     }
     
-    .company-ceo-profile-image > img,
-    .company-ceo-profile-image > span {
+    /* 手机横屏：优先“完整展示 + 无空隙” => 匹配容器比例 + contain（不裁切） */
+    .company-ceo-profile-image img,
+    .company-ceo-profile-image span img {
       width: 100% !important;
       height: 100% !important;
-      object-fit: cover !important;
+      object-fit: contain !important;
+      object-position: center center !important;
+      transform: none !important;
     }
     
+    /* 关键修复：隐藏那个没有尺寸却用 fill 的图片容器，否则会铺满整个屏幕 */
     .company-ceo-profile-intro-image {
       display: none !important;
       visibility: hidden !important;
@@ -3933,37 +4434,87 @@ section.desktop-message {
     width: 100% !important;
     margin-top: 0 !important;
     padding-top: 0 !important;
+    min-height: 90vh !important; /* 关键：让绝对定位的图片以整段寄语高度为参照，确保贴到页尾 */
   }
   
   .mobile-portrait-message-image-wrapper {
-    float: right !important;
-    width: 55% !important; /* 参考iPad版比例（1120/768≈1.46），手机版375px宽度时约55% */
-    max-width: 55% !important;
-    margin-left: 1rem !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    shape-outside: inset(0) !important;
+    /* 关键：贴页尾（bottom:0） */
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 46% !important;
+    /* 让绕图只发生在图片真实高度范围内，剩余正文可回到全宽，显著减少“无用空白” */
+    height: clamp(300px, 60vh, 640px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
   }
   
   .mobile-portrait-message-image {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
+    max-height: 100% !important;
     object-fit: contain !important;
     object-position: bottom !important; /* 紧贴页尾顶部边缘 */
     display: block !important;
+    transform: scale(2) !important; /* 适度放大，减少人物图上方空白 */
+    transform-origin: right bottom !important;
+  }
+
+  /* 手机竖版：真实 float 占位块（让文案环绕包围人物图，同时人物图仍可 absolute 贴底） */
+  .mobile-portrait-message-float-spacer {
+    float: right !important;
+    width: 46% !important;
+    /* 与图片占用同高：只在图片高度范围内绕图，之后回到全宽排版 */
+    height: clamp(300px, 60vh, 640px) !important;
+    margin-left: 0.9rem !important;
+    shape-outside: inset(0) !important;
+    shape-margin: 10px !important;
+  }
+  .mobile-portrait-message-text::after {
+    content: '' !important;
+    display: block !important;
+    clear: both !important;
+  }
+
+  /* 手机竖版：寄语段落节奏对齐桌面版（按当前字体行高） */
+  .mobile-portrait-message .ceo-message-paragraphs > * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .mobile-portrait-message .ceo-message-paragraphs > *:not(:first-child) {
+    margin-top: 1.2em !important;
+  }
+  .mobile-portrait-message .ceo-message-paragraphs {
+    margin-bottom: 1.2em !important;
+  }
+
+  /* A 方案：以“文字环绕人物图”为最高优先级，不对单独段落设置固定宽度（避免破坏环绕与造成遮挡） */
+  .mobile-portrait-message .ceo-message-signature .mt-2,
+  .mobile-portrait-message .ceo-message-signature .mt-1,
+  .mobile-portrait-message .ceo-message-signature [class*="mt-2"] {
+    margin-top: 0.78em !important;
   }
   
   .mobile-portrait-message-text {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
+    position: relative !important;
+    z-index: 2 !important;
+    /* A 方案：不强行挤窄整段容器（会导致标题竖排/排版极窄）；由段落内的 float-spacer 负责环绕 */
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
   }
   
   .mobile-portrait-message-text p {
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
     word-break: break-word !important;
+    /* 手机端正文：不要用 text-wrap: balance（会造成每行右侧大量空白），改为更自然的换行策略 */
+    text-wrap: pretty !important;
   }
   
   /* 手机竖版：确保图片真正从页面顶部开始 */
@@ -3985,9 +4536,23 @@ section.desktop-message {
     }
     
     .mobile-portrait-message-image-wrapper {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
+      position: absolute !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 55% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
+  }
+
+  /* 手机竖版：确保页尾与寄语 section 之间无额外空隙 */
+  section.mobile-portrait-message {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  body:has(.mobile-portrait-message) footer {
+    margin-top: 0 !important;
   }
 
   /* 竖屏触摸设备兜底（手机/Pad 可能处于“桌面版网站/更大视口”，max-width 不命中）：
@@ -4132,12 +4697,14 @@ section.desktop-message {
       height: 1.95rem !important;
     }
     
-    /* 文字：两行布局下标题不允许自动换行（避免出现三行/多行） */
+    /* 文字：允许两行（适配日/英等更长标题），并限制最多两行，避免把卡片撑高 */
     #tenant-services h4,
     .wuye-service-item h4 {
-      white-space: nowrap !important;
       overflow: hidden !important;
-      text-overflow: clip !important;
+      white-space: pre-line !important;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2 !important;
+      -webkit-box-orient: vertical !important;
       font-size: 0.95rem !important;
       line-height: 1.2 !important;
       margin: 0 !important;
@@ -7144,6 +7711,95 @@ article.saikai-awards-page section[class*="section-padding"] {
   section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 .h-48 {
     height: 11rem !important; /* 从 h-48 (12rem) 减少到 11rem，但比之前稍大 */
   }
+
+/* =========================
+   FINAL OVERRIDE: iPad 寄语页面（JS 标记驱动）
+   说明：iPad 外接键鼠会导致 any-pointer/hover 误判；此处放在文件末尾，确保覆盖所有 media query。
+   ========================= */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message {
+  display: block !important;
+  overflow: visible !important;
+}
+html[data-device="ipad"][data-orientation="landscape"] .desktop-message,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-portrait-message,
+html[data-device="ipad"][data-orientation="landscape"] .mobile-landscape-message,
+html[data-device="ipad"][data-orientation="landscape"] .mobile-portrait-message {
+  display: none !important;
+}
+
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message {
+  display: block !important;
+  overflow: visible !important;
+}
+html[data-device="ipad"][data-orientation="portrait"] .desktop-message,
+html[data-device="ipad"][data-orientation="portrait"] .ipad-landscape-message,
+html[data-device="ipad"][data-orientation="portrait"] .mobile-landscape-message,
+html[data-device="ipad"][data-orientation="portrait"] .mobile-portrait-message {
+  display: none !important;
+}
+
+/* iPad 横版：文案宽度=当前 620px 的 70% ≈ 434px */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ceo-message-text {
+  width: 434px !important;
+  max-width: 434px !important;
+}
+/* 兜底：不依赖 data 标记 */
+.ipad-landscape-message .ceo-message-text {
+  width: 434px !important;
+  max-width: 434px !important;
+}
+
+/* iPad 竖版：文案宽度=当前 620px 的 50% = 310px */
+html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message .ceo-message-text {
+  width: 310px !important;
+  max-width: 310px !important;
+}
+/* 兜底：不依赖 data 标记 */
+.ipad-portrait-message .ceo-message-text {
+  width: 310px !important;
+  max-width: 310px !important;
+}
+
+/* iPad 横版：人物图向左移动到屏幕以内（覆盖旧的 translateX(80%) 规则） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner span img {
+  transform: translateX(0) scale(1.25) !important;
+  transform-origin: right bottom !important;
+}
+
+/* iPad 横版：最终兜底覆盖（旧规则选择器更“长”，必须用同链式选择器才能压过它） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div span img {
+  transform: translateX(0) scale(1.25) !important;
+  transform-origin: right bottom !important;
+}
+
+/* A 方案：以“文字环绕人物图”为最高优先级，不对 iPad 竖版单独段落设置固定宽度（避免破坏排版与造成遮挡） */
+
+/* iPad 横版：人物图右移=人物图宽度的 80%（先保证可见，不叠加 scale 避免被挪出视口） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-message-portrait-inner,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-message-portrait-inner * {
+  overflow: visible !important;
+}
+
+/* iPad 横版：位移改为作用在“容器”上（比改 img 更可靠，保证你一定能看到变化） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait {
+  justify-content: flex-start !important;
+  padding-left: 0 !important; /* 覆盖内联 paddingLeft:8% */
+}
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner {
+  width: 45% !important;
+  max-width: 45% !important;
+  height: 100% !important;
+  min-height: 90vh !important;
+  transform: translateX(0) !important; /* 修复：避免人物图跑到屏幕左侧以外 */
+  will-change: transform !important;
+}
+
+/* 兜底：即使 data 标记没命中，只要 iPad 横版 section 在页面上，这条也会生效 */
+.ipad-landscape-message .ipad-message-portrait-inner {
+  transform: translateX(0) !important;
+}
   
   section.bg-gradient-to-br.from-slate-50.to-blue-50 .flex-shrink-0 .p-4 {
     padding: 0.5rem !important; /* 从 p-4 (1rem) 进一步减少到 0.5rem */
@@ -7170,3 +7826,33 @@ article.saikai-awards-page section[class*="section-padding"] {
     border-width: 1px !important; /* 确保border不会太粗 */
   }
 }
+
+/* =========================
+   TRUE FINAL OVERRIDE: iPad 横/竖版 董事长寄语（不在任何 media query 内）
+   目的：避免 iPad 横屏 1024px 被 max-width:1023 的 media 排除，导致规则不生效。
+   ========================= */
+
+/* iPad 横版：确保人物图一定回到屏幕内（贴右布局 + 取消旧 translateX(80%)） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait {
+  justify-content: flex-end !important;
+  padding-left: 0 !important;  /* 覆盖内联 paddingLeft:8% */
+  padding-right: 0 !important;
+}
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner {
+  width: 45% !important;
+  max-width: 45% !important;
+  height: 100% !important;
+  min-height: 90vh !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+/* 用“同链式选择器”压过旧规则（.ipad-landscape-message > div.absolute... img { translateX(80%) ... }） */
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message > div.absolute.inset-0.flex.justify-center > div span img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner img,
+html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ipad-message-portrait-inner span img {
+  transform: translateX(0) scale(1.25) !important;
+  transform-origin: right bottom !important;
+}
+
+/* A 方案：以“文字环绕人物图”为最高优先级，不对 iPad 竖版单独段落设置固定宽度（避免破坏排版与造成遮挡） */

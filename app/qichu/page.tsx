@@ -648,7 +648,7 @@ export default function QiChuPage() {
       },
     ]
   }, [t])
-  
+
   const comingSoonProjects = useMemo(() => {
     return [
       { title: t('qichu.cases.comingSoon1.title'), result: t('qichu.cases.comingSoon1.result') },
@@ -1087,39 +1087,16 @@ export default function QiChuPage() {
             </div>
 
             {/* 一站式服务优势 */}
-            <div className="bg-gradient-to-br from-navy-900/90 via-green-900/80 to-navy-800/90 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-12 border-2 border-green-500/30 shadow-2xl">
-              <div className="text-center mb-6 md:mb-8">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 md:mb-3">一站式企业落地解决方案</h3>
-                <p className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto px-4 md:px-0">
-                  整合全链条资源，提供端到端服务支持，助力企业快速建立并优化在日运营体系
-                </p>
+            <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-white/10 bg-gradient-to-br from-navy-900/70 via-navy-900/40 to-green-900/50 shadow-2xl">
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-green-500/15 blur-3xl" />
+                <div className="absolute -bottom-28 -left-28 w-72 h-72 rounded-full bg-cyan-400/10 blur-3xl" />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6 md:mt-8">
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg md:rounded-xl p-5 md:p-6 border border-green-400/20 hover:border-green-400/40 transition-all duration-300">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-3 md:mb-4 shadow-lg">
-                    <Target className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                  </div>
-                  <h4 className="text-white font-bold text-base md:text-lg mb-2">战略规划</h4>
-                  <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
-                    基于市场洞察制定进入策略，明确业务定位与资源配置方案
-                  </p>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg md:rounded-xl p-5 md:p-6 border border-green-400/20 hover:border-green-400/40 transition-all duration-300">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-3 md:mb-4 shadow-lg">
-                    <FileCheck className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                  </div>
-                  <h4 className="text-white font-bold text-base md:text-lg mb-2">合规落地</h4>
-                  <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
-                    协助完成法人设立、税务登记、劳动合规等关键环节，确保合法运营
-                  </p>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg md:rounded-xl p-5 md:p-6 border border-green-400/20 hover:border-green-400/40 transition-all duration-300">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-3 md:mb-4 shadow-lg">
-                    <LifeBuoy className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                  </div>
-                  <h4 className="text-white font-bold text-base md:text-lg mb-2">运营支持</h4>
-                  <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
-                    提供持续性的本地化运营指导，优化业务流程，提升运营效率
+
+              <div className="relative p-5 md:p-8 lg:p-10">
+                <div className="rounded-xl border border-white/10 bg-black/20 p-4 md:p-6">
+                  <p className="text-gray-100/90 text-sm md:text-base leading-relaxed whitespace-pre-line">
+                    {t('qichu.oneStop.summary')}
                   </p>
                 </div>
               </div>
@@ -1462,7 +1439,7 @@ export default function QiChuPage() {
                          className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 md:hover:-translate-y-2 flex-shrink-0 w-[280px] md:w-[380px]"
                        >
                         <div className="relative overflow-hidden">
-                          <div className="relative w-full h-64">
+                          <div className="relative w-full h-64 qichu-case-image">
                             <Image
                               src={projectData.image}
                               alt={project.title}

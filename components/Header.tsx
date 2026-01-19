@@ -481,7 +481,7 @@ const Header = () => {
             <motion.div
               className="lg:hidden bg-white border-t border-gray-200"
             >
-              <div className="px-2 pt-2 pb-3 space-y-1">
+              <div className="px-2 pt-2 pb-3 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
                 {navigation.map((item, index) => {
                   if (item.children) {
                     const expanded = expandedMobile === item.key

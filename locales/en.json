@@ -616,11 +616,11 @@
         "baoxian": "Related Insurance"
       },
       "appreciation": {
-        "marketResearch": "Market Research",
-        "consulting": "Business Consulting",
-        "rentNegotiation": "Rent Negotiation",
-        "majorRepair": "Major Repair",
-        "additionalIncome": "Related Additional Income"
+        "marketResearch": "Market\nResearch",
+        "consulting": "Business\nConsulting",
+        "rentNegotiation": "Rent\nNegotiation",
+        "majorRepair": "Major\nRepair",
+        "additionalIncome": "Additional\nIncome"
       }
     },
     "properties": {
@@ -1796,6 +1796,50 @@
       },
       "subtitle": "Comprehensive landing support services for enterprises, from location selection to operations, a one-stop solution"
     },
+    "oneStop": {
+      "title": "One-stop Landing Solution",
+      "subtitle": "End-to-end deliverables to help your team set up and optimize operations in Japan—faster and compliantly.",
+      "badge": "Deliverables & Flow",
+      "summary": "Expanding into Japan is often less about what to do, and more about doing it correctly—compliantly and efficiently. Backed by local networks and hands-on experience, we support the critical path from entry strategy and partner connections to incorporation, tax and labor compliance, office setup, and ongoing operations.\n\nBy identifying risk points early and standardizing the process, we help overseas teams avoid common pitfalls in compliance, contracts, taxation, and employment—reducing trial-and-error and enabling a faster, smoother landing in Japan.",
+      "items": [
+        {
+          "title": "Strategy & Roadmap",
+          "desc": "Clarify priorities and provide an executable landing roadmap.",
+          "bullets": ["Market & competitor research", "Location & cost estimation", "Milestones & resourcing"],
+          "image": "/imgs/qichu/one-stop-strategy.svg"
+        },
+        {
+          "title": "Incorporation",
+          "desc": "Get the critical procedures right the first time to reduce rework.",
+          "bullets": ["Registration & seals/articles", "Bank account coordination", "Required licenses & filings"],
+          "image": "/imgs/qichu/one-stop-incorporation.svg"
+        },
+        {
+          "title": "Finance & Tax",
+          "desc": "Build a sustainable finance/tax framework with consistent reporting.",
+          "bullets": ["Accounting/booking setup", "Tax registration & filing cadence", "Expense & internal controls"],
+          "image": "/imgs/qichu/one-stop-finance.svg"
+        },
+        {
+          "title": "HR & Labor",
+          "desc": "Standardize recruiting, onboarding, and labor compliance.",
+          "bullets": ["Employment types & contracts", "Social/Employment insurance", "Hiring & onboarding flow"],
+          "image": "/imgs/qichu/one-stop-hr.svg"
+        },
+        {
+          "title": "Office & Procurement",
+          "desc": "From space to equipment, get your office ready quickly.",
+          "bullets": ["Office lease/fit-out", "IT & office procurement", "Network/phone/signage setup"],
+          "image": "/imgs/qichu/one-stop-office.svg"
+        },
+        {
+          "title": "Localized Operations",
+          "desc": "Continuous optimization after launch for growth and efficiency.",
+          "bullets": ["Brand localization & comms", "Partner network introduction", "Ongoing operating support"],
+          "image": "/imgs/qichu/one-stop-ops.svg"
+        }
+      ]
+    },
     "partners": {
       "title": "Partners Network",
       "subtitle": "Partners Network",
@@ -1985,22 +2029,18 @@
           ]
         },
         "abc-hall-management": {
-          "type": "Management Contract",
-          "title": "ABC Hall Management Contract",
+          "type": "Managed Property",
+          "title": "THE ROPPONGI TOKYO CLUB RESIDENCE",
           "location": "Tokyo",
-          "category": "Property Management",
-          "description": "Successfully accepted property management contract for ABC Hall, providing comprehensive asset management services.",
+          "category": "Managed Properties",
+          "description": "Managed property showcase (sourced from the managed properties gallery).",
           "details": [
-            "Management contract started on October 23, 2025",
-            "Providing comprehensive property management services",
-            "Including rental management, maintenance management, financial management, etc.",
-            "Improving asset operation efficiency and optimizing revenue structure",
-            "Continuously improving client satisfaction"
+            "This page showcases a managed property card.",
+            "Contact us for more project details."
           ],
           "highlights": [
-            { "label": "Management Area", "value": "Approx. 500㎡" },
-            { "label": "Management Type", "value": "Mixed Facility" },
-            { "label": "Service Team", "value": "Professional Team" }
+            { "label": "Showcase", "value": "Managed Property" },
+            { "label": "Image", "value": "Local asset" }
           ]
         },
         "kingsoft-wps-japan": {
@@ -2025,66 +2065,48 @@
           ]
         },
         "shibuya-luxury-apartment": {
-          "type": "Management Contract",
-          "title": "Tokyo Shibuya Luxury Apartment",
-          "location": "Shibuya Ward, Tokyo",
-          "category": "Luxury Apartment",
-          "description": "96% occupancy rate, reduced maintenance response time to within 12 hours through digital management system.",
+          "type": "Managed Property",
+          "title": "The LOG Nihonbashi",
+          "location": "Tokyo",
+          "category": "Managed Properties",
+          "description": "Managed property showcase (sourced from the managed properties gallery).",
           "details": [
-            "Successfully accepted management contract on March 15, 2024",
-            "Maintained 96% occupancy rate, above market average",
-            "Reduced maintenance response time to within 12 hours through digital management system",
-            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
-            "Regularly providing detailed financial reports to ensure asset value preservation and growth",
-            "Professional property management team with extensive service experience"
+            "This page showcases a managed property card.",
+            "Contact us for more project details."
           ],
           "highlights": [
-            { "label": "Management Type", "value": "Comprehensive Management" },
-            { "label": "Occupancy Rate", "value": "96%" },
-            { "label": "Maintenance Response Time", "value": "Within 12 hours" },
-            { "label": "Service Team", "value": "Professional Team" }
+            { "label": "Showcase", "value": "Managed Property" },
+            { "label": "Image", "value": "Local asset" }
           ]
         },
         "yokohama-waterfront-complex": {
-          "type": "Management Contract",
-          "title": "Yokohama Waterfront Complex",
-          "location": "Yokohama City, Kanagawa Prefecture",
-          "category": "Commercial Complex",
-          "description": "Commercial rent increased by 18% through zone management and tenant restructuring.",
+          "type": "Managed Property",
+          "title": "The Parkhouse Nishi-Shinjuku Tower 60",
+          "location": "Tokyo",
+          "category": "Managed Properties",
+          "description": "Managed property showcase (sourced from the managed properties gallery).",
           "details": [
-            "Successfully accepted management contract on June 20, 2024",
-            "Optimized tenant mix through zone management strategy",
-            "Increased commercial rent by 18% through tenant restructuring",
-            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
-            "Regularly providing detailed financial reports to ensure asset value preservation and growth",
-            "Professional property management team with extensive service experience"
+            "This page showcases a managed property card.",
+            "Contact us for more project details."
           ],
           "highlights": [
-            { "label": "Management Type", "value": "Comprehensive Management" },
-            { "label": "Rent Increase", "value": "18%" },
-            { "label": "Service Content", "value": "Rental, maintenance, finance" },
-            { "label": "Service Team", "value": "Professional Team" }
+            { "label": "Showcase", "value": "Managed Property" },
+            { "label": "Image", "value": "Local asset" }
           ]
         },
         "nagoya-student-apartment": {
-          "type": "Management Contract",
-          "title": "Nagoya Student Apartment",
-          "location": "Nagoya City, Aichi Prefecture",
-          "category": "Student Apartment",
-          "description": "Introduced smart access control and tenant community operations, maintaining annual renewal rate at 92%.",
+          "type": "Managed Property",
+          "title": "Kachidoki The Tower",
+          "location": "Tokyo",
+          "category": "Managed Properties",
+          "description": "Managed property showcase (sourced from the managed properties gallery).",
           "details": [
-            "Successfully accepted management contract on September 10, 2024",
-            "Introduced smart access control system, improving security and convenience",
-            "Enhanced tenant stickiness through tenant community operations",
-            "Maintained annual renewal rate at 92%, above market average",
-            "Providing comprehensive property management services including rental management, maintenance, financial management, etc.",
-            "Professional property management team with extensive service experience"
+            "This page showcases a managed property card.",
+            "Contact us for more project details."
           ],
           "highlights": [
-            { "label": "Management Type", "value": "Comprehensive Management" },
-            { "label": "Renewal Rate", "value": "92%" },
-            { "label": "Service Content", "value": "Rental, maintenance, finance, community operations" },
-            { "label": "Service Team", "value": "Professional Team" }
+            { "label": "Showcase", "value": "Managed Property" },
+            { "label": "Image", "value": "Local asset" }
           ]
         }
       },
@@ -2112,49 +2134,41 @@
     "requirements": "Qualifications",
     "benefits": "Benefits & Perks",
     "howToApply": "How to Apply",
+    "workLocation": "Location",
+    "employmentType": "Employment Type",
+    "salary": "Salary",
     "positions": [
       {
-        "title": "Property Management Associate",
+        "title": "Property Management Specialist (Chinese Language Proficiency)",
         "location": "Nihonbashi Ningyocho, Chuo-ku, Tokyo",
         "workType": "Full-time",
-        "salary": "Salary: Negotiable",
-        "summary": "Manage daily property operations including tenant communications, maintenance coordination, and lease administration. Bilingual Chinese and Japanese communication skills required.",
-        "description": "We are seeking a Property Management Associate to handle daily property management operations, including tenant communications, property maintenance coordination, and lease administration.\n\nAs a real estate company specializing in serving Chinese clients, this role plays a crucial part in delivering exceptional customer service. The ideal candidate will be bilingual in Chinese and Japanese, with a strong commitment to professional property management.",
+        "salary": "JPY 290,000–323,000 / month (incl. fixed overtime pay)",
+        "summary": "Bridge asset value with language: work with overseas owners in Chinese and coordinate operations and value-enhancement projects for central Tokyo apartments (no prior industry experience required; full mentorship provided).",
+        "description": "Position: Property Management Specialist (Chinese Language Proficiency)\n— Bridge asset value with language and start your career in central Tokyo\n\nWe are looking for someone who:\n- Language: Can communicate in Chinese at a business level and work smoothly with overseas / Greater China owners;\n- Basic skills: Can use Word / Excel and other common office tools;\n- Work style: Patient, detail-oriented, good at listening, and able to collaborate effectively;\n- Growth mindset: Interested in property management and overseas asset operations (no prior experience required; senior members will mentor you end-to-end).\n\nWork location:\nBourn Mark Ningyocho BLD. 2F, 1-2-12 Nihonbashi Ningyocho, Chuo-ku, Tokyo\n▶ Access: 2-minute walk from Ningyocho Station",
         "responsibilities": [
-          "Manage daily communication and business coordination with Chinese-speaking clients",
-          "Conduct property maintenance management and regular inspections",
-          "Prepare, update, and manage lease contracts",
-          "Respond promptly to tenant inquiries and service requests",
-          "Coordinate and communicate with vendors and service providers",
-          "Organize and maintain business documents and records"
+          "Owner communication & support: Communicate mainly in Chinese to support overseas owners; respond to inquiries about repairs and value-enhancement initiatives",
+          "Operations coordination: Coordinate with external contractors and manage repairs/renovations for assigned apartments in central Tokyo (no on-site work required)",
+          "Asset value enhancement: Participate in proposals and planning for major repairs and renovation projects to support value preservation and growth",
+          "Daily administration: Respond to resident inquiries; organize property-management documents (contracts/reports handled in Japanese)"
         ],
         "requirements": [
-          "Native Chinese speaker or fluent Chinese communication skills (Required)",
-          "Japanese language proficiency N2 or above, able to communicate in daily work (Required)",
-          "Real estate management or related industry experience preferred",
-          "Excellent communication skills and strong service orientation",
-          "Proficient in Microsoft Office suite",
-          "Relevant certifications preferred (e.g., Real Estate Transaction Specialist license)"
+          "Business-level Chinese communication (Required)",
+          "Basic Word / Excel skills",
+          "Patient, detail-oriented; strong teamwork and execution",
+          "Interest in property management and overseas asset operations; willingness to learn (no prior experience required; mentorship provided)"
         ],
         "benefits": [
-          "Full transportation reimbursement",
-          "Annual bonus",
-          "No relocation required",
-          "No overtime culture",
-          "5-minute walk from station",
-          "Paid annual leave",
-          "Comprehensive training program",
-          "Professional certification support",
-          "Experienced candidates welcome",
-          "Certified professionals welcome",
-          "Utilize Chinese language skills",
-          "Health insurance",
-          "Employee pension",
-          "Employment insurance",
-          "Workers' compensation insurance",
-          "Fixed working hours"
+          "Visible career growth: Work directly with the CEO and overseas high-net-worth owners; build high-end networks and cross-cultural communication skills",
+          "Certification support: Support for licenses such as Real Estate Transaction Agent and Rental Property Management; additional allowance after obtaining (up to JPY 30,000/month)",
+          "Small team, high autonomy: A lean team with strong ownership and room for initiative",
+          "Working hours: 10:00–19:00 (8 hours actual work); generally on-time; monthly overtime within 10 hours",
+          "Holidays: Sat/Sun off + year-end/New Year (4 days) + Golden Week + summer break (3 days) + paid leave (10–20 days/year) + childcare leave + anniversary leave",
+          "Office & facilities: Company-owned building; lounge with nap space, massage chair, coffee machine",
+          "Compensation: JPY 290,000–323,000/month (incl. fixed overtime), two bonuses/year (historically 2.5+ months), performance incentives every half-year",
+          "Additional perks: Full transportation reimbursement + certification allowance + company trip (Okinawa for all members at end of 2025) + quarterly team events + work phone + flu vaccination",
+          "Insurance: Health insurance, employee pension, employment insurance, workers' compensation; same benefits during 3-month probation"
         ],
-        "contact": "To apply, please send your resume to info@bournmark.jp. For inquiries, please call 03-XXXX-XXXX"
+        "contact": "This page is for job promotion only. If you are interested, please apply via https://jp.indeed.com/viewjob?jk=e641e0fd67e66aca&from=shareddesktop_copy. Within 3 business days after applying, our recruiter will contact you. The interview process includes \"HR + hiring manager\" and a \"CEO interview\". We look forward to speaking with you."
       }
     ]
   },

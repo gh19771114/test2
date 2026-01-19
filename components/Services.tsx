@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const Services = () => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const ref = useRef(null)
   const pieChartRef = useRef(null)
   const mobilePieChartRef = useRef<HTMLDivElement>(null)
@@ -340,6 +340,65 @@ const Services = () => {
     },
   ], [t])
 
+  // 饼图文字：SVG <text> 不支持自动换行；英文标题较长时容易溢出扇区
+  // 这里做两件事：
+  // 1) 英文按空格智能分成两行（尽量均匀）
+  // 2) 根据“最长行长度”自动缩小字号，确保文字收纳在饼图内
+  const getPieLabelLines = (title: string) => {
+    const raw = String(title ?? '').trim()
+    if (!raw) return ['']
+
+    // 允许未来通过翻译直接传入换行（\n），统一在这里处理
+    if (raw.includes('\n')) {
+      const lines = raw
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean)
+      return lines.length ? lines.slice(0, 3) : ['']
+    }
+
+    if (language !== 'en') return [raw]
+
+    const words = raw.split(/\s+/).filter(Boolean)
+    if (words.length <= 1) return [raw]
+
+    // 找一个最“均衡”的断点：让两行的最大长度尽量小，同时两行长度差尽量小
+    let bestIdx = 1
+    let bestScore = Number.POSITIVE_INFINITY
+    for (let i = 1; i < words.length; i++) {
+      const line1 = words.slice(0, i).join(' ')
+      const line2 = words.slice(i).join(' ')
+      const maxLen = Math.max(line1.length, line2.length)
+      const diff = Math.abs(line1.length - line2.length)
+      const score = maxLen * 2 + diff // maxLen 权重更高
+      if (score < bestScore) {
+        bestScore = score
+        bestIdx = i
+      }
+    }
+
+    const l1 = words.slice(0, bestIdx).join(' ')
+    const l2 = words.slice(bestIdx).join(' ')
+    return [l1, l2]
+  }
+
+  const computePieLabelFontSizePx = (basePx: number, title: string) => {
+    const lines = getPieLabelLines(title)
+    const longest = Math.max(...lines.map(l => l.length))
+
+    let shrink = 1
+    if (language === 'en') {
+      // 两行会更占垂直空间，略微缩小
+      if (lines.length >= 2) shrink *= 0.92
+
+      // 英文更容易溢出，按最长行长度再缩小
+      if (longest > 12) shrink *= Math.max(0.70, 12 / longest)
+      else if (longest > 10) shrink *= 0.90
+    }
+
+    return Math.max(12, Math.round(basePx * shrink))
+  }
+
   // 计算饼图的路径和文字位置（使用固定精度避免 hydration 错误）
   const calculatePieData = (percentage: number, startAngle: number) => {
     const radius = 300 // 外圆半径
@@ -388,7 +447,8 @@ const Services = () => {
     return { path, textX, textY, midAngle: Number(midAngle.toFixed(2)), percentage }
   }
 
-  // 使用 useMemo 缓存饼图数据，避免 hydration 错误
+  // 使用 useMemo 缓存饼图数据
+  // 注意：这里必须依赖 services，否则切换语言时 service.title 会停留在首次渲染的语言（饼图文字不跟随多语言变化）
   const pieDataList = useMemo(() => {
     let currentAngle = 0
     return services.map((service) => {
@@ -396,7 +456,7 @@ const Services = () => {
       currentAngle += service.percentage * 3.6
       return { ...data, service }
     })
-  }, [])
+  }, [services])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -596,17 +656,30 @@ const Services = () => {
                                 if (isMobile) {
                                   // iPad放大1.3倍，手机放大1.4倍
                                   const scale = (isIPad || isIPadDeviceRef.current) ? 1.3 : 1.4
-                                  return Math.round(baseSize * scale)
+                                  return computePieLabelFontSizePx(Math.round(baseSize * scale), service.title)
                                 }
                               }
-                              return baseSize
+                              return computePieLabelFontSizePx(baseSize, service.title)
                             })()}px`,
                             fontWeight: '600',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                           }}
                           suppressHydrationWarning
                         >
-                          {service.title}
+                          {(() => {
+                            const lines = getPieLabelLines(service.title)
+                            const lineHeightEm = 1.05
+                            const startDy = lines.length === 1 ? '0em' : `${-((lines.length - 1) / 2) * lineHeightEm}em`
+                            return lines.map((line, i) => (
+                              <tspan
+                                key={`${service.link}-m-${i}`}
+                                x={pieData.textX}
+                                dy={i === 0 ? startDy : `${lineHeightEm}em`}
+                              >
+                                {line}
+                              </tspan>
+                            ))
+                          })()}
                         </text>
                       </g>
                     )
@@ -957,14 +1030,28 @@ const Services = () => {
                       strokeWidth={(service.percentage === 60 || service.percentage === 12.5) ? '2' : '0'}
                       paintOrder="stroke fill"
                       style={{
-                        fontSize: `${baseFontSize * scale}px`,
+                        fontSize: `${computePieLabelFontSizePx(baseFontSize * scale, service.title)}px`,
                         fontWeight: '600',
                         textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                         transformOrigin: `${pieData.textX}px ${pieData.textY}px`,
                         transform: `scale(${scale})`,
                       }}
+                      suppressHydrationWarning
                     >
-                      {service.title}
+                      {(() => {
+                        const lines = getPieLabelLines(service.title)
+                        const lineHeightEm = 1.05
+                        const startDy = lines.length === 1 ? '0em' : `${-((lines.length - 1) / 2) * lineHeightEm}em`
+                        return lines.map((line, i) => (
+                          <tspan
+                            key={`${service.link}-d-${i}`}
+                            x={pieData.textX}
+                            dy={i === 0 ? startDy : `${lineHeightEm}em`}
+                          >
+                            {line}
+                          </tspan>
+                        ))
+                      })()}
                     </text>
                   </g>
                 )

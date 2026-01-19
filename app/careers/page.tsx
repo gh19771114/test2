@@ -35,19 +35,30 @@ export default function CareersPage() {
                     <h2 className="text-xl md:text-2xl font-bold text-navy-800 mb-4 group-hover:text-indigo-600 transition-colors">
                       {position.title}
                     </h2>
-                    <div className="space-y-2 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <MapPin size={16} className="text-indigo-600 flex-shrink-0" />
-                        <span className="line-clamp-1">{position.location}</span>
+                    <div className="space-y-3 text-sm text-gray-600">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-gray-500 font-medium">{t('careers.workLocation')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <MapPin size={16} className="text-indigo-600 flex-shrink-0" />
+                          <span className="line-clamp-1">{position.location}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock size={16} className="text-indigo-600 flex-shrink-0" />
-                        <span>{position.workType}</span>
+
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-gray-500 font-medium">{t('careers.employmentType')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Clock size={16} className="text-indigo-600 flex-shrink-0" />
+                          <span className="line-clamp-1">{position.workType}</span>
+                        </div>
                       </div>
+
                       {position.salary && (
-                        <div className="flex items-center gap-2">
-                          <Briefcase size={16} className="text-indigo-600 flex-shrink-0" />
-                          <span>{position.salary}</span>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs text-gray-500 font-medium">{t('careers.salary')}</span>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Briefcase size={16} className="text-indigo-600 flex-shrink-0" />
+                            <span className="line-clamp-1">{position.salary}</span>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -91,19 +102,30 @@ export default function CareersPage() {
                     <h2 className="text-2xl md:text-3xl font-bold text-navy-800 mb-4">
                       {positions[selectedPosition].title}
                     </h2>
-                    <div className="flex flex-wrap gap-4 text-sm md:text-base text-gray-600 mb-4">
-                      <div className="flex items-center gap-2">
-                        <MapPin size={18} className="text-indigo-600" />
-                        <span>{positions[selectedPosition].location}</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm md:text-base text-gray-600 mb-4">
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.workLocation')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <MapPin size={18} className="text-indigo-600 flex-shrink-0" />
+                          <span className="truncate">{positions[selectedPosition].location}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock size={18} className="text-indigo-600" />
-                        <span>{positions[selectedPosition].workType}</span>
+
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.employmentType')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Clock size={18} className="text-indigo-600 flex-shrink-0" />
+                          <span className="truncate">{positions[selectedPosition].workType}</span>
+                        </div>
                       </div>
+
                       {positions[selectedPosition].salary && (
-                        <div className="flex items-center gap-2">
-                          <Briefcase size={18} className="text-indigo-600" />
-                          <span>{positions[selectedPosition].salary}</span>
+                        <div className="flex flex-col gap-1 min-w-0">
+                          <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.salary')}</span>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Briefcase size={18} className="text-indigo-600 flex-shrink-0" />
+                            <span className="truncate">{positions[selectedPosition].salary}</span>
+                          </div>
                         </div>
                       )}
                     </div>

@@ -307,7 +307,7 @@ export default function ShouzhiPage() {
                   <div className="flex-1 w-full">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                        <span className="text-lg font-bold text-white">{step.step}</span>
+                        <span className="text-lg font-bold text-white">{String(parseInt(step.step, 10))}</span>
                       </div>
                       <h3 className="text-2xl md:text-3xl font-bold text-white">{step.title}</h3>
                     </div>

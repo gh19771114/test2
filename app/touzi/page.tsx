@@ -68,7 +68,7 @@ export default function TouZiPage() {
                           <div className="text-gray-400 text-sm">No Photo</div>
                         )}
                       </div>
-                      <div className="p-5">
+                      <div className="p-[25px]">
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{t(item.titleKey)}</h4>
                           <p className="text-sm text-gray-600">{t(item.locationKey)}</p>
                         </div>

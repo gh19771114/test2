@@ -9,11 +9,11 @@ import { caseIds, caseDates, caseImages } from '@/lib/casesData'
 
 const Works = () => {
   const { t } = useLanguage()
-  const [visibleCount, setVisibleCount] = useState(6) // 初始只显示6个案例
+  const [visibleCount, setVisibleCount] = useState(6) // 首页默认展示6个案例
 
   // 首页“成功案例”与 /cases 页共享同一套多语言数据源与图片映射
   const works = useMemo(() => {
-    return caseIds.map((id) => {
+    const baseWorks = caseIds.map((id) => {
       const detail = t(`cases.details.${id}`, { returnObjects: true }) as any
       return {
         id,
@@ -25,6 +25,9 @@ const Works = () => {
         description: detail?.description || '',
     }
     })
+
+    // 首页需求：去掉“パークタワー西新宿施設棟1F”
+    return baseWorks.filter((w) => w.id !== 'park-tower-nishishinjuku-101-201')
   }, [t])
 
   // 首页只显示6个案例，不再滚动加载更多
@@ -85,15 +88,19 @@ const Works = () => {
                 </div>
                 
                 <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                    <span>{work.date}</span>
-                  </div>
+                  {work.date ? (
+                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                      <span>{work.date}</span>
+                    </div>
+                  ) : null}
                 <h3 className="text-xl font-semibold text-navy-700 mb-2">
                     {work.title}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {work.description}
-                  </p>
+                  {work.description ? (
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {work.description}
+                    </p>
+                  ) : null}
                 </div>
             </div>
           ))}
@@ -139,15 +146,19 @@ const Works = () => {
                     </div>
                     
                   <div className="md:p-6" style={{ padding: '0.125rem' }}>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                        <span>{work.date}</span>
-                      </div>
+                      {work.date ? (
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                          <span>{work.date}</span>
+                        </div>
+                      ) : null}
                     <h3 className="text-xl font-semibold text-navy-700 mb-2 line-clamp-2">
                         {work.title}
                       </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                        {work.description}
-                      </p>
+                      {work.description ? (
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                          {work.description}
+                        </p>
+                      ) : null}
                     </div>
                 </div>
               </div>
