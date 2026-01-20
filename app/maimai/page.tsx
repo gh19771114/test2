@@ -159,7 +159,7 @@ export default function MaiMaiPage() {
     href: '/maimai/lions-higashiginza-2f'
   },
   {
-      title: '新中野駅上プラザ3F',
+      title: '新中野駅上プラザ305号室',
       price: '1,940万日元',
       area: '25.42㎡',
       type: '1R',

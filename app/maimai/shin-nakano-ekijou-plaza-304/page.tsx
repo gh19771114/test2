@@ -98,11 +98,11 @@ export default function ShinNakanoPlaza304Page() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/shinnakanoekiue.jpeg',
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/305.png',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}
