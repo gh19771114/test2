@@ -160,12 +160,22 @@ export default function MaiMaiPage() {
   },
   {
       title: '新中野駅上プラザ305号室',
-      price: '1,940万日元',
+      price: '2,100万日元',
       area: '25.42㎡',
       type: '1R',
     location: '東京都中野区本町',
       feature: t('maimai.properties.noFee'),
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/shinnakanoekiue.jpeg',
+    href: '/maimai/shin-nakano-ekijou-plaza-305'
+  },
+  {
+      title: '新中野駅上プラザ304号室',
+      price: '5,600万日元',
+      area: '71.73㎡',
+      type: '2LDK',
+    location: '東京都中野区本町',
+      feature: t('maimai.properties.noFee'),
+    image: '/imgs/maimai/shinnakanoekiue.jpeg',
     href: '/maimai/shin-nakano-ekijou-plaza-304'
   },
   ], [t])
