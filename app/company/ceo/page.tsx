@@ -13,6 +13,9 @@ export default function CompanyCeoPage() {
 
   const [isIpadDevice, setIsIpadDevice] = useState(false)
   const [ipadOrientation, setIpadOrientation] = useState<'landscape' | 'portrait'>('portrait')
+  const [messageLayout, setMessageLayout] = useState<
+    'desktop' | 'ipad-landscape' | 'ipad-portrait' | 'mobile-landscape' | 'mobile-portrait'
+  >('desktop')
   const ipadLandscapeTextBasePx = 434
   const ipadLandscapeTextScale = 1.2 // “当前的120%”
   const ipadLandscapeTextMaxPx = Math.round(ipadLandscapeTextBasePx * ipadLandscapeTextScale) // 521
@@ -51,6 +54,41 @@ export default function CompanyCeoPage() {
     return () => {
       window.removeEventListener('orientationchange', syncOrientation)
       window.removeEventListener('resize', syncOrientation)
+    }
+  }, [])
+
+  // 寄语（Message）版本选择：只渲染一个布局，避免 CSS 误判导致多个版本叠加/空白
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const pickLayout = () => {
+      // iPad：优先使用 iPad 专用布局（已在上面的 effect 中识别并写入状态）
+      const isIpad =
+        /iPad/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && (navigator as any).maxTouchPoints > 1)
+      if (isIpad) {
+        const isLandscape = window.matchMedia?.('(orientation: landscape)')?.matches
+        setMessageLayout(isLandscape ? 'ipad-landscape' : 'ipad-portrait')
+        return
+      }
+
+      const isMobile = window.matchMedia?.('(max-width: 767px)')?.matches
+      if (isMobile) {
+        const isLandscape = window.matchMedia?.('(orientation: landscape)')?.matches
+        setMessageLayout(isLandscape ? 'mobile-landscape' : 'mobile-portrait')
+        return
+      }
+
+      // 其余设备统一走 desktop（包含 768–1023 的平板/小屏桌面，避免空白）
+      setMessageLayout('desktop')
+    }
+
+    pickLayout()
+    window.addEventListener('resize', pickLayout)
+    window.addEventListener('orientationchange', pickLayout)
+    return () => {
+      window.removeEventListener('resize', pickLayout)
+      window.removeEventListener('orientationchange', pickLayout)
     }
   }, [])
 
@@ -177,9 +215,6 @@ export default function CompanyCeoPage() {
                   <div className="relative w-full max-w-sm mx-auto lg:mx-0 aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-gray-200 company-ceo-profile-image lg:float-left lg:mr-6 lg:mb-4">
                     <Image src={ceoPortrait2} alt={t('company.ceo.profile.name')} fill className="object-cover" sizes="(min-width: 1024px) 28vw, 80vw" />
                   </div>
-                  <div className="company-ceo-profile-intro-image">
-                    <Image src={ceoPortrait2} alt={t('company.ceo.profile.name')} fill className="object-cover" sizes="(max-width: 767px) 45vw, 28vw" />
-              </div>
                   <div className="company-ceo-profile-intro-text">
                     <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-navy-800">{t('company.ceo.profile.name')}</h2>
                     <div className="space-y-2 md:space-y-3">
@@ -220,7 +255,10 @@ export default function CompanyCeoPage() {
         ) : (
           <>
             {/* 桌面版 */}
-            <section className="desktop-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+            <section
+              className="desktop-message relative min-h-[90vh] bg-[#f3eadf]"
+              style={{ background: '#f3eadf', display: messageLayout === 'desktop' ? 'block' : 'none' }}
+            >
               <div className="container-custom relative z-10 py-16 md:py-20 desktop-message-wrap">
                 <div className="desktop-message-text text-slate-900 space-y-6">
                   {/* 桌面版寄语：文字环绕“红色图片区域”的占位块（实际图片用绝对定位渲染） */}
@@ -260,7 +298,10 @@ export default function CompanyCeoPage() {
             </section>
 
             {/* iPad横版：用稳定的两列 grid（左文右图），避免 absolute/translate 造成遮挡与溢出 */}
-            <section className="ipad-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+            <section
+              className="ipad-landscape-message relative bg-[#f3eadf]"
+              style={{ background: '#f3eadf', display: messageLayout === 'ipad-landscape' ? 'block' : 'none' }}
+            >
               <div className="container-custom ipad-message-grid">
                 <div
                   className="ipad-message-text text-slate-900 space-y-6 ceo-message-text"
@@ -295,7 +336,10 @@ export default function CompanyCeoPage() {
             </section>
 
             {/* iPad竖版：同样用两列 grid（左文右图），避免复用 desktop-message 的 float/绝对定位导致空隙与遮挡 */}
-            <section className="ipad-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+            <section
+              className="ipad-portrait-message relative bg-[#f3eadf]"
+              style={{ background: '#f3eadf', display: messageLayout === 'ipad-portrait' ? 'block' : 'none' }}
+            >
               <div className="container-custom ipad-message-grid ipad-message-grid--portrait">
                 <div className="ipad-message-text text-slate-900 space-y-6 ceo-message-text">
                   <div>
@@ -327,7 +371,10 @@ export default function CompanyCeoPage() {
             </section>
 
             {/* 手机横版 - 文字环绕人物图 */}
-            <section className="mobile-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+            <section
+              className="mobile-landscape-message relative bg-[#f3eadf]"
+              style={{ background: '#f3eadf', display: messageLayout === 'mobile-landscape' ? 'block' : 'none' }}
+            >
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-landscape-message-content relative">
                   <div className="mobile-landscape-message-text ceo-message-text">
@@ -365,7 +412,10 @@ export default function CompanyCeoPage() {
             </section>
 
             {/* 手机竖版 - 文字环绕人物图 */}
-            <section className="mobile-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+            <section
+              className="mobile-portrait-message relative bg-[#f3eadf]"
+              style={{ background: '#f3eadf', display: messageLayout === 'mobile-portrait' ? 'block' : 'none' }}
+            >
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-portrait-message-content relative">
                   <div className="mobile-portrait-message-text ceo-message-text">
