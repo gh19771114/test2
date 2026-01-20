@@ -2171,39 +2171,7 @@ section#partners.desktop-partners-network .yellow-network-container {
   }
 }
 
-/* 社长寄语页面 - 响应式显示控制 */
-
-/* 默认全部隐藏，避免多个版本同时出现 */
-.desktop-message,
-.ipad-landscape-message,
-.ipad-portrait-message,
-.mobile-landscape-message,
-.mobile-portrait-message {
-  display: none !important;
-}
-
-/* iPad（含外接键盘/触控板）寄语：通过 JS 注入的 data 属性稳定切换版本，避免 any-pointer/hover 误判 */
-html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message {
-  display: block !important;
-}
-html[data-device="ipad"][data-orientation="landscape"] .desktop-message,
-html[data-device="ipad"][data-orientation="landscape"] .ipad-portrait-message,
-html[data-device="ipad"][data-orientation="landscape"] .mobile-landscape-message,
-html[data-device="ipad"][data-orientation="landscape"] .mobile-portrait-message {
-  display: none !important;
-}
-
-html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message {
-  display: block !important;
-}
-html[data-device="ipad"][data-orientation="portrait"] .desktop-message,
-html[data-device="ipad"][data-orientation="portrait"] .ipad-landscape-message,
-html[data-device="ipad"][data-orientation="portrait"] .mobile-landscape-message,
-html[data-device="ipad"][data-orientation="portrait"] .mobile-portrait-message {
-  display: none !important;
-}
-
-/* iPad 竖版：不再复用 desktop-message（float/absolute 方案会制造空隙/遮挡），改用 ipad-portrait-message 的 grid 布局 */
+/* 社长寄语页面 - 响应式显示控制（已改为 React 仅渲染一个版本，避免 display:none 造成叠加/空白） */
 
 /* iPad 竖版：桌面版寄语样式兜底（iPad 是 coarse pointer，不会命中桌面媒体查询；必须单独补齐“贴页尾”规则） */
 html[data-device="ipad"][data-orientation="portrait"] section.desktop-message {
@@ -2867,16 +2835,7 @@ section.desktop-message {
     overflow: visible !important;
   }
 
-  /* iPad横版：强制只显示 iPad 横版寄语（避免 iPad 外接键鼠时误显示 desktop 版本） */
-  .desktop-message,
-  .ipad-portrait-message,
-  .mobile-landscape-message,
-  .mobile-portrait-message {
-    display: none !important;
-  }
-  .ipad-landscape-message {
-    display: block !important;
-  }
+  /* iPad横版：不再通过 display none/block 切换版本（由 React 决定渲染哪个 section） */
   
   /* iPad横版：人物图片容器改为float布局，让文案环绕 */
   .ipad-landscape-message > div.absolute.inset-0.flex.justify-center {
@@ -7777,23 +7736,12 @@ html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message {
   display: block !important;
   overflow: visible !important;
 }
-html[data-device="ipad"][data-orientation="landscape"] .desktop-message,
-html[data-device="ipad"][data-orientation="landscape"] .ipad-portrait-message,
-html[data-device="ipad"][data-orientation="landscape"] .mobile-landscape-message,
-html[data-device="ipad"][data-orientation="landscape"] .mobile-portrait-message {
-  display: none !important;
-}
 
 html[data-device="ipad"][data-orientation="portrait"] .ipad-portrait-message {
   display: block !important;
   overflow: visible !important;
 }
-html[data-device="ipad"][data-orientation="portrait"] .desktop-message,
-html[data-device="ipad"][data-orientation="portrait"] .ipad-landscape-message,
-html[data-device="ipad"][data-orientation="portrait"] .mobile-landscape-message,
-html[data-device="ipad"][data-orientation="portrait"] .mobile-portrait-message {
-  display: none !important;
-}
+/* 说明：版本切换由 React 负责，不再在 CSS 里通过 display:none 切换 */
 
 /* iPad 横版：文案宽度=当前 620px 的 70% ≈ 434px */
 html[data-device="ipad"][data-orientation="landscape"] .ipad-landscape-message .ceo-message-text {

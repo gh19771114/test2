@@ -254,11 +254,8 @@ export default function CompanyCeoPage() {
           </section>
         ) : (
           <>
-            {/* 桌面版 */}
-            <section
-              className="desktop-message relative min-h-[90vh] bg-[#f3eadf]"
-              style={{ background: '#f3eadf', display: messageLayout === 'desktop' ? 'block' : 'none' }}
-            >
+            {messageLayout === 'desktop' && (
+            <section className="desktop-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom relative z-10 py-16 md:py-20 desktop-message-wrap">
                 <div className="desktop-message-text text-slate-900 space-y-6">
                   {/* 桌面版寄语：文字环绕“红色图片区域”的占位块（实际图片用绝对定位渲染） */}
@@ -296,12 +293,11 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
+            )}
 
             {/* iPad横版：用稳定的两列 grid（左文右图），避免 absolute/translate 造成遮挡与溢出 */}
-            <section
-              className="ipad-landscape-message relative bg-[#f3eadf]"
-              style={{ background: '#f3eadf', display: messageLayout === 'ipad-landscape' ? 'block' : 'none' }}
-            >
+            {messageLayout === 'ipad-landscape' && (
+            <section className="ipad-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom ipad-message-grid">
                 <div
                   className="ipad-message-text text-slate-900 space-y-6 ceo-message-text"
@@ -334,12 +330,11 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
+            )}
 
             {/* iPad竖版：同样用两列 grid（左文右图），避免复用 desktop-message 的 float/绝对定位导致空隙与遮挡 */}
-            <section
-              className="ipad-portrait-message relative bg-[#f3eadf]"
-              style={{ background: '#f3eadf', display: messageLayout === 'ipad-portrait' ? 'block' : 'none' }}
-            >
+            {messageLayout === 'ipad-portrait' && (
+            <section className="ipad-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom ipad-message-grid ipad-message-grid--portrait">
                 <div className="ipad-message-text text-slate-900 space-y-6 ceo-message-text">
                   <div>
@@ -369,12 +364,11 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
+            )}
 
             {/* 手机横版 - 文字环绕人物图 */}
-            <section
-              className="mobile-landscape-message relative bg-[#f3eadf]"
-              style={{ background: '#f3eadf', display: messageLayout === 'mobile-landscape' ? 'block' : 'none' }}
-            >
+            {messageLayout === 'mobile-landscape' && (
+            <section className="mobile-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-landscape-message-content relative">
                   <div className="mobile-landscape-message-text ceo-message-text">
@@ -410,12 +404,11 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
+            )}
 
             {/* 手机竖版 - 文字环绕人物图 */}
-            <section
-              className="mobile-portrait-message relative bg-[#f3eadf]"
-              style={{ background: '#f3eadf', display: messageLayout === 'mobile-portrait' ? 'block' : 'none' }}
-            >
+            {messageLayout === 'mobile-portrait' && (
+            <section className="mobile-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-portrait-message-content relative">
                   <div className="mobile-portrait-message-text ceo-message-text">
@@ -451,6 +444,7 @@ export default function CompanyCeoPage() {
                 </div>
               </div>
             </section>
+            )}
           </>
         )}
     </PageLayout>
