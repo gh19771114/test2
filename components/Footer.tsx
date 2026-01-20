@@ -29,7 +29,7 @@ const Footer = () => {
   }
 
   const handleAddressClick = () => {
-    const address = encodeURIComponent('東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F')
+    const address = encodeURIComponent(t('footer.address.mapQuery'))
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     if (isMobile) {
       window.location.href = `https://maps.google.com/maps?q=${address}`
@@ -263,8 +263,8 @@ const Footer = () => {
                 <div className="flex items-start space-x-3">
                   <MapPin size={22} className="md:w-5 md:h-5 text-gray-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-base md:text-sm text-gray-300">東京都中央区日本橋人形町1-2-12</p>
-                    <p className="text-base md:text-sm text-gray-400">Bourn Mark Ningyocho BLD. 2F</p>
+                    <p className="text-base md:text-sm text-gray-300">{t('footer.address.line1')}</p>
+                    <p className="text-base md:text-sm text-gray-400">{t('footer.address.line2')}</p>
                   </div>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { MapPin, Building2, Train, TrendingUp, Clock, ArrowLeft, X } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useState, useRef } from 'react'
+import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
 
 export default function LionsHigashiGinza2FPage() {
   const { t } = useLanguage()
@@ -213,40 +214,21 @@ export default function LionsHigashiGinza2FPage() {
           </div>
         </section>
 
-        {/* 图片画廊 */}
-        <section className="bg-white py-12">
-          <div className="container-custom">
-            <div className="mx-auto max-w-6xl">
-              <h2 className="mb-6 text-xl font-semibold text-slate-900">{t('maimai.propertyDetail.photos')}</h2>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="/imgs/Lions Mansion Higashi-Ginza.jpeg"
-                    alt={labels.exterior || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt={labels.surroundings || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt={labels.interior || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MaimaiPhotosMap
+          photosTitle={t('maimai.propertyDetail.photos')}
+          mapTitle={t('maimai.propertyDetail.mapTitle')}
+          address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
+          images={[
+            {
+              src: '/imgs/Lions Mansion Higashi-Ginza.jpeg',
+              alt: labels.exterior || labels.appearance || p.title,
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              alt: labels.surroundings || labels.appearance || p.title,
+            },
+          ]}
+        />
 
         {/* 物业概要 */}
         <section className="mx-auto mt-6 max-w-6xl px-4 pb-14">

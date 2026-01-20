@@ -129,7 +129,59 @@
       "message": "留言",
       "required": "必填",
       "submit": "提交",
-      "consultation": "联系我们预约咨询"
+      "consultation": "联系我们预约咨询",
+      "submitButton": "提交信息",
+      "submitHint": "提交后，我们将在一个工作日内与您确认需求并安排专属顾问。",
+      "placeholders": {
+        "company": "如：东京蓝海股份有限公司",
+        "name": "请输入姓名",
+        "email": "example@company.com",
+        "message": "请描述您的需求或希望了解的服务内容"
+      },
+      "confirm": {
+        "title": "确认信息",
+        "hint": "请确认以下信息无误后点击\"发送\"。如需修改，请点击\"修改\"按钮。",
+        "send": "确认发送",
+        "sending": "发送中...",
+        "edit": "修改信息",
+        "notProvided": "未填写"
+      },
+      "errors": {
+        "recaptchaRequired": "请完成机器人验证",
+        "recaptchaFailed": "机器人验证失败，请重试",
+        "sendFailed": "发送失败",
+        "submitFailed": "提交失败，请稍后重试。"
+      },
+      "success": "信息已提交，我们会尽快与您联系。",
+      "faxMail": {
+        "subject": "发送传真",
+        "body": "请附上传真内容或相关文件，我们的顾问会尽快回复。"
+      },
+      "contactInfoTitle": "联系方式",
+      "contactInfo": {
+        "copy": "复制",
+        "email": {
+          "title": "电子邮箱",
+          "description": "我们将在 24 小时内回复您的咨询"
+        },
+        "phone": {
+          "title": "联系电话",
+          "description": "工作日 10:00-18:00"
+        },
+        "fax": {
+          "title": "传真"
+        },
+        "address": {
+          "title": "公司地址"
+        },
+        "actions": {
+          "sendMail": "发送邮件",
+          "callPhone": "拨打电话",
+          "openMap": "打开地图",
+          "sendFax": "发送传真"
+        }
+      },
+      "mapTitle": "公司位置地图"
     }
   },
   "news": {
@@ -457,7 +509,7 @@
         "milestone11": {
           "year": "2021.06",
           "title": "品牌焕新",
-          "description": "公司正式更名为川雨流痕股份有限公司（Bourn Mark CO., LTD.），确立\"根植日本、连接中日\"的企业定位。",
+          "description": "公司正式更名为川雨流痕股份有限公司（Bourn Mark CO., LTD.），确立\"根植日本、连接世界\"的企业定位。",
           "imageAlt": "品牌发布活动"
         }
       }
@@ -473,7 +525,7 @@
       "profile": {
         "name": "桂小川",
         "introduction1": "自 2009 年创立 Bourn Mark 以来，以跨文化视角与专业实务经验带领团队深耕日本不动产市场，致力于搭建中日商务合作的桥梁，推动资产运营、企业落地与投资业务的协同发展。",
-        "introduction2": "将企业定位于\"根植日本、连接中日\"，以扎实的租赁管理、资产增值与企业服务经验，持续扩展公司的业务版图，并通过长期主义的经营理念，打造兼具国际视野与本地执行力的服务体系。",
+        "introduction2": "将企业定位于\"根植日本、连接世界\"，以扎实的租赁管理、资产增值与企业服务经验，持续扩展公司的业务版图，并通过长期主义的经营理念，打造兼具国际视野与本地执行力的服务体系。",
         "portraitAlt": "桂小川肖像",
         "highlights": {
           "birth": {
@@ -602,7 +654,7 @@
   },
   "wuye": {
     "title": "全方位物业管理服务",
-    "subtitle": "Property Management",
+    "subtitle": "投资不动产管理",
     "description": "为在日本持有房产的个人与机构业主提供全流程托管服务，不仅涵盖日常租赁管理、财务税务与维修维护，更专注于通过专业的资产增值策略和租金增长交涉，持续提升您的房产价值与投资回报率，让资产稳健成长。",
     "services": {
       "title": "服务内容",
@@ -648,7 +700,7 @@
     "stats": {
       "units": "户",
       "totalProperties": "管理房产总数",
-      "amountValue": "約800億",
+      "amountValue": "约1000亿",
       "yen": "日元",
       "totalAssets": "管理资产总额"
     },
@@ -670,7 +722,7 @@
         "item1": {
           "time": "尽快",
           "title": "办理入住手续",
-          "description": "完成所有入住手续的办理，包括合同签署、押金收取、钥匙交接等。通知租客具体入住日期，确保流程顺畅。"
+          "description": "通过在租约中加入更有利于房东的关键条款，并在签署前完成合规核验，切实保障房东权益。"
         },
         "item2": {
           "time": "最快2周",
@@ -710,7 +762,8 @@
             "信用记录调查",
             "收入证明审核",
             "保证公司担保申请",
-            "租客提交承租申请后，我们完成对租客提供信息的真伪验证和社会信用调查。同时联系保证公司申请担保，确保租客资质符合要求。"
+            "租客提交承租申请后，我们完成对租客提供信息的真伪验证和社会信用调查。同时联系保证公司申请担保，确保租客资质符合要求。",
+            "我们招募的租客将统一加入保证会社*（租金保障）机制，降低租金拖欠风险。"
           ]
         },
         "service2": {
@@ -742,7 +795,7 @@
         },
         "step2": {
           "title": "背景调查",
-          "description": "协助租客完成包含信用记录调查、收入证明等项目在内的保证公司担保申请，并尽快推进审核。"
+          "description": "协助租客完成包含信用记录调查、收入证明等项目在内的保证公司担保申请，并推进审核。"
         },
         "step3": {
           "title": "合同签署",
@@ -848,23 +901,30 @@
       "cases": {
         "title": "成功案例",
         "subtitle": "真实案例展示我们的专业能力和服务成果",
+        "table": {
+          "area": "面積（㎡）",
+          "rentBefore": "漲租前租金（日幣）",
+          "rentAfter": "漲租後租金（日幣）",
+          "diff": "差額",
+          "increase": "調漲幅度"
+        },
         "case1": {
-          "title": "新宿商业大厦租金优化项目",
-          "location": "东京都新宿区",
+          "title": "涩谷商铺租金优化项目",
+          "location": "东京都涩谷区",
           "result": "租金提升 32%",
           "description": "通过市场分析和专业交涉，成功将商业大厦平均租金提升32%，年收益增加约2.5亿日元",
           "category": "租金交涉"
         },
         "case2": {
-          "title": "涩谷高级公寓大规模修缮",
-          "location": "东京都涩谷区",
+          "title": "港区公寓楼大规模修缮",
+          "location": "东京都港区",
           "result": "资产价值提升 28%",
           "description": "完成全面修缮改造，提升物业品质，资产估值提升28%，租金收益率显著改善",
           "category": "大规模修缮"
         },
         "case3": {
-          "title": "池袋综合设施附加收益开发",
-          "location": "东京都丰岛区",
+          "title": "文京区公寓楼附加收益开发",
+          "location": "东京都文京区",
           "result": "附加收益增加 5%",
           "description": "通过设置自动贩卖机、信号塔等设施，成功开发多元化收益来源，年附加收益增加5%",
           "category": "附加收益"
@@ -1124,7 +1184,7 @@
         },
         "step3": {
           "title": "持续支援",
-          "description": "定期关怀回访，组织社区活动，提供生活咨询协助，持续提升租客居住体验。"
+          "description": "快速响应客户投诉，迅速协调解决问题。"
         }
       },
       "nextStep": "下一步"
@@ -1603,6 +1663,7 @@
       "backToPrevious": "返回上一页",
       "subtitle": "不动产投资用 房源介绍",
       "photos": "房源照片",
+      "mapTitle": "谷歌地图",
       "overview": "房源概要",
       "investmentPoints": "投资・运营要点",
       "investmentPortfolio": "1F投资组合概要",
@@ -2232,6 +2293,11 @@
         "title": "案例即将推出",
         "result": "更多成功案例正在筹备中，敬请期待..."
       }
+    },
+    "cta": {
+      "title": "计划拓展日本业务？",
+      "description": "告诉我们您的行业、预算与时间安排，我们将提供市场评估、落地路线与伙伴资源建议，为您构建可持续的在日业务体系。",
+      "button": "获取专属方案"
     }
   },
   "cases": {
@@ -2463,6 +2529,11 @@
     "services": "服务项目",
     "contactInfo": "联系方式",
     "workingHours": "工作日 10:00-18:00",
+    "address": {
+      "line1": "东京都中央区日本桥人形町1-2-12",
+      "line2": "Bourn Mark Ningyocho BLD. 2F",
+      "mapQuery": "东京都中央区日本桥人形町1-2-12 Bourn Mark Ningyocho BLD. 2F"
+    },
     "copyright": "© 2024 Bourn Mark Co., Ltd. 保留所有权利。",
     "privacyPolicy": "隐私政策",
     "mobileVersion": "移动版"

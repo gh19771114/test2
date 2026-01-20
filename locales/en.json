@@ -129,7 +129,59 @@
       "message": "Message",
       "required": "Required",
       "submit": "Submit",
-      "consultation": "Contact Us for Consultation"
+      "consultation": "Contact Us for Consultation",
+      "submitButton": "Submit",
+      "submitHint": "After submission, we will confirm your needs within one business day and arrange a dedicated advisor.",
+      "placeholders": {
+        "company": "e.g., Tokyo Blue Ocean Co., Ltd.",
+        "name": "Enter your name",
+        "email": "example@company.com",
+        "message": "Please describe your needs or the services you would like to learn about"
+      },
+      "confirm": {
+        "title": "Confirm Information",
+        "hint": "Please confirm the information below and click \"Send\". To edit, click the \"Edit\" button.",
+        "send": "Confirm & Send",
+        "sending": "Sending...",
+        "edit": "Edit Information",
+        "notProvided": "Not provided"
+      },
+      "errors": {
+        "recaptchaRequired": "Please complete the reCAPTCHA verification.",
+        "recaptchaFailed": "reCAPTCHA verification failed. Please try again.",
+        "sendFailed": "Send failed.",
+        "submitFailed": "Submission failed. Please try again later."
+      },
+      "success": "Your message has been submitted. We will contact you as soon as possible.",
+      "faxMail": {
+        "subject": "Send Fax",
+        "body": "Please attach the fax content or related files. Our advisor will respond as soon as possible."
+      },
+      "contactInfoTitle": "Contact Information",
+      "contactInfo": {
+        "copy": "Copy",
+        "email": {
+          "title": "Email",
+          "description": "We will respond within 24 hours"
+        },
+        "phone": {
+          "title": "Phone",
+          "description": "Weekdays 10:00–18:00"
+        },
+        "fax": {
+          "title": "Fax"
+        },
+        "address": {
+          "title": "Address"
+        },
+        "actions": {
+          "sendMail": "Send Email",
+          "callPhone": "Call",
+          "openMap": "Open Map",
+          "sendFax": "Send Fax"
+        }
+      },
+      "mapTitle": "Company Location Map"
     }
   },
   "news": {
@@ -648,7 +700,7 @@
     "stats": {
       "units": "Units",
       "totalProperties": "Total Managed Properties",
-      "amountValue": "Approx. 80 Billion",
+      "amountValue": "Approx. 100 Billion",
       "yen": "Yen",
       "totalAssets": "Total Managed Assets"
     },
@@ -670,12 +722,12 @@
         "item1": {
           "time": "Promptly",
           "title": "Tenant Screening and Background Check",
-          "description": "After a tenant submits a rental application, we will complete verification of the tenant's information and social credit investigation as soon as possible. We also contact guarantee companies to apply for guarantees, ensuring the tenant's qualifications meet requirements."
+          "description": "After a tenant submits a rental application, we verify the provided information, conduct a social credit check, and coordinate a guarantee company screening to ensure the tenant meets the requirements."
         },
         "item2": {
           "time": "Within 1 week",
           "title": "Move-in Procedures",
-          "description": "Complete all move-in procedures, including contract signing, deposit collection, key handover, etc. Notify tenants of specific move-in dates to ensure smooth process."
+          "description": "Protect the landlord’s interests by incorporating key landlord-friendly clauses into the lease agreement and confirming compliance before signing."
         },
         "item3": {
           "time": "Fastest 2 weeks",
@@ -719,7 +771,8 @@
             "Identity verification",
             "Credit record investigation",
             "Income proof review",
-            "Guarantee company guarantee application"
+            "Guarantee company guarantee application",
+            "Tenants we recruit are enrolled in a guarantee company* (rent guarantee) mechanism to reduce the risk of rent arrears."
           ]
         },
         "service2": {
@@ -750,7 +803,7 @@
         },
         "step2": {
           "title": "Background Check",
-          "description": "Complete identity verification, credit investigation and guarantee company guarantee application promptly."
+          "description": "Complete identity verification, credit investigation and guarantee company guarantee application."
         },
         "step3": {
           "title": "Contract Signing",
@@ -856,6 +909,13 @@
       "cases": {
         "title": "Success Cases",
         "subtitle": "Real cases demonstrating our professional capabilities and service results",
+        "table": {
+          "area": "Area (㎡)",
+          "rentBefore": "Rent before increase (JPY)",
+          "rentAfter": "Rent after increase (JPY)",
+          "diff": "Difference",
+          "increase": "Increase rate"
+        },
         "case1": {
           "title": "Shinjuku Commercial Building Rent Optimization Project",
           "location": "Shinjuku Ward, Tokyo",
@@ -1132,7 +1192,7 @@
         },
         "step3": {
           "title": "Ongoing Support",
-          "description": "Regular care follow-ups, organize community activities, provide life consultation assistance, and continuously improve tenant living experience."
+          "description": "Quickly respond to customer complaints and promptly coordinate solutions."
         }
       },
       "nextStep": "Next Step"
@@ -1390,6 +1450,11 @@
     "services": "Services",
     "contactInfo": "Contact Information",
     "workingHours": "Weekdays 10:00-18:00",
+    "address": {
+      "line1": "1-2-12 Nihonbashi Ningyocho, Chuo City, Tokyo",
+      "line2": "Bourn Mark Ningyocho BLD. 2F",
+      "mapQuery": "1-2-12 Nihonbashi Ningyocho, Chuo City, Tokyo Bourn Mark Ningyocho BLD. 2F"
+    },
     "copyright": "© 2024 Bourn Mark Co., Ltd. All rights reserved.",
     "privacyPolicy": "Privacy Policy",
     "mobileVersion": "Mobile Version"
@@ -1601,6 +1666,7 @@
       "backToPrevious": "Back to Previous Page",
       "subtitle": "Real Estate Investment Property Introduction",
       "photos": "Property Photos",
+      "mapTitle": "Google Maps",
       "overview": "Property Overview",
       "investmentPoints": "Investment & Operation Points",
       "investmentPortfolio": "1F Investment Portfolio Overview",
@@ -1905,6 +1971,11 @@
         "title": "Case Coming Soon",
         "result": "More success cases are being prepared, please stay tuned..."
       }
+    },
+    "cta": {
+      "title": "Planning to expand your business in Japan?",
+      "description": "Tell us your industry, budget, and timeline. We’ll provide market assessment, a landing roadmap, and partner recommendations to help you build a sustainable operation in Japan.",
+      "button": "Get a tailored plan"
     }
   },
   "cases": {

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Building2, Train, TrendingUp, Shield, Clock, ArrowLeft } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
 
 export default function StHillsShiinamachi405Page() {
   const { t } = useLanguage()
@@ -97,40 +98,21 @@ export default function StHillsShiinamachi405Page() {
           </div>
         </section>
 
-        {/* 图片画廊 */}
-        <section className="bg-white py-12">
-          <div className="container-custom">
-            <div className="mx-auto max-w-6xl">
-              <h2 className="mb-6 text-xl font-semibold text-slate-900">{t('maimai.propertyDetail.photos')}</h2>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt={labels.exterior || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt={labels.surroundings || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-64 overflow-hidden rounded-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt={labels.interior || labels.appearance || p.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MaimaiPhotosMap
+          photosTitle={t('maimai.propertyDetail.photos')}
+          mapTitle={t('maimai.propertyDetail.mapTitle')}
+          address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
+          images={[
+            {
+              src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              alt: labels.exterior || labels.appearance || p.title,
+            },
+            {
+              src: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              alt: labels.surroundings || labels.appearance || p.title,
+            },
+          ]}
+        />
 
         <section className="mx-auto mt-6 max-w-6xl px-4 pb-14">
           <div className="grid gap-10 lg:grid-cols-[2fr,1.2fr]">

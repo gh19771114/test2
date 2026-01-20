@@ -11,33 +11,7 @@ import { cn } from '@/lib/utils'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { caseImages, caseDates } from '@/lib/casesData'
 
-const relatedServices = [
-  {
-    name: '商业地产租赁',
-    desc: '提供东京周边地区商铺、写字楼、工厂、仓库等各种商业地产的租赁服务。',
-    icon: Store,
-  },
-  {
-    name: '室内软装',
-    desc: '根据品牌定位提供室内软装设计、陈设与执行，打造统一的空间体验。',
-    icon: Palette,
-  },
-  {
-    name: '办公设备采购及设置',
-    desc: '整合IT设备、办公家具等采购渠道，负责配送、安装与调试。',
-    icon: Monitor,
-  },
-  {
-    name: '企业相关活动承办',
-    desc: '开业典礼、展会设置等商务活动的策划与现场执行支持。',
-    icon: Sparkles,
-  },
-  {
-    name: '广告宣传策划',
-    desc: '整合线上线下媒体资源，制定品牌本地化宣传与推广方案。',
-    icon: Megaphone,
-  },
-]
+const relatedServiceIcons = [Store, Palette, Monitor, Sparkles, Megaphone]
 
 // 合作伙伴数据将在组件内从多语言文件读取
 
@@ -656,6 +630,20 @@ export default function QiChuPage() {
       { title: t('qichu.cases.comingSoon3.title'), result: t('qichu.cases.comingSoon3.result') },
     ]
   }, [t])
+
+  // 相关服务（多语言）
+  const relatedServices = useMemo(() => {
+    type RelatedService = { name: string; desc: string }
+    const raw = t('qichu.services.related', { returnObjects: true }) as any
+    if (Array.isArray(raw)) return raw as RelatedService[]
+    if (raw && typeof raw === 'object') {
+      return Object.keys(raw)
+        .sort()
+        .map((k) => raw[k])
+        .filter((v) => v && typeof v === 'object' && 'name' in v && 'desc' in v) as RelatedService[]
+    }
+    return [] as RelatedService[]
+  }, [t])
   
   // 从 sessionStorage 恢复放大状态
   useEffect(() => {
@@ -1057,18 +1045,18 @@ export default function QiChuPage() {
         <section id="services" className="section-padding" style={{ position: 'relative', zIndex: 10 }}>
           <div className="container-custom">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">相关服务</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">{t('qichu.services.title')}</h2>
               <p className="text-sm md:text-base text-gray-300 max-w-2xl mx-auto px-4 md:px-0">
-                为企业提供全方位的落地支持服务，从选址到运营，一站式解决方案
+                {t('qichu.services.subtitle')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8 relative z-10">
-              {relatedServices.map((service) => {
-                const Icon = service.icon
+              {relatedServices.map((service, idx) => {
+                const Icon = relatedServiceIcons[idx] || Store
                 return (
                   <div
-                    key={service.name}
+                    key={`${service.name}-${idx}`}
                     className="group bg-gradient-to-br from-white to-green-50/50 backdrop-blur-sm border-2 border-green-100 rounded-xl md:rounded-2xl p-4 md:p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 md:hover:-translate-y-2 hover:border-green-300 relative z-10"
                     style={{ pointerEvents: 'auto' }}
                   >
@@ -1511,12 +1499,12 @@ export default function QiChuPage() {
 
         <section className="section-padding">
           <div className="container-custom text-center px-4 md:px-0">
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">计划拓展日本业务？</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">{t('qichu.cta.title')}</h2>
             <p className="text-sm md:text-base text-gray-200 max-w-2xl mx-auto mb-5 md:mb-6 leading-relaxed">
-              告诉我们您的行业、预算与时间安排，我们将提供市场评估、落地路线与伙伴资源建议，为您构建可持续的在日业务体系。
+              {t('qichu.cta.description')}
             </p>
             <a href="/#contact" className="btn-primary inline-flex items-center gap-2 text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3">
-              获取专属方案
+              {t('qichu.cta.button')}
             </a>
           </div>
         </section>

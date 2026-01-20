@@ -129,7 +129,59 @@
       "message": "メッセージ",
       "required": "必須",
       "submit": "送信",
-      "consultation": "お問い合わせ・相談予約"
+      "consultation": "お問い合わせ・相談予約",
+      "submitButton": "送信",
+      "submitHint": "送信後、1営業日以内に内容確認のうえ、担当アドバイザーよりご連絡いたします。",
+      "placeholders": {
+        "company": "例：東京ブルーオーシャン株式会社",
+        "name": "お名前を入力してください",
+        "email": "example@company.com",
+        "message": "ご要望やご相談内容をご記入ください"
+      },
+      "confirm": {
+        "title": "内容確認",
+        "hint": "以下の内容をご確認のうえ「送信」を押してください。修正する場合は「修正」を押してください。",
+        "send": "確認して送信",
+        "sending": "送信中...",
+        "edit": "修正",
+        "notProvided": "未入力"
+      },
+      "errors": {
+        "recaptchaRequired": "reCAPTCHA 認証を完了してください。",
+        "recaptchaFailed": "reCAPTCHA 認証に失敗しました。再度お試しください。",
+        "sendFailed": "送信に失敗しました。",
+        "submitFailed": "送信に失敗しました。しばらくしてから再度お試しください。"
+      },
+      "success": "送信が完了しました。折り返しご連絡いたします。",
+      "faxMail": {
+        "subject": "FAX送付",
+        "body": "FAX内容または関連ファイルを添付してください。担当者より折り返しご連絡いたします。"
+      },
+      "contactInfoTitle": "連絡先",
+      "contactInfo": {
+        "copy": "コピー",
+        "email": {
+          "title": "メール",
+          "description": "24時間以内にご返信いたします"
+        },
+        "phone": {
+          "title": "電話",
+          "description": "平日 10:00-18:00"
+        },
+        "fax": {
+          "title": "FAX"
+        },
+        "address": {
+          "title": "住所"
+        },
+        "actions": {
+          "sendMail": "メール送信",
+          "callPhone": "電話をかける",
+          "openMap": "地図を開く",
+          "sendFax": "FAX送付"
+        }
+      },
+      "mapTitle": "会社所在地マップ"
     }
   },
   "news": {
@@ -602,7 +654,7 @@
   },
   "wuye": {
     "title": "包括的な不動産管理サービス",
-    "subtitle": "Property Management",
+    "subtitle": "不動産管理",
     "description": "日本に不動産を保有する個人および機関オーナー向けに、全プロセスの管理サービスを提供します。日常的な賃貸管理、財務・税務、メンテナンスだけでなく、専門的な資産価値向上戦略と家賃増加交渉を通じて、不動産の価値と投資リターンを継続的に向上させ、資産の安定した成長を実現します。",
     "services": {
       "title": "サービス内容",
@@ -648,7 +700,7 @@
     "stats": {
       "units": "戸",
       "totalProperties": "管理不動産総数",
-      "amountValue": "約800億",
+      "amountValue": "約1000億",
       "yen": "円",
       "totalAssets": "管理資産総額"
     },
@@ -675,7 +727,7 @@
         "item2": {
           "time": "1週間以内",
           "title": "入居手続きの実施",
-          "description": "契約締結、敷金収受、鍵の引き渡しなど、すべての入居手続きを完了します。入居者に具体的な入居日を通知し、スムーズなプロセスを確保します。"
+          "description": "賃貸契約に貸主に有利な重要条項を盛り込み、署名前の確認も含めて貸主の権益を守ります。"
         },
         "item3": {
           "time": "最短2週間",
@@ -719,7 +771,8 @@
             "身元情報確認",
             "信用記録調査",
             "収入証明審査",
-            "保証会社保証申請"
+            "保証会社保証申請",
+            "当社が募集する入居者は保証会社*（家賃保証）の仕組みに加入し、家賃滞納リスクを低減します。"
           ]
         },
         "service2": {
@@ -856,6 +909,13 @@
       "cases": {
         "title": "成功事例",
         "subtitle": "私たちの専門能力とサービス成果を示す実際の事例",
+        "table": {
+          "area": "面積（㎡）",
+          "rentBefore": "改定前賃料（円）",
+          "rentAfter": "改定後賃料（円）",
+          "diff": "差額",
+          "increase": "改定率"
+        },
         "case1": {
           "title": "新宿商業ビル家賃最適化プロジェクト",
           "location": "東京都新宿区",
@@ -1132,7 +1192,7 @@
         },
         "step3": {
           "title": "継続的支援",
-          "description": "定期ケアフォローアップ、コミュニティ活動の組織、生活相談支援を提供し、入居者の居住体験を継続的に向上させます。"
+          "description": "お客様の苦情に迅速に対応し、速やかに調整して解決します。"
         }
       },
       "nextStep": "次のステップ"
@@ -1390,6 +1450,11 @@
     "services": "サービス項目",
     "contactInfo": "連絡先",
     "workingHours": "平日 10:00-18:00",
+    "address": {
+      "line1": "東京都中央区日本橋人形町1-2-12",
+      "line2": "Bourn Mark Ningyocho BLD. 2F",
+      "mapQuery": "東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F"
+    },
     "copyright": "© 2024 Bourn Mark Co., Ltd. All rights reserved.",
     "privacyPolicy": "プライバシーポリシー",
     "mobileVersion": "モバイル版"
@@ -1601,6 +1666,7 @@
       "backToPrevious": "前のページに戻る",
       "subtitle": "不動産投資用 物件紹介",
       "photos": "物件写真",
+      "mapTitle": "Google マップ",
       "overview": "物件概要",
       "investmentPoints": "投資・運営のポイント",
       "surroundings": "周辺施設・環境",
@@ -2219,6 +2285,11 @@
         "title": "事例公開予定",
         "result": "さらに多くの成功事例を準備中です。お楽しみに..."
       }
+    },
+    "cta": {
+      "title": "日本での事業展開をご検討ですか？",
+      "description": "業種・予算・スケジュールをお聞かせください。市場評価、進出ロードマップ、パートナー提案を行い、日本で持続可能な事業体制づくりを支援します。",
+      "button": "専属プランを受け取る"
     }
   },
   "cases": {

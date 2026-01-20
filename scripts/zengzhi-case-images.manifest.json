@@ -1,0 +1,59 @@
+[
+  {
+    "id": "zengzhi-case-01",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-01.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-01.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style street photography in Japan. Sagamihara City, Kanagawa: lively neighborhood shopping street with small storefronts and pedestrians, representing a retail shop lease. Natural daylight, 35mm lens look, shallow depth of field, clean premium tone. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-02",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-02.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-02.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style street photography in Tokyo. Chuo City business district (Nihonbashi / Kyobashi vibe): modern office buildings along a clean street, office workers walking, calm premium corporate mood. Natural daylight, 35mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-03",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-03.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-03.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style street photography in Yokohama, Kanagawa. Minato Mirai / business waterfront district vibe: modern office towers and clean pedestrian street, office commute scene, calm premium corporate mood. Natural daylight, 35mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-04",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-04.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-04.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style residential street photography in Tokyo. Nakano City: quiet residential street with low-rise apartment buildings, bicycles, greenery, soft morning light, calm living vibe. Natural light, 35mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-05",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-05.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-05.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style residential street photography in Tokyo. Shinjuku City near Shinjuku Gyoen residential vibe: tree-lined street with mid-rise apartments, calm upscale living mood. Natural daylight, 50mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-06",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-06.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-06.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style residential street photography in Tokyo. Arakawa City: quiet neighborhood street with small apartment buildings, local atmosphere, bicycles, soft afternoon light. Natural light, 35mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-07",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-07.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-07.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style upscale residential street photography in Tokyo. Shinjuku City Kagurazaka-like refined neighborhood: elegant street with modern high-end residential building entrance, warm evening light, premium calm mood. Natural light, 50mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  },
+  {
+    "id": "zengzhi-case-08",
+    "outFile": "/Users/gaohang/Documents/BMHP/version2/public/imgs/wuye/real/zengzhi-cases/zengzhi-case-08.webp",
+    "publicPath": "/imgs/wuye/real/zengzhi-cases/zengzhi-case-08.webp",
+    "size": "1200x800",
+    "prompt": "Photorealistic documentary-style residential street photography in Tokyo. Suginami City (Koenji / Asagaya vibe): calm residential street with low-rise apartments, greenery, warm morning light, friendly living atmosphere. Natural light, 35mm lens look, shallow depth of field. No text, no watermark, no logo, no readable signage, no UI, no illustration, no icon, no cartoon."
+  }
+]
+

@@ -87,7 +87,7 @@ export default function WuYePage() {
     const container = propertiesScrollRef.current
     if (!container) return
 
-    let scrollPosition = 0
+    let scrollPosition = container.scrollLeft || 0
     // 参照企业概要页：用“像素/帧”推进，体感更稳定；这里调快一些
     const scrollSpeed = 2.8 // px/frame（约 168px/s @60fps）
     let animationFrameId: number | null = null
@@ -95,6 +95,23 @@ export default function WuYePage() {
     let isDragging = false
     let startX = 0
     let startScrollLeft = 0
+    let resumeTimeout: number | null = null
+
+    const getHalf = () => {
+      const half = container.scrollWidth / 2
+      return Number.isFinite(half) ? half : 0
+    }
+
+    const normalize = () => {
+      const half = getHalf()
+      if (half <= 0) return
+      if (container.scrollLeft >= half) {
+        container.scrollLeft -= half
+      } else if (container.scrollLeft < 0) {
+        container.scrollLeft += half
+      }
+      scrollPosition = container.scrollLeft
+    }
 
     const scroll = () => {
       if (isPaused || isDragging) {
@@ -103,9 +120,9 @@ export default function WuYePage() {
       }
 
       scrollPosition += scrollSpeed
-      const maxScroll = container.scrollWidth - container.clientWidth
-      if (scrollPosition >= maxScroll) {
-        scrollPosition = 0
+      const half = getHalf()
+      if (half > 0 && scrollPosition >= half) {
+        scrollPosition -= half
       }
       container.scrollLeft = scrollPosition
       animationFrameId = requestAnimationFrame(scroll)
@@ -123,8 +140,8 @@ export default function WuYePage() {
 
     // 触摸板/鼠标滚轮：将 deltaX/deltaY 映射为横向滚动，并阻止页面上下滚动“抢手势”
     const onWheel = (e: WheelEvent) => {
-      const maxScroll = container.scrollWidth - container.clientWidth
-      if (maxScroll <= 0) return
+      const half = getHalf()
+      if (half <= 0) return
 
       // 暂停自动滚动，避免抢夺
       isPaused = true
@@ -136,16 +153,7 @@ export default function WuYePage() {
       e.preventDefault()
       e.stopPropagation()
       container.scrollLeft += delta
-      scrollPosition = container.scrollLeft
-
-      // 循环：到末尾回到开头
-      if (container.scrollLeft >= maxScroll) {
-        container.scrollLeft = 0
-        scrollPosition = 0
-      } else if (container.scrollLeft < 0) {
-        container.scrollLeft = maxScroll
-        scrollPosition = maxScroll
-      }
+      normalize()
 
       window.setTimeout(() => {
         isPaused = false
@@ -153,8 +161,16 @@ export default function WuYePage() {
     }
 
     const onPointerDown = (e: PointerEvent) => {
-      // 只对主键（左键）/触摸开始拖拽
-      if (e.pointerType === 'mouse' && e.button !== 0) return
+      // 移动端用原生滚动（带惯性）更丝滑：这里只保留鼠标拖拽
+      if (e.pointerType !== 'mouse') {
+        isPaused = true
+        if (resumeTimeout) window.clearTimeout(resumeTimeout)
+        resumeTimeout = window.setTimeout(() => {
+          isPaused = false
+        }, 900)
+        return
+      }
+      if (e.button !== 0) return
       isDragging = true
       isPaused = true
       startX = e.clientX
@@ -167,6 +183,7 @@ export default function WuYePage() {
       e.preventDefault()
       const dx = e.clientX - startX
       container.scrollLeft = startScrollLeft - dx
+      normalize()
     }
     const endDrag = () => {
       if (!isDragging) return
@@ -174,6 +191,16 @@ export default function WuYePage() {
       // 同步 scrollPosition，避免松手后“跳回”或速度突变
       scrollPosition = container.scrollLeft
       isPaused = false
+    }
+
+    // 原生滚动（手机惯性/触摸板）时，同步 scrollPosition 并短暂停止自动滚动，避免“抢滚动”
+    const onScroll = () => {
+      normalize()
+      isPaused = true
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, 450)
     }
 
     container.addEventListener('mouseenter', handleMouseEnter)
@@ -185,6 +212,7 @@ export default function WuYePage() {
     container.addEventListener('pointercancel', endDrag, { passive: true })
     // 关键：wheel 必须 non-passive，才能接管触摸板横向手势
     container.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('scroll', onScroll, { passive: true })
 
     animationFrameId = requestAnimationFrame(scroll)
 
@@ -197,6 +225,8 @@ export default function WuYePage() {
       container.removeEventListener('pointerup', endDrag as any)
       container.removeEventListener('pointercancel', endDrag as any)
       container.removeEventListener('wheel', onWheel as any)
+      container.removeEventListener('scroll', onScroll as any)
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
     }
   }, [])
   return (
@@ -279,10 +309,12 @@ export default function WuYePage() {
           {/* 全端：横向滚动（使用 imgs/2 生成的卡片） */}
           <div
             ref={propertiesScrollRef}
-            className="wuye-properties-scroll-container overflow-x-hidden pb-4 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+            className="wuye-properties-scroll-container overflow-x-auto pb-4 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+              scrollBehavior: 'auto',
               // 让浏览器把该区域识别为“横向手势区域”，减少页面竖向滚动抢手势
               touchAction: 'pan-x',
               overscrollBehavior: 'contain',

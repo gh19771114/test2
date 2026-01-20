@@ -13,13 +13,11 @@ export default function ZengzhiPage() {
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
-  const processRef = useRef(null)
   const casesRef = useRef(null)
   
   const isHeroInView = useInView(heroRef, { once: true })
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
-  const isProcessInView = useInView(processRef, { once: true, margin: '-100px' })
   const isCasesInView = useInView(casesRef, { once: true, margin: '-100px' })
 
   // 从多语言文件读取数据
@@ -65,40 +63,8 @@ export default function ZengzhiPage() {
     },
   ], [t])
 
-  const processSteps = useMemo(() => [
-    {
-      step: '01',
-      title: t('wuye.zengzhi.process.step1.title'),
-      description: t('wuye.zengzhi.process.step1.description'),
-      image: '/imgs/wuye/real/zengzhi-process-1.jpg',
-    },
-    {
-      step: '02',
-      title: t('wuye.zengzhi.process.step2.title'),
-      description: t('wuye.zengzhi.process.step2.description'),
-      image: '/imgs/wuye/real/zengzhi-process-2.jpg',
-    },
-    {
-      step: '03',
-      title: t('wuye.zengzhi.process.step3.title'),
-      description: t('wuye.zengzhi.process.step3.description'),
-      image: '/imgs/wuye/real/zengzhi-process-3.jpg',
-    },
-    {
-      step: '04',
-      title: t('wuye.zengzhi.process.step4.title'),
-      description: t('wuye.zengzhi.process.step4.description'),
-      image: '/imgs/wuye/real/zengzhi-process-4.jpg',
-    },
-    {
-      step: '05',
-      title: t('wuye.zengzhi.process.step5.title'),
-      description: t('wuye.zengzhi.process.step5.description'),
-      image: '/imgs/wuye/real/zengzhi-process-5.jpg',
-    },
-  ], [t])
-
-  const successCases = useMemo(() => [
+  // 旧版 3 张图文案例（需要保留）
+  const legacyCases = useMemo(() => [
     {
       title: t('wuye.zengzhi.cases.case1.title'),
       location: t('wuye.zengzhi.cases.case1.location'),
@@ -125,71 +91,169 @@ export default function ZengzhiPage() {
     },
   ], [t])
 
-  const mobileCasesRef = useRef<HTMLDivElement>(null)
+  const yenFmt = useMemo(() => new Intl.NumberFormat('ja-JP'), [])
+  const areaFmt = useMemo(() => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }), [])
 
-  // 手机端：鼠标/手指拖动横向滚动 + 自动滚动（不交互时）
+  const rentCases = useMemo(() => {
+    return [
+      { kind: '店舖', address: '神奈川県相模原市', area: 57.61, before: 85000, after: 130000, diff: 45000, rate: 53, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-01.webp' },
+      { kind: '事務所', address: '東京都中央区', area: 70.24, before: 240000, after: 308000, diff: 68000, rate: 28, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-02.webp' },
+      { kind: '事務所', address: '神奈川県横浜市', area: 82.21, before: 298320, after: 386000, diff: 87680, rate: 29, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-03.webp' },
+      { kind: '住宅', address: '東京都中野区', area: 10.83, before: 58000, after: 65000, diff: 7000, rate: 12, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-04.webp' },
+      { kind: '住宅', address: '東京都新宿区', area: 38.07, before: 128000, after: 138000, diff: 10000, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-05.webp' },
+      { kind: '住宅', address: '東京都荒川区', area: 64.54, before: 136000, after: 146000, diff: 10000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-06.webp' },
+      { kind: '住宅', address: '東京都新宿区', area: 323.9, before: 1567680, after: 1693100, diff: 125420, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-07.webp' },
+      { kind: '住宅', address: '東京都杉並区', area: 30.52, before: 75000, after: 80000, diff: 5000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-08.webp' },
+    ].map((c) => ({
+      ...c,
+      areaText: `${areaFmt.format(c.area)}㎡`,
+      beforeText: `¥${yenFmt.format(c.before)}`,
+      afterText: `¥${yenFmt.format(c.after)}`,
+      diffText: `+¥${yenFmt.format(c.diff)}`,
+      rateText: `${c.rate}%`,
+    }))
+  }, [areaFmt, yenFmt])
+
+  const casesScrollRef = useRef<HTMLDivElement | null>(null)
+
+  const casesBase = useMemo(() => {
+    const legacy = legacyCases.map((c) => ({ type: 'legacy' as const, ...c }))
+    const rent = rentCases.map((c) => ({ type: 'rent' as const, ...c }))
+    return [...legacy, ...rent]
+  }, [legacyCases, rentCases])
+
+  const casesLoop = useMemo(() => {
+    if (!casesBase.length) return []
+    return [...casesBase, ...casesBase]
+  }, [casesBase])
+
+  // 成功案例：全端横向滚动栏（自动循环 + 鼠标拖拽 + 触摸板手势）
   useEffect(() => {
-    const el = mobileCasesRef.current
-    if (!el) return
+    const container = casesScrollRef.current
+    if (!container) return
 
-    let raf: number | null = null
+    let scrollPosition = container.scrollLeft || 0
+    const scrollSpeed = 1.2 // px/frame
+    let animationFrameId: number | null = null
     let isPaused = false
     let isDragging = false
     let startX = 0
     let startScrollLeft = 0
-    const speed = 0.5 // px / frame
+    let resumeTimeout: number | null = null
+
+    const getHalf = () => {
+      const half = container.scrollWidth / 2
+      return Number.isFinite(half) ? half : 0
+    }
+
+    const normalize = () => {
+      const half = getHalf()
+      if (half <= 0) return
+      if (container.scrollLeft >= half) {
+        container.scrollLeft -= half
+      } else if (container.scrollLeft < 0) {
+        container.scrollLeft += half
+      }
+      scrollPosition = container.scrollLeft
+    }
 
     const tick = () => {
       if (!isPaused && !isDragging) {
-        const max = el.scrollWidth - el.clientWidth
-        el.scrollLeft += speed
-        if (el.scrollLeft >= max - 2) {
-          el.scrollLeft = 0
-        }
+        scrollPosition += scrollSpeed
+        const half = getHalf()
+        if (half > 0 && scrollPosition >= half) scrollPosition -= half
+        container.scrollLeft = scrollPosition
       }
-      raf = requestAnimationFrame(tick)
+      animationFrameId = requestAnimationFrame(tick)
+    }
+
+    const onMouseEnter = () => {
+      isPaused = true
+    }
+    const onMouseLeave = () => {
+      isPaused = false
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      const half = getHalf()
+      if (half <= 0) return
+      isPaused = true
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (delta === 0) return
+      e.preventDefault()
+      e.stopPropagation()
+      container.scrollLeft += delta
+      normalize()
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, 600)
     }
 
     const onPointerDown = (e: PointerEvent) => {
+      // 鼠标拖拽即可；触摸保持原生惯性更丝滑
+      if (e.pointerType !== 'mouse') {
+        isPaused = true
+        if (resumeTimeout) window.clearTimeout(resumeTimeout)
+        resumeTimeout = window.setTimeout(() => {
+          isPaused = false
+        }, 900)
+        return
+      }
+      if (e.button !== 0) return
       isDragging = true
       isPaused = true
       startX = e.clientX
-      startScrollLeft = el.scrollLeft
-      el.setPointerCapture?.(e.pointerId)
+      startScrollLeft = container.scrollLeft
+      container.setPointerCapture?.(e.pointerId)
     }
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return
+      e.preventDefault()
       const dx = e.clientX - startX
-      el.scrollLeft = startScrollLeft - dx
+      container.scrollLeft = startScrollLeft - dx
+      normalize()
     }
     const endDrag = () => {
       if (!isDragging) return
       isDragging = false
+      scrollPosition = container.scrollLeft
       isPaused = false
     }
-    const onEnter = () => (isPaused = true)
-    const onLeave = () => {
-      if (!isDragging) isPaused = false
+
+    const onScroll = () => {
+      normalize()
+      isPaused = true
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, 450)
     }
 
-    el.addEventListener('pointerdown', onPointerDown, { passive: true })
-    el.addEventListener('pointermove', onPointerMove, { passive: true })
-    el.addEventListener('pointerup', endDrag, { passive: true })
-    el.addEventListener('pointercancel', endDrag, { passive: true })
-    el.addEventListener('mouseenter', onEnter)
-    el.addEventListener('mouseleave', onLeave)
+    container.addEventListener('mouseenter', onMouseEnter)
+    container.addEventListener('mouseleave', onMouseLeave)
+    container.addEventListener('pointerdown', onPointerDown, { passive: false })
+    container.addEventListener('pointermove', onPointerMove, { passive: false })
+    container.addEventListener('pointerup', endDrag, { passive: true })
+    container.addEventListener('pointercancel', endDrag, { passive: true })
+    container.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('scroll', onScroll, { passive: true })
 
-    raf = requestAnimationFrame(tick)
+    animationFrameId = requestAnimationFrame(tick)
+
     return () => {
-      if (raf) cancelAnimationFrame(raf)
-      el.removeEventListener('pointerdown', onPointerDown as any)
-      el.removeEventListener('pointermove', onPointerMove as any)
-      el.removeEventListener('pointerup', endDrag as any)
-      el.removeEventListener('pointercancel', endDrag as any)
-      el.removeEventListener('mouseenter', onEnter)
-      el.removeEventListener('mouseleave', onLeave)
+      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+      container.removeEventListener('mouseenter', onMouseEnter)
+      container.removeEventListener('mouseleave', onMouseLeave)
+      container.removeEventListener('pointerdown', onPointerDown)
+      container.removeEventListener('pointermove', onPointerMove)
+      container.removeEventListener('pointerup', endDrag)
+      container.removeEventListener('pointercancel', endDrag)
+      container.removeEventListener('wheel', onWheel)
+      container.removeEventListener('scroll', onScroll)
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
     }
-  }, [])
+  }, [casesLoop.length])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -244,13 +308,13 @@ export default function ZengzhiPage() {
               >
                 <TrendingUp className="w-8 h-8 text-purple-300" />
               </motion.div>
-              <p className="text-sm text-purple-300 font-semibold">Asset Appreciation</p>
+              <p className="text-sm text-purple-300 font-semibold">{t('wuye.zengzhi.subtitle')}</p>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              资产增值服务
+              {t('wuye.zengzhi.title')}
             </h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8">
-              通过租金优化、大规模修缮和附加收益开发，持续提升您的房产价值和投资回报率。专业团队，数据驱动，为您创造长期价值。
+              {t('wuye.zengzhi.description')}
             </p>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -260,15 +324,15 @@ export default function ZengzhiPage() {
             >
               <div className="flex items-center gap-2 text-purple-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">15年行业经验</span>
+                <span className="text-sm">{t('wuye.zengzhi.features.experience')}</span>
               </div>
               <div className="flex items-center gap-2 text-purple-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">500+成功案例</span>
+                <span className="text-sm">{t('wuye.zengzhi.features.cases')}</span>
               </div>
               <div className="flex items-center gap-2 text-purple-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">平均租金提升25%+</span>
+                <span className="text-sm">{t('wuye.zengzhi.features.rentIncrease')}</span>
               </div>
             </motion.div>
           </motion.div>
@@ -362,48 +426,6 @@ export default function ZengzhiPage() {
           </div>
         </section>
 
-        {/* Process Section */}
-        <section ref={processRef} className="section-padding bg-gradient-to-b from-navy-900 to-gray-900">
-          <div className="container-custom">
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate={isProcessInView ? 'visible' : 'hidden'}
-              className="space-y-8 md:space-y-12"
-            >
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-8 md:gap-12`}
-                >
-                  <div className="flex-1 w-full">
-                    <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden border border-white/10">
-                      <Image
-                        src={step.image}
-                        alt={step.title}
-                        fill
-                        className="object-cover"
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 to-navy-900/40"></div>
-                    </div>
-                  </div>
-                  <div className="flex-1 w-full">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-lg font-bold text-white">{String(parseInt(step.step, 10))}</span>
-                      </div>
-                      <h3 className="text-2xl md:text-3xl font-bold text-white">{step.title}</h3>
-                    </div>
-                    <p className="text-lg text-gray-300 leading-relaxed">{step.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
         {/* Success Cases Section */}
         <section ref={casesRef} className="section-padding">
           <div className="container-custom">
@@ -419,91 +441,109 @@ export default function ZengzhiPage() {
               </p>
             </motion.div>
 
-            {/* 手机竖版：可拖动横向滚动 + 自动滚动 */}
-            <div className="md:hidden">
-              <div
-                ref={mobileCasesRef}
-                className="flex gap-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing pb-2"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-y' as any }}
-              >
-                {[...successCases, ...successCases].map((caseItem, index) => (
+            {/* 全端：横向滚动栏（自动循环 + 可拖拽） */}
+            <div
+              ref={casesScrollRef}
+              className="overflow-x-auto pb-2 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
+                scrollBehavior: 'auto',
+                touchAction: 'pan-x',
+                overscrollBehavior: 'contain',
+              }}
+            >
+              <div className="flex gap-4 min-w-max px-1">
+                {casesLoop.map((item, index) => (
                   <div
-                    key={`m-${index}-${caseItem.title}`}
-                    className="flex-shrink-0 w-72 bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200"
+                    key={`${item.type}-${index}-${item.type === 'legacy' ? item.title : item.address}`}
+                    className="flex-shrink-0 w-72 sm:w-80 md:w-[360px]"
                   >
-                    <div className="relative h-44 overflow-hidden">
-                      <Image
-                        src={caseItem.image}
-                        alt={caseItem.title}
-                        fill
-                        className="object-cover"
-                        sizes="288px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-navy-900/40"></div>
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 bg-purple-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
-                          {caseItem.category}
-                        </span>
+                    {item.type === 'legacy' ? (
+                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
+                        <div className="relative h-44 overflow-hidden">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                            sizes="(min-width: 768px) 360px, 320px"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/55 to-navy-900/45"></div>
+                          <div className="absolute top-3 left-3">
+                            <span className="px-2.5 py-1 bg-purple-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
+                              {item.category}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-3 left-3 right-3">
+                            <h3 className="text-base font-bold text-white mb-0.5 line-clamp-2">{item.title}</h3>
+                            <p className="text-xs text-white/90">{item.location}</p>
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <TrendingUp className="w-5 h-5 text-green-600" />
+                            <span className="text-base font-bold text-green-600">{item.result}</span>
+                          </div>
+                          <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{item.description}</p>
+                        </div>
                       </div>
-                      <div className="absolute bottom-3 left-3 right-3">
-                        <h3 className="text-base font-bold text-white mb-0.5">{caseItem.title}</h3>
-                        <p className="text-xs text-white/90">{caseItem.location}</p>
+                    ) : (
+                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
+                        <div className="relative h-44 overflow-hidden">
+                          <Image
+                            src={item.image}
+                            alt={`${item.kind} ${item.address}`}
+                            fill
+                            className="object-cover"
+                            sizes="(min-width: 768px) 360px, 320px"
+                            unoptimized={item.image.startsWith('/imgs/')}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-navy-900/55 to-purple-900/35"></div>
+                          <div className="absolute top-3 left-3 flex items-center gap-2">
+                            <span className="px-2.5 py-1 bg-purple-600/90 backdrop-blur-sm text-white rounded-full text-xs font-semibold">
+                              {item.kind}
+                            </span>
+                            <span className="text-xs text-white/90">{t('wuye.zengzhi.cases.table.area')} {item.areaText}</span>
+                          </div>
+                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
+                            <h3 className="text-base font-bold text-white leading-snug line-clamp-2">{item.address}</h3>
+                            <div className="text-right flex-shrink-0">
+                              <div className="text-xs text-white/80">{t('wuye.zengzhi.cases.table.increase')}</div>
+                              <div className="text-base font-extrabold text-green-300">{item.rateText}</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-4">
+                          <div className="rounded-xl border border-gray-200 bg-white/70 p-3">
+                            <div className="flex items-center justify-between">
+                              <div className="min-w-0">
+                                <div className="text-[11px] text-gray-500">{t('wuye.zengzhi.cases.table.rentBefore')}</div>
+                                <div className="text-xs text-gray-700 tabular-nums">{item.beforeText}</div>
+                              </div>
+                              <ArrowRight className="w-4 h-4 text-gray-400" />
+                              <div className="min-w-0 text-right">
+                                <div className="text-[11px] text-gray-500">{t('wuye.zengzhi.cases.table.rentAfter')}</div>
+                                <div className="text-xs font-semibold text-navy-900 tabular-nums">{item.afterText}</div>
+                              </div>
+                            </div>
+                            <div className="mt-2 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <TrendingUp className="w-4 h-4 text-green-600" />
+                                <span className="text-sm font-bold text-green-700 tabular-nums">{item.diffText}</span>
+                              </div>
+                              <span className="text-sm font-bold text-green-700 tabular-nums">{item.rateText}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-5 h-5 text-green-600" />
-                        <span className="text-base font-bold text-green-600">{caseItem.result}</span>
-                      </div>
-                      <p className="text-sm text-gray-700 leading-relaxed">{caseItem.description}</p>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* 桌面/平板：保持原来的三列卡片 */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate={isCasesInView ? 'visible' : 'hidden'}
-              className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8"
-            >
-              {successCases.map((caseItem, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="group relative bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={caseItem.image}
-                      alt={caseItem.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 to-navy-900/60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-purple-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
-                        {caseItem.category}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-lg font-bold text-white mb-1">{caseItem.title}</h3>
-                      <p className="text-sm text-white/90">{caseItem.location}</p>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <TrendingUp className="w-5 h-5 text-green-600" />
-                      <span className="text-lg font-bold text-green-600">{caseItem.result}</span>
-                    </div>
-                    <p className="text-sm text-gray-700 leading-relaxed">{caseItem.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
           </div>
         </section>
       </div>

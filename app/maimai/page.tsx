@@ -148,130 +148,130 @@ export default function MaiMaiPage() {
   }
 
   const propertiesNoFee = useMemo(() => [
-    {
-      title: 'ライオンズマンション東銀座2F',
-      price: '42,680万日元',
-      area: '127.6㎡',
-      type: '店舗・事務所',
-      location: '東京都中央区築地',
+  {
+    title: 'ライオンズマンション東銀座2F',
+    price: '42,680万日元',
+    area: '127.6㎡',
+    type: '店舗・事務所',
+    location: '東京都中央区築地',
       feature: t('maimai.properties.noFee'),
       image: '/imgs/Lions Mansion Higashi-Ginza.jpeg',
-      href: '/maimai/lions-higashiginza-2f'
-    },
-    {
+    href: '/maimai/lions-higashiginza-2f'
+  },
+  {
       title: '新中野駅上プラザ3F',
       price: '1,940万日元',
       area: '25.42㎡',
       type: '1R',
-      location: '東京都中野区本町',
+    location: '東京都中野区本町',
       feature: t('maimai.properties.noFee'),
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/shin-nakano-ekijou-plaza-304'
-    },
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/shin-nakano-ekijou-plaza-304'
+  },
   ], [t])
 
   const propertiesWithFee = useMemo(() => [
-    {
+  {
       title: 'パティオ杉並 2F',
-      price: '1,050万日元',
-      area: '19.2㎡',
-      type: '1R',
-      location: '东京都杉并区堀之内',
+    price: '1,050万日元',
+    area: '19.2㎡',
+    type: '1R',
+    location: '东京都杉并区堀之内',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/patio-suginami-203'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/patio-suginami-203'
+  },
+  {
       title: 'セントヒルズ椎名町 4F',
-      price: '1,050万日元',
-      area: '—',
-      type: '—',
-      location: '东京都丰岛区长崎',
+    price: '1,050万日元',
+    area: '—',
+    type: '—',
+    location: '东京都丰岛区长崎',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/cent-hills-shiinamachi-405'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/cent-hills-shiinamachi-405'
+  },
+  {
       title: 'パレ・ドール相模原 8F',
-      price: '420万日元',
-      area: '—',
-      type: '1R',
-      location: '神奈川县相模原市',
+    price: '420万日元',
+    area: '—',
+    type: '1R',
+    location: '神奈川县相模原市',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/pale-dor-sagamihara-808'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/pale-dor-sagamihara-808'
+  },
+  {
       title: '日神パレス竹ノ塚 5F',
-      price: '700万日元',
-      area: '—',
-      type: '1R/1K',
-      location: '东京都足立区伊兴',
+    price: '700万日元',
+    area: '—',
+    type: '1R/1K',
+    location: '东京都足立区伊兴',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/nichishin-palace-takenotsuka-509'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/nichishin-palace-takenotsuka-509'
+  },
+  {
       title: 'セザール高島平 2F',
-      price: '1,200万日元',
-      area: '50〜52㎡',
-      type: '2〜3LDK',
-      location: '东京都板桥区德丸',
+    price: '1,200万日元',
+    area: '50〜52㎡',
+    type: '2〜3LDK',
+    location: '东京都板桥区德丸',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/cesar-takashimadaira-206'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/cesar-takashimadaira-206'
+  },
+  {
       title: '美和プラザ高井戸 1F',
-      price: '990万日元',
-      area: '—',
-      type: '1K×3戸',
-      location: '东京都杉并区上高井戸',
+    price: '990万日元',
+    area: '—',
+    type: '1K×3戸',
+    location: '东京都杉并区上高井戸',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/miwa-plaza-takaido-101'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/miwa-plaza-takaido-101'
+  },
+  {
       title: 'LM西八王子第3 7F',
-      price: '480万日元',
-      area: '18.2㎡',
-      type: '1K',
-      location: '东京都八王子市八木町',
+    price: '480万日元',
+    area: '18.2㎡',
+    type: '1K',
+    location: '东京都八王子市八木町',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/lm-nishihachioji-3-707'
-    },
-    {
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/lm-nishihachioji-3-707'
+  },
+  {
       title: 'スカイコート生田 2F',
-      price: '430万日元',
-      area: '约17㎡',
-      type: '1K',
-      location: '神奈川县川崎市多摩区',
+    price: '430万日元',
+    area: '约17㎡',
+    type: '1K',
+    location: '神奈川县川崎市多摩区',
       feature: t('maimai.properties.withFee'),
-      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      href: '/maimai/sky-court-ikuta-202'
-    },
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    href: '/maimai/sky-court-ikuta-202'
+  },
   ], [t])
 
   const recentDeals = useMemo(() => [
-    {
+  {
       title: t('maimai.deals.deal1.title'),
       price: t('maimai.deals.deal1.price'),
       highlight: t('maimai.deals.deal1.highlight'),
       detail: t('maimai.deals.deal1.detail'),
-    },
-    {
+  },
+  {
       title: t('maimai.deals.deal2.title'),
       price: t('maimai.deals.deal2.price'),
       highlight: t('maimai.deals.deal2.highlight'),
       detail: t('maimai.deals.deal2.detail'),
-    },
-    {
+  },
+  {
       title: t('maimai.deals.deal3.title'),
       price: t('maimai.deals.deal3.price'),
       highlight: t('maimai.deals.deal3.highlight'),
       detail: t('maimai.deals.deal3.detail'),
-    },
+  },
   ], [t])
 
   const stats = useMemo(() => [
@@ -962,24 +962,24 @@ export default function MaiMaiPage() {
                       <div className="relative group h-full">
                         <div
                           className="relative bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-10 h-full shadow-lg hover:shadow-xl transition-all duration-300 overflow-visible"
-                          style={{
+                        style={{
                             clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 0 100%, 24px 50%)',
                             width: '100%',
                           }}
                         >
-                          <div className="flex flex-col items-center text-center h-full justify-center relative">
-                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                        <div className="flex flex-col items-center text-center h-full justify-center relative">
+                          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-blue-500">
                                 <span className="text-blue-700 font-extrabold text-lg">{item.step}</span>
-                              </div>
                             </div>
+                          </div>
                             <div className="text-4xl mb-2 mt-6">{item.icon}</div>
                             <h3 className="text-sm font-bold leading-tight px-1 mt-1 whitespace-nowrap">{item.title}</h3>
-                          </div>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
                 </div>
               </div>
             </div>
@@ -1021,12 +1021,12 @@ export default function MaiMaiPage() {
               >
               {/* 买房费用 */}
               <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-2 md:p-3 border border-blue-100 shadow-md h-full flex flex-col">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center">
                       <span className="text-2xl font-bold text-white">{t('maimai.fees.buy')}</span>
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.buyingTitle')}</h3>
                   </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.buyingTitle')}</h3>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {buyingFees.map((fee, index) => (
                     <button
@@ -1050,12 +1050,12 @@ export default function MaiMaiPage() {
 
               {/* 卖房费用 */}
               <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-2 md:p-3 border border-green-100 shadow-md h-full flex flex-col">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center">
                       <span className="text-2xl font-bold text-white">{t('maimai.fees.sell')}</span>
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.sellingTitle')}</h3>
                   </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.sellingTitle')}</h3>
+                </div>
                 <div className="flex-1 flex flex-col">
                   <div className="grid grid-cols-2 gap-3">
                     {sellingFees.map((fee, index) => (
@@ -1209,7 +1209,7 @@ export default function MaiMaiPage() {
                   
                   <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t('maimai.tools.loan.amount')}
                       </label>
                       <input
@@ -1223,7 +1223,7 @@ export default function MaiMaiPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t('maimai.tools.loan.interestRate')}
                       </label>
                       <input
@@ -1237,7 +1237,7 @@ export default function MaiMaiPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t('maimai.tools.loan.years')}
                       </label>
                       <input
@@ -1269,7 +1269,7 @@ export default function MaiMaiPage() {
                   
                   <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t('maimai.tools.rental.price')}
                       </label>
                       <input
@@ -1283,7 +1283,7 @@ export default function MaiMaiPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t('maimai.tools.rental.yieldRate')}
                       </label>
                       <input

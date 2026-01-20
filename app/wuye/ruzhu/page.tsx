@@ -69,14 +69,6 @@ export default function RuzhuPage() {
       items: (t('wuye.ruzhu.services.service2.items', { returnObjects: true }) as string[]) || [],
       color: 'from-blue-500 to-blue-600',
     },
-    {
-      title: t('wuye.ruzhu.services.service3.title'),
-      icon: Heart,
-      image: '/imgs/wuye/real/ruzhu-service-3.jpg',
-      description: t('wuye.ruzhu.services.service3.description'),
-      items: (t('wuye.ruzhu.services.service3.items', { returnObjects: true }) as string[]) || [],
-      color: 'from-purple-500 to-purple-600',
-    },
   ], [t])
   
   const processSteps = useMemo(() => [
@@ -210,13 +202,13 @@ export default function RuzhuPage() {
               variants={containerVariants}
               initial="hidden"
               animate={isServicesInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 md:justify-items-center"
             >
               {services.map((service, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="group relative bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-teal-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                  className="group relative w-full max-w-md bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-teal-300 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
                 >
                   <div className="relative h-48 overflow-hidden">
                     <Image

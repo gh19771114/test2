@@ -1,32 +1,24 @@
 #!/usr/bin/env node
 /**
- * 批量生成 wuye 写实场景图片（通过 Google Generative Language API / 兼容 nano banana pro 接口）
+ * 批量生成 资产增值页“涨租案例”8 张卡片背景图（通过 nano banana pro 接口）
  *
- * 依赖：
- * - Node 18+（自带 fetch）
+ * - 读取 scripts/zengzhi-case-images.manifest.json
+ * - 生成后统一裁切为 1200x800 webp（与 manifest 的 size 一致）
  *
- * 用法（推荐把 key 放到 version2/.env.local，并自行 export 到环境变量）：
- *   NANO_BANANA_API_KEY=... \
- *   NANO_BANANA_MODEL=... \
- *   node version2/scripts/generate-wuye-real-images.js
- *
- * 说明：
- * - 本脚本只负责“生成并写入图片文件”
- * - 替换页面里的图片路径请运行 replace-wuye-images.js
+ * 用法：
+ *   node version2/scripts/generate-zengzhi-case-images.js --dotenv
+ *   node version2/scripts/generate-zengzhi-case-images.js --dotenv --limit 2
  */
 
 const fs = require('fs')
 const path = require('path')
+const sharp = require('sharp')
 
 function parseArgs(argv) {
-  const out = { limit: null, dotenv: false, match: null, manifest: null }
+  const out = { limit: null, dotenv: false, match: null }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
     if (a === '--dotenv') out.dotenv = true
-    if (a === '--manifest') {
-      out.manifest = String(argv[i + 1] || '').trim() || null
-      i++
-    }
     if (a === '--match') {
       out.match = String(argv[i + 1] || '').trim() || null
       i++
@@ -71,38 +63,19 @@ function pick(obj, keys, fallback = undefined) {
   return fallback
 }
 
-function parseSize(size) {
-  // "1200x800" -> { width: 1200, height: 800 }
-  const m = String(size || '').match(/^(\d+)\s*x\s*(\d+)$/i)
-  if (!m) return null
-  return { width: Number(m[1]), height: Number(m[2]) }
-}
-
 function buildEndpoint({ model }) {
-  // 支持两种写法：
-  // - gemini-2.0-flash
-  // - models/gemini-2.0-flash
   const normalizedModel = String(model || '').startsWith('models/')
     ? String(model || '').slice('models/'.length)
     : String(model || '')
-  // 兼容两种传参方式：
-  // 1) Header: X-goog-api-key
-  // 2) Query: ?key=
   const base =
     process.env.NANO_BANANA_ENDPOINT ||
     process.env.GOOGLE_GENAI_ENDPOINT ||
     'https://generativelanguage.googleapis.com/v1beta/models'
-  // base 允许用户直接填完整 generateContent URL
   if (base.includes(':generateContent')) return base
   return `${base}/${normalizedModel}:generateContent`
 }
 
-function buildRequestBody({ prompt, size }) {
-  // 重要：不同模型对“生成图片”字段支持不一致。
-  // 这里做成“可覆盖”的通用结构：
-  // - 默认仅发 text prompt（你给的 curl 就是这个结构）
-  // - 如果你提供了 NANO_BANANA_GENERATION_CONFIG_JSON，会合并到 body.generationConfig
-  // - 如果你提供了 NANO_BANANA_RESPONSE_MODALITIES，会写到 generationConfig.responseModalities
+function buildRequestBody({ prompt }) {
   const body = {
     contents: [
       {
@@ -111,7 +84,6 @@ function buildRequestBody({ prompt, size }) {
     ],
   }
 
-  // 可选：response modalities（如 ["IMAGE"] 或 ["IMAGE","TEXT"]）
   const modalitiesRaw = process.env.NANO_BANANA_RESPONSE_MODALITIES
   if (modalitiesRaw) {
     try {
@@ -123,11 +95,6 @@ function buildRequestBody({ prompt, size }) {
     }
   }
 
-  // 注意：不同模型的“图片尺寸/比例”字段差异很大。
-  // 为避免 400（未知字段）默认不自动注入任何 imageConfig。
-  // 如需控制尺寸/比例，请使用 NANO_BANANA_GENERATION_CONFIG_JSON 覆盖（见脚本说明）。
-
-  // 用户自定义 generationConfig（最高优先级）
   const genCfgRaw = process.env.NANO_BANANA_GENERATION_CONFIG_JSON
   if (genCfgRaw) {
     try {
@@ -142,8 +109,6 @@ function buildRequestBody({ prompt, size }) {
 }
 
 function extractFirstImagePart(json) {
-  // 常见结构：
-  // candidates[0].content.parts[] 里包含 { inlineData: { mimeType, data(base64) } }
   const candidates = json?.candidates
   if (!Array.isArray(candidates)) return null
   for (const c of candidates) {
@@ -154,7 +119,6 @@ function extractFirstImagePart(json) {
       if (inline?.data && inline?.mimeType && String(inline.mimeType).startsWith('image/')) {
         return { mimeType: inline.mimeType, data: inline.data }
       }
-      // 某些实现可能叫 inline_data / mime_type / bytes
       const inline2 = p?.inline_data
       if (inline2?.data && inline2?.mime_type && String(inline2.mime_type).startsWith('image/')) {
         return { mimeType: inline2.mime_type, data: inline2.data }
@@ -165,21 +129,8 @@ function extractFirstImagePart(json) {
 }
 
 async function callApi({ endpoint, apiKey, body }) {
-  const useHeaderKey = true
-  const headers = { 'Content-Type': 'application/json' }
-  if (useHeaderKey) headers['X-goog-api-key'] = apiKey
-
-  let url = endpoint
-  if (!useHeaderKey) {
-    const sep = url.includes('?') ? '&' : '?'
-    url = `${url}${sep}key=${encodeURIComponent(apiKey)}`
-  }
-
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-  })
+  const headers = { 'Content-Type': 'application/json', 'X-goog-api-key': apiKey }
+  const res = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) })
   const text = await res.text()
   let json
   try {
@@ -194,14 +145,17 @@ async function callApi({ endpoint, apiKey, body }) {
   return json
 }
 
+async function writeWebp({ outFile, buffer }) {
+  ensureDir(path.dirname(outFile))
+  await sharp(buffer).resize(1200, 800, { fit: 'cover', position: 'entropy' }).webp({ quality: 84 }).toFile(outFile)
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2))
 
   if (args.dotenv) {
     const envPath = path.join(__dirname, '..', '.env.local')
-    if (fs.existsSync(envPath)) {
-      loadEnvFile(envPath)
-    }
+    if (fs.existsSync(envPath)) loadEnvFile(envPath)
   }
 
   const apiKey = pick(process.env, ['NANO_BANANA_API_KEY', 'GOOGLE_API_KEY'])
@@ -210,28 +164,23 @@ async function main() {
     process.exit(1)
   }
 
-  const model = pick(process.env, ['NANO_BANANA_MODEL', 'GOOGLE_MODEL'], 'gemini-2.0-flash')
+  const model = pick(process.env, ['NANO_BANANA_MODEL', 'GOOGLE_MODEL'], 'gemini-3-pro-image-preview')
   const endpoint = buildEndpoint({ model })
 
-  const manifestPath = args.manifest
-    ? path.isAbsolute(args.manifest)
-      ? args.manifest
-      : path.join(process.cwd(), args.manifest)
-    : path.join(__dirname, 'wuye-real-images.manifest.json')
+  const manifestPath = path.join(__dirname, 'zengzhi-case-images.manifest.json')
   if (!fs.existsSync(manifestPath)) {
     console.error(`找不到 manifest：${manifestPath}`)
     process.exit(1)
   }
+
   const manifest = readJson(manifestPath)
   if (!Array.isArray(manifest) || manifest.length === 0) {
     console.error('manifest 为空或格式不正确')
     process.exit(1)
   }
+
   const filtered = args.match
-    ? manifest.filter((it) => {
-        const hay = `${it?.sourceSvg || ''} ${it?.publicPath || ''} ${it?.outFile || ''}`
-        return hay.includes(args.match)
-      })
+    ? manifest.filter((it) => `${it?.id || ''} ${it?.publicPath || ''} ${it?.outFile || ''}`.includes(args.match))
     : manifest
   const items = args.limit ? filtered.slice(0, args.limit) : filtered
 
@@ -244,7 +193,6 @@ async function main() {
     `任务数: ${items.length}${args.match ? ` (match=${args.match})` : ''}${args.limit ? ` (limit=${args.limit})` : ''}, concurrency=${concurrency}`
   )
 
-  // 简单并发池
   let idx = 0
   let done = 0
   let failed = 0
@@ -255,18 +203,13 @@ async function main() {
       if (i >= items.length) return
       const item = items[i]
       const outFile = item.outFile
-      const outDir = path.dirname(outFile)
-      ensureDir(outDir)
 
-      // 已存在则跳过（支持断点续跑）
-      if (fs.existsSync(outFile) && fs.statSync(outFile).size > 10_000) {
+      if (fs.existsSync(outFile) && fs.statSync(outFile).size > 30_000) {
         done++
-        if (done % 5 === 0) console.log(`progress: done=${done}, failed=${failed}`)
         continue
       }
 
-      const body = buildRequestBody({ prompt: item.prompt, size: item.size })
-
+      const body = buildRequestBody({ prompt: item.prompt })
       let attempt = 0
       let ok = false
       while (attempt <= maxRetries && !ok) {
@@ -275,18 +218,16 @@ async function main() {
           const json = await callApi({ endpoint, apiKey, body })
           const img = extractFirstImagePart(json)
           if (!img) {
-            throw new Error(
-              `未在响应中找到图片（inlineData）。你可能需要换支持图片输出的模型，或设置 NANO_BANANA_RESPONSE_MODALITIES/GENERATION_CONFIG_JSON。响应片段：${JSON.stringify(json).slice(0, 300)}`
-            )
+            throw new Error(`未在响应中找到图片（inlineData）。响应片段：${JSON.stringify(json).slice(0, 300)}`)
           }
           const buf = Buffer.from(img.data, 'base64')
-          fs.writeFileSync(outFile, buf)
+          await writeWebp({ outFile, buffer: buf })
           ok = true
         } catch (e) {
           const msg = e?.message || String(e)
           if (attempt <= maxRetries) {
             console.warn(`[worker ${workerId}] 失败(${attempt}/${maxRetries}) ${path.basename(outFile)}: ${msg}`)
-            await sleep(800 * attempt)
+            await sleep(900 * attempt)
           } else {
             console.error(`[worker ${workerId}] 失败(最终) ${path.basename(outFile)}: ${msg}`)
           }
@@ -295,8 +236,7 @@ async function main() {
 
       if (ok) done++
       else failed++
-      if ((done + failed) % 5 === 0) console.log(`progress: done=${done}, failed=${failed}`)
-      await sleep(150) // 温和一点，避免触发限流
+      await sleep(150)
     }
   }
 

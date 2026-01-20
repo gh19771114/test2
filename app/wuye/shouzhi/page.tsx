@@ -127,7 +127,7 @@ export default function ShouzhiPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src="/imgs/wuye/real/shouzhi-hero.jpg"
-              alt="收支与税务"
+              alt={t('wuye.shouzhi.title')}
               fill
               className="object-cover opacity-30"
               priority
@@ -151,11 +151,11 @@ export default function ShouzhiPage() {
               >
                 <DollarSign className="w-8 h-8 text-green-300" />
               </motion.div>
-              <p className="text-sm text-green-300 font-semibold drop-shadow-md">Finance & Tax</p>
+              <p className="text-sm text-green-300 font-semibold drop-shadow-md">{t('wuye.shouzhi.subtitle')}</p>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">收支与税务管理</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">{t('wuye.shouzhi.title')}</h1>
             <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8 drop-shadow-md">
-              提供透明的财务管理和专业的税务服务，让您随时掌握资产运营状况，确保合规经营。
+              {t('wuye.shouzhi.description')}
             </p>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -165,15 +165,15 @@ export default function ShouzhiPage() {
             >
               <div className="flex items-center gap-2 text-green-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">每月20日发送报表</span>
+                <span className="text-sm">{t('wuye.shouzhi.features.report')}</span>
               </div>
               <div className="flex items-center gap-2 text-green-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">100%财务透明度</span>
+                <span className="text-sm">{t('wuye.shouzhi.features.transparency')}</span>
               </div>
               <div className="flex items-center gap-2 text-green-200">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">专业税务服务</span>
+                <span className="text-sm">{t('wuye.shouzhi.features.taxService')}</span>
               </div>
             </motion.div>
           </motion.div>

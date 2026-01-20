@@ -146,7 +146,7 @@ export default function BaoxianPage() {
                         sizes="(min-width: 768px) 50vw, 100vw"
                       />
                       <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-60 group-hover:opacity-80 transition-opacity duration-300`}></div>
-                    </div>
+          </div>
                     <div className="flex-1 p-6">
                       <h3 className="text-xl font-bold text-gray-800 mb-2">{service.title}</h3>
                       <p className="text-sm text-gray-600 mb-4">{service.description}</p>
@@ -166,7 +166,7 @@ export default function BaoxianPage() {
                           </div>
                           <h4 className="text-sm font-semibold text-gray-800 mb-1">{service.timeline.title}</h4>
                           <p className="text-xs text-gray-600 leading-relaxed">{service.timeline.description}</p>
-                        </div>
+              </div>
                       )}
               </div>
             </div>

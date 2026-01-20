@@ -16,6 +16,7 @@ const Contact = () => {
   const [copied, setCopied] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const [submitResultType, setSubmitResultType] = useState<'success' | 'error' | null>(null)
   const [showConfirm, setShowConfirm] = useState(false)
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -55,12 +56,14 @@ const Contact = () => {
     // 先显示确认界面，不直接发送
     setShowConfirm(true)
     setSubmitResult(null)
+    setSubmitResultType(null)
   }
 
   const handleConfirmSend = async () => {
     // 验证 reCAPTCHA
     if (!recaptchaToken) {
-      setSubmitResult('请完成机器人验证')
+      setSubmitResult(t('home.contact.errors.recaptchaRequired'))
+      setSubmitResultType('error')
       if (recaptchaRef.current) {
         recaptchaRef.current.reset()
       }
@@ -76,7 +79,8 @@ const Contact = () => {
 
     const verifyData = await verifyRes.json()
     if (!verifyData.success) {
-      setSubmitResult('机器人验证失败，请重试')
+      setSubmitResult(t('home.contact.errors.recaptchaFailed'))
+      setSubmitResultType('error')
       if (recaptchaRef.current) {
         recaptchaRef.current.reset()
       }
@@ -86,6 +90,7 @@ const Contact = () => {
 
     setLoading(true)
     setSubmitResult(null)
+    setSubmitResultType(null)
 
     try {
       // 提交到 Pages Router API: /api/send-form
@@ -103,11 +108,12 @@ const Contact = () => {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}))
-        throw new Error(errorData.error || '发送失败')
+        throw new Error(errorData.error || t('home.contact.errors.sendFailed'))
       }
 
       const data = await res.json()
-      setSubmitResult(data.message || '信息已提交，我们会尽快与您联系。')
+      setSubmitResult(data.message || t('home.contact.success'))
+      setSubmitResultType('success')
       setShowConfirm(false)
 
       // 清空表单和 reCAPTCHA
@@ -123,7 +129,8 @@ const Contact = () => {
       }
     } catch (err: any) {
       console.error(err)
-      setSubmitResult(err.message || '提交失败，请稍后重试。')
+      setSubmitResult(err.message || t('home.contact.errors.submitFailed'))
+      setSubmitResultType('error')
     } finally {
       setLoading(false)
     }
@@ -133,6 +140,7 @@ const Contact = () => {
     // 直接返回编辑状态
     setShowConfirm(false)
     setSubmitResult(null)
+    setSubmitResultType(null)
     setRecaptchaToken(null)
     if (recaptchaRef.current) {
       recaptchaRef.current.reset()
@@ -158,7 +166,7 @@ const Contact = () => {
   }
 
   const handleAddressClick = () => {
-    const address = encodeURIComponent('東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F')
+    const address = encodeURIComponent(t('footer.address.mapQuery'))
     // 检测移动设备 - 使用 typeof window 检查确保在客户端执行
     if (typeof window !== 'undefined') {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -173,33 +181,39 @@ const Contact = () => {
   }
 
   const handleFaxClick = () => {
-    window.location.href = 'mailto:info@bournmark.jp?subject=发送传真&body=请附上传真内容或相关文件，我们的顾问会尽快回复。'
+    const subject = encodeURIComponent(t('home.contact.faxMail.subject'))
+    const body = encodeURIComponent(t('home.contact.faxMail.body'))
+    window.location.href = `mailto:info@bournmark.jp?subject=${subject}&body=${body}`
   }
 
   const contactInfo = [
     {
       icon: Mail,
-      title: '电子邮箱',
+      key: 'email',
+      title: t('home.contact.contactInfo.email.title'),
       content: 'info@bournmark.jp',
-      description: '我们将在 24 小时内回复您的咨询',
+      description: t('home.contact.contactInfo.email.description'),
       noWrap: true
     },
     {
       icon: Phone,
-      title: '联系电话',
+      key: 'phone',
+      title: t('home.contact.contactInfo.phone.title'),
       content: '03-6661-7745',
-      description: '工作日 10:00-18:00'
+      description: t('home.contact.contactInfo.phone.description')
     },
     {
       icon: Printer,
-      title: '传真',
+      key: 'fax',
+      title: t('home.contact.contactInfo.fax.title'),
       content: '03-6661-7744',
       description: ''
     },
     {
       icon: MapPin,
-      title: '公司地址',
-      contentLines: ['東京都中央区日本橋人形町1-2-12', 'Bourn Mark Ningyocho BLD. 2F'],
+      key: 'address',
+      title: t('home.contact.contactInfo.address.title'),
+      contentLines: [t('footer.address.line1'), t('footer.address.line2')],
       description: ''
     }
   ]
@@ -237,7 +251,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       className={`${isMobilePortrait ? 'w-[90%]' : 'w-full'} px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200`}
-                      placeholder="如：东京蓝海股份有限公司"
+                      placeholder={t('home.contact.placeholders.company')}
                       suppressHydrationWarning
                     />
                   </div>
@@ -254,7 +268,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       className={`${isMobilePortrait ? 'w-[90%]' : 'w-full'} px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200`}
-                      placeholder="请输入姓名"
+                      placeholder={t('home.contact.placeholders.name')}
                       suppressHydrationWarning
                     />
                   </div>
@@ -271,7 +285,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       required
                       className={`${isMobilePortrait ? 'w-[90%]' : 'w-full'} px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200`}
-                      placeholder="example@company.com"
+                      placeholder={t('home.contact.placeholders.email')}
                       suppressHydrationWarning
                     />
                   </div>
@@ -288,7 +302,7 @@ const Contact = () => {
                       required
                       rows={5}
                       className={`${isMobilePortrait ? 'w-[90%]' : 'w-full'} px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-colors duration-200 resize-none`}
-                      placeholder="请描述您的需求或希望了解的服务内容"
+                      placeholder={t('home.contact.placeholders.message')}
                       suppressHydrationWarning
                     />
                   </div>
@@ -299,17 +313,17 @@ const Contact = () => {
                       disabled={loading}
                       className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      提交信息
+                      {t('home.contact.submitButton')}
                       <Send size={20} />
                     </button>
                     {submitResult && (
-                      <p className={`text-sm text-center ${submitResult.includes('失败') ? 'text-red-600' : 'text-green-600'}`}>
+                      <p className={`text-sm text-center ${submitResultType === 'error' ? 'text-red-600' : 'text-green-600'}`}>
                         {submitResult}
                       </p>
                     )}
                     {!submitResult && (
                       <p className="text-sm text-gray-500 text-center">
-                        提交后，我们将在一个工作日内与您确认需求并安排专属顾问。
+                        {t('home.contact.submitHint')}
                       </p>
                     )}
                   </div>
@@ -318,28 +332,28 @@ const Contact = () => {
             ) : (
               <>
                 <h3 className="text-2xl font-semibold text-navy-700 mb-6">
-                  确认信息
+                  {t('home.contact.confirm.title')}
                 </h3>
                 <div className="space-y-6 flex-1">
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                     <p className="text-sm text-blue-800">
-                      请确认以下信息无误后点击"发送"。如需修改，请点击"修改"按钮。
+                      {t('home.contact.confirm.hint')}
                     </p>
                   </div>
 
                   <div className="space-y-4">
                     <div className="border-b border-gray-200 pb-4">
                       <label className="block text-sm font-medium text-gray-500 mb-1">
-                        公司名称
+                        {t('home.contact.companyName')}
                       </label>
                       <p className="text-base text-navy-700 font-medium">
-                        {formData.company || '未填写'}
+                        {formData.company || t('home.contact.confirm.notProvided')}
                       </p>
                     </div>
 
                     <div className="border-b border-gray-200 pb-4">
                       <label className="block text-sm font-medium text-gray-500 mb-1">
-                        联系人姓名
+                        {t('home.contact.name')}
                       </label>
                       <p className="text-base text-navy-700 font-medium">
                         {formData.name}
@@ -348,7 +362,7 @@ const Contact = () => {
 
                     <div className="border-b border-gray-200 pb-4">
                       <label className="block text-sm font-medium text-gray-500 mb-1">
-                        邮箱地址
+                        {t('home.contact.email')}
                       </label>
                       <p className="text-base text-navy-700 font-medium">
                         {formData.email}
@@ -380,7 +394,7 @@ const Contact = () => {
                       disabled={loading || !recaptchaToken}
                       className="w-full btn-primary text-lg py-4 inline-flex items-center justify-center gap-2 hover:scale-105 transform transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {loading ? '发送中...' : '确认发送'}
+                      {loading ? t('home.contact.confirm.sending') : t('home.contact.confirm.send')}
                       {!loading && <CheckCircle size={20} />}
                     </button>
                     <button
@@ -388,7 +402,7 @@ const Contact = () => {
                       disabled={loading}
                       className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-lg py-4 inline-flex items-center justify-center gap-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      修改信息
+                      {t('home.contact.confirm.edit')}
                       <Edit size={20} />
                     </button>
                     {submitResult && (
@@ -405,30 +419,30 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 h-full flex flex-col shadow-2xl">
             <h3 className={`text-xl md:text-2xl font-semibold text-navy-700 mb-4 md:mb-6 ${isMobilePortrait ? 'text-center mt-4 md:mt-0' : ''}`}>
-              联系方式
+              {t('home.contact.contactInfoTitle')}
             </h3>
 
             <div className={`${isMobilePortrait ? 'space-y-1.5' : 'space-y-3 md:space-y-4 lg:space-y-6'} flex-1`}>
               {contactInfo.map((info, index) => {
-                const copyKey = info.title === '电子邮箱' ? 'email' : info.title === '联系电话' ? 'phone' : info.title === '传真' ? 'fax' : info.title === '公司地址' ? 'address' : ''
+                const copyKey = (info as any).key as string
                 const isCopied = copied === copyKey
 
                 const copyValue = info.contentLines ? info.contentLines.join(' ') : info.content
 
                 // 判断是否为地址项，在移动端需要特殊布局
-                const isAddress = info.title === '公司地址'
+                const isAddress = (info as any).key === 'address'
 
                 // 手机竖版：整个卡片可点击跳转（邮件、电话、传真、地址）
                 const handleCardClick = () => {
                   if (!isMobilePortrait) return
 
-                  if (info.title === '电子邮箱') {
+                  if ((info as any).key === 'email') {
                     handleEmailClick()
-                  } else if (info.title === '联系电话') {
+                  } else if ((info as any).key === 'phone') {
                     handlePhoneClick()
-                  } else if (info.title === '传真') {
+                  } else if ((info as any).key === 'fax') {
                     handleFaxClick()
-                  } else if (info.title === '公司地址') {
+                  } else if ((info as any).key === 'address') {
                     handleAddressClick()
                   }
                 }
@@ -475,7 +489,7 @@ const Contact = () => {
                               cursor: 'pointer',
                               boxSizing: 'border-box'
                             }}
-                            title="复制"
+                            title={t('home.contact.contactInfo.copy')}
                           >
                             {isCopied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
                           </button>
@@ -493,7 +507,7 @@ const Contact = () => {
                             right: '1.5rem',
                             top: '1.5rem',
                           }}
-                          title="复制"
+                          title={t('home.contact.contactInfo.copy')}
                         >
                           {isCopied ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
                         </button>
@@ -553,36 +567,36 @@ const Contact = () => {
                       {/* 桌面版：显示操作按钮 */}
                       {!isMobilePortrait && (
                         <div className="flex gap-2 flex-shrink-0 flex-wrap mt-2">
-                          {info.title === '电子邮箱' && (
+                          {(info as any).key === 'email' && (
                             <button
                               onClick={handleEmailClick}
                               className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                             >
-                              发送邮件
+                              {t('home.contact.contactInfo.actions.sendMail')}
                             </button>
                           )}
-                          {info.title === '联系电话' && (
+                          {(info as any).key === 'phone' && (
                             <button
                               onClick={handlePhoneClick}
                               className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                             >
-                              拨打电话
+                              {t('home.contact.contactInfo.actions.callPhone')}
                             </button>
                           )}
-                          {info.title === '公司地址' && (
+                          {(info as any).key === 'address' && (
                             <button
                               onClick={handleAddressClick}
                               className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                             >
-                              打开地图
+                              {t('home.contact.contactInfo.actions.openMap')}
                             </button>
                           )}
-                          {info.title === '传真' && (
+                          {(info as any).key === 'fax' && (
                             <button
                               onClick={handleFaxClick}
                               className="text-blue-600 hover:text-blue-700 text-sm font-medium"
                             >
-                              发送传真
+                              {t('home.contact.contactInfo.actions.sendFax')}
                             </button>
                           )}
                         </div>
@@ -597,7 +611,7 @@ const Contact = () => {
         <div className="mt-12">
           <div className="relative w-full overflow-hidden rounded-3xl border border-white/30 shadow-2xl">
             <iframe
-              src={`https://www.google.com/maps?q=${encodeURIComponent('東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F')}&output=embed&hl=ja&z=17`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(t('footer.address.mapQuery'))}&output=embed&hl=ja&z=17`}
               width="100%"
               height="400"
               style={{ border: 0 }}
@@ -605,7 +619,7 @@ const Contact = () => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
-              title="公司位置地图"
+              title={t('home.contact.mapTitle')}
               suppressHydrationWarning
             ></iframe>
           </div>

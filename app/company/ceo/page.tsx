@@ -2,13 +2,13 @@
 
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import { useEffect, useState, useMemo, Fragment, useRef } from 'react'
+import { useEffect, useState, useMemo, Fragment } from 'react'
 import ceoPortrait1 from '@/imgs/ceo3.png'
 import ceoPortrait2 from '@/imgs/ceo2.png'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function CompanyCeoPage() {
-  const { t, language } = useLanguage()
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<'profile' | 'message'>('profile')
 
   const [isIpadDevice, setIsIpadDevice] = useState(false)
@@ -75,80 +75,6 @@ export default function CompanyCeoPage() {
     const paragraphs = t('company.ceo.message.paragraphs.withBreaks', { returnObjects: true })
     return Array.isArray(paragraphs) ? paragraphs : []
   }, [t])
-
-  // 手机竖版：按“第一行（到‘业务为起’）”的实际宽度锁定前两段的行宽，让第 1/2 段每一行都按同一行宽排版
-  const [mobilePortraitIntroWidthPx, setMobilePortraitIntroWidthPx] = useState<number | null>(null)
-  const mobilePortraitIntroRef = useRef<HTMLDivElement | null>(null)
-
-  // 手机竖版：第一段强制换行（“业务为起”后换行，让“点，于2009年...”进入第二行）
-  const mobilePortraitMessageParagraphs = useMemo(() => {
-    // 只在中文系做这个精确换行（英文/日文不适用该短语）
-    const shouldApply =
-      language === 'zh' || language === 'zh-HK' || language === 'zh-TW'
-    if (!shouldApply) return messageParagraphs
-
-    if (!Array.isArray(messageParagraphs) || messageParagraphs.length === 0) return messageParagraphs
-    const cloned = [...messageParagraphs]
-    const p0 = String(cloned[0] ?? '')
-    // 将 “业务为起点，于2009年” 改为 “业务为起<br/>点，于2009年”
-    // 兼容全角/半角逗号与可能的空格
-    cloned[0] = p0.replace(
-      /业务为起点[，,]\s*于\s*2009\s*年/g,
-      '业务为起<br/>点，于2009年'
-    )
-    return cloned
-  }, [messageParagraphs, language])
-
-  useEffect(() => {
-    // 只在手机竖版（非 iPad）测量
-    if (typeof window === 'undefined') return
-    if (isIpadDevice) return
-    if (!window.matchMedia?.('(orientation: portrait)')?.matches) return
-    if (window.innerWidth > 767) return
-
-    const host = mobilePortraitIntroRef.current
-    if (!host) return
-
-    const firstParaRaw = mobilePortraitMessageParagraphs?.[0]
-    if (!firstParaRaw) return
-
-    // 取“业务为起”之前的文本作为第一行（因为我们会在“业务为起”后插入 <br/>）
-    const plain = String(firstParaRaw).replace(/<[^>]*>/g, '')
-    const idx = plain.indexOf('业务为起')
-    if (idx === -1) return
-    const firstLineText = plain.slice(0, idx + '业务为起'.length)
-
-    const measure = () => {
-      const sampleP = host.querySelector('p') as HTMLElement | null
-      const cs = sampleP ? window.getComputedStyle(sampleP) : null
-
-      const span = document.createElement('span')
-      span.style.position = 'absolute'
-      span.style.left = '-99999px'
-      span.style.top = '-99999px'
-      span.style.visibility = 'hidden'
-      span.style.whiteSpace = 'nowrap'
-      span.style.fontFamily = cs?.fontFamily || 'inherit'
-      span.style.fontSize = cs?.fontSize || '14px'
-      span.style.fontWeight = cs?.fontWeight || '400'
-      span.style.letterSpacing = cs?.letterSpacing || 'normal'
-      span.textContent = firstLineText
-      document.body.appendChild(span)
-      const w = Math.ceil(span.getBoundingClientRect().width)
-      span.remove()
-
-      // 给一点点安全余量，避免设备字体渲染差异导致意外换行
-      setMobilePortraitIntroWidthPx(Math.max(240, w + 6))
-    }
-
-    measure()
-    window.addEventListener('resize', measure)
-    window.addEventListener('orientationchange', measure)
-    return () => {
-      window.removeEventListener('resize', measure)
-      window.removeEventListener('orientationchange', measure)
-    }
-  }, [isIpadDevice, mobilePortraitMessageParagraphs])
 
   // iPad 横版：根据第一行（到“于 2009 年”）实际文本宽度，动态锁定正文容器宽度
   // 目的：保证第一行不会在更早处自动换行，并让后续段落沿用同一宽度。
@@ -333,31 +259,20 @@ export default function CompanyCeoPage() {
               </div>
             </section>
 
-            {/* iPad横版 */}
-            <section className="ipad-landscape-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center ipad-message-portrait" style={{ paddingLeft: '8%' }}>
-                <div className="ipad-message-portrait-inner relative w-full max-w-[1120px] h-full min-h-[90vh] overflow-visible">
-                  <Image
-                    src={ceoPortrait1}
-                    alt="桂小川人物照片"
-                    fill
-                    className="object-contain object-bottom"
-                    priority={false}
-                    sizes="100vw"
-                  />
-                </div>
-              </div>
-              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-                <div className="max-w-[620px] text-slate-900 space-y-6 ceo-message-text">
+            {/* iPad横版：用稳定的两列 grid（左文右图），避免 absolute/translate 造成遮挡与溢出 */}
+            <section className="ipad-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="container-custom ipad-message-grid">
+                <div
+                  className="ipad-message-text text-slate-900 space-y-6 ceo-message-text"
+                  style={{ maxWidth: `${ipadLandscapeTextWidthPx}px` }}
+                >
                   <div>
                     <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed ceo-message-paragraphs">
                     {messageParagraphsOriginal.map((paragraph, index) => (
-                      <p key={index} className="text-balance">
-                        {paragraph}
-                      </p>
+                      <p key={index}>{paragraph}</p>
                     ))}
                   </div>
                   <div className="pt-4 ceo-message-signature">
@@ -365,32 +280,31 @@ export default function CompanyCeoPage() {
                     <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
-              </div>
-            </section>
 
-            {/* iPad竖版 */}
-            <section className="ipad-portrait-message relative min-h-[90vh] bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
-              <div className="absolute inset-0 flex justify-center ipad-message-portrait" style={{ paddingLeft: '8%' }}>
-                <div className="ipad-message-portrait-inner relative w-full max-w-[1120px] h-full min-h-[90vh] overflow-visible">
+                <div className="ipad-message-image" aria-hidden="true">
                   <Image
                     src={ceoPortrait1}
                     alt="桂小川人物照片"
                     fill
                     className="object-contain object-bottom"
                     priority={false}
-                    sizes="100vw"
+                    sizes="45vw"
                   />
                 </div>
               </div>
-              <div className="container-custom relative z-10 flex items-start md:items-center justify-start py-16 md:py-20" style={{ paddingLeft: 'calc(1rem + 8%)' }}>
-                <div className="max-w-[620px] text-slate-900 space-y-6 ceo-message-text">
+            </section>
+
+            {/* iPad竖版：同样用两列 grid（左文右图），避免复用 desktop-message 的 float/绝对定位导致空隙与遮挡 */}
+            <section className="ipad-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
+              <div className="container-custom ipad-message-grid ipad-message-grid--portrait">
+                <div className="ipad-message-text text-slate-900 space-y-6 ceo-message-text">
                   <div>
                     <p className="text-xl tracking-[0.35em] text-slate-700">{t('company.ceo.message.title')}</p>
                     <p className="text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">{t('company.ceo.message.subtitle')}</p>
                   </div>
                   <div className="space-y-5 text-[1.05rem] leading-relaxed ceo-message-paragraphs">
                     {messageParagraphs.map((paragraph, index) => (
-                      <p key={index} className="text-balance" dangerouslySetInnerHTML={{ __html: paragraph }} />
+                      <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
                     ))}
                   </div>
                   <div className="pt-4 ceo-message-signature">
@@ -398,11 +312,22 @@ export default function CompanyCeoPage() {
                     <p className="text-2xl font-semibold text-navy-800 mt-2 tracking-wide">{t('company.ceo.message.presidentName')}</p>
                   </div>
                 </div>
+
+                <div className="ipad-message-image ipad-message-image--portrait" aria-hidden="true">
+                  <Image
+                    src={ceoPortrait1}
+                    alt="桂小川人物照片"
+                    fill
+                    className="object-contain object-bottom"
+                    priority={false}
+                    sizes="48vw"
+                  />
+                </div>
               </div>
             </section>
 
             {/* 手机横版 - 文字环绕人物图 */}
-            <section className="mobile-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf', minHeight: '90vh' }}>
+            <section className="mobile-landscape-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-landscape-message-content relative">
                   <div className="mobile-landscape-message-text ceo-message-text">
@@ -440,7 +365,7 @@ export default function CompanyCeoPage() {
             </section>
 
             {/* 手机竖版 - 文字环绕人物图 */}
-            <section className="mobile-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf', minHeight: '90vh' }}>
+            <section className="mobile-portrait-message relative bg-[#f3eadf]" style={{ background: '#f3eadf' }}>
               <div className="container-custom relative z-10 py-6 md:py-20 px-4">
                 <div className="mobile-portrait-message-content relative">
                   <div className="mobile-portrait-message-text ceo-message-text">
@@ -449,26 +374,11 @@ export default function CompanyCeoPage() {
                       <p className="text-xs md:text-sm uppercase tracking-[0.4em] text-slate-500 mt-1 md:mt-2">{t('company.ceo.message.subtitle')}</p>
                     </div>
                     <div className="space-y-3 md:space-y-5 text-sm md:text-[1.05rem] leading-relaxed ceo-message-paragraphs">
-                      {/* 前两段：锁定为“第一行宽度”，并强制第一段在“业务为起”后换行 */}
-                      <div
-                        ref={mobilePortraitIntroRef}
-                        className="mobile-portrait-message-intro"
-                        style={
-                          mobilePortraitIntroWidthPx
-                            ? { width: `${mobilePortraitIntroWidthPx}px`, maxWidth: `${mobilePortraitIntroWidthPx}px` }
-                            : undefined
-                        }
-                      >
-                        {mobilePortraitMessageParagraphs.slice(0, 2).map((paragraph, index) => (
-                          <p key={`intro-${index}`} dangerouslySetInnerHTML={{ __html: paragraph }} />
-                        ))}
-                      </div>
-
-                      {/* 从第 3 段开始绕图 */}
-                      {mobilePortraitMessageParagraphs.slice(2).map((paragraph, index) => (
-                        <Fragment key={`rest-${index}`}>
-                          {index === 0 && <div className="mobile-portrait-message-float-spacer" aria-hidden="true" />}
-                          <p dangerouslySetInnerHTML={{ __html: paragraph }} />
+                      {messageParagraphsOriginal.map((paragraph, index) => (
+                        <Fragment key={index}>
+                          {/* 从第 3 段开始才环绕人物图：标题与前两段保持全宽，避免“改行点乱/行宽被锁死” */}
+                          {index === 2 && <div className="mobile-portrait-message-float-spacer" aria-hidden="true" />}
+                          <p>{paragraph}</p>
                         </Fragment>
                       ))}
                   </div>

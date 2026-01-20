@@ -129,7 +129,59 @@
       "message": "留言",
       "required": "必填",
       "submit": "提交",
-      "consultation": "聯絡我們預約諮詢"
+      "consultation": "聯絡我們預約諮詢",
+      "submitButton": "提交信息",
+      "submitHint": "提交後，我們將在一個工作日內與您確認需求並安排專屬顧問。",
+      "placeholders": {
+        "company": "如：東京藍海股份有限公司",
+        "name": "請輸入姓名",
+        "email": "example@company.com",
+        "message": "請描述您的需求或希望了解的服務內容"
+      },
+      "confirm": {
+        "title": "確認信息",
+        "hint": "請確認以下信息無誤後點擊\"發送\"。如需修改，請點擊\"修改\"按鈕。",
+        "send": "確認發送",
+        "sending": "發送中...",
+        "edit": "修改信息",
+        "notProvided": "未填寫"
+      },
+      "errors": {
+        "recaptchaRequired": "請完成機器人驗證",
+        "recaptchaFailed": "機器人驗證失敗，請重試",
+        "sendFailed": "發送失敗",
+        "submitFailed": "提交失敗，請稍後重試。"
+      },
+      "success": "信息已提交，我們會盡快與您聯絡。",
+      "faxMail": {
+        "subject": "發送傳真",
+        "body": "請附上傳真內容或相關文件，我們的顧問會盡快回覆。"
+      },
+      "contactInfoTitle": "聯絡方式",
+      "contactInfo": {
+        "copy": "複製",
+        "email": {
+          "title": "電子郵箱",
+          "description": "我們將在 24 小時內回覆您的諮詢"
+        },
+        "phone": {
+          "title": "聯絡電話",
+          "description": "工作日 10:00-18:00"
+        },
+        "fax": {
+          "title": "傳真"
+        },
+        "address": {
+          "title": "公司地址"
+        },
+        "actions": {
+          "sendMail": "發送郵件",
+          "callPhone": "撥打電話",
+          "openMap": "打開地圖",
+          "sendFax": "發送傳真"
+        }
+      },
+      "mapTitle": "公司位置地圖"
     }
   },
   "news": {
@@ -457,7 +509,7 @@
         "milestone11": {
           "year": "2021.06",
           "title": "品牌煥新",
-          "description": "公司正式更名為川雨流痕股份有限公司（Bourn Mark CO., LTD.），確立\"根植日本、連接中日\"的企業定位。",
+          "description": "公司正式更名為川雨流痕股份有限公司（Bourn Mark CO., LTD.），確立\"根植日本、連接世界\"的企業定位。",
           "imageAlt": "品牌發布活動"
         }
       }
@@ -473,7 +525,7 @@
       "profile": {
         "name": "桂小川",
         "introduction1": "自 2009 年創立 Bourn Mark 以來，以跨文化視角與專業實務經驗帶領團隊深耕日本不動產市場，致力於搭建中日商務合作的橋樑，推動資產運營、企業落地與投資業務的協同發展。",
-        "introduction2": "將企業定位於\"根植日本、連接中日\"，以扎實的租賃管理、資產增值與企業服務經驗，持續擴展公司的業務版圖，並通過長期主義的經營理念，打造兼具國際視野與本地執行力的服務體系。",
+        "introduction2": "將企業定位於\"根植日本、連接世界\"，以扎實的租賃管理、資產增值與企業服務經驗，持續擴展公司的業務版圖，並通過長期主義的經營理念，打造兼具國際視野與本地執行力的服務體系。",
         "portraitAlt": "桂小川肖像",
         "highlights": {
           "birth": {
@@ -602,7 +654,7 @@
   },
   "wuye": {
     "title": "全方位物業管理服務",
-    "subtitle": "Property Management",
+    "subtitle": "投資不動產管理",
     "description": "為在日本持有房產的個人與機構業主提供全流程託管服務，不僅涵蓋日常租賃管理、財務稅務與維修維護，更專注於通過專業的資產增值策略和租金增長交涉，持續提升您的房產價值與投資回報率，讓資產穩健成長。",
     "services": {
       "title": "服務內容",
@@ -648,7 +700,7 @@
     "stats": {
       "units": "戶",
       "totalProperties": "管理房產總數",
-      "amountValue": "約800億",
+      "amountValue": "約1000億",
       "yen": "日元",
       "totalAssets": "管理資產總額"
     },
@@ -670,12 +722,12 @@
         "item1": {
           "time": "盡快",
           "title": "租客篩選與背景調查",
-          "description": "租客提交承租申請後，我們將盡快完成對租客提供資訊的真偽驗證和社會信用調查。同時聯繫保證公司申請擔保，確保租客資質符合要求。"
+          "description": "租客提交承租申請後，我們會完成對租客提供資訊的真偽驗證與社會信用調查，同時聯繫保證公司申請擔保，確保租客資質符合要求。"
         },
         "item2": {
           "time": "1週內",
           "title": "辦理入住手續",
-          "description": "完成所有入住手續的辦理，包括契約簽署、押金收取、鑰匙交接等。通知租客具體入住日期，確保流程順暢。"
+          "description": "透過在租約中加入更有利於房東的關鍵條款，並在簽署前完成合規核驗，切實保障房東權益。"
         },
         "item3": {
           "time": "最快2週",
@@ -719,7 +771,8 @@
             "身份資訊驗證",
             "信用記錄調查",
             "收入證明審核",
-            "保證公司擔保申請"
+            "保證公司擔保申請",
+            "凡由我們招募的租客，均會加入保證會社*（租金保障）機制，降低租金拖欠風險。"
           ]
         },
         "service2": {
@@ -750,7 +803,7 @@
         },
         "step2": {
           "title": "背景調查",
-          "description": "盡快完成身份驗證、信用調查和保證公司擔保申請。"
+          "description": "完成身份驗證、信用調查和保證公司擔保申請。"
         },
         "step3": {
           "title": "契約簽署",
@@ -856,6 +909,13 @@
       "cases": {
         "title": "成功案例",
         "subtitle": "真實案例展示我們的專業能力和服務成果",
+        "table": {
+          "area": "面積（㎡）",
+          "rentBefore": "調漲前租金（日圓）",
+          "rentAfter": "調漲後租金（日圓）",
+          "diff": "差額",
+          "increase": "調漲幅度"
+        },
         "case1": {
           "title": "新宿商業大廈租金優化項目",
           "location": "東京都新宿區",
@@ -1132,7 +1192,7 @@
         },
         "step3": {
           "title": "持續支援",
-          "description": "定期關懷回訪，組織社區活動，提供生活諮詢協助，持續提升租客居住體驗。"
+          "description": "快速響應客戶投訴，迅速協調解決問題。"
         }
       },
       "nextStep": "下一步"
@@ -1390,6 +1450,11 @@
     "services": "服務項目",
     "contactInfo": "聯絡方式",
     "workingHours": "工作日 10:00-18:00",
+    "address": {
+      "line1": "東京都中央區日本橋人形町1-2-12",
+      "line2": "Bourn Mark Ningyocho BLD. 2F",
+      "mapQuery": "東京都中央區日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F"
+    },
     "copyright": "© 2024 Bourn Mark Co., Ltd. 保留所有權利。",
     "privacyPolicy": "隱私政策",
     "mobileVersion": "移動版"
@@ -1601,6 +1666,7 @@
       "backToPrevious": "返回上一頁",
       "subtitle": "不動產投資用 物業介紹",
       "photos": "物業照片",
+      "mapTitle": "Google 地圖",
       "overview": "物業概要",
       "investmentPoints": "投資・營運要點",
       "surroundings": "周邊設施・環境",
@@ -1897,6 +1963,11 @@
         "title": "案例即將推出",
         "result": "更多成功案例正在籌備中，敬請期待..."
       }
+    },
+    "cta": {
+      "title": "計劃拓展日本業務？",
+      "description": "告訴我們您的行業、預算與時間安排，我們將提供市場評估、落地路線與夥伴資源建議，為您構建可持續的在日業務體系。",
+      "button": "獲取專屬方案"
     }
   },
   "cases": {
