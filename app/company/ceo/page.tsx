@@ -121,48 +121,78 @@ export default function CompanyCeoPage() {
         ) : (
           <>
             <section className="relative bg-[#f3eadf]">
-              <div className="container-custom py-12 md:py-16 lg:py-20">
-                <div className="mx-auto max-w-6xl grid gap-8 md:gap-10 md:grid-cols-[minmax(0,1fr)_minmax(240px,360px)] items-end">
-                  <div className="text-slate-900">
-                    <div className="mb-6">
-                      <p className="text-lg sm:text-xl tracking-[0.35em] text-slate-700">
-                        {t('company.ceo.message.title')}
-                      </p>
-                      <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">
-                        {t('company.ceo.message.subtitle')}
-                      </p>
-                    </div>
+              {(() => {
+                // 关键硬性要求：人物图底边必须紧贴页尾（footer 顶部边缘）
+                // 做法：桌面/平板使用 absolute bottom-0，并给容器设置与人物图一致的 min-height，防止 footer 压住图片。
+                const portraitHeight = 'min(560px, 72vh)'
+                const portraitWidthPx = 360
 
-                    <div className="space-y-4 sm:space-y-5 text-sm sm:text-[1.05rem] leading-relaxed">
-                      {messageParagraphsOriginal.map((paragraph, index) => (
-                        <p key={index} className="text-balance">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
+                return (
+                  <div className="container-custom pt-12 md:pt-16 lg:pt-20 pb-0">
+                    <div
+                      className="mx-auto max-w-6xl relative"
+                      style={{ minHeight: portraitHeight as any }}
+                    >
+                      {/* 文案区：桌面/平板为人物图预留右侧空间；移动端为全宽 */}
+                      <div className="text-slate-900 md:pr-[380px]">
+                        <div className="mb-6">
+                          <p className="text-lg sm:text-xl tracking-[0.35em] text-slate-700">
+                            {t('company.ceo.message.title')}
+                          </p>
+                          <p className="text-xs sm:text-sm uppercase tracking-[0.4em] text-slate-500 mt-2">
+                            {t('company.ceo.message.subtitle')}
+                          </p>
+                        </div>
 
-                    <div className="pt-6 md:pt-8">
-                      <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
-                      <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
-                        {t('company.ceo.message.presidentName')}
-                      </p>
+                        <div className="space-y-4 sm:space-y-5 text-sm sm:text-[1.05rem] leading-relaxed">
+                          {messageParagraphsOriginal.map((paragraph, index) => (
+                            <p key={index} className="text-balance">
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+
+                        <div className="pt-6 md:pt-8">
+                          <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                          <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
+                            {t('company.ceo.message.presidentName')}
+                          </p>
+                        </div>
+
+                        {/* 移动端：人物图在文案下方，且底边贴页尾（无额外 pb） */}
+                        <div className="md:hidden mt-8 w-full flex justify-center">
+                          <div className="relative w-full max-w-[320px] aspect-[2/3]">
+                            <Image
+                              src={ceoPortrait1}
+                              alt="桂小川人物照片"
+                              fill
+                              className="object-contain object-bottom"
+                              priority={false}
+                              sizes="70vw"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 桌面/平板：绝对定位人物图，bottom=0 硬贴页尾 */}
+                      <div
+                        className="hidden md:block absolute right-0 bottom-0"
+                        style={{ width: portraitWidthPx, height: portraitHeight as any }}
+                        aria-hidden="true"
+                      >
+                        <Image
+                          src={ceoPortrait1}
+                          alt="桂小川人物照片"
+                          fill
+                          className="object-contain object-bottom"
+                          priority={false}
+                          sizes={`${portraitWidthPx}px`}
+                        />
+                      </div>
                     </div>
                   </div>
-
-                  <div className="relative w-full max-w-[320px] md:max-w-none mx-auto">
-                    <div className="relative aspect-[2/3]">
-                      <Image
-                        src={ceoPortrait1}
-                        alt="桂小川人物照片"
-                        fill
-                        className="object-contain object-bottom"
-                        priority={false}
-                        sizes="(min-width: 768px) 360px, 70vw"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                )
+              })()}
             </section>
           </>
         )}
