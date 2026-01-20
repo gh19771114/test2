@@ -77,13 +77,18 @@ export default function ShinNakanoPlaza304Page() {
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
                   <video
-                    src="/movie/shinnagano.mp4"
                     className="w-full h-full object-cover"
                     autoPlay
                     loop
                     muted
                     playsInline
-                  />
+                    controls
+                    preload="metadata"
+                    poster="/imgs/maimai/shinnakanoekiue.jpeg"
+                  >
+                    <source src="/movie/shinnagano.mp4" type="video/mp4" />
+                    {t('maimai.propertyDetail.videoNotSupported')}
+                  </video>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent" />
                   <div className="absolute bottom-3 left-4 text-xs text-slate-50 drop-shadow">
                     <p className="font-semibold">{labels.appearance}</p>
