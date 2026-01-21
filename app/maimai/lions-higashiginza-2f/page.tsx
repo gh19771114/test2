@@ -224,7 +224,7 @@ export default function LionsHigashiGinza2FPage() {
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/lions-higashiginza-2f-2.png',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}

@@ -33,7 +33,7 @@ export const caseDates: Record<(typeof caseIds)[number], string> = {
 // 案例图片映射（本地图片优先，保证一致性与可控性）
 export const caseImages: Record<(typeof caseIds)[number], string> = {
   'grand-maison-asakusa-1302': '/imgs/Grand Maison Asakusa Hanakawado.jpeg',
-  'park-tower-nishishinjuku-101-201': '/imgs/Park Tower Nishishinjuku Facility.jpeg',
+  'park-tower-nishishinjuku-101-201': '/imgs/maimai/Park Tower Nishi-Shinjuku Facility Building.jpeg',
   'my-castle-yoyogi-1203': '/imgs/My Castle Yoyogi.jpeg',
   // 物业管理：用“管理房产”图片替换原 4 个管理委托案例（卡片与详情页保持一致）
   'abc-hall-management': '/imgs/managed-properties/mp-03.jpeg',
@@ -41,7 +41,7 @@ export const caseImages: Record<(typeof caseIds)[number], string> = {
   'yokohama-waterfront-complex': '/imgs/managed-properties/mp-09.jpeg',
   'nagoya-student-apartment': '/imgs/managed-properties/mp-18.jpeg',
   'kingsoft-wps-japan': '/imgs/WPS.jpeg',
-  'shinjuku-daikan-plaza-a-201': 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+  'shinjuku-daikan-plaza-a-201': '/imgs/Shinjuku Daikan Plaza.jpeg',
 }
 
 // 案例分类组映射

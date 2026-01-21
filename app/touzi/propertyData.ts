@@ -13,12 +13,12 @@ export const investmentProperties: InvestmentProperty[] = [
   {
     titleKey: 'company.overview.assets.property2.title',
     locationKey: 'company.overview.assets.property2.location',
-    image: '/imgs/kura.png',
+    image: '/imgs/Shinjuku Daikan Plaza.jpeg',
   },
   {
     titleKey: 'company.overview.assets.property3.title',
     locationKey: 'company.overview.assets.property3.location',
-    image: null, // 没有照片
+    image: '/imgs/Noa%20shibuya.jpeg',
   },
   {
     titleKey: 'company.overview.assets.property4.title',
@@ -38,7 +38,7 @@ export const investmentProperties: InvestmentProperty[] = [
   {
     titleKey: 'company.overview.assets.property7.title',
     locationKey: 'company.overview.assets.property7.location',
-    image: '/imgs/bourn%20mark%20building.png',
+    image: '/imgs/lingshiguan.jpg',
   },
 ]
 

@@ -82,7 +82,7 @@ export default function CaesarTakashimadaira206Page() {
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
                   <Image
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    src="/imgs/Cesar Nishi Takashimadaira.jpeg"
                     alt={p.imageAlt || p.title || labels.appearance}
                     fill
                     className="object-cover"
@@ -104,11 +104,11 @@ export default function CaesarTakashimadaira206Page() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/Cesar Nishi Takashimadaira.jpeg',
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/20260119164448_295_6.png',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}

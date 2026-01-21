@@ -188,7 +188,7 @@ export default function MaiMaiPage() {
     type: '1R',
     location: '东京都杉并区堀之内',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Patio Suginami 2F.jpeg',
     href: '/maimai/patio-suginami-203'
   },
   {
@@ -198,7 +198,7 @@ export default function MaiMaiPage() {
     type: '—',
     location: '东京都丰岛区长崎',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Saint Hills Shiinamachi 4F.jpeg',
     href: '/maimai/cent-hills-shiinamachi-405'
   },
   {
@@ -208,7 +208,7 @@ export default function MaiMaiPage() {
     type: '1R',
     location: '神奈川县相模原市',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Palais d\'Or Sagamihara 8F.jpeg',
     href: '/maimai/pale-dor-sagamihara-808'
   },
   {
@@ -218,11 +218,11 @@ export default function MaiMaiPage() {
     type: '1R/1K',
     location: '东京都足立区伊兴',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Nisshin Palace Takenotsuka 5f.jpeg',
     href: '/maimai/nichishin-palace-takenotsuka-509'
   },
   {
-      title: 'セザール高島平 2F',
+      title: 'セザール西高島平 2F',
     price: '1,200万日元',
     area: '50〜52㎡',
     type: '2〜3LDK',
@@ -238,7 +238,7 @@ export default function MaiMaiPage() {
     type: '1K×3戸',
     location: '东京都杉并区上高井戸',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Miwa Plaza Takaido 1.jpeg',
     href: '/maimai/miwa-plaza-takaido-101'
   },
   {
@@ -248,7 +248,7 @@ export default function MaiMaiPage() {
     type: '1K',
     location: '东京都八王子市八木町',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Lions Mansion Nishi Hachioji 3-1.jpeg',
     href: '/maimai/lm-nishihachioji-3-707'
   },
   {
@@ -258,7 +258,7 @@ export default function MaiMaiPage() {
     type: '1K',
     location: '神奈川县川崎市多摩区',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/maimai/Sky Court Ikuta.jpeg',
     href: '/maimai/sky-court-ikuta-202'
   },
   ], [t])

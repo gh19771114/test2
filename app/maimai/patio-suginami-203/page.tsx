@@ -36,7 +36,10 @@ export default function PatioSuginami203Page() {
                 <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
                   {p.title}
                 </h1>
-                <p className="mt-4 text-sm leading-relaxed text-slate-700" dangerouslySetInnerHTML={{ __html: p.description }} />
+                <p
+                  className="mt-4 text-sm leading-relaxed text-slate-700"
+                  dangerouslySetInnerHTML={{ __html: (p?.description ?? '') as string }}
+                />
 
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
                   <div className="rounded-xl bg-white/80 p-4 shadow-sm">
@@ -74,7 +77,7 @@ export default function PatioSuginami203Page() {
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
                   <Image
-                    src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    src="/imgs/maimai/Patio Suginami 2F.jpeg"
                     alt={p.imageAlt || p.title || labels.appearance}
                     fill
                     className="object-cover"
@@ -96,11 +99,11 @@ export default function PatioSuginami203Page() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/Patio Suginami 2F.jpeg',
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/20260119164526_297_6.png',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}
@@ -110,7 +113,7 @@ export default function PatioSuginami203Page() {
         <section className="mx-auto mt-6 max-w-6xl px-4 pb-14">
           <div className="grid gap-10 lg:grid-cols-[2fr,1.2fr]">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">{labels.overview}</h2>
+              <h2 className="text-lg font-semibold text-slate-900">{t('maimai.propertyDetail.overview')}</h2>
               <div className="mt-4 overflow-hidden rounded-2xl bg-white shadow-sm">
                 <table className="w-full border-separate border-spacing-0 text-xs">
                   <tbody>

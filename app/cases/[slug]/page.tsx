@@ -57,7 +57,7 @@ const caseDetails: Record<string, CaseDetail> = {
     title: 'パークタワー西新宿施設棟1F',
     location: '东京都新宿区西新宿',
     category: '商业设施',
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    image: '/imgs/maimai/Park Tower Nishi-Shinjuku Facility Building.jpeg',
     description: '成功完成西新宿核心地段商业设施两个单元的销售交易。',
     details: [
       '成功完成销售交易，交易日期：2025年9月25日',
@@ -101,7 +101,7 @@ const caseDetails: Record<string, CaseDetail> = {
     title: '新宿ダイカンプラザA館2F',
     location: '东京都新宿区',
     category: '商业设施',
-    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    image: '/imgs/Shinjuku Daikan Plaza.jpeg',
     description: '公司成功购入新宿核心商业区商业设施资产。',
     details: [
       '公司资产购入，购入日期：2025年10月23日',

@@ -1,30 +1,19 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
-import { Noto_Sans_JP, Inter, Playfair_Display } from 'next/font/google'
+import localFont from 'next/font/local'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 
-const notoSansJp = Noto_Sans_JP({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['300', '400', '500', '600', '700'],
+// 使用本地字体，避免构建阶段依赖 Google Fonts（fonts.gstatic.com）
+const notoSansJp = localFont({
+  src: [
+    {
+      path: '../public/fonts/NotoSansSC-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
   variable: '--font-noto-sans-jp',
-  preload: true,
-  adjustFontFallback: true,
-  fallback: ['Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'sans-serif'],
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-inter',
-})
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-playfair',
 })
 
 export const metadata: Metadata = {
@@ -58,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body
-        className={`${notoSansJp.variable} ${inter.variable} ${playfair.variable} antialiased font-sans`}
+        className={`${notoSansJp.variable} antialiased font-sans`}
         suppressHydrationWarning
       >
         <LanguageProvider>

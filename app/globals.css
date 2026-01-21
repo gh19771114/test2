@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font CSS variables fallback
+   - 避免在未注入 next/font 变量时，var(--font-*) 导致 font-family 整条声明失效
+   - 同时确保构建不依赖 Google Fonts 在线下载
+*/
+:root {
+  --font-inter: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-playfair: ui-serif, Georgia, 'Times New Roman', serif;
+}
+
 /* ライオンズマンション東銀座物件介绍页面布局 */
 /* 桌面版和iPad横版：视频在右侧 */
 .lions-higashiginza-video-mobile-portrait {

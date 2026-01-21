@@ -77,7 +77,7 @@ export default function LMNishiHachioji3_707Page() {
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
                   <Image
-                    src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    src="/imgs/maimai/Lions Mansion Nishi Hachioji 3-1.jpeg"
                     alt={p.imageAlt || p.title || labels.appearance}
                     fill
                     className="object-cover"
@@ -99,11 +99,11 @@ export default function LMNishiHachioji3_707Page() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/Lions Mansion Nishi Hachioji 3-1.jpeg',
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: 'https://images.unsplash.com/photo-1560449752-91594c95c0ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              src: '/imgs/maimai/Lions Mansion Nishi Hachioji 3-2.jpeg',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}

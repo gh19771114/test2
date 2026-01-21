@@ -305,14 +305,38 @@
         "subsidiaryValue": "Evolve Corporation"
       },
       "financialPartners": {
-        "bank1": { "name": "Sumitomo Mitsui Banking Corporation", "branch": "Ningyocho Branch" },
-        "bank2": { "name": "MUFG Bank", "branch": "Nippori Branch" },
-        "bank3": { "name": "Mizuho Bank", "branch": "Shimbashi Branch" },
-        "bank4": { "name": "Kira Bank", "branch": "Shinjuku Branch" },
-        "bank5": { "name": "Higashi-Nihon Bank", "branch": "Higashi-Nihonbashi Branch" },
-        "bank6": { "name": "Kansai Mirai Bank", "branch": "Tokyo Branch" },
-        "bank7": { "name": "Tokyo Shinkin Bank", "branch": "Nihonbashi Branch" },
-        "bank8": { "name": "Sugamo Shinkin Bank", "branch": "Nishi-Nippori Branch" }
+        "bank1": {
+          "name": "Sumitomo Mitsui Banking Corporation",
+          "branch": "Ningyocho Branch"
+        },
+        "bank2": {
+          "name": "MUFG Bank",
+          "branch": "Nippori Branch"
+        },
+        "bank3": {
+          "name": "Mizuho Bank",
+          "branch": "Shimbashi Branch"
+        },
+        "bank4": {
+          "name": "Kira Bank",
+          "branch": "Shinjuku Branch"
+        },
+        "bank5": {
+          "name": "Higashi-Nihon Bank",
+          "branch": "Higashi-Nihonbashi Branch"
+        },
+        "bank6": {
+          "name": "Kansai Mirai Bank",
+          "branch": "Tokyo Branch"
+        },
+        "bank7": {
+          "name": "Tokyo Shinkin Bank",
+          "branch": "Nihonbashi Branch"
+        },
+        "bank8": {
+          "name": "Sugamo Shinkin Bank",
+          "branch": "Nishi-Nippori Branch"
+        }
       },
       "teamTitle": "Professional Team",
       "team": {
@@ -1819,6 +1843,328 @@
           "expectedRentText": "Based on past recruitment examples, approx. ¥1.0–1.1 million / month (incl. common service fee).",
           "usageSuggestion": "Suitable for flexible uses such as retail, showrooms, clinics, salons, and offices leveraging street visibility and transportation convenience.",
           "referenceRentNote": "※Please confirm the latest conditions and sale price."
+        },
+        "patio-suginami-203": {
+          "title": "パティオ杉並 2F",
+          "description": "东京地铁丸之内线「方南町」站步行6分的紧凑单间。位于居住需求稳定的杉并区堀之内区域，适合初次区分投资的<strong>紧凑投资用公寓</strong>。",
+          "area": "17.64m²",
+          "areaPing": "5.3",
+          "type": "1R",
+          "typeNote": "单身者向紧凑型",
+          "station": "丸之内线「方南町」站 步行6分",
+          "stationNote": "通勤到新宿・东京方向便捷",
+          "price": "1,050万日元（含税）",
+          "priceNote": "※以最新募集资料为准",
+          "address": "东京都杉并区堀之内2-11-4",
+          "buildingName": "パティオ杉並",
+          "access1": "东京地铁丸之内线「方南町」站 步行6分",
+          "access2": "",
+          "structure": "钢筋混凝土结构（RC） 陆屋根／地上5层建／1992年1月竣工／总户数31户",
+          "floorInfo": "2F／1R／专有面积（壁芯）17.64m²",
+          "equipmentInfo": "电梯／室内洗衣机放置场／角房（两面采光）／南向阳台 等",
+          "point1Title": "适合初次区分投资的价格带",
+          "point1Desc": "约20m²前后的单间，取得价格・租金水平都容易触及，是区分公寓投资的「第1件」容易选择的尺寸感。",
+          "point2Title": "丸之内线沿线的稳定租赁需求",
+          "point2Desc": "到新宿・东京方向的通勤需求高的丸之内线沿线。方南町区域作为住宅街有安静的氛围，同时都心访问的便利性使单身者需求稳定的区域。",
+          "life1": "便利店",
+          "life2": "超市",
+          "life3": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "新宿站约15分",
+          "transport2": "东京站约25分",
+          "transport3": "丸之内线沿线各站",
+          "locationDesc": "位于环七通稍微进入的住宅街，周边有便利店和超市、餐饮店等日常便利设施齐全。是安静住环境与生活便利性并立的位置。",
+          "target1": "寻求初次区分投资的个人投资者",
+          "target2": "重视稳定租赁收益的长期持有型投资",
+          "target3": "丸之内线沿线通勤的单身者",
+          "notesText": "当前租金：65,000日元／月（租赁中）。管理费：8,110日元／月；修缮积立金：9,070日元／月；固都税（2024年度）：33,300日元／年。※图面与现况不同以现况为准。",
+          "imageAlt": "パティオ杉並外观"
+        },
+        "cent-hills-shiinamachi-405": {
+          "title": "セントヒルズ椎名町 4F（最上阶）",
+          "description": "西武池袋线「椎名町」站步行约5分，有乐町线・副都心线「要町」站也可利用的多重访问位置。白色瓷砖贴面的外观印象深刻的低层住宅的最上阶住戸。",
+          "area": "13.84m²",
+          "areaNote": "专有面积（壁芯）",
+          "type": "1R",
+          "typeNote": "紧凑单间",
+          "station": "西武池袋线「椎名町」站 步行5分",
+          "stationNote": "有乐町线・副都心线「要町」站 步行7分",
+          "price": "1,050万日元（含税）",
+          "priceNote": "※以最新募集资料为准",
+          "address": "东京都丰岛区长崎1-25-15",
+          "buildingName": "セントヒルズ椎名町",
+          "access1": "西武池袋线「椎名町」站 步行5分",
+          "access2": "东京地铁有乐町线・副都心线「要町」站 步行7分",
+          "access3": "",
+          "structure": "钢筋混凝土结构（RC） 陆屋根／地上4层建／1984年8月竣工／总户数29户",
+          "floorInfo": "4F（最上阶）／1R／东向",
+          "equipmentInfo": "最上阶／日照良好／电梯 等",
+          "point1Title": "池袋区域附近的落合〜长崎地址",
+          "point1Desc": "椎名町・要町的2站利用，到池袋站约3分访问良好。容易吸收在池袋区域工作的单身者・情侣层的租赁需求的位置。",
+          "point2Title": "管理状态良好的紧凑住宅",
+          "point2Desc": "总户数29户的中规模公寓，外观・共用部的管理状态良好的房源。共用部的美观在入住者募集时也是加分项。",
+          "life1": "超市",
+          "life2": "便利店",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "池袋站约3分",
+          "transport2": "新宿站约15分",
+          "transport3": "东京站约20分",
+          "locationDesc": "周边是公寓和独栋房屋排列的安静住宅街。步行5分范围内有超市・便利店・药妆店齐全，日常生活便利性也高的区域。",
+          "target1": "在池袋区域工作的单身者・情侣",
+          "target2": "重视管理状态的长期持有型投资",
+          "target3": "寻求紧凑住宅的初次投资者",
+          "notesText": "当前租金：53,000日元／月（租赁中）。管理费：8,000日元／月；修缮积立金：3,500日元／月；固都税（2024年度）：20,800日元／年。表面利回：6.05%。※图面与现况不同以现况为准。",
+          "imageAlt": "セントヒルズ椎名町外观"
+        },
+        "cesar-takashimadaira-206": {
+          "title": "セザール西高島平 2F",
+          "description": "都营三田线「高岛平」站步行范围内位置的家庭类型分售公寓。2F是约50m²台的2〜3LDK预期住戸，自用・租赁运用的两方面都容易考虑的一室。",
+          "area": "约50〜52 m² 预期",
+          "areaNote": "※登记簿・图纸需确认准确数值",
+          "type": "2LDK〜3LDK 预期",
+          "typeNote": "※基于过往募集例的预期／请输入实际户型",
+          "station": "高岛平站 步行13〜14分",
+          "stationNote": "西台・东武练马也可利用",
+          "price": "约2,400万日元台",
+          "priceNote": "※基于在线行情信息的参考",
+          "address": "东京都板桥区德丸7丁目22-10",
+          "buildingName": "セザール西高島平",
+          "access1": "都营三田线「高岛平」站 步行13〜14分",
+          "access2": "都营三田线「西台」站 步行18分",
+          "access3": "东武东上线「东武练马」站 步行22分",
+          "structure": "钢筋混凝土结构4层建／1994年竣工",
+          "equipmentInfo": "家庭类型中心／系统厨房／洗发梳妆台 等",
+          "point1Title": "家庭租赁需求的吸收",
+          "point1Desc": "约50m²级别的2〜3LDK，家庭・DINKS层向的稳定租赁需求可以期待的户型。",
+          "point2Title": "生活便利设施齐全的住宅区域",
+          "point2Desc": "近邻有超市和家电量贩店、公园等齐全，对家庭层来说容易居住的住环境齐全。",
+          "life1": "超市",
+          "life2": "便利店",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "到池袋站约25分",
+          "transport2": "到新宿站约35分",
+          "transport3": "到东京站约40分",
+          "locationDesc": "高岛平站〜德丸区域，绿地和公园多对育儿世代也受欢迎的住宅地。都心访问与安静住环境的平衡位置。",
+          "target1": "寻求家庭用租赁的投资者",
+          "target2": "重视生活便利性的长期持有型投资",
+          "target3": "自用・租赁两用的考虑",
+          "notesText": "2F的准确专有面积・户型・价格・租金等，请根据最新销售资料输入・修正。",
+          "imageAlt": "セザール西高島平外观"
+        },
+        "pale-dor-sagamihara-808": {
+          "title": "パレ・ドール相模原 8F",
+          "description": "JR横滨线「相模原」站步行8〜9分，站北侧的住宅街建的投资用公寓。8F作为上阶层住戸，可期待采光和眺望的1R类型预期住戸。",
+          "area": "16.29m²",
+          "areaNote": "专有面积",
+          "type": "1K",
+          "typeNote": "紧凑1K",
+          "station": "横滨线「相模原」站 步行9分",
+          "stationNote": "",
+          "price": "420万日元（含税）",
+          "priceNote": "※以最新募集资料为准",
+          "address": "神奈川县相模原市中央区相模原6-3-20",
+          "buildingName": "パレ・ドール相模原",
+          "access1": "JR横滨线「相模原」站 步行9分",
+          "access2": "",
+          "structure": "钢筋混凝土结构（SRC） 陆屋根／地下1层付・地上9层建／1993年7月竣工／总户数71户",
+          "equipmentInfo": "电梯／室内洗衣机放置场 等",
+          "point1Title": "站步行10分范围内的紧凑1R",
+          "point1Desc": "横滨线沿线・相模原站步行范围内的单间需求可以吸收的位置。单身者向的稳定租赁需求可以期待。",
+          "point2Title": "上阶层独有的采光・眺望",
+          "point2Desc": "8层部分的住戸，可以眺望低层住宅街的眺望・日照条件有魅力。作为募集时的照片・宣传要点容易差异化的要素。",
+          "life1": "超市",
+          "life2": "便利店",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "到町田站约15分",
+          "transport2": "到横滨站约30分",
+          "transport3": "到新宿站约50分",
+          "locationDesc": "站周边的商业设施与周边住宅街的安静平衡的区域。便利店・餐饮店・超市等，租赁入住者需要的设施齐全。",
+          "target1": "在相模原・町田区域工作的单身者",
+          "target2": "重视采光・眺望的长期持有型投资",
+          "target3": "寻求紧凑单间的初次投资者",
+          "notesText": "当前租金：33,000日元／月（租赁中）。管理费：5,600日元／月；修缮积立金：4,000日元／月；固都税（2024年度）：33,900日元／年。表面利回：9.42%。※图面与现况不同以现况为准。",
+          "imageAlt": "パレ・ドール相模原外观"
+        },
+        "nichishin-palace-takenotsuka-509": {
+          "title": "日神パレス竹ノ塚 5F（最上阶）",
+          "description": "东武伊势崎线「竹ノ塚」站从步行6分前后，位于安静住宅街的单身者向公寓。5F作为最上阶住戸，采光和隐私性优秀的一室。",
+          "area": "○○ m²",
+          "areaNote": "※请确认登记簿・图纸后输入",
+          "type": "1R / 1K 预期",
+          "typeNote": "※请输入实际户型",
+          "station": "竹ノ塚站 步行5〜7分",
+          "stationNote": "天空树线的准急停车站",
+          "price": "○○万日元／月",
+          "priceNote": "※基于邻近成交事例设定",
+          "address": "东京都足立区伊兴4丁目",
+          "buildingName": "日神パレス竹ノ塚",
+          "access1": "东武伊势崎线「竹ノ塚」站 步行5〜7分",
+          "access2": "日暮里舍人线「舍人公园」站 步行21分",
+          "access3": "同线「谷在家」站 步行27分",
+          "structure": "钢筋混凝土结构 地上5层建／总户数49户／1987年12月竣工",
+          "equipmentInfo": "宅配箱／自行车停车场／阳台／室内洗衣机放置场／空调／外壁瓷砖贴面 等",
+          "point1Title": "天空树线沿线的单身需求",
+          "point1Desc": "到北千住・浅草方向的访问良好，都心勤务的单身者需求可以预期的区域。作为单间投资平衡的位置。",
+          "point2Title": "宅配箱完备容易入住附着的设备",
+          "point2Desc": "单身者需求高的宅配箱和互联网对应等，租赁募集时容易宣传的设备齐全。",
+          "life1": "超市",
+          "life2": "便利店",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "到北千住站约15分",
+          "transport2": "到浅草站约25分",
+          "transport3": "到上野站约30分",
+          "locationDesc": "下町氛围残留的住宅街，同时站前有商业设施也齐全生活便利性高的区域。学生・社会人都可以期待租赁需求。",
+          "target1": "在都心工作的单身者",
+          "target2": "学生・社会人",
+          "target3": "重视最上阶采光的投资者",
+          "notesText": "5F的户型・面积・价格・租金等在互联网上无法确认，请务必根据最新资料输入・修正。",
+          "imageAlt": "日神パレス竹ノ塚外观"
+        },
+        "miwa-plaza-takaido-101": {
+          "title": "美和プラザ高井戸 1F",
+          "description": "位于京王线「八幡山」「上北沢」站步行范围内的美和プラザ高井戸。1F的3户统一取得运营，预期用于投资的组合。",
+          "type": "1K×3户",
+          "typeNote": "面向单身者",
+          "station": "八幡山站 步行8〜11分",
+          "stationNote": "上北沢站也步行9分",
+          "structure": "RC造4层建",
+          "structureNote": "1986年6月竣工",
+          "address": "东京都杉并区上高井戸3丁目1-16",
+          "buildingName": "美和プラザ高井戸",
+          "access1": "京王线「八幡山」站 步行8〜11分",
+          "access2": "京王线「上北沢」站 步行9分",
+          "equipmentInfo": "自动锁／宅配箱／电梯／阳台／互联网接入／F内垃圾放置场 等",
+          "room101Area": "○○ m²",
+          "room101AreaNote": "※请输入图纸数值",
+          "room101Rent": "○○万日元／月",
+          "room101RentNote": "※请反映租金表",
+          "room101Note": "角落房间（预计）",
+          "room104Area": "○○ m²",
+          "room104AreaNote": "※请输入图纸数值",
+          "room104Rent": "○○万日元／月",
+          "room104RentNote": "※请反映租金表",
+          "room104Note": "中间房间",
+          "room106Area": "○○ m²",
+          "room106AreaNote": "※请输入图纸数值",
+          "room106Rent": "○○万日元／月",
+          "room106RentNote": "※请反映租金表",
+          "room106Note": "已有出租案例（1K）",
+          "point1Title": "1栋内的分散投资可能",
+          "point1Desc": "在同一公寓内持有1K户型3户，可以平摊空置风险，同时减少管理成本，实现高效运营。",
+          "point2Title": "京王线沿线的稳定单身需求",
+          "point2Desc": "京王线沿线前往新宿方向交通便利，社会人和学生等单身者需求旺盛，是适合长期持有1K户型的区域。",
+          "life1": "便利店",
+          "life2": "超市",
+          "life3": "药妆店",
+          "life4": "公园",
+          "education1": "各种学校",
+          "education2": "图书馆",
+          "education3": "体育设施",
+          "transport1": "到新宿站约15分",
+          "transport2": "到涩谷站约20分",
+          "transport3": "京王线沿线各站",
+          "locationDesc": "周边有便利店超市药妆店公园等齐全，安静住宅街的氛围与日常便利性兼备的区域。",
+          "target1": "寻求分散投资的个人投资者",
+          "target2": "重视稳定租赁收益的长期持有型",
+          "target3": "京王线沿线通勤的单身者",
+          "notesText": "1F各自的面积、租金、管理费等，请务必根据最新租金表、租赁合同输入。",
+          "imageAlt": "美和プラザ高井戸外观"
+        },
+        "lm-nishihachioji-3-707": {
+          "title": "ライオンズマンション西八王子第3 7F",
+          "description": "JR中央线「西八王子」站步行范围内的ライオンズ品牌区分公寓。7F是南向・约18.2m²的1K住戸，学生・单身社会人向的稳定租赁需求可以预期的一室。",
+          "area": "18.2 m²",
+          "areaNote": "1K・南向",
+          "type": "1K",
+          "station": "西八王子站 步行11〜13分",
+          "stationNote": "八王子・京王八王子也可利用",
+          "price": "约3.6〜4.2万日元／月",
+          "priceNote": "※在线预测值／实际租金需确认",
+          "expectedPrice": "约429〜560万日元",
+          "expectedPriceNote": "※作为参考记载",
+          "address": "东京都八王子市八木町3-15",
+          "buildingName": "ライオンズマンション西八王子第3",
+          "access1": "JR中央线「西八王子」站 步行11〜13分",
+          "access2": "JR中央线「八王子」站 步行24分",
+          "access3": "京王线「京王八王子」站 步行27分",
+          "structure": "钢筋混凝土结构 地上10层建／总户数81户／1990年竣工",
+          "equipmentInfo": "自动锁／宅配箱／24小时垃圾出可／防盗摄像头／2沿线利用可 等",
+          "point1Title": "容易触及的价格带的ライオンズ品牌",
+          "point1Desc": "约500万日元前后的取得价格预期的紧凑区分。品牌力高的「ライオンズ」系列，作为长期保有投资的入口也容易考虑的房源。",
+          "point2Title": "学生・单身社会人向的稳定需求",
+          "point2Desc": "八王子区域大学・专门学校多，单身者向1K的租赁需求稳定的点也有魅力。",
+          "life1": "便利店",
+          "life2": "超市",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种大学・专门学校",
+          "education2": "图书馆",
+          "education3": "公园",
+          "transport1": "到新宿站约45分",
+          "transport2": "到东京站约55分",
+          "transport3": "中央线沿线各站",
+          "locationDesc": "甲州街道稍微进入的住宅街位置，便利店和餐饮店也在步行范围内。都心访问与本地生活环境的双方都可以享受的位置。",
+          "target1": "寻求初次区分投资的个人投资者",
+          "target2": "学生・单身社会人向的租赁需求",
+          "target3": "重视品牌力的长期持有型投资",
+          "notesText": "本页面记载的AI预测价格・租金是参考信息。实际买卖价格・租金条件，请务必确认估价书・租金表等最新资料。",
+          "imageAlt": "ライオンズマンション西八王子第3外观"
+        },
+        "sky-court-ikuta-202": {
+          "title": "スカイコート生田 2F",
+          "description": "小田急线「生田」站步行5分，站近的スカイコート品牌公寓。2F是约17m²的1K预期住戸，学生・单身者向的稳定租赁需求可以期待。",
+          "area": "约17 m² 预期",
+          "areaNote": "※参考3层住戸16.92m²／需确认实测值",
+          "type": "1K",
+          "typeNote": "一人生活向紧凑类型",
+          "station": "生田站 步行5分",
+          "stationNote": "读卖乐园前站 步行15分",
+          "completedDate": "1989年11月",
+          "completedDateNote": "RC造 地上3层／地下1层",
+          "address": "神奈川县川崎市多摩区生田7丁目25-7",
+          "buildingName": "スカイコート生田",
+          "access1": "小田急小田原线「生田」站 步行5分",
+          "access2": "小田急小田原线「读卖乐园前」站 步行15分",
+          "structure": "钢筋混凝土结构 地上3层／地下1层建・总户数26户／1989年11月竣工",
+          "equipmentInfo": "垃圾出24小时可／自行车停车场／瓷砖贴面／阳台／室内洗衣机放置场／燃气灶对应／TV监控对讲／互联网对应 等",
+          "point1Title": "站近×スカイコート品牌",
+          "point1Desc": "生田站步行5分的站近位置与，投资用公寓作为实绩有的スカイコート系列的组合，入住附着・出口战略的两面都有优点。",
+          "point2Title": "学生・社会人向的稳定需求",
+          "point2Desc": "小田急线沿线大学和专门学校多，同时都心方向的访问也良好，单身者向1K的稳定租赁需求可以期待。",
+          "life1": "超市",
+          "life2": "便利店",
+          "life3": "药妆店",
+          "life4": "各种餐饮店",
+          "education1": "各种学校",
+          "education2": "公园",
+          "education3": "图书馆",
+          "transport1": "到新宿站约30分",
+          "transport2": "到涩谷站约35分",
+          "transport3": "小田急线沿线各站",
+          "locationDesc": "站周边有超市和餐饮店齐全，生活便利性高的环境。丘陵地独有的安静住宅街的氛围也有魅力。",
+          "target1": "在都心工作的单身者",
+          "target2": "学生・社会人",
+          "target3": "重视品牌力的长期持有型投资",
+          "notesText": "2F的准确专有面积・租金水平・管理费等，请根据最新募集资料输入・修正。",
+          "imageAlt": "スカイコート生田外观"
         }
       }
     }
@@ -1883,37 +2229,61 @@
         {
           "title": "Strategy & Roadmap",
           "desc": "Clarify priorities and provide an executable landing roadmap.",
-          "bullets": ["Market & competitor research", "Location & cost estimation", "Milestones & resourcing"],
+          "bullets": [
+            "Market & competitor research",
+            "Location & cost estimation",
+            "Milestones & resourcing"
+          ],
           "image": "/imgs/qichu/one-stop-strategy.svg"
         },
         {
           "title": "Incorporation",
           "desc": "Get the critical procedures right the first time to reduce rework.",
-          "bullets": ["Registration & seals/articles", "Bank account coordination", "Required licenses & filings"],
+          "bullets": [
+            "Registration & seals/articles",
+            "Bank account coordination",
+            "Required licenses & filings"
+          ],
           "image": "/imgs/qichu/one-stop-incorporation.svg"
         },
         {
           "title": "Finance & Tax",
           "desc": "Build a sustainable finance/tax framework with consistent reporting.",
-          "bullets": ["Accounting/booking setup", "Tax registration & filing cadence", "Expense & internal controls"],
+          "bullets": [
+            "Accounting/booking setup",
+            "Tax registration & filing cadence",
+            "Expense & internal controls"
+          ],
           "image": "/imgs/qichu/one-stop-finance.svg"
         },
         {
           "title": "HR & Labor",
           "desc": "Standardize recruiting, onboarding, and labor compliance.",
-          "bullets": ["Employment types & contracts", "Social/Employment insurance", "Hiring & onboarding flow"],
+          "bullets": [
+            "Employment types & contracts",
+            "Social/Employment insurance",
+            "Hiring & onboarding flow"
+          ],
           "image": "/imgs/qichu/one-stop-hr.svg"
         },
         {
           "title": "Office & Procurement",
           "desc": "From space to equipment, get your office ready quickly.",
-          "bullets": ["Office lease/fit-out", "IT & office procurement", "Network/phone/signage setup"],
+          "bullets": [
+            "Office lease/fit-out",
+            "IT & office procurement",
+            "Network/phone/signage setup"
+          ],
           "image": "/imgs/qichu/one-stop-office.svg"
         },
         {
           "title": "Localized Operations",
           "desc": "Continuous optimization after launch for growth and efficiency.",
-          "bullets": ["Brand localization & comms", "Partner network introduction", "Ongoing operating support"],
+          "bullets": [
+            "Brand localization & comms",
+            "Partner network introduction",
+            "Ongoing operating support"
+          ],
           "image": "/imgs/qichu/one-stop-ops.svg"
         }
       ]
@@ -1993,219 +2363,303 @@
   "cases": {
     "title": "Success Cases",
     "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
-      "project1": {
-        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-        "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
-      },
-      "comingSoon1": {
-        "title": "Case Coming Soon",
-        "result": "More success cases are being prepared, please stay tuned..."
-      },
-      "comingSoon2": {
-        "title": "Case Coming Soon",
-        "result": "More success cases are being prepared, please stay tuned..."
-      },
-      "comingSoon3": {
-        "title": "Case Coming Soon",
-        "result": "More success cases are being prepared, please stay tuned..."
-      },
-      "notFound": {
-        "title": "Case Not Found",
-        "message": "Sorry, the case you are looking for could not be found.",
-        "back": "Back to Case List"
-      },
-      "detail": {
-        "backToList": "Back to Case List",
-        "overview": "Project Overview",
-        "details": "Project Details",
-        "location": "Location",
-        "locationDescription": "The project is located at the following address in Tokyo:",
-        "map": "Location Map",
-        "clickToViewMap": "Click to view detailed map",
-        "clickToViewGoogleMap": "Click to view Google Maps",
-        "highlights": "Project Highlights",
-        "cta": {
-          "title": "Want to Learn More?",
-          "description": "Our professional team is always available to provide consulting services and help you find the most suitable investment solution.",
-          "button": "Contact Us"
-        }
-      },
-      "details": {
-        "grand-maison-asakusa-1302": {
-          "type": "Sale",
-          "title": "Grand Maison Asakusa Hanakawado 13F",
-          "location": "Asakusa Hanakawado, Taito-ku, Tokyo",
-          "category": "Luxury Apartment",
-          "description": "Successfully completed the sale transaction of a luxury apartment unit in Asakusa Hanakawado, providing professional sales services to the client.",
-          "details": [
-            "Successfully completed sale transaction on August 25, 2025",
-            "Provided professional sales consultation and transaction services to the client",
-            "Excellent location, only 5 minutes walk to Senso-ji Temple",
-            "Convenient transportation with multiple subway lines accessible",
-            "Successfully completed all transaction procedures with high client satisfaction"
-          ],
-          "highlights": [
-            { "label": "Floor Area", "value": "Approx. 65㎡" },
-            { "label": "Layout", "value": "2LDK" },
-            { "label": "Year Built", "value": "2018" },
-            { "label": "Floor", "value": "13F" }
-          ]
-        },
-        "park-tower-nishishinjuku-101-201": {
-          "type": "Sale",
-          "title": "Park Tower Nishishinjuku Facility Building 1F",
-          "location": "Nishishinjuku, Shinjuku-ku, Tokyo",
-          "category": "Commercial Facility",
-          "description": "Successfully completed the sale transaction of two commercial facility units in the core area of Nishishinjuku.",
-          "details": [
-            "Successfully completed sale transaction on September 25, 2025",
-            "Includes two units on the 1st floor with a total area of approximately 200㎡",
-            "Provided professional commercial facility sales services to the client",
-            "Located in Shinjuku's core business district with high commercial value",
-            "Successfully completed all transaction procedures with client recognition"
-          ],
-          "highlights": [
-            { "label": "Total Area", "value": "Approx. 200㎡" },
-            { "label": "Number of Units", "value": "2 units" },
-            { "label": "Year Built", "value": "2015" },
-            { "label": "Usage", "value": "Commercial Facility" }
-          ]
-        },
-        "my-castle-yoyogi-1203": {
-          "type": "Sale",
-          "title": "My Castle Yoyogi 12F",
-          "location": "Yoyogi, Shibuya-ku, Tokyo",
-          "category": "Apartment",
-          "description": "Successfully completed the sale transaction of a quality apartment unit in the Yoyogi area.",
-          "details": [
-            "Successfully completed sale transaction on May 16, 2025",
-            "Provided professional apartment sales services to the client",
-            "Premium location in Yoyogi area with excellent living environment",
-            "Surrounded by Yoyogi Park with beautiful scenery",
-            "Successfully completed all transaction procedures with high client satisfaction"
-          ],
-          "highlights": [
-            { "label": "Floor Area", "value": "Approx. 55㎡" },
-            { "label": "Layout", "value": "1LDK" },
-            { "label": "Year Built", "value": "2020" },
-            { "label": "Floor", "value": "12F" }
-          ]
-        },
-        "shinjuku-daikan-plaza-a-201": {
-          "type": "Asset Purchase",
-          "title": "Shinjuku Daikan Plaza Building A 2F",
-          "location": "Shinjuku-ku, Tokyo",
-          "category": "Commercial Facility",
-          "description": "Company successfully purchased commercial facility asset in Shinjuku's core business district.",
-          "details": [
-            "Company asset purchase completed on October 23, 2025",
-            "Shinjuku core business district with extremely high commercial value",
-            "High foot traffic with strong commercial atmosphere",
-            "Convenient transportation with multiple subway lines accessible",
-            "Held as company asset for long-term operation and management"
-          ],
-          "highlights": [
-            { "label": "Floor Area", "value": "Approx. 150㎡" },
-            { "label": "Year Built", "value": "2017" },
-            { "label": "Floor", "value": "2F" },
-            { "label": "Usage", "value": "Commercial Facility" }
-          ]
-        },
-        "abc-hall-management": {
-          "type": "Managed Property",
-          "title": "THE ROPPONGI TOKYO CLUB RESIDENCE",
-          "location": "Tokyo",
-          "category": "Managed Properties",
-          "description": "Managed property showcase (sourced from the managed properties gallery).",
-          "details": [
-            "This page showcases a managed property card.",
-            "Contact us for more project details."
-          ],
-          "highlights": [
-            { "label": "Showcase", "value": "Managed Property" },
-            { "label": "Image", "value": "Local asset" }
-          ]
-        },
-        "kingsoft-wps-japan": {
-          "type": "Enterprise Service",
-          "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-          "location": "Tokyo",
-          "category": "Enterprise Expansion",
-          "description": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems.",
-          "details": [
-            "Successfully completed Kingsoft WPS Japan subsidiary setup service on November 15, 2024",
-            "Assisted in completing corporate registration procedures, ensuring compliant establishment",
-            "Signed with a major Japanese real estate company and successfully established an office",
-            "Built local finance system and established comprehensive financial management processes",
-            "Established recruitment system and assisted in forming local team",
-            "Providing ongoing enterprise expansion support services"
-          ],
-          "highlights": [
-            { "label": "Service Type", "value": "Corporate Setup" },
-            { "label": "Service Content", "value": "Corporate registration, office setup, finance system, recruitment system" },
-            { "label": "Service Period", "value": "Ongoing support" },
-            { "label": "Service Team", "value": "Professional Team" }
-          ]
-        },
-        "shibuya-luxury-apartment": {
-          "type": "Managed Property",
-          "title": "The LOG Nihonbashi",
-          "location": "Tokyo",
-          "category": "Managed Properties",
-          "description": "Managed property showcase (sourced from the managed properties gallery).",
-          "details": [
-            "This page showcases a managed property card.",
-            "Contact us for more project details."
-          ],
-          "highlights": [
-            { "label": "Showcase", "value": "Managed Property" },
-            { "label": "Image", "value": "Local asset" }
-          ]
-        },
-        "yokohama-waterfront-complex": {
-          "type": "Managed Property",
-          "title": "The Parkhouse Nishi-Shinjuku Tower 60",
-          "location": "Tokyo",
-          "category": "Managed Properties",
-          "description": "Managed property showcase (sourced from the managed properties gallery).",
-          "details": [
-            "This page showcases a managed property card.",
-            "Contact us for more project details."
-          ],
-          "highlights": [
-            { "label": "Showcase", "value": "Managed Property" },
-            { "label": "Image", "value": "Local asset" }
-          ]
-        },
-        "nagoya-student-apartment": {
-          "type": "Managed Property",
-          "title": "Kachidoki The Tower",
-          "location": "Tokyo",
-          "category": "Managed Properties",
-          "description": "Managed property showcase (sourced from the managed properties gallery).",
-          "details": [
-            "This page showcases a managed property card.",
-            "Contact us for more project details."
-          ],
-          "highlights": [
-            { "label": "Showcase", "value": "Managed Property" },
-            { "label": "Image", "value": "Local asset" }
-          ]
-        }
-      },
-      "page": {
-        "title": "Case Studies",
-        "subtitle": "Below are real cases we have successfully completed, covering real estate sales, purchases, property management, and other services, providing professional and efficient services to our clients.",
-        "filters": {
-          "all": "All Cases",
-          "maimai": "Sales & Purchase Brokerage",
-          "wuye": "Property Management",
-          "qichu": "Enterprise Expansion Support",
-          "touzi": "Asset Investment"
-        },
-        "scrollLeft": "Scroll Left",
-        "scrollRight": "Scroll Right"
+    "project1": {
+      "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+      "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
+    },
+    "comingSoon1": {
+      "title": "Case Coming Soon",
+      "result": "More success cases are being prepared, please stay tuned..."
+    },
+    "comingSoon2": {
+      "title": "Case Coming Soon",
+      "result": "More success cases are being prepared, please stay tuned..."
+    },
+    "comingSoon3": {
+      "title": "Case Coming Soon",
+      "result": "More success cases are being prepared, please stay tuned..."
+    },
+    "notFound": {
+      "title": "Case Not Found",
+      "message": "Sorry, the case you are looking for could not be found.",
+      "back": "Back to Case List"
+    },
+    "detail": {
+      "backToList": "Back to Case List",
+      "overview": "Project Overview",
+      "details": "Project Details",
+      "location": "Location",
+      "locationDescription": "The project is located at the following address in Tokyo:",
+      "map": "Location Map",
+      "clickToViewMap": "Click to view detailed map",
+      "clickToViewGoogleMap": "Click to view Google Maps",
+      "highlights": "Project Highlights",
+      "cta": {
+        "title": "Want to Learn More?",
+        "description": "Our professional team is always available to provide consulting services and help you find the most suitable investment solution.",
+        "button": "Contact Us"
       }
+    },
+    "details": {
+      "grand-maison-asakusa-1302": {
+        "type": "Sale",
+        "title": "Grand Maison Asakusa Hanakawado 13F",
+        "location": "Asakusa Hanakawado, Taito-ku, Tokyo",
+        "category": "Luxury Apartment",
+        "description": "Successfully completed the sale transaction of a luxury apartment unit in Asakusa Hanakawado, providing professional sales services to the client.",
+        "details": [
+          "Successfully completed sale transaction on August 25, 2025",
+          "Provided professional sales consultation and transaction services to the client",
+          "Excellent location, only 5 minutes walk to Senso-ji Temple",
+          "Convenient transportation with multiple subway lines accessible",
+          "Successfully completed all transaction procedures with high client satisfaction"
+        ],
+        "highlights": [
+          {
+            "label": "Floor Area",
+            "value": "Approx. 65㎡"
+          },
+          {
+            "label": "Layout",
+            "value": "2LDK"
+          },
+          {
+            "label": "Year Built",
+            "value": "2018"
+          },
+          {
+            "label": "Floor",
+            "value": "13F"
+          }
+        ]
+      },
+      "park-tower-nishishinjuku-101-201": {
+        "type": "Sale",
+        "title": "Park Tower Nishishinjuku Facility Building 1F",
+        "location": "Nishishinjuku, Shinjuku-ku, Tokyo",
+        "category": "Commercial Facility",
+        "description": "Successfully completed the sale transaction of two commercial facility units in the core area of Nishishinjuku.",
+        "details": [
+          "Successfully completed sale transaction on September 25, 2025",
+          "Includes two units on the 1st floor with a total area of approximately 200㎡",
+          "Provided professional commercial facility sales services to the client",
+          "Located in Shinjuku's core business district with high commercial value",
+          "Successfully completed all transaction procedures with client recognition"
+        ],
+        "highlights": [
+          {
+            "label": "Total Area",
+            "value": "Approx. 200㎡"
+          },
+          {
+            "label": "Number of Units",
+            "value": "2 units"
+          },
+          {
+            "label": "Year Built",
+            "value": "2015"
+          },
+          {
+            "label": "Usage",
+            "value": "Commercial Facility"
+          }
+        ]
+      },
+      "my-castle-yoyogi-1203": {
+        "type": "Sale",
+        "title": "My Castle Yoyogi 12F",
+        "location": "Yoyogi, Shibuya-ku, Tokyo",
+        "category": "Apartment",
+        "description": "Successfully completed the sale transaction of a quality apartment unit in the Yoyogi area.",
+        "details": [
+          "Successfully completed sale transaction on May 16, 2025",
+          "Provided professional apartment sales services to the client",
+          "Premium location in Yoyogi area with excellent living environment",
+          "Surrounded by Yoyogi Park with beautiful scenery",
+          "Successfully completed all transaction procedures with high client satisfaction"
+        ],
+        "highlights": [
+          {
+            "label": "Floor Area",
+            "value": "Approx. 55㎡"
+          },
+          {
+            "label": "Layout",
+            "value": "1LDK"
+          },
+          {
+            "label": "Year Built",
+            "value": "2020"
+          },
+          {
+            "label": "Floor",
+            "value": "12F"
+          }
+        ]
+      },
+      "shinjuku-daikan-plaza-a-201": {
+        "type": "Asset Purchase",
+        "title": "Shinjuku Daikan Plaza Building A 2F",
+        "location": "Shinjuku-ku, Tokyo",
+        "category": "Commercial Facility",
+        "description": "Company successfully purchased commercial facility asset in Shinjuku's core business district.",
+        "details": [
+          "Company asset purchase completed on October 23, 2025",
+          "Shinjuku core business district with extremely high commercial value",
+          "High foot traffic with strong commercial atmosphere",
+          "Convenient transportation with multiple subway lines accessible",
+          "Held as company asset for long-term operation and management"
+        ],
+        "highlights": [
+          {
+            "label": "Floor Area",
+            "value": "Approx. 150㎡"
+          },
+          {
+            "label": "Year Built",
+            "value": "2017"
+          },
+          {
+            "label": "Floor",
+            "value": "2F"
+          },
+          {
+            "label": "Usage",
+            "value": "Commercial Facility"
+          }
+        ]
+      },
+      "abc-hall-management": {
+        "type": "Managed Property",
+        "title": "THE ROPPONGI TOKYO CLUB RESIDENCE",
+        "location": "Tokyo",
+        "category": "Managed Properties",
+        "description": "Managed property showcase (sourced from the managed properties gallery).",
+        "details": [
+          "This page showcases a managed property card.",
+          "Contact us for more project details."
+        ],
+        "highlights": [
+          {
+            "label": "Showcase",
+            "value": "Managed Property"
+          },
+          {
+            "label": "Image",
+            "value": "Local asset"
+          }
+        ]
+      },
+      "kingsoft-wps-japan": {
+        "type": "Enterprise Service",
+        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+        "location": "Tokyo",
+        "category": "Enterprise Expansion",
+        "description": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems.",
+        "details": [
+          "Successfully completed Kingsoft WPS Japan subsidiary setup service on November 15, 2024",
+          "Assisted in completing corporate registration procedures, ensuring compliant establishment",
+          "Signed with a major Japanese real estate company and successfully established an office",
+          "Built local finance system and established comprehensive financial management processes",
+          "Established recruitment system and assisted in forming local team",
+          "Providing ongoing enterprise expansion support services"
+        ],
+        "highlights": [
+          {
+            "label": "Service Type",
+            "value": "Corporate Setup"
+          },
+          {
+            "label": "Service Content",
+            "value": "Corporate registration, office setup, finance system, recruitment system"
+          },
+          {
+            "label": "Service Period",
+            "value": "Ongoing support"
+          },
+          {
+            "label": "Service Team",
+            "value": "Professional Team"
+          }
+        ]
+      },
+      "shibuya-luxury-apartment": {
+        "type": "Managed Property",
+        "title": "The LOG Nihonbashi",
+        "location": "Tokyo",
+        "category": "Managed Properties",
+        "description": "Managed property showcase (sourced from the managed properties gallery).",
+        "details": [
+          "This page showcases a managed property card.",
+          "Contact us for more project details."
+        ],
+        "highlights": [
+          {
+            "label": "Showcase",
+            "value": "Managed Property"
+          },
+          {
+            "label": "Image",
+            "value": "Local asset"
+          }
+        ]
+      },
+      "yokohama-waterfront-complex": {
+        "type": "Managed Property",
+        "title": "The Parkhouse Nishi-Shinjuku Tower 60",
+        "location": "Tokyo",
+        "category": "Managed Properties",
+        "description": "Managed property showcase (sourced from the managed properties gallery).",
+        "details": [
+          "This page showcases a managed property card.",
+          "Contact us for more project details."
+        ],
+        "highlights": [
+          {
+            "label": "Showcase",
+            "value": "Managed Property"
+          },
+          {
+            "label": "Image",
+            "value": "Local asset"
+          }
+        ]
+      },
+      "nagoya-student-apartment": {
+        "type": "Managed Property",
+        "title": "Kachidoki The Tower",
+        "location": "Tokyo",
+        "category": "Managed Properties",
+        "description": "Managed property showcase (sourced from the managed properties gallery).",
+        "details": [
+          "This page showcases a managed property card.",
+          "Contact us for more project details."
+        ],
+        "highlights": [
+          {
+            "label": "Showcase",
+            "value": "Managed Property"
+          },
+          {
+            "label": "Image",
+            "value": "Local asset"
+          }
+        ]
+      }
+    },
+    "page": {
+      "title": "Case Studies",
+      "subtitle": "Below are real cases we have successfully completed, covering real estate sales, purchases, property management, and other services, providing professional and efficient services to our clients.",
+      "filters": {
+        "all": "All Cases",
+        "maimai": "Sales & Purchase Brokerage",
+        "wuye": "Property Management",
+        "qichu": "Enterprise Expansion Support",
+        "touzi": "Asset Investment"
+      },
+      "scrollLeft": "Scroll Left",
+      "scrollRight": "Scroll Right"
+    }
   },
   "careers": {
     "title": "Careers",
