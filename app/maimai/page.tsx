@@ -228,7 +228,7 @@ export default function MaiMaiPage() {
     type: '2〜3LDK',
     location: '东京都板桥区德丸',
       feature: t('maimai.properties.withFee'),
-    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/imgs/Cesar Nishi Takashimadaira.jpeg',
     href: '/maimai/cesar-takashimadaira-206'
   },
   {
