@@ -161,7 +161,7 @@ export default function MaiMaiPage() {
   {
       title: '新中野駅上プラザ305号室',
       price: '2,100万日元',
-      area: '25.42㎡',
+      area: '23.92㎡',
       type: '1R',
     location: '東京都中野区本町',
       feature: t('maimai.properties.noFee'),
@@ -194,8 +194,8 @@ export default function MaiMaiPage() {
   {
       title: 'セントヒルズ椎名町 4F',
     price: '1,050万日元',
-    area: '—',
-    type: '—',
+    area: '13.84㎡',
+    type: '1R',
     location: '东京都丰岛区长崎',
       feature: t('maimai.properties.withFee'),
     image: '/imgs/maimai/Saint Hills Shiinamachi 4F.jpeg',
@@ -204,8 +204,8 @@ export default function MaiMaiPage() {
   {
       title: 'パレ・ドール相模原 8F',
     price: '420万日元',
-    area: '—',
-    type: '1R',
+    area: '16.29㎡',
+    type: '1K',
     location: '神奈川县相模原市',
       feature: t('maimai.properties.withFee'),
     image: '/imgs/maimai/Palais d\'Or Sagamihara 8F.jpeg',
@@ -214,8 +214,8 @@ export default function MaiMaiPage() {
   {
       title: '日神パレス竹ノ塚 5F',
     price: '700万日元',
-    area: '—',
-    type: '1R/1K',
+    area: '18.09㎡',
+    type: '1R',
     location: '东京都足立区伊兴',
       feature: t('maimai.properties.withFee'),
     image: '/imgs/maimai/Nisshin Palace Takenotsuka 5f.jpeg',
@@ -224,7 +224,7 @@ export default function MaiMaiPage() {
   {
       title: 'セザール西高島平 2F',
     price: '1,200万日元',
-    area: '50〜52㎡',
+    area: '27.13㎡',
     type: '2〜3LDK',
     location: '东京都板桥区德丸',
       feature: t('maimai.properties.withFee'),

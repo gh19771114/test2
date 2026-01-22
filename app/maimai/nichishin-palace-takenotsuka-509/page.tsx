@@ -108,7 +108,7 @@ export default function NisshinPalaceTakenotsuka509Page() {
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: '/imgs/maimai/nishin.png',
+              src: '/imgs/maimai/881560758cd5e3259d00fb0f5c44606b.png',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}

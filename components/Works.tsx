@@ -7,6 +7,13 @@ import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { caseIds, caseDates, caseImages } from '@/lib/casesData'
 
+const managedPropertyCaseIds = new Set([
+  'abc-hall-management',
+  'shibuya-luxury-apartment',
+  'yokohama-waterfront-complex',
+  'nagoya-student-apartment',
+])
+
 const Works = () => {
   const { t } = useLanguage()
   const [visibleCount, setVisibleCount] = useState(6) // 首页默认展示6个案例
@@ -22,7 +29,8 @@ const Works = () => {
         category: detail?.category || '',
         title: detail?.title || '',
         image: caseImages[id],
-        description: detail?.description || '',
+        // 首页需求：管理房产卡片下方不显示“管理房产展示（来源：管理房产图片库）。”这类说明文字
+        description: managedPropertyCaseIds.has(id) ? '' : (detail?.description || ''),
     }
     })
 

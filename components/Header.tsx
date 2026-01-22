@@ -36,6 +36,7 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null)
+  const [expandedMobileChild, setExpandedMobileChild] = useState<string | null>(null)
   const [hoveredChild, setHoveredChild] = useState<string | null>(null)
   const [isMounted, setIsMounted] = useState(false)
   
@@ -126,6 +127,13 @@ const Header = () => {
       setHoveredChild(null)
     }
   }, [openDropdown])
+  
+  // 当手机端一级折叠关闭时，清除二级/三级展开状态
+  useEffect(() => {
+    if (!expandedMobile) {
+      setExpandedMobileChild(null)
+    }
+  }, [expandedMobile])
 
   const handleLanguageSelect = (lang: typeof languages[number]) => {
     // 将语言代码转换为Language类型
@@ -373,7 +381,9 @@ const Header = () => {
                                             setHoveredChild(null)
                                           }}
                                         >
-                                          {subChild.name}
+                                          <span className={subChild.href === '/wuye/zengzhi' ? 'nav-rainbow-flash' : ''}>
+                                            {subChild.name}
+                                          </span>
                                         </a>
                                       ))}
                                     </motion.div>
@@ -505,20 +515,84 @@ const Header = () => {
                             <motion.div
                               className="bg-gray-50"
                             >
-                              {item.children.map((child) => (
-                                <a
-                                  key={child.name}
-                                  href={child.href}
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                  onClick={(e) => {
-                                    handleNavClick(e, child.href)
-                                    setIsMenuOpen(false)
-                                    setExpandedMobile(null)
-                                  }}
-                                >
-                                  {child.name}
-                                </a>
-                              ))}
+                              {item.children.map((child) => {
+                                const childKey = `${item.key}:${child.href}`
+                                const childExpanded = expandedMobileChild === childKey
+                                const hasThird = Array.isArray(child.subChildren) && child.subChildren.length > 0
+
+                                if (!hasThird) {
+                                  return (
+                                    <a
+                                      key={child.name}
+                                      href={child.href}
+                                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                      onClick={(e) => {
+                                        handleNavClick(e, child.href)
+                                        setIsMenuOpen(false)
+                                        setExpandedMobile(null)
+                                        setExpandedMobileChild(null)
+                                      }}
+                                    >
+                                      {child.name}
+                                    </a>
+                                  )
+                                }
+
+                                return (
+                                  <div key={child.name} className="border-t border-gray-100 first:border-t-0">
+                                    <div className="flex items-stretch">
+                                      <a
+                                        href={child.href}
+                                        className="flex-1 px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                                        onClick={(e) => {
+                                          handleNavClick(e, child.href)
+                                          setIsMenuOpen(false)
+                                          setExpandedMobile(null)
+                                          setExpandedMobileChild(null)
+                                        }}
+                                      >
+                                        {child.name}
+                                      </a>
+                                      <button
+                                        type="button"
+                                        aria-label={`展开 ${child.name} 的子菜单`}
+                                        className="px-3 py-2 text-gray-700 hover:bg-gray-100"
+                                        onClick={() => {
+                                          setExpandedMobileChild((prev) => (prev === childKey ? null : childKey))
+                                        }}
+                                      >
+                                        <ChevronDown
+                                          size={16}
+                                          className={`transition-transform duration-200 ${childExpanded ? 'rotate-180' : ''}`}
+                                        />
+                                      </button>
+                                    </div>
+                                    <AnimatePresence initial={false}>
+                                      {childExpanded && (
+                                        <motion.div className="pb-1">
+                                          {child.subChildren!.map((subChild) => (
+                                            <a
+                                              key={subChild.name}
+                                              href={subChild.href}
+                                              className="block pl-8 pr-4 py-2 text-[13px] text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                                              onClick={(e) => {
+                                                handleNavClick(e, subChild.href)
+                                                setIsMenuOpen(false)
+                                                setExpandedMobile(null)
+                                                setExpandedMobileChild(null)
+                                              }}
+                                            >
+                                              <span className={subChild.href === '/wuye/zengzhi' ? 'nav-rainbow-flash' : ''}>
+                                                {subChild.name}
+                                              </span>
+                                            </a>
+                                          ))}
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                )
+                              })}
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -568,6 +642,7 @@ const Header = () => {
                         handleLanguageSelect(lang)
                         setIsMenuOpen(false)
                         setExpandedMobile(null)
+                        setExpandedMobileChild(null)
                         setOpenDropdown(null)
                       }}
                     >

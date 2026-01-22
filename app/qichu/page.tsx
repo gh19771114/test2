@@ -17,6 +17,121 @@ const relatedServiceIcons = [Store, Palette, Monitor, Sparkles, Megaphone]
 
 const partnerIcons = [Building2, Users, Briefcase, Globe, Landmark]
 
+function isWeChatBrowser() {
+  if (typeof navigator === 'undefined') return false
+  return /MicroMessenger/i.test(navigator.userAgent || '')
+}
+
+function normalizeWeChatMiniProgramLink(link: string) {
+  // 语言包里存的是 "#小程序://..."（常见于微信内复制的格式）
+  // 在网页里点击需要去掉 "#"，否则只会变成 hash，不会触发协议跳转
+  return link.startsWith('#') ? link.slice(1) : link
+}
+
+function isIOS() {
+  if (typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent || ''
+  return /iPad|iPhone|iPod/i.test(ua)
+}
+
+function openUrlByHiddenIframe(url: string) {
+  if (typeof document === 'undefined') return
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = url
+  document.body.appendChild(iframe)
+  window.setTimeout(() => {
+    try {
+      document.body.removeChild(iframe)
+    } catch {
+      // ignore
+    }
+  }, 1200)
+}
+
+async function copyToClipboard(text: string) {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text)
+      return true
+    }
+  } catch {
+    // ignore
+  }
+  try {
+    if (typeof document === 'undefined') return false
+    const ta = document.createElement('textarea')
+    ta.value = text
+    ta.style.position = 'fixed'
+    ta.style.top = '-9999px'
+    ta.style.left = '-9999px'
+    document.body.appendChild(ta)
+    ta.focus()
+    ta.select()
+    const ok = document.execCommand('copy')
+    document.body.removeChild(ta)
+    return ok
+  } catch {
+    return false
+  }
+}
+
+function tryOpenWeChatMiniProgram(options: {
+  rawLink: string
+  confirmText: string
+  fallbackText: string
+}) {
+  const normalized = normalizeWeChatMiniProgramLink(options.rawLink)
+  // 支持：小程序口令（仅微信环境可识别）、微信 URL Scheme、以及外部可拉起的 URL Link（如 wxaurl.cn）
+  const isMiniProgramToken = normalized.startsWith('小程序://')
+  const isWeixinScheme = normalized.startsWith('weixin://')
+  const isExternalLink = /^https?:\/\//i.test(normalized)
+  if (!isMiniProgramToken && !isWeixinScheme && !isExternalLink) return false
+
+  // 用户确认后再尝试拉起微信打开小程序
+  const ok = typeof window !== 'undefined' ? window.confirm(options.confirmText) : false
+  if (!ok) return true
+
+  if (typeof window !== 'undefined') {
+    // 关键事实：
+    // - “小程序://...” 这种字符串在系统浏览器里并不是可被系统识别的 URL Scheme，无法直接拉起微信并打开小程序；
+    //   它通常只在微信环境/聊天内被识别。
+    // - 真正可从外部浏览器稳定拉起微信并打开小程序，需要小程序后台生成的 URL Scheme / Universal Link / URL Link（如 wxaurl.cn）。
+    if (isMiniProgramToken) {
+      // 小程序口令无法作为“URL”跳转（即使在微信内置浏览器里也不可靠）。
+      // 正确方式：复制口令 → 去微信聊天输入框/搜索框粘贴并发送/搜索。
+      void copyToClipboard(normalized)
+      // 若不在微信里，顺便尝试拉起微信 App（仅打开 App，能否成功取决于系统策略）
+      if (!isWeChatBrowser()) {
+        openUrlByHiddenIframe('weixin://')
+      }
+      alert(options.fallbackText)
+      return true
+    }
+
+    // 微信内置浏览器或已提供可拉起的链接：按原方式跳转
+    if (isWeixinScheme) {
+      // scheme 跳转用 iframe 触发，避免把当前页替换成错误页
+      openUrlByHiddenIframe(normalized)
+    } else {
+      window.location.href = normalized
+    }
+
+    // 若系统/浏览器拦截协议跳转，页面通常不会离开；此时给出明确提示
+    window.setTimeout(() => {
+      try {
+        if (typeof document !== 'undefined' && !document.hidden) {
+          alert(options.fallbackText)
+        }
+      } catch {
+        // ignore
+      }
+    }, 900)
+  }
+
+  return true
+}
+
 // 定义类型
 type Partner = {
   name: string
@@ -29,8 +144,10 @@ type Partner = {
 type PartnerIcon = typeof Building2 | typeof Users | typeof Briefcase | typeof Globe | typeof Landmark
 
 type Project = {
+  id: string
   title: string
   result: string
+  href?: string
 }
 
 type ProjectData = {
@@ -542,8 +659,21 @@ function PartnersNetworkContent({
             >
               {partner.link ? (
                 <a
-                  href={partner.link}
+                  href={normalizeWeChatMiniProgramLink(partner.link).startsWith('小程序://') ? '#' : normalizeWeChatMiniProgramLink(partner.link)}
                   className="block focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white rounded-xl"
+                  onClick={(e) => {
+                    const raw = partner.link
+                    if (!raw) return
+                    const handled = tryOpenWeChatMiniProgram({
+                      rawLink: raw,
+                      confirmText: '将尝试打开微信并准备小程序口令（已自动复制），是否继续？',
+                      fallbackText: '已复制小程序口令。请打开微信，在搜索框或任意聊天输入框中粘贴并发送/搜索，即可识别并打开该小程序。',
+                    })
+                    if (handled) {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }
+                  }}
                 >
                   {cardContent}
                 </a>
@@ -579,6 +709,12 @@ function PartnersNetworkContent({
 
 export default function QiChuPage() {
   const { t } = useLanguage()
+  const [debug, setDebug] = useState(false)
+  // 仅用于排查：确认手机是否真的访问到“当前正在运行”的 dev server，而不是旧端口/旧标签页/缓存
+  const debugStamp = 'qichu-debug-2026-01-22-05'
+  const [clientHost, setClientHost] = useState('')
+  const [probe, setProbe] = useState(false)
+  const [clientViewport, setClientViewport] = useState<{ w: number; h: number; dpr: number }>({ w: 0, h: 0, dpr: 1 })
   const [showMobilePortrait, setShowMobilePortrait] = useState(false)
   const [showIpadPortrait, setShowIpadPortrait] = useState(false)
   const [showIpadProPortrait, setShowIpadProPortrait] = useState(false)
@@ -593,6 +729,22 @@ export default function QiChuPage() {
   const yellowBoxScaleInitializedRef = useRef(false) // 标记黄框缩放比例是否已初始化
   const ipadPortraitScaleCalculatedInPortraitRef = useRef(false) // 标记是否在竖版时计算过 ipadPortraitScale
   const [isInitialized, setIsInitialized] = useState(false) // 标记是否已初始化
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const sp = new URLSearchParams(window.location.search)
+      setDebug(sp.get('debug') === '1')
+      setProbe(sp.get('probe') === '1')
+      setClientHost(window.location.host || '')
+      setClientViewport({ w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio || 1 })
+    } catch {
+      setDebug(false)
+      setProbe(false)
+      setClientHost('')
+      setClientViewport({ w: 0, h: 0, dpr: 1 })
+    }
+  }, [])
   
   // 从多语言文件读取合作伙伴数据
   const partners = useMemo(() => {
@@ -617,17 +769,17 @@ export default function QiChuPage() {
   const projects = useMemo((): Project[] => {
     return [
       {
+        id: 'kingsoft-wps-japan',
         title: t('qichu.cases.project1.title'),
         result: t('qichu.cases.project1.result'),
+        href: '/cases/kingsoft-wps-japan',
       },
-    ]
-  }, [t])
-
-  const comingSoonProjects = useMemo(() => {
-    return [
-      { title: t('qichu.cases.comingSoon1.title'), result: t('qichu.cases.comingSoon1.result') },
-      { title: t('qichu.cases.comingSoon2.title'), result: t('qichu.cases.comingSoon2.result') },
-      { title: t('qichu.cases.comingSoon3.title'), result: t('qichu.cases.comingSoon3.result') },
+      {
+        id: 'suzhou-industrial-park',
+        title: t('qichu.cases.project2.title'),
+        result: t('qichu.cases.project2.result'),
+        // 该卡片暂不跳转案例详情页（未提供对应 cases 页面）
+      },
     ]
   }, [t])
 
@@ -654,6 +806,9 @@ export default function QiChuPage() {
       }
     }
   }, [])
+
+  // 更鲁棒的“竖屏窄屏”判断：用于压缩边距（避免某些手机/微信浏览器把宽度算到 768+ 导致手机规则不触发）
+  const isNarrowPortrait = showMobilePortrait || showIpadPortrait
 
   // --- Partners infographic (fixed canvas + scale, NO clipping/overlap) ---
   const PARTNERS_BASE_W = 1800
@@ -1019,9 +1174,26 @@ export default function QiChuPage() {
 
   return (
     <PageLayout>
+      {(process.env.NODE_ENV !== 'production' || debug) ? (
+        <div
+          className="fixed top-2 right-2 z-[9999] rounded-md bg-black/70 text-white text-[11px] px-2 py-1 border border-white/20"
+          style={{ pointerEvents: 'none' }}
+        >
+          {process.env.NODE_ENV !== 'production' ? 'DEV ' : ''}{debugStamp}{clientHost ? ` @ ${clientHost}` : ''}
+        </div>
+      ) : null}
+
+      {probe ? (
+        <div
+          className="fixed bottom-2 left-2 z-[9999] rounded-md bg-red-600 text-white text-[12px] px-2 py-1 border border-white/30"
+          style={{ pointerEvents: 'none' }}
+        >
+          PROBE {debugStamp}{clientHost ? ` @ ${clientHost}` : ''} | {clientViewport.w}×{clientViewport.h} dpr{clientViewport.dpr}
+        </div>
+      ) : null}
       <div className="relative">
         {/* Hero Section with Background Image */}
-        <section className="relative pt-28 pb-16 bg-gradient-to-br from-green-800 via-green-700 to-navy-800 overflow-hidden">
+        <section className="relative pt-16 sm:pt-24 lg:pt-28 pb-10 sm:pb-14 lg:pb-16 bg-gradient-to-br from-green-800 via-green-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
@@ -1033,25 +1205,32 @@ export default function QiChuPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-br from-green-900/80 to-navy-900/60" style={{ minHeight: '100%' }}></div>
           </div>
-          <div className="relative z-10 container-custom px-4 md:px-6 lg:px-8">
-            <p className="text-xs md:text-sm text-green-300 font-semibold mb-3 md:mb-4 drop-shadow-md">{t('qichu.subtitle')}</p>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 md:mb-6 drop-shadow-lg">{t('qichu.title')}</h1>
-            <p className="text-sm md:text-base lg:text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
+          <div className="relative z-10 container-custom">
+            <p className="text-xs md:text-sm text-green-300 font-semibold mb-2 md:mb-4 drop-shadow-md">
+              {t('qichu.subtitle')}
+              {isNarrowPortrait ? (
+                <span className="ml-2 text-[10px] font-normal text-white/70">v2026-01-22-05</span>
+              ) : null}
+            </p>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 md:mb-6 drop-shadow-lg">{t('qichu.title')}</h1>
+            <p className="text-sm md:text-base lg:text-lg text-gray-200 max-w-3xl leading-snug md:leading-relaxed drop-shadow-md">
               {t('qichu.description')}
             </p>
           </div>
         </section>
 
-        <section id="services" className="section-padding" style={{ position: 'relative', zIndex: 10 }}>
-          <div className="container-custom">
-            <div className="text-center mb-8 md:mb-12">
+        {/* 手机竖版：收紧 services 整段的上下留白；同时取消 section-padding 的左右 padding，避免叠加 container padding 导致“离边缘很远” */}
+        <section id="services" className="section-padding !py-10 md:!py-16 !px-0" style={{ position: 'relative', zIndex: 10 }}>
+          {/* 相关服务：保持正常左右留白 */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-5 md:mb-12">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">{t('qichu.services.title')}</h2>
-              <p className="text-sm md:text-base text-gray-300 max-w-2xl mx-auto px-4 md:px-0">
+              <p className="text-sm md:text-base text-gray-300 max-w-2xl mx-auto px-0">
                 {t('qichu.services.subtitle')}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-3 md:mb-8 relative z-10">
               {relatedServices.map((service, idx) => {
                 const Icon = relatedServiceIcons[idx] || Store
                 return (
@@ -1073,17 +1252,22 @@ export default function QiChuPage() {
                 )
               })}
             </div>
+          </div>
 
-            {/* 一站式服务优势 */}
-            <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-white/10 bg-gradient-to-br from-navy-900/70 via-navy-900/40 to-green-900/50 shadow-2xl">
+          {/* 一站式服务优势（就是你说的“相关服务下方两段文字”） */}
+          {/* 手机竖版：单独控制左右留白，尽量贴边（避免 container-custom 在 768px 下强制 px-6 造成大空隙） */}
+          {/* 手机竖版：做成 edge-to-edge，尽量消除“外容器到卡片”的左右空隙 */}
+          <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8">
+            <div className="relative overflow-hidden rounded-none sm:rounded-xl md:rounded-2xl border-y border-white/10 sm:border bg-gradient-to-br from-navy-900/70 via-navy-900/40 to-green-900/50 shadow-2xl">
               <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-green-500/15 blur-3xl" />
                 <div className="absolute -bottom-28 -left-28 w-72 h-72 rounded-full bg-cyan-400/10 blur-3xl" />
               </div>
 
-              <div className="relative p-5 md:p-8 lg:p-10">
-                <div className="rounded-xl border border-white/10 bg-black/20 p-4 md:p-6">
-                  <p className="text-gray-100/90 text-sm md:text-base leading-relaxed whitespace-pre-line">
+              {/* 手机竖版：减少外层/内层 padding，压缩文字与容器边缘的无用空间 */}
+              <div className="relative !p-1 sm:!p-4 md:!p-8 lg:!p-10">
+                <div className="rounded-none sm:rounded-xl border-y border-white/10 sm:border bg-black/20 !p-1 sm:!p-4 md:!p-6">
+                  <p className="text-gray-100/90 text-sm md:text-base leading-snug md:leading-relaxed whitespace-pre-line">
                     {t('qichu.oneStop.summary')}
                   </p>
                 </div>
@@ -1107,8 +1291,16 @@ export default function QiChuPage() {
           )}
           style={{
             // 简化逻辑：清晰的设备分支
-            paddingTop: isDesktop || showIpadProPortrait ? '0' : (showIpadPortrait ? '0' : '43px'),
+            // 手机竖屏：减少顶部无用留白，避免标题/文案被整体“压下去”
+            paddingTop: isDesktop || showIpadProPortrait || showIpadPortrait
+              ? '0'
+              : (showMobilePortrait ? '8px' : '43px'),
+            // 竖屏窄屏：把左右 padding 压到 0（让标题/文案尽量贴边）
+            paddingLeft: isNarrowPortrait ? '0px' : undefined,
+            paddingRight: isNarrowPortrait ? '0px' : undefined,
             paddingBottom: '8px',
+            outline: probe ? '4px solid #ff00ff' : undefined,
+            outlineOffset: probe ? '-4px' : undefined,
             // 高度分配：
             // - 桌面版/iPad Pro竖版：1000px（正常显示）
             // - iPad竖版：1000px（与桌面版相同，确保内容正确显示）
@@ -1118,10 +1310,13 @@ export default function QiChuPage() {
             height: isDesktop || showIpadProPortrait || showIpadPortrait ? '1000px' : (showMobilePortrait ? '600px' : '812px'),
           }}
         >
-          <div className="container-custom" style={{ overflow: 'visible' }}>
-            <div className="text-center mb-4">
-              <h2 className="text-3xl font-bold text-white mb-4">{t('qichu.partners.title')}</h2>
-              <p className="text-gray-300 max-w-2xl mx-auto">
+          {/* 这里不要再套一层 container-custom（它本身带左右 padding，叠加 section-padding 会导致手机竖版“离边缘太远”） */}
+          <div className="max-w-7xl mx-auto w-full" style={{ overflow: 'visible' }}>
+            <div className="text-center sm:text-center mb-2.5 sm:mb-4">
+              <h2 className="text-center sm:text-center text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-4">
+                {t('qichu.partners.title')}
+              </h2>
+              <p className="text-gray-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
                 {t('qichu.partners.description')}
               </p>
             </div>
@@ -1381,8 +1576,21 @@ export default function QiChuPage() {
                     >
                       {partner.link ? (
                         <a
-                          href={partner.link}
+                  href={normalizeWeChatMiniProgramLink(partner.link).startsWith('小程序://') ? '#' : normalizeWeChatMiniProgramLink(partner.link)}
                           className="block focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white rounded-xl"
+                          onClick={(e) => {
+                            const raw = partner.link
+                            if (!raw) return
+                            const handled = tryOpenWeChatMiniProgram({
+                              rawLink: raw,
+                              confirmText: t('qichu.partners.miniProgramConfirm'),
+                              fallbackText: t('qichu.partners.miniProgramFallback'),
+                            })
+                            if (handled) {
+                              e.preventDefault()
+                              e.stopPropagation()
+                            }
+                          }}
                         >
                           {cardContent}
                         </a>
@@ -1397,100 +1605,87 @@ export default function QiChuPage() {
         </section>
 
 
-        <section id="cases" className="section-padding" style={{ marginTop: '0px', position: 'relative', zIndex: 10 }}>
-          <div className="container-custom">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">{t('qichu.cases.title')}</h2>
+        <section
+          id="cases"
+          className="section-padding"
+          style={{
+            marginTop: '0px',
+            position: 'relative',
+            zIndex: 10,
+            // 手机竖版：把 section 自身的左右 padding 也压到最小（否则会被全局 section-padding 强制 8px）
+            paddingLeft: isNarrowPortrait ? '0px' : undefined,
+            paddingRight: isNarrowPortrait ? '0px' : undefined,
+            outline: probe ? '4px solid #00ffff' : undefined,
+            outlineOffset: probe ? '-4px' : undefined,
+          }}
+        >
+          {/* 手机竖版：避免 container-custom 额外 padding 让卡片整体离边缘过远；这里改为自行控制 padding */}
+          <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-8 text-left sm:text-center">{t('qichu.cases.title')}</h2>
 
             {/* 横向滚动容器 */}
             <div className="relative">
-              <div className="overflow-x-auto scroll-smooth pb-4 scrollbar-hide">
-                <div className="flex gap-6 min-w-max">
+              <div className="overflow-x-auto scroll-smooth pb-2 md:pb-4 scrollbar-hide">
+                <div className="flex gap-3 md:gap-6 min-w-max">
                   {projects.map((project, index) => {
                     // 从案例展示页面获取对应的图片和日期
-                    const projectDataMap: Record<string, ProjectData> = {
-                      '金山 WPS 日本子公司设立服务': {
-                        id: 'kingsoft-wps-japan',
-                        date: caseDates['kingsoft-wps-japan'],
-                        image: caseImages['kingsoft-wps-japan'],
-                      },
-                    }
-                    const projectData: ProjectData = projectDataMap[project.title] || {
-                      id: `project-${index}`,
-                      date: '2024/01/01',
-                      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                    const projectId = project.id || `project-${index}`
+                    const projectData: ProjectData = {
+                      id: projectId,
+                      date: caseDates[projectId] || '—',
+                      image:
+                        projectId === 'suzhou-industrial-park'
+                          ? '/imgs/qichu/suzhougongyeyuan.jpeg'
+                          : (caseImages[projectId] || 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'),
                     }
 
-                     return (
-                       <Link
-                         key={project.title}
-                         href={`/cases/${projectData.id}`}
-                         className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 md:hover:-translate-y-2 flex-shrink-0 w-[280px] md:w-[380px]"
-                       >
-                        <div className="relative overflow-hidden">
-                          <div className="relative w-full h-64 qichu-case-image">
+                    const CardWrapper: React.ElementType = project.href ? Link : 'div'
+                    const cardWrapperProps = project.href
+                      ? { href: project.href }
+                      : { role: 'article', 'aria-label': project.title }
+
+                    return (
+                      <CardWrapper
+                        key={`${projectData.id}-${project.title}`}
+                        {...cardWrapperProps}
+                        className="group bg-white/80 backdrop-blur-sm rounded-none sm:rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 md:hover:-translate-y-2 flex-shrink-0 w-[280px] md:w-[380px]"
+                      >
+                        {/* 图片区：固定高度，内部用 absolute -inset 出血，确保真正贴边 */}
+                        <div className="relative overflow-hidden h-64">
+                          {/* 手机端更强出血；sm 以上稍微收一点，贴近桌面效果 */}
+                          <div className="absolute -inset-[8px] sm:-inset-[3px] qichu-case-image m-0 p-0">
                             <Image
                               src={projectData.image}
                               alt={project.title}
                               fill
                               className="object-cover group-hover:scale-110 transition-transform duration-500"
                               sizes="380px"
+                              // 本地 /public/imgs 图片：绕过 next/image 优化器，避免个别 JPEG 在移动端优化失败导致不显示
+                              unoptimized={projectData.image.startsWith('/imgs/')}
                             />
                           </div>
-                          <div className="absolute top-4 right-4">
-                            <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                          <div className="absolute top-2 right-2 md:top-4 md:right-4">
+                            <span className="bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium">
                               企业服务
                             </span>
                           </div>
                         </div>
 
-                        <div className="p-3 md:p-6">
-                          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-1.5 md:mb-3">
+                        <div className="p-6">
+                          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-1 md:mb-3">
                             <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4" />
                             <span>{projectData.date}</span>
                           </div>
-                          <h3 className="text-base md:text-lg lg:text-xl font-semibold text-navy-900 mb-1.5 md:mb-2 group-hover:text-navy-600 transition-colors duration-200">
+                          <h3 className="text-base md:text-lg lg:text-xl font-semibold text-navy-900 mb-1 md:mb-2 group-hover:text-navy-600 transition-colors duration-200">
                             {project.title}
                           </h3>
                           <p className="text-gray-700 text-xs md:text-sm leading-relaxed line-clamp-2">
                             {project.result}
                           </p>
                         </div>
-                      </Link>
+                      </CardWrapper>
                     )
                   })}
-                  {/* Coming Soon 卡片 */}
-                  {comingSoonProjects.map((project, index) => (
-                    <div
-                      key={`coming-soon-${index}`}
-                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 w-[280px] md:w-[380px] opacity-75"
-                    >
-                      <div className="relative overflow-hidden">
-                        <div className="relative w-full h-64 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="text-3xl md:text-4xl font-bold text-gray-400 mb-2">Coming Soon</div>
-                            <div className="text-xs md:text-sm text-gray-500">案例准备中</div>
-                          </div>
-                          <div className="absolute top-4 right-4">
-                            <span className="bg-gray-400 text-white px-3 py-1 rounded-full text-sm font-medium">
-                              准备中
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-3 md:p-6">
-                        <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400 mb-1.5 md:mb-3">
-                          <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                          <span>—</span>
-                        </div>
-                        <h3 className="text-base md:text-lg lg:text-xl font-semibold text-gray-400 mb-1.5 md:mb-2">
-                          {project.title}
-                        </h3>
-                        <p className="text-gray-500 text-xs md:text-sm leading-relaxed line-clamp-2">
-                          {project.result}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>

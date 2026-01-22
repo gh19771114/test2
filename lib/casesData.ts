@@ -18,7 +18,7 @@ export const caseIds = [
 ] as const
 
 // 案例日期映射
-export const caseDates: Record<(typeof caseIds)[number], string> = {
+export const caseDates: Record<string, string> = {
   'grand-maison-asakusa-1302': '2025/08/25',
   'park-tower-nishishinjuku-101-201': '2025/09/25',
   'my-castle-yoyogi-1203': '2025/05/16',
@@ -26,7 +26,10 @@ export const caseDates: Record<(typeof caseIds)[number], string> = {
   'shibuya-luxury-apartment': '2024/03/15',
   'yokohama-waterfront-complex': '2024/06/20',
   'nagoya-student-apartment': '2024/09/10',
-  'kingsoft-wps-japan': '2024/11/15',
+  // 企业出海助力：成功案例卡片显示“2025年”
+  'kingsoft-wps-japan': '2025/11/15',
+  // 企业出海助力：苏州工业园卡片显示“2025年10月”
+  'suzhou-industrial-park': '2025/10',
   'shinjuku-daikan-plaza-a-201': '2025/10/23',
 }
 

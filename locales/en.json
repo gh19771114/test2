@@ -1749,7 +1749,7 @@
         "shin-nakano-ekijou-plaza-305": {
           "title": "Shin-Nakano Ekijou Plaza Room 305",
           "description": "A station-connected apartment directly above Tokyo Metro Marunouchi Line \"Shin-Nakano\" Station. A highly visible building facing Ome Kaido, connecting central Tokyo and Nakano area - a <strong>compact investment property</strong>, an attractive one-room unit.",
-          "area": "25.42 m²",
+          "area": "23.92 m²",
           "areaPing": "7.7",
           "type": "1R",
           "station": "Marunouchi Line \"Shin-Nakano\" Station 1 min walk",
@@ -1925,7 +1925,7 @@
         "cesar-takashimadaira-206": {
           "title": "セザール西高島平 2F",
           "description": "都营三田线「高岛平」站步行范围内位置的家庭类型分售公寓。2F是约50m²台的2〜3LDK预期住戸，自用・租赁运用的两方面都容易考虑的一室。",
-          "area": "约50〜52 m² 预期",
+          "area": "27.13㎡",
           "areaNote": "※登记簿・图纸需确认准确数值",
           "type": "2LDK〜3LDK 预期",
           "typeNote": "※基于过往募集例的预期／请输入实际户型",
@@ -2000,16 +2000,16 @@
           "imageAlt": "パレ・ドール相模原外观"
         },
         "nichishin-palace-takenotsuka-509": {
-          "title": "日神パレス竹ノ塚 5F（最上阶）",
-          "description": "东武伊势崎线「竹ノ塚」站从步行6分前后，位于安静住宅街的单身者向公寓。5F作为最上阶住戸，采光和隐私性优秀的一室。",
-          "area": "○○ m²",
-          "areaNote": "※请确认登记簿・图纸后输入",
-          "type": "1R / 1K 预期",
-          "typeNote": "※请输入实际户型",
+          "title": "日神パレス竹ノ塚 5F（最上层）",
+          "description": "东武伊势崎线「竹ノ塚」站从步行6分前后，位于安静住宅街的单身者向公寓。5F作为最上层住戸，采光和隐私性优秀的一室。",
+          "area": "壁芯：18.09㎡",
+          "areaNote": "",
+          "type": "1R",
+          "typeNote": "Studio",
           "station": "竹ノ塚站 步行5〜7分",
           "stationNote": "天空树线的准急停车站",
-          "price": "○○万日元／月",
-          "priceNote": "※基于邻近成交事例设定",
+          "price": "700万日元",
+          "priceNote": "Ref rent level: 50,000 JPY / month",
           "address": "东京都足立区伊兴4丁目",
           "buildingName": "日神パレス竹ノ塚",
           "access1": "东武伊势崎线「竹ノ塚」站 步行5〜7分",
@@ -2052,20 +2052,20 @@
           "access1": "京王线「八幡山」站 步行8〜11分",
           "access2": "京王线「上北沢」站 步行9分",
           "equipmentInfo": "自动锁／宅配箱／电梯／阳台／互联网接入／F内垃圾放置场 等",
-          "room101Area": "○○ m²",
-          "room101AreaNote": "※请输入图纸数值",
-          "room101Rent": "○○万日元／月",
-          "room101RentNote": "※请反映租金表",
+          "room101Area": "16.47㎡",
+          "room101AreaNote": "Exclusive area",
+          "room101Rent": "JPY 60,000 / month",
+          "room101RentNote": "Estimated rent",
           "room101Note": "角落房间（预计）",
-          "room104Area": "○○ m²",
-          "room104AreaNote": "※请输入图纸数值",
-          "room104Rent": "○○万日元／月",
-          "room104RentNote": "※请反映租金表",
+          "room104Area": "16.47㎡",
+          "room104AreaNote": "Exclusive area",
+          "room104Rent": "JPY 60,000 / month",
+          "room104RentNote": "Estimated rent",
           "room104Note": "中间房间",
-          "room106Area": "○○ m²",
-          "room106AreaNote": "※请输入图纸数值",
-          "room106Rent": "○○万日元／月",
-          "room106RentNote": "※请反映租金表",
+          "room106Area": "16.47㎡",
+          "room106AreaNote": "Exclusive area",
+          "room106Rent": "JPY 60,000 / month",
+          "room106RentNote": "Estimated rent",
           "room106Note": "已有出租案例（1K）",
           "point1Title": "1栋内的分散投资可能",
           "point1Desc": "在同一公寓内持有1K户型3户，可以平摊空置风险，同时减少管理成本，实现高效运营。",
@@ -2333,13 +2333,19 @@
           "desc": "Handle various insurance businesses including small-amount short-term, fire, earthquake insurance, etc."
         }
       ],
-      "centerText": "Net"
+      "centerText": "Net",
+      "miniProgramConfirm": "We’ll try to open WeChat and prepare the mini program token (copied automatically). Continue?",
+      "miniProgramFallback": "Mini program token copied. In WeChat, paste it into the Search bar or any chat input and send/search (do NOT paste into the browser address bar). If it still can’t open, the token may be invalid—please provide the Mini Program URL Link (e.g. wxaurl.cn) generated in the mini program console."
     },
     "cases": {
       "title": "Success Cases",
       "project1": {
         "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-        "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
+        "result": "Signed with a major Japanese real estate company to establish an office and provided recruitment support."
+      },
+      "project2": {
+        "title": "Suzhou Industrial Park (Strategic Partner)",
+        "result": "Partnering with Suzhou Industrial Park to provide one-stop landing services in Japan for hundreds of companies preparing to expand overseas."
       },
       "comingSoon1": {
         "title": "Case Coming Soon",
@@ -2365,7 +2371,7 @@
     "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
     "project1": {
       "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-      "result": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems."
+      "result": "Signed with a major Japanese real estate company to establish an office and provided recruitment support."
     },
     "comingSoon1": {
       "title": "Case Coming Soon",
@@ -2555,13 +2561,11 @@
         "title": "Kingsoft WPS Japan Subsidiary Setup Service",
         "location": "Tokyo",
         "category": "Enterprise Expansion",
-        "description": "Assisted in completing corporate registration, signing with a major Japanese real estate company to establish an office, and building local finance and recruitment systems.",
+        "description": "Signed with a major Japanese real estate company to establish an office and provided recruitment support.",
         "details": [
           "Successfully completed Kingsoft WPS Japan subsidiary setup service on November 15, 2024",
-          "Assisted in completing corporate registration procedures, ensuring compliant establishment",
           "Signed with a major Japanese real estate company and successfully established an office",
-          "Built local finance system and established comprehensive financial management processes",
-          "Established recruitment system and assisted in forming local team",
+          "Provided recruitment support to help form a local team",
           "Providing ongoing enterprise expansion support services"
         ],
         "highlights": [
@@ -2571,7 +2575,7 @@
           },
           {
             "label": "Service Content",
-            "value": "Corporate registration, office setup, finance system, recruitment system"
+            "value": "Office setup, recruitment support"
           },
           {
             "label": "Service Period",
@@ -2664,6 +2668,7 @@
   "careers": {
     "title": "Careers",
     "subtitle": "Join us and create the future together",
+    "companyInfoTitle": "Company Information",
     "noPositions": "Currently no positions available",
     "viewDetails": "View Details",
     "jobDescription": "Job Description",

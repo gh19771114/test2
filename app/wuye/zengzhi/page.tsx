@@ -96,14 +96,14 @@ export default function ZengzhiPage() {
 
   const rentCases = useMemo(() => {
     return [
-      { kind: '店舖', address: '神奈川県相模原市', area: 57.61, before: 85000, after: 130000, diff: 45000, rate: 53, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-01.webp' },
-      { kind: '事務所', address: '東京都中央区', area: 70.24, before: 240000, after: 308000, diff: 68000, rate: 28, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-02.webp' },
-      { kind: '事務所', address: '神奈川県横浜市', area: 82.21, before: 298320, after: 386000, diff: 87680, rate: 29, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-03.webp' },
-      { kind: '住宅', address: '東京都中野区', area: 10.83, before: 58000, after: 65000, diff: 7000, rate: 12, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-04.webp' },
-      { kind: '住宅', address: '東京都新宿区', area: 38.07, before: 128000, after: 138000, diff: 10000, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-05.webp' },
-      { kind: '住宅', address: '東京都荒川区', area: 64.54, before: 136000, after: 146000, diff: 10000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-06.webp' },
-      { kind: '住宅', address: '東京都新宿区', area: 323.9, before: 1567680, after: 1693100, diff: 125420, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-07.webp' },
-      { kind: '住宅', address: '東京都杉並区', area: 30.52, before: 75000, after: 80000, diff: 5000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/zengzhi-case-08.webp' },
+      { kind: '店舖', address: '神奈川県相模原市緑区', area: 57.61, before: 85000, after: 130000, diff: 45000, rate: 53, image: '/imgs/wuye/real/zengzhi-cases/Asahi Plaza Hashimoto II.jpeg' },
+      { kind: '事務所', address: '東京都中央区新川', area: 70.24, before: 240000, after: 308000, diff: 68000, rate: 28, image: '/imgs/wuye/real/zengzhi-cases/Daigosankyo Building.png' },
+      { kind: '事務所', address: '神奈川県横浜市西区', area: 82.21, before: 298320, after: 386000, diff: 87680, rate: 29, image: '/imgs/wuye/real/zengzhi-cases/Minato Mirai Midsquare.jpeg' },
+      { kind: '住宅', address: '東京都中野区中央', area: 10.83, before: 58000, after: 65000, diff: 7000, rate: 12, image: '/imgs/wuye/real/zengzhi-cases/Urban Place V Sakagami A.jpg' },
+      { kind: '住宅', address: '東京都新宿区歌舞伎町', area: 38.07, before: 128000, after: 138000, diff: 10000, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/Noah Shinjuku.jpeg' },
+      { kind: '住宅', address: '東京都荒川区町屋', area: 64.54, before: 136000, after: 146000, diff: 10000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/ND Building.jpeg' },
+      { kind: '住宅', address: '東京都新宿区西新宿', area: 323.9, before: 1567680, after: 1693100, diff: 125420, rate: 8, image: '/imgs/wuye/real/zengzhi-cases/Token New Heights Nishi-Shinjuku.jpeg' },
+      { kind: '住宅', address: '東京都杉並区荻窪', area: 30.52, before: 75000, after: 80000, diff: 5000, rate: 7, image: '/imgs/wuye/real/zengzhi-cases/Ark Ogikubo.jpeg' },
     ].map((c) => ({
       ...c,
       areaText: `${areaFmt.format(c.area)}㎡`,
@@ -131,6 +131,25 @@ export default function ZengzhiPage() {
   useEffect(() => {
     const container = casesScrollRef.current
     if (!container) return
+
+    // 移动端（触摸为主）优先保证“手滑横向滚动”体验：
+    // - 关闭自动循环滚动，避免每帧写 scrollLeft 抵消触摸滚动
+    // - 保留 scroll 归一化逻辑，保证循环列表不会跑出边界
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(pointer: coarse)').matches
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
+        isCoarsePointer)
+    // 触摸设备上彻底关闭自动滚动，避免与手滑抢 scrollLeft（iPhone/Safari 尤其明显）
+    const enableAutoScroll = !isTouchDevice && !prefersReducedMotion
 
     let scrollPosition = container.scrollLeft || 0
     const scrollSpeed = 1.2 // px/frame
@@ -236,10 +255,14 @@ export default function ZengzhiPage() {
     container.addEventListener('pointermove', onPointerMove, { passive: false })
     container.addEventListener('pointerup', endDrag, { passive: true })
     container.addEventListener('pointercancel', endDrag, { passive: true })
-    container.addEventListener('wheel', onWheel, { passive: false })
+    if (enableAutoScroll) {
+      container.addEventListener('wheel', onWheel, { passive: false })
+    }
     container.addEventListener('scroll', onScroll, { passive: true })
 
-    animationFrameId = requestAnimationFrame(tick)
+    if (enableAutoScroll) {
+      animationFrameId = requestAnimationFrame(tick)
+    }
 
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId)
@@ -249,7 +272,9 @@ export default function ZengzhiPage() {
       container.removeEventListener('pointermove', onPointerMove)
       container.removeEventListener('pointerup', endDrag)
       container.removeEventListener('pointercancel', endDrag)
-      container.removeEventListener('wheel', onWheel)
+      if (enableAutoScroll) {
+        container.removeEventListener('wheel', onWheel)
+      }
       container.removeEventListener('scroll', onScroll)
       if (resumeTimeout) window.clearTimeout(resumeTimeout)
     }
@@ -462,12 +487,12 @@ export default function ZengzhiPage() {
                   >
                     {item.type === 'legacy' ? (
                       <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
-                        <div className="relative h-44 overflow-hidden">
+                        <div className="relative h-44 overflow-hidden bg-gray-200">
                           <Image
                             src={item.image}
                             alt={item.title}
                             fill
-                            className="object-cover"
+                            className="object-cover transform-gpu scale-[1.06]"
                             sizes="(min-width: 768px) 360px, 320px"
                           />
                           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/55 to-navy-900/45"></div>
@@ -491,12 +516,12 @@ export default function ZengzhiPage() {
                       </div>
                     ) : (
                       <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
-                        <div className="relative h-44 overflow-hidden">
+                        <div className="relative h-44 overflow-hidden bg-gray-200">
                           <Image
                             src={item.image}
                             alt={`${item.kind} ${item.address}`}
                             fill
-                            className="object-cover"
+                            className="object-cover transform-gpu scale-[1.06]"
                             sizes="(min-width: 768px) 360px, 320px"
                             unoptimized={item.image.startsWith('/imgs/')}
                           />

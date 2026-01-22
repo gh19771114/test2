@@ -261,10 +261,13 @@ export default function ZulinPage() {
                     </ul>
                       {service.timeline && (
                         <div className="mt-3 pt-3 border-t border-gray-200">
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            <Clock className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                            <span className="text-xs sm:text-sm font-semibold text-gray-500 whitespace-nowrap">{service.timeline.time}</span>
-                          </div>
+                          {/* 仅对“租客筛选与背景调查”（第1张卡片）隐藏：钟表 + 时间文案（如“提交后”） */}
+                          {index !== 0 ? (
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <Clock className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                              <span className="text-xs sm:text-sm font-semibold text-gray-500 whitespace-nowrap">{service.timeline.time}</span>
+                            </div>
+                          ) : null}
                           <h4 className="text-sm sm:text-base font-semibold text-gray-800 mb-1 text-center">{service.timeline.title}</h4>
                           <p className="text-xs sm:text-sm text-gray-600 leading-snug text-center">{service.timeline.description}</p>
                         </div>

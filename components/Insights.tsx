@@ -64,7 +64,7 @@ const Insights = () => {
     const recentNews = normalNews.filter(news => {
       const newsDate = new Date(news.date)
       // 如果是通知或公司活动，不进行时间过滤
-      if (news.isNotice || news.category === '公司活动') {
+      if (news.isNotice || news.category === '通知' || news.category === '公司活动') {
         return true
       }
       // 其他新闻只保留3个月以内的

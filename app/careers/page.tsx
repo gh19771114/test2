@@ -4,6 +4,7 @@ import { useState } from 'react'
 import PageLayout from '@/components/PageLayout'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { MapPin, Clock, Briefcase, X, Heart } from 'lucide-react'
+import CompanyActivitiesPanel from '@/components/CompanyActivitiesPanel'
 
 export default function CareersPage() {
   const { t } = useLanguage()
@@ -23,69 +24,81 @@ export default function CareersPage() {
             </p>
           </div>
 
-          {positions && positions.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {positions.map((position, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedPosition(index)}
-                  className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 cursor-pointer hover:shadow-xl hover:border-indigo-300 transition-all duration-300 group"
-                >
-                  <div className="mb-4">
-                    <h2 className="text-xl md:text-2xl font-bold text-navy-800 mb-4 group-hover:text-indigo-600 transition-colors">
-                      {position.title}
-                    </h2>
-                    <div className="space-y-3 text-sm text-gray-600">
-                      <div className="flex flex-col gap-1">
-                        <span className="text-xs text-gray-500 font-medium">{t('careers.workLocation')}</span>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <MapPin size={16} className="text-indigo-600 flex-shrink-0" />
-                          <span className="line-clamp-1">{position.location}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-1">
-                        <span className="text-xs text-gray-500 font-medium">{t('careers.employmentType')}</span>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Clock size={16} className="text-indigo-600 flex-shrink-0" />
-                          <span className="line-clamp-1">{position.workType}</span>
-                        </div>
-                      </div>
-
-                      {position.salary && (
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs text-gray-500 font-medium">{t('careers.salary')}</span>
-                          <div className="flex items-center gap-2 min-w-0">
-                            <Briefcase size={16} className="text-indigo-600 flex-shrink-0" />
-                            <span className="line-clamp-1">{position.salary}</span>
+          <div className="careers-layout">
+            <div className="careers-main">
+              {positions && positions.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {positions.map((position, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedPosition(index)}
+                      className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 cursor-pointer hover:shadow-xl hover:border-indigo-300 transition-all duration-300 group"
+                    >
+                      <div className="mb-4">
+                        <h2 className="text-xl md:text-2xl font-bold text-navy-800 mb-4 group-hover:text-indigo-600 transition-colors">
+                          {position.title}
+                        </h2>
+                        <div className="space-y-3 text-sm text-gray-600">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs text-gray-500 font-medium">{t('careers.workLocation')}</span>
+                            <div className="flex items-center gap-2 min-w-0">
+                              <MapPin size={16} className="text-indigo-600 flex-shrink-0" />
+                              <span className="line-clamp-1">{position.location}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {position.summary && (
-                    <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 mb-4">
-                      {position.summary}
-                    </p>
-                  )}
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="text-indigo-600 font-semibold text-sm">
-                      {t('careers.viewDetails')}
-                    </span>
-                    <span className="text-indigo-600 group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs text-gray-500 font-medium">{t('careers.employmentType')}</span>
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Clock size={16} className="text-indigo-600 flex-shrink-0" />
+                              <span className="line-clamp-1">{position.workType}</span>
+                            </div>
+                          </div>
+
+                          {position.salary && (
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs text-gray-500 font-medium">{t('careers.salary')}</span>
+                              <div className="flex items-center gap-2 min-w-0">
+                                <Briefcase size={16} className="text-indigo-600 flex-shrink-0" />
+                                <span className="line-clamp-1">{position.salary}</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {position.summary && (
+                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 mb-4">
+                          {position.summary}
+                        </p>
+                      )}
+
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <span className="text-indigo-600 font-semibold text-sm">
+                          {t('careers.viewDetails')}
+                        </span>
+                        <span className="text-indigo-600 group-hover:translate-x-1 transition-transform">→</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="text-center py-20">
+                  <p className="text-xl md:text-2xl text-gray-200">
+                    {t('careers.noPositions')}
+                  </p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="text-center py-20">
-              <p className="text-xl md:text-2xl text-gray-200">
-                {t('careers.noPositions')}
-              </p>
+
+            {/* 分割线：仅桌面端显示 */}
+            <div className="careers-divider" aria-hidden="true" />
+
+            {/* 公司活动展示栏：桌面两栏 + 竖线；移动端单栏 */}
+            <div className="careers-side">
+              <CompanyActivitiesPanel />
             </div>
-          )}
+          </div>
 
           {/* 招聘详情弹窗 */}
           {selectedPosition !== null && positions && positions[selectedPosition] && (

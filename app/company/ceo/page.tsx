@@ -120,21 +120,25 @@ export default function CompanyCeoPage() {
           </section>
         ) : (
           <>
-            <section className="relative bg-[#f3eadf]">
+            <section className="relative bg-[#f3eadf] company-ceo-message-section">
               {(() => {
                 /**
                  * 杂志式排版（文字环绕人物图）
                  * - 桌面/平板：用“右侧 float 占位块”让文字环绕；人物图用 absolute bottom-0 硬贴页尾
                  * - 手机：保持一致（人物图仍在右侧），同样使用 float 占位块 + absolute bottom-0
                  */
-                const portraitW = 'clamp(220px, 34vw, 420px)'
-                const portraitH = 'clamp(360px, 72vh, 680px)'
-                const gap = 14
+                // 说明：
+                // - 这里必须用“普通文档流 + float”才能稳定实现“文字环绕人物图”
+                // - 不使用 flex/grid（会导致 float 失效，从而出现大空白/遮挡）
+                // 手机竖版：降低最小宽度，避免为人物图预留过多空间导致文案列过窄（对齐 iPad 的比例观感）
+                const portraitW = 'clamp(160px, 42vw, 380px)'
+                const portraitH = 'clamp(320px, 60vh, 620px)'
+                const gap = 12
 
                 return (
-                  <div className="container-custom pt-10 md:pt-12 lg:pt-14 pb-0">
+                  <div className="container-custom pt-2 pb-0 company-ceo-message-container">
                     <div
-                      className="mx-auto max-w-5xl relative"
+                      className="mx-auto max-w-5xl relative company-ceo-message-stage"
                       style={
                         {
                           minHeight: portraitH,
@@ -146,12 +150,12 @@ export default function CompanyCeoPage() {
                     >
                       {/* 文案区：整体向中间收窄、并为人物图预留右侧空间（全端一致） */}
                       <div
-                        className="text-slate-900"
-                        style={{ paddingRight: 'calc(var(--ceoPortraitW) + var(--ceoPortraitGap))' } as any}
+                        className="text-slate-900 relative z-10 company-ceo-message-text"
                       >
-                        {/* 右侧浮动占位块：让正文像杂志一样环绕人物图 */}
+                        {/* 右侧浮动占位块：让正文像杂志一样环绕人物图
+                            注意：这里不再额外使用 paddingRight，否则会“预留两次”导致大量空白 */}
                         <div
-                          className="float-right"
+                          className="float-right company-ceo-message-float"
                           style={{
                             width: 'var(--ceoPortraitW)',
                             height: 'var(--ceoPortraitH)',
@@ -161,7 +165,7 @@ export default function CompanyCeoPage() {
                         />
 
                         {/* 标题区：收紧两行之间与上下间距，避免出现“巨大空白” */}
-                        <div className="mb-4 sm:mb-5">
+                        <div className="mb-2">
                           <div className="space-y-1">
                             <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
                             {t('company.ceo.message.title')}
@@ -172,7 +176,7 @@ export default function CompanyCeoPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed">
+                        <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
                           {messageParagraphsOriginal.map((paragraph, index) => (
                             <p key={index} className="text-balance">
                               {paragraph}
@@ -180,7 +184,8 @@ export default function CompanyCeoPage() {
                           ))}
                         </div>
 
-                        <div className="pt-6 sm:pt-7">
+                        {/* 署名区：尽量向下“顶”到人物图底部附近，减少空白 */}
+                        <div className="pt-6 sm:pt-7 company-ceo-message-signature">
                           <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
                           <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
                             {t('company.ceo.message.presidentName')}
@@ -193,7 +198,7 @@ export default function CompanyCeoPage() {
 
                       {/* 全端：人物图放大并紧贴页尾（footer 顶部） */}
                       <div
-                        className="absolute right-0 bottom-0"
+                        className="absolute right-0 bottom-0 z-0 pointer-events-none select-none company-ceo-message-portrait"
                         style={{ width: 'var(--ceoPortraitW)', height: 'var(--ceoPortraitH)' } as any}
                         aria-hidden="true"
                       >
