@@ -1636,7 +1636,8 @@ export default function QiChuPage() {
                       image:
                         projectId === 'suzhou-industrial-park'
                           ? '/imgs/qichu/suzhougongyeyuan.jpeg'
-                          : (caseImages[projectId] || 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'),
+                          : (caseImages[projectId as keyof typeof caseImages] ||
+                              'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'),
                     }
 
                     const CardWrapper: React.ElementType = project.href ? Link : 'div'
