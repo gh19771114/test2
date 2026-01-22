@@ -1736,8 +1736,8 @@ section#partners.desktop-partners-network .yellow-network-container {
   align-items: start;
 }
 
-/* 董事长寄语（/company/ceo）：手机竖版排版兜底，避免文字与人物图重叠 + 文案更整齐 */
-@media (max-width: 767px) and (orientation: portrait) {
+/* 董事长寄语（/company/ceo）：手机竖版排版兜底（用 pointer:coarse，不依赖 viewport 宽度，避免“切换到PC版”后规则失效） */
+@media (pointer: coarse) and (orientation: portrait) {
   .company-ceo-message-stage {
     min-height: auto !important;
   }
@@ -1765,7 +1765,7 @@ section#partners.desktop-partners-network .yellow-network-container {
   /* 明确层级：人物图永远在文案下方 */
   .company-ceo-message-portrait {
     z-index: 0 !important;
-    position: relative !important;
+    position: static !important;
     right: auto !important;
     bottom: auto !important;
     width: min(42vw, 240px) !important;
@@ -1779,8 +1779,8 @@ section#partners.desktop-partners-network .yellow-network-container {
   }
 }
 
-/* 董事长寄语（/company/ceo）：手机横版改用“稳定布局”，避免 float/绝对定位在 iOS 横屏时导致空白/遮挡/竖排 */
-@media (max-width: 1023px) and (orientation: landscape) {
+/* 董事长寄语（/company/ceo）：手机横版稳定布局（同样用 pointer:coarse，避免 viewport 被强制为 1280 时不生效） */
+@media (pointer: coarse) and (orientation: landscape) {
   .company-ceo-message-stage {
     min-height: auto !important;
   }
@@ -1797,7 +1797,7 @@ section#partners.desktop-partners-network .yellow-network-container {
 
   /* 人物图改回正常文档流，放在正文后面（结构上本来就在后面），彻底避免 overlap */
   .company-ceo-message-portrait {
-    position: relative !important;
+    position: static !important;
     right: auto !important;
     bottom: auto !important;
     width: min(46vw, 320px) !important;
