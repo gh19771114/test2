@@ -1740,7 +1740,8 @@ section#partners.desktop-partners-network .yellow-network-container {
 @media (max-width: 767px) and (orientation: portrait) {
   .company-ceo-message-text {
     /* 双保险：即使 float 在 iOS/Safari 偶发失效，也强制预留右侧空间 */
-    padding-right: calc(var(--ceoPortraitW) + var(--ceoPortraitGap)) !important;
+    /* 但不能把正文挤到过窄（会导致标题/段落每个字换行成“竖排”），限制最大不超过屏宽的一半 */
+    padding-right: min(52vw, calc(var(--ceoPortraitW) + var(--ceoPortraitGap))) !important;
     /* 让中文段落更“整齐” */
     text-align: justify;
     text-justify: inter-ideograph;
@@ -1765,6 +1766,42 @@ section#partners.desktop-partners-network .yellow-network-container {
   }
   .company-ceo-message-text {
     z-index: 10 !important;
+  }
+}
+
+/* 董事长寄语（/company/ceo）：手机横版改用“稳定布局”，避免 float/绝对定位在 iOS 横屏时导致空白/遮挡/竖排 */
+@media (max-width: 1023px) and (orientation: landscape) {
+  .company-ceo-message-stage {
+    min-height: auto !important;
+  }
+
+  .company-ceo-message-text {
+    padding-right: 0 !important;
+    text-align: left;
+    text-justify: auto;
+  }
+
+  .company-ceo-message-float {
+    display: none !important;
+  }
+
+  /* 人物图改回正常文档流，放在正文后面（结构上本来就在后面），彻底避免 overlap */
+  .company-ceo-message-portrait {
+    position: relative !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(46vw, 320px) !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4;
+    margin-left: auto;
+    margin-top: 12px;
+  }
+
+  .company-ceo-message-portrait > span,
+  .company-ceo-message-portrait > span > img,
+  .company-ceo-message-portrait img {
+    object-fit: contain !important;
+    object-position: bottom right !important;
   }
 }
 
