@@ -3,7 +3,7 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Briefcase, Hand, Hammer, Coins, Building2 } from 'lucide-react'
+import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Hand, Hammer, Coins, Building2, ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useMemo, useRef } from 'react'
 import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
@@ -45,11 +45,6 @@ export default function WuYePage() {
       title: t('wuye.services.appreciation.marketResearch'),
       link: '/wuye/zengzhi',
       icon: Search,
-    },
-    {
-      title: t('wuye.services.appreciation.consulting'),
-      link: '/wuye/zengzhi',
-      icon: Briefcase,
     },
     {
       title: t('wuye.services.appreciation.rentNegotiation'),
@@ -278,25 +273,85 @@ export default function WuYePage() {
               </div>
             </div>
 
-            {/* 专业资产增值服务 - 右侧大方块 */}
-            <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-8 md:p-10 border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300">
-              <h3 className="text-2xl md:text-3xl font-bold text-navy-700 mb-8 text-center">{t('wuye.services.appreciationTitle')}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {assetAppreciationServices.map((item) => {
-                  const Icon = item.icon
-                  return (
-                    <Link key={item.title} href={item.link} className="block">
-                      <div className="bg-white/80 backdrop-blur-sm border border-purple-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer wuye-service-item h-[112px] overflow-hidden">
-                        <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-3 text-center md:text-left">
-                          <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-7 h-7 text-purple-600" />
+            {/* 资产维护&增值服务 - 右侧大方块（更醒目的主视觉入口） */}
+            <div className="relative overflow-hidden rounded-3xl border-2 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="absolute inset-0">
+                <Image
+                  src="/imgs/wuye/real/zengzhi-hero.jpg"
+                  alt={t('wuye.services.appreciationTitle')}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-950/90 via-purple-900/78 to-navy-950/90" />
+                <div className="absolute -top-24 -right-24 w-80 h-80 bg-fuchsia-400/25 rounded-full blur-3xl" />
+                <div className="absolute -bottom-28 -left-28 w-96 h-96 bg-blue-400/18 rounded-full blur-3xl" />
+              </div>
+
+              <div className="relative p-8 md:p-10">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-xs md:text-sm text-purple-200 font-semibold tracking-wide">
+                      {t('wuye.zengzhi.subtitle')}
+                    </p>
+                    <h3 className="text-2xl md:text-3xl font-extrabold text-white leading-tight break-words">
+                      {t('wuye.services.appreciationTitle')}
+                    </h3>
+                  </div>
+                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <TrendingUp className="w-6 h-6 text-purple-200" />
+                  </div>
+                </div>
+
+                <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+                  {t('wuye.zengzhi.description')}
+                </p>
+
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {assetAppreciationServices.map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.title}
+                        href={item.link}
+                        className="group block rounded-2xl bg-white/10 hover:bg-white/14 border border-white/15 hover:border-white/25 backdrop-blur-sm transition-all duration-300"
+                      >
+                        <div className="flex items-center gap-3 p-4">
+                          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-5 h-5 text-white" />
                           </div>
-                          <h4 className="text-lg md:text-base font-semibold text-navy-700 whitespace-pre-line leading-snug break-words line-clamp-2 min-w-0">{item.title}</h4>
+                          <div className="min-w-0">
+                            <div className="text-sm md:text-base font-semibold text-white leading-snug break-words">
+                              {item.title}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  )
-                })}
+                      </Link>
+                    )
+                  })}
+                </div>
+
+                <div className="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <Link
+                    href="/wuye/zengzhi"
+                    className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-5 py-3 text-white font-semibold shadow-lg hover:shadow-xl hover:brightness-110 transition-all duration-300"
+                  >
+                    <span className="truncate">{t('wuye.zengzhi.title')}</span>
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                      {t('wuye.zengzhi.features.experience')}
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                      {t('wuye.zengzhi.features.cases')}
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                      {t('wuye.zengzhi.features.rentIncrease')}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

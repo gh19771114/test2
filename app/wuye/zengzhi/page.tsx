@@ -4,7 +4,7 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useEffect, useRef, useMemo } from 'react'
+import { useEffect, useRef, useMemo, useState } from 'react'
 import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -14,11 +14,27 @@ export default function ZengzhiPage() {
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
   const casesRef = useRef(null)
+  const [isAnimOpen, setIsAnimOpen] = useState(false)
   
   const isHeroInView = useInView(heroRef, { once: true })
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isCasesInView = useInView(casesRef, { once: true, margin: '-100px' })
+
+  // 动画弹窗：打开时锁滚动 + 支持 ESC 关闭
+  useEffect(() => {
+    if (!isAnimOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsAnimOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [isAnimOpen])
 
   // 从多语言文件读取数据
   const stats = useMemo(() => [
@@ -70,7 +86,7 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case1.location'),
       result: t('wuye.zengzhi.cases.case1.result'),
       description: t('wuye.zengzhi.cases.case1.description'),
-      image: '/imgs/wuye/real/zengzhi-case-1.jpg',
+      image: '/imgs/Noa shibuya.jpeg',
       category: t('wuye.zengzhi.cases.case1.category'),
     },
     {
@@ -78,7 +94,7 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case2.location'),
       result: t('wuye.zengzhi.cases.case2.result'),
       description: t('wuye.zengzhi.cases.case2.description'),
-      image: '/imgs/wuye/real/zengzhi-case-2.jpg',
+      image: '/imgs/wuye/real/zengzhi-cases/YHS.jpeg',
       category: t('wuye.zengzhi.cases.case2.category'),
     },
     {
@@ -86,7 +102,7 @@ export default function ZengzhiPage() {
       location: t('wuye.zengzhi.cases.case3.location'),
       result: t('wuye.zengzhi.cases.case3.result'),
       description: t('wuye.zengzhi.cases.case3.description'),
-      image: '/imgs/wuye/real/zengzhi-case-3.jpg',
+      image: '/imgs/wuye/real/zengzhi-cases/JPC%20Koishikawa.jpeg',
       category: t('wuye.zengzhi.cases.case3.category'),
     },
   ], [t])
@@ -152,7 +168,8 @@ export default function ZengzhiPage() {
     const enableAutoScroll = !isTouchDevice && !prefersReducedMotion
 
     let scrollPosition = container.scrollLeft || 0
-    const scrollSpeed = 1.2 // px/frame
+    // 桌面端自动滚动速度（用户反馈原来过慢）
+    const scrollSpeed = 2.6 // px/frame
     let animationFrameId: number | null = null
     let isPaused = false
     let isDragging = false
@@ -220,6 +237,13 @@ export default function ZengzhiPage() {
         return
       }
       if (e.button !== 0) return
+
+      // 允许用户选中文本：如果按下发生在“可选择文本区域”，就不进入拖拽滚动模式
+      const target = e.target as HTMLElement | null
+      if (target && target.closest('[data-carousel-selectable="true"]')) {
+        return
+      }
+
       isDragging = true
       isPaused = true
       startX = e.clientX
@@ -304,6 +328,38 @@ export default function ZengzhiPage() {
   return (
     <PageLayout>
       <div className="relative wuye-subpage">
+        {/* 动画放大弹窗 */}
+        {isAnimOpen && (
+          <div
+            className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label="动画播放窗口"
+            onClick={() => setIsAnimOpen(false)}
+          >
+            <div className="w-[min(96vw,1200px)]" onClick={(e) => e.stopPropagation()}>
+              <div className="flex justify-end mb-2">
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white px-3 py-2 text-sm transition-colors"
+                  onClick={() => setIsAnimOpen(false)}
+                  aria-label="关闭"
+                >
+                  关闭
+                </button>
+              </div>
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black shadow-2xl">
+                <iframe
+                  title="Bournmark 动画演示（放大）"
+                  src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
+                  className="absolute inset-0 w-full h-full"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-purple-800 via-purple-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -325,41 +381,82 @@ export default function ZengzhiPage() {
             transition={{ duration: 0.8 }}
             className="relative z-10 container-custom"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={isHeroInView ? { scale: 1, rotate: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <TrendingUp className="w-8 h-8 text-purple-300" />
-              </motion.div>
-              <p className="text-sm text-purple-300 font-semibold">{t('wuye.zengzhi.subtitle')}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={isHeroInView ? { scale: 1, rotate: 0 } : {}}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    <TrendingUp className="w-8 h-8 text-purple-300" />
+                  </motion.div>
+                  <p className="text-sm text-purple-300 font-semibold">{t('wuye.zengzhi.subtitle')}</p>
+                </div>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+                  {t('wuye.zengzhi.title')}
+                </h1>
+                <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8">
+                  {t('wuye.zengzhi.description')}
+                </p>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="flex flex-wrap items-center gap-4"
+                >
+                  <div className="flex items-center gap-2 text-purple-200">
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span className="text-sm">{t('wuye.zengzhi.features.experience')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-purple-200">
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span className="text-sm">{t('wuye.zengzhi.features.cases')}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-purple-200">
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span className="text-sm">{t('wuye.zengzhi.features.rentIncrease')}</span>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* 右侧：动画播放窗口（嵌入 public 下的 HTML 动画） */}
+              <div className="w-full">
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/20 shadow-2xl">
+                  <iframe
+                    title="Bournmark 动画演示"
+                    src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
+                    className="absolute inset-0 w-full h-full"
+                    loading="lazy"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                  {/* 覆盖层：点击放大（避免 iframe 吃掉点击事件） */}
+                  <button
+                    type="button"
+                    onClick={() => setIsAnimOpen(true)}
+                    className="absolute inset-0 cursor-zoom-in bg-black/0 hover:bg-black/10 transition-colors"
+                    aria-label="点击放大播放"
+                  />
+                  <div className="absolute bottom-3 right-3 pointer-events-none">
+                    <span className="px-3 py-1 rounded-full bg-black/55 border border-white/15 text-white text-xs">
+                      点击放大
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-white/70">
+                  若无法播放，可
+                  <a
+                    href="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-1 underline underline-offset-2 hover:text-white"
+                  >
+                    新窗口打开
+                  </a>
+                  。
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              {t('wuye.zengzhi.title')}
-            </h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8">
-              {t('wuye.zengzhi.description')}
-            </p>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-wrap items-center gap-4"
-            >
-              <div className="flex items-center gap-2 text-purple-200">
-                <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">{t('wuye.zengzhi.features.experience')}</span>
-              </div>
-              <div className="flex items-center gap-2 text-purple-200">
-                <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">{t('wuye.zengzhi.features.cases')}</span>
-              </div>
-              <div className="flex items-center gap-2 text-purple-200">
-                <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm">{t('wuye.zengzhi.features.rentIncrease')}</span>
-              </div>
-            </motion.div>
           </motion.div>
         </section>
 
@@ -469,7 +566,7 @@ export default function ZengzhiPage() {
             {/* 全端：横向滚动栏（自动循环 + 可拖拽） */}
             <div
               ref={casesScrollRef}
-              className="overflow-x-auto pb-2 scrollbar-hide select-none cursor-grab active:cursor-grabbing"
+              className="overflow-x-auto pb-2 scrollbar-hide cursor-grab active:cursor-grabbing"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -486,8 +583,8 @@ export default function ZengzhiPage() {
                     className="flex-shrink-0 w-72 sm:w-80 md:w-[360px]"
                   >
                     {item.type === 'legacy' ? (
-                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
-                        <div className="relative h-44 overflow-hidden bg-gray-200">
+                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl flex flex-col h-[420px]">
+                        <div className="relative h-44 overflow-hidden bg-gray-200" data-zengzhi-case-image="true">
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -506,17 +603,17 @@ export default function ZengzhiPage() {
                             <p className="text-xs text-white/90">{item.location}</p>
                           </div>
                         </div>
-                        <div className="p-4">
+                        <div className="p-4 flex flex-col flex-1" data-carousel-selectable="true">
                           <div className="flex items-center gap-2 mb-2">
                             <TrendingUp className="w-5 h-5 text-green-600" />
                             <span className="text-base font-bold text-green-600">{item.result}</span>
                           </div>
-                          <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">{item.description}</p>
+                          <p className="text-sm text-gray-700 leading-relaxed line-clamp-4">{item.description}</p>
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl">
-                        <div className="relative h-44 overflow-hidden bg-gray-200">
+                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl flex flex-col h-[420px]">
+                        <div className="relative h-44 overflow-hidden bg-gray-200" data-zengzhi-case-image="true">
                           <Image
                             src={item.image}
                             alt={`${item.kind} ${item.address}`}
@@ -541,8 +638,8 @@ export default function ZengzhiPage() {
                           </div>
                         </div>
 
-                        <div className="p-4">
-                          <div className="rounded-xl border border-gray-200 bg-white/70 p-3">
+                        <div className="p-4 flex flex-col flex-1" data-carousel-selectable="true">
+                          <div className="rounded-xl border border-gray-200 bg-white/70 p-3" data-carousel-selectable="true">
                             <div className="flex items-center justify-between">
                               <div className="min-w-0">
                                 <div className="text-[11px] text-gray-500">{t('wuye.zengzhi.cases.table.rentBefore')}</div>

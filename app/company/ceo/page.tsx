@@ -2,7 +2,7 @@
 
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import ceoPortrait1 from '@/imgs/ceo3.png'
 import ceoPortrait2 from '@/imgs/ceo2.png'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -10,6 +10,45 @@ import { useLanguage } from '@/contexts/LanguageContext'
 export default function CompanyCeoPage() {
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<'profile' | 'message'>('profile')
+  const [handheldMode, setHandheldMode] = useState<'portrait' | 'landscape' | null>(null)
+
+  // 仅用于“手机端寄语页稳定布局”判断：
+  // - 不依赖 viewport 宽度（因为用户可能点过“切换到PC版”，会把 viewport 强制到 1280）
+  // - 用 coarse pointer + 高度阈值排除 iPad（iPad 竖屏一般 >=1024px，横屏高度一般 >=768px）
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
+
+    const compute = () => {
+      const isCoarse = window.matchMedia('(pointer: coarse)').matches
+      if (!isCoarse) {
+        setHandheldMode(null)
+        return
+      }
+
+      const isPortrait = window.matchMedia('(orientation: portrait)').matches
+      const h = window.innerHeight || 0
+      // iPhone 15 Pro Max 竖屏约 932；这里留一点余量
+      if (isPortrait && h > 0 && h <= 950) {
+        setHandheldMode('portrait')
+        return
+      }
+      // 手机横屏高度通常 < 500；排除 iPad 横屏 768
+      if (!isPortrait && h > 0 && h <= 500) {
+        setHandheldMode('landscape')
+        return
+      }
+
+      setHandheldMode(null)
+    }
+
+    compute()
+    window.addEventListener('resize', compute)
+    window.addEventListener('orientationchange', compute)
+    return () => {
+      window.removeEventListener('resize', compute)
+      window.removeEventListener('orientationchange', compute)
+    }
+  }, [])
 
   const profileHighlights = useMemo(() => [
     { label: t('company.ceo.profile.highlights.birth.label'), value: t('company.ceo.profile.highlights.birth.value', { returnObjects: true }) },
@@ -134,6 +173,63 @@ export default function CompanyCeoPage() {
                 const portraitW = 'clamp(160px, 42vw, 380px)'
                 const portraitH = 'clamp(320px, 60vh, 620px)'
                 const gap = 12
+
+                // 手机端（竖/横）寄语：使用“稳定布局”（正文全宽 + 人物图在正文后，不重叠）
+                if (handheldMode) {
+                  return (
+                    <div className="container-custom pt-2 pb-0 company-ceo-message-container">
+                      <div className="mx-auto max-w-5xl company-ceo-message-stage">
+                        <div className="text-slate-900 company-ceo-message-text">
+                          <div className="mb-2">
+                            <div className="space-y-1">
+                              <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
+                                {t('company.ceo.message.title')}
+                              </p>
+                              <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-slate-500 leading-snug">
+                                {t('company.ceo.message.subtitle')}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                            {messageParagraphsOriginal.map((paragraph, index) => (
+                              <p key={index} className="text-balance">
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+
+                          <div className="pt-6 sm:pt-7 company-ceo-message-signature">
+                            <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                            <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
+                              {t('company.ceo.message.presidentName')}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex justify-end">
+                          <div
+                            className="relative company-ceo-message-portrait"
+                            style={{
+                              width: handheldMode === 'landscape' ? 'min(46vw, 320px)' : 'min(42vw, 240px)',
+                              aspectRatio: '3 / 4',
+                            }}
+                            aria-hidden="true"
+                          >
+                            <Image
+                              src={ceoPortrait1}
+                              alt="桂小川人物照片"
+                              fill
+                              className="object-contain object-bottom"
+                              priority={false}
+                              sizes="(min-width: 1024px) 420px, (min-width: 768px) 360px, 52vw"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
 
                 return (
                   <div className="container-custom pt-2 pb-0 company-ceo-message-container">

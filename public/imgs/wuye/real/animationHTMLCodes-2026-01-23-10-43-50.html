@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bournmark - 企业服务模式演示</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            /* 品牌色系：深邃午夜蓝 + 铂金 + 科技蓝 */
+            --bg-deep: #050b14;
+            --bg-light: #0f172a;
+            --accent-gold: #cfaa68; /* 更加沉稳的高级金 */
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --glass-bg: rgba(20, 30, 48, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh; /* 移动端/iframe 更准确的视口高度 */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- 舞台容器 --- */
+        #stage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+        }
+
+        /* 背景纹理 */
+        .grid-bg {
+            position: absolute;
+            width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            transform: perspective(1000px) rotateX(60deg) translateY(-100px);
+            opacity: 0.4;
+            animation: gridMove 60s linear infinite;
+        }
+        @keyframes gridMove { 0% { transform: perspective(1000px) rotateX(60deg) translateY(0); } 100% { transform: perspective(1000px) rotateX(60deg) translateY(80px); } }
+
+        .vignette {
+            position: absolute; top:0; left:0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 40%, #000 100%);
+            pointer-events: none; z-index: 5; opacity: 0.8;
+        }
+
+        /* --- Logo --- */
+        .brand-logo {
+            position: absolute;
+            top: clamp(14px, 4vh, 40px);
+            left: clamp(14px, 4vw, 50px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon { width: clamp(28px, 4vw, 40px); height: clamp(28px, 4vw, 40px); fill: var(--accent-gold); }
+        .logo-text { font-family: 'Times New Roman', serif; font-size: clamp(16px, 2.2vw, 24px); letter-spacing: clamp(1px, 0.25vw, 2px); color: #fff; font-weight: bold; text-transform: uppercase; }
+
+        /* --- 字幕条 --- */
+        .subtitle-container {
+            position: absolute;
+            bottom: clamp(14px, 6vh, 60px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 1400px);
+            max-width: 1400px;
+            text-align: center;
+            z-index: 200;
+            padding: 0 12px;
+        }
+        .sub-cn {
+            /* 字幕需随播放窗口自适应（iframe/手机/桌面） */
+            font-size: clamp(16px, 3.0vw, 32px);
+            font-weight: 600;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.9);
+            margin-bottom: clamp(6px, 1.2vw, 10px);
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.7), transparent);
+            padding: clamp(6px, 1.1vw, 10px) clamp(14px, 4.0vw, 40px);
+            display: inline-block;
+            line-height: 1.25;
+            max-width: 100%;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .sub-en {
+            font-size: clamp(11px, 1.6vw, 16px);
+            color: var(--accent-gold);
+            font-weight: 300;
+            letter-spacing: clamp(0.5px, 0.12vw, 1px);
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            line-height: 1.25;
+            max-width: 100%;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        /* --- 场景通用 --- */
+        .scene {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 10;
+        }
+
+        .big-title {
+            font-size: clamp(28px, 6vw, 64px);
+            font-weight: bold;
+            margin-bottom: clamp(10px, 2vh, 20px);
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+        .highlight-text { color: var(--accent-gold); }
+        .sub-desc { font-size: clamp(14px, 2.4vw, 24px); color: var(--text-sub); line-height: 1.3; }
+
+        /* --- 场景 1: 价值 (Value) --- */
+        .scene1-container { text-align: center; }
+        .icon-shield {
+            width: clamp(96px, 20vw, 180px);
+            height: clamp(96px, 20vw, 180px);
+            margin: 0 auto clamp(16px, 3vh, 40px);
+            filter: drop-shadow(0 0 20px rgba(207, 170, 104, 0.3));
+        }
+
+        /* --- 场景 2: 市场 (Market) --- */
+        .market-map {
+            width: 100%; height: 100%; position: relative;
+        }
+        .node {
+            position: absolute; display: flex; flex-direction: column; align-items: center;
+            transform: translate(-50%, -50%);
+        }
+        .node-dot { width: clamp(12px, 2.6vw, 20px); height: clamp(12px, 2.6vw, 20px); background: var(--text-main); border-radius: 50%; box-shadow: 0 0 15px rgba(255,255,255,0.5); margin-bottom: clamp(6px, 1.2vw, 10px); }
+        .node-label { font-size: clamp(12px, 2.2vw, 20px); background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 4px; }
+        .center-node .node-dot { width: clamp(22px, 4.8vw, 40px); height: clamp(22px, 4.8vw, 40px); background: var(--accent-gold); box-shadow: 0 0 30px var(--accent-gold); }
+        .center-node .node-label { font-size: clamp(18px, 3.6vw, 32px); font-weight: bold; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+
+        /* --- 场景 3: 对比 (Comparison) --- */
+        .split-screen { display: flex; width: min(92vw, 1400px); height: 70%; gap: clamp(16px, 4vw, 40px); }
+        .split-panel {
+            flex: 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: clamp(18px, 4vw, 40px);
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .panel-bad { border-top: 6px solid var(--accent-red); }
+        .panel-good { border-top: 6px solid var(--accent-blue); background: linear-gradient(160deg, rgba(59, 130, 246, 0.1), rgba(15, 23, 42, 0.9)); }
+        .panel-title { font-size: clamp(20px, 3.4vw, 36px); margin-bottom: clamp(12px, 2.6vw, 30px); font-weight: bold; }
+        .panel-list { list-style: none; font-size: clamp(14px, 2.2vw, 22px); line-height: 1.8; color: #ccc; }
+        .panel-list li::before { content: '•'; margin-right: 15px; }
+        .panel-bad li::before { color: var(--accent-red); }
+        .panel-good li::before { color: var(--accent-blue); }
+
+        /* --- 场景 4: 长期主义 (Philosophy) --- */
+        .philosophy-box { position: relative; width: 100%; text-align: center; }
+        .hero-text {
+            font-size: clamp(44px, 10vw, 100px); font-weight: 900; letter-spacing: clamp(2px, 1vw, 10px);
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text; color: transparent;
+            margin-bottom: clamp(18px, 4vh, 40px);
+        }
+        .balance-scale {
+            width: min(92vw, 800px); height: 4px; background: #333; margin: 0 auto; position: relative;
+        }
+        .scale-pivot {
+            width: 0; height: 0; 
+            border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--accent-gold);
+            position: absolute; left: 50%; top: 4px; transform: translateX(-50%);
+        }
+        .scale-bar {
+            width: 100%; height: 100%; background: var(--accent-gold);
+            transform-origin: center;
+        }
+
+        /* --- 场景 5: 流程 (Process) --- */
+        .process-row { display: flex; width: min(92vw, 1400px); justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+        .p-step {
+            width: 22%; height: clamp(160px, 26vh, 240px);
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative;
+        }
+        .p-num { font-size: clamp(34px, 6vw, 60px); font-weight: 900; color: rgba(255,255,255,0.05); position: absolute; top: 10px; left: 16px; }
+        .p-title { font-size: clamp(18px, 3vw, 32px); font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .p-icon { font-size: clamp(26px, 4vw, 40px); margin-bottom: 14px; color: var(--accent-blue); }
+        .p-arrow { font-size: clamp(22px, 4vw, 40px); color: var(--text-sub); opacity: 0.5; }
+        .p-final { border-color: var(--accent-gold); background: rgba(207, 170, 104, 0.1); box-shadow: 0 0 30px rgba(207, 170, 104, 0.1); }
+
+        /* --- 场景 6: 饼图 (Pie Chart) --- */
+        .pie-layout { display: flex; width: min(92vw, 1400px); align-items: center; justify-content: space-around; gap: 20px; }
+        .pie-text { flex: 1; }
+        .pie-stat { font-size: clamp(56px, 10vw, 120px); font-weight: bold; color: var(--text-main); line-height: 1; }
+        .pie-label { font-size: clamp(16px, 3vw, 32px); color: var(--accent-gold); margin-top: 10px; display: block; }
+        .pie-chart-container { width: min(72vw, 500px); aspect-ratio: 1 / 1; height: auto; position: relative; }
+        svg.pie-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        circle.pie-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 40; }
+        circle.pie-segment { fill: none; stroke: var(--accent-gold); stroke-width: 40; stroke-dasharray: 0 1000; transition: stroke-dasharray 1s; stroke-linecap: round; }
+        
+        /* --- 场景 7: KPI 全屏 (Highlights) --- */
+        .kpi-fullscreen {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: min(92vw, 1400px); height: 80%;
+            gap: clamp(14px, 3vw, 30px);
+        }
+        .kpi-block {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: clamp(14px, 3vw, 28px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+            position: relative; overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .kpi-icon-lg { font-size: clamp(44px, 8vw, 80px); margin-bottom: 16px; display: block; }
+        .kpi-label-lg { font-size: clamp(14px, 2.2vw, 24px); color: var(--text-sub); letter-spacing: clamp(1px, 0.4vw, 2px); text-transform: uppercase; }
+        .kpi-value-lg { font-size: clamp(22px, 4vw, 56px); font-weight: bold; margin-top: 10px; }
+        
+        /* 颜色修饰 */
+        .k-income { border-left: 5px solid var(--accent-green); }
+        .k-income .kpi-icon-lg { color: var(--accent-green); }
+        
+        .k-cost { border-left: 5px solid var(--accent-green); }
+        .k-cost .kpi-icon-lg { color: var(--accent-green); }
+        
+        .k-risk { border-left: 5px solid var(--accent-gold); }
+        .k-risk .kpi-icon-lg { color: var(--accent-gold); }
+        
+        .k-vis { border-left: 5px solid var(--accent-blue); }
+        .k-vis .kpi-icon-lg { color: var(--accent-blue); }
+
+        /* --- 响应式断点：窄屏/小窗口（iframe） --- */
+        @media (max-width: 900px) {
+            .split-screen { flex-direction: column; height: auto; }
+            .panel-list { line-height: 1.6; }
+
+            .process-row { justify-content: center; }
+            .p-step { width: 46%; }
+            .p-arrow { display: none; }
+
+            .pie-layout { flex-direction: column; justify-content: center; }
+            .pie-text { text-align: center; }
+
+            .kpi-fullscreen { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
+        }
+
+        @media (max-width: 600px) {
+            .brand-logo { gap: 10px; }
+
+            /* 进一步收紧小屏的留白与容器尺寸 */
+            .split-panel { border-radius: 14px; }
+            .pie-chart-container { width: min(78vw, 360px); }
+            .p-step { width: 100%; height: auto; padding: 20px 14px; }
+            .p-num { position: static; margin-bottom: 6px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="stage">
+    <div class="grid-bg"></div>
+    <div class="vignette"></div>
+
+    <!-- 公司 Logo -->
+    <div class="brand-logo">
+        <svg class="logo-icon" viewBox="0 0 50 50">
+            <path d="M25,2 L45,12 L45,38 L25,48 L5,38 L5,12 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+            <path d="M25,12 L35,20 L35,30 L25,38 L15,30 L15,20 Z" fill="currentColor"/>
+        </svg>
+        <div class="logo-text">Bournmark</div>
+    </div>
+
+    <!-- 场景 1: 价值 (Introduction) -->
+    <div class="scene" id="scene1">
+        <div class="scene1-container">
+            <svg class="icon-shield" viewBox="0 0 100 100">
+                <path d="M50,95 C20,75 10,40 10,20 L50,5 L90,20 C90,40 80,75 50,95 Z" fill="none" stroke="#cfaa68" stroke-width="2" />
+                <path d="M35,35 L35,70 M50,25 L50,70 M65,40 L65,70" stroke="#3b82f6" stroke-width="6" stroke-linecap="butt"/>
+            </svg>
+            <div class="label" style="font-size: 20px; color: var(--accent-gold); margin-bottom: 10px;">CORE OBJECTIVE</div>
+            <h1 class="big-title">资产价值 <span class="highlight-text">维护与提升</span></h1>
+            <p class="sub-desc">Asset Value Maintenance & Enhancement</p>
+        </div>
+    </div>
+
+    <!-- 场景 2: 市场 (Market) -->
+    <div class="scene" id="scene2">
+        <div class="market-map">
+            <svg style="position: absolute; width:100%; height:100%; top:0; left:0;">
+                <line x1="50%" y1="50%" x2="20%" y2="30%" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+                <line x1="50%" y1="50%" x2="80%" y2="20%" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+                <line x1="50%" y1="50%" x2="20%" y2="70%" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+                <line x1="50%" y1="50%" x2="80%" y2="70%" stroke="rgba(255,255,255,0.2)" stroke-width="2" />
+            </svg>
+            <div class="node center-node" style="top: 50%; left: 50%;">
+                <div class="node-dot"></div>
+                <div class="node-label">大型投资机构</div>
+            </div>
+            <div class="node" style="top: 30%; left: 20%;">
+                <div class="node-dot"></div>
+                <div class="node-label">市场波动</div>
+            </div>
+            <div class="node" style="top: 20%; left: 80%;">
+                <div class="node-dot"></div>
+                <div class="node-label">增值能力</div>
+            </div>
+            <div class="node" style="top: 70%; left: 20%;">
+                <div class="node-dot"></div>
+                <div class="node-label">资源集中</div>
+            </div>
+            <div class="node" style="top: 70%; left: 80%;">
+                <div class="node-dot"></div>
+                <div class="node-label">风险管控</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 3: 对比 (Comparison) -->
+    <div class="scene" id="scene3">
+        <div class="split-screen">
+            <div class="split-panel panel-bad">
+                <div class="panel-title" style="color: var(--accent-red);">传统管理模式</div>
+                <ul class="panel-list">
+                    <li>流程复杂冗余</li>
+                    <li>执行标准不稳定</li>
+                    <li>难以持续投入资源</li>
+                </ul>
+            </div>
+            <div class="split-panel panel-good">
+                <div class="panel-title" style="color: var(--accent-blue);">Bournmark 模式</div>
+                <ul class="panel-list">
+                    <li>长期利益导向</li>
+                    <li>系统化资源投入</li>
+                    <li>资产价值持续提升</li>
+                </ul>
+                <div style="position: absolute; bottom: 20px; right: 20px; font-size: 100px; opacity: 0.1; color: var(--accent-blue);">√</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 4: 理念 (Philosophy) -->
+    <div class="scene" id="scene4">
+        <div class="philosophy-box">
+            <div style="font-size: 24px; color: var(--accent-gold); margin-bottom: 20px; letter-spacing: 4px;">MANAGEMENT PHILOSOPHY</div>
+            <div class="hero-text">长期主义</div>
+            
+            <!-- 天平动画 -->
+            <div style="margin-top: 60px;">
+                <div class="balance-scale">
+                    <div class="scale-bar"></div>
+                    <div class="scale-pivot"></div>
+                    <!-- 砝码 -->
+                    <div style="position: absolute; left: 0; top: -40px; text-align: center;">
+                        <div style="width: 20px; height: 40px; background: #555; margin: 0 auto;"></div>
+                        <span style="font-size: 18px; color: #999;">常规服务</span>
+                    </div>
+                    <div style="position: absolute; right: 0; top: -60px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: var(--accent-gold); margin: 0 auto; box-shadow: 0 0 20px var(--accent-gold);"></div>
+                        <span style="font-size: 20px; color: var(--accent-gold); font-weight: bold; display: block; margin-top: 10px;">价值提升</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 5: 流程 (Process) -->
+    <div class="scene" id="scene5">
+        <div class="process-row">
+            <div class="p-step">
+                <div class="p-num">01</div>
+                <div class="p-icon">📊</div>
+                <div class="p-title">市场调研</div>
+                <div style="font-size: 14px; color: #aaa;">深入分析环境</div>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+                <div class="p-num">02</div>
+                <div class="p-icon">🧠</div>
+                <div class="p-title">数据分析</div>
+                <div style="font-size: 14px; color: #aaa;">定制增值策略</div>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+                <div class="p-num">03</div>
+                <div class="p-icon">🤝</div>
+                <div class="p-title">机制协商</div>
+                <div style="font-size: 14px; color: #aaa;">结构化管理</div>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step p-final">
+                <div class="p-num" style="color: rgba(207, 170, 104, 0.2);">04</div>
+                <div class="p-icon">💎</div>
+                <div class="p-title" style="color: var(--accent-gold);">价值兑现</div>
+                <div style="font-size: 14px; color: #aaa;">稳定提升</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 6: 满意度 (Pie Chart) -->
+    <div class="scene" id="scene6">
+        <div class="pie-layout">
+            <div class="pie-text">
+                <h2 style="font-size: 48px; margin-bottom: 20px;">卓越表现</h2>
+                <p style="font-size: 24px; color: var(--text-sub); margin-bottom: 40px;">
+                    通过结构化管理实现资产稳定维护<br>获得业界领先的客户认可
+                </p>
+                <div style="border-left: 4px solid var(--accent-gold); padding-left: 20px;">
+                    <div style="font-size: 20px; color: #fff;">客户留存率</div>
+                    <div style="font-size: 30px; color: var(--accent-blue);">High Stability</div>
+                </div>
+            </div>
+            
+            <div class="pie-chart-container">
+                <svg class="pie-svg" viewBox="0 0 350 350">
+                    <circle class="pie-bg" cx="175" cy="175" r="140"></circle>
+                    <circle class="pie-segment" cx="175" cy="175" r="140" pathLength="100"></circle>
+                </svg>
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <span class="pie-stat">0%</span>
+                    <span class="pie-label">整体满意度</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场景 7: KPI 核心目标 (Highlights) -->
+    <div class="scene" id="scene7">
+        <div class="kpi-fullscreen">
+            <!-- 收入 -->
+            <div class="kpi-block k-income">
+                <span class="kpi-icon-lg">📈</span>
+                <span class="kpi-label-lg">Revenue</span>
+                <div class="kpi-value-lg">提高收入</div>
+                <div style="font-size: 20px; color: #666; margin-top: 10px;">资产增值最大化</div>
+            </div>
+            <!-- 支出 -->
+            <div class="kpi-block k-cost">
+                <span class="kpi-icon-lg">📉</span>
+                <span class="kpi-label-lg">Cost Efficiency</span>
+                <div class="kpi-value-lg">降低支出</div>
+                <div style="font-size: 20px; color: #666; margin-top: 10px;">运营成本优化</div>
+            </div>
+            <!-- 风险 -->
+            <div class="kpi-block k-risk">
+                <span class="kpi-icon-lg">🛡️</span>
+                <span class="kpi-label-lg">Risk Control</span>
+                <div class="kpi-value-lg">规避风险</div>
+                <div style="font-size: 20px; color: #666; margin-top: 10px;">稳健投资回报</div>
+            </div>
+            <!-- 可视化 -->
+            <div class="kpi-block k-vis">
+                <span class="kpi-icon-lg">👁️</span>
+                <span class="kpi-label-lg">Transparency</span>
+                <div class="kpi-value-lg">服务可视化</div>
+                <div style="font-size: 20px; color: #666; margin-top: 10px;">过程透明可控</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 字幕 -->
+    <div class="subtitle-container">
+        <div class="sub-cn" id="sub-cn"></div>
+        <div class="sub-en" id="sub-en"></div>
+    </div>
+
+</div>
+
+<script>
+    // --- 数据配置 (根据阅读语速调整时长) ---
+    // 假设中文阅读速度约 250字/分钟，即约 4字/秒
+    const narrations = [
+        {
+            dur: 8, // 约35字 -> 8-9秒
+            cn: "物业管理的工作中有一项非常重要的项目，那就是维护和提升房产的价值。",
+            en: "A critical aspect of property management is the maintenance and enhancement of asset value."
+        },
+        {
+            dur: 9, // 35字，稍微复杂 -> 9秒
+            cn: "在特定市场环境中，具备资产增值能力的管理模式通常集中于大型投资机构。",
+            en: "In specific markets, asset appreciation capabilities are often concentrated in large investment institutions."
+        },
+        {
+            dur: 10, // 40字 -> 10秒
+            cn: "传统管理模式由于流程复杂、执行不稳定，往往难以持续投入资源用于资产价值提升。",
+            en: "Traditional models struggle to allocate resources for value enhancement due to complexity and instability."
+        },
+        {
+            dur: 11, // 45字 -> 11秒
+            cn: "在以客户长期利益为导向的管理理念下，企业在提供常规服务的同时，将资源持续投入于资产价值维护与提升。",
+            en: "Guided by long-term client interests, we continuously invest in asset value while providing routine services."
+        },
+        {
+            dur: 9, // 35字 -> 9秒
+            cn: "通过设立专门的业务模块，并结合市场调研与数据分析，形成系统化的价值提升流程。",
+            en: "By establishing specialized modules and data analysis, we form a systematic value enhancement process."
+        },
+        {
+            dur: 11, // 45字 -> 11秒
+            cn: "在复杂的市场环境下，通过结构化管理与协商机制，实现资产价值的稳定维护与提升，并获得较高整体满意度。",
+            en: "Structured management ensures stable asset value and achieves high overall satisfaction in complex markets."
+        },
+        {
+            dur: 12, // 45字 -> 12秒，重点展示
+            cn: "提高收入、降低支出、规避风险、服务可视化，是该管理模式的核心目标，使不动产投资过程更加可控。",
+            en: "Increasing income, reducing costs, mitigating risk, and service visibility make the investment process controllable."
+        }
+    ];
+
+    // --- GSAP 动画 ---
+    const tl = gsap.timeline();
+    const subCn = document.getElementById('sub-cn');
+    const subEn = document.getElementById('sub-en');
+
+    // 字幕切换辅助函数
+    function setSub(index) {
+        gsap.to(".subtitle-container", { opacity: 0, duration: 0.3, onComplete: () => {
+            subCn.innerText = narrations[index].cn;
+            subEn.innerText = narrations[index].en;
+            gsap.to(".subtitle-container", { opacity: 1, duration: 0.5 });
+        }});
+    }
+
+    // === 场景 1: 价值 ===
+    tl.call(() => setSub(0))
+      .to("#scene1", { autoAlpha: 1, duration: 1 })
+      .from(".icon-shield", { scale: 0.5, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" })
+      .from(".big-title", { y: 50, opacity: 0, duration: 1 }, "-=1")
+      .to("#scene1", { duration: narrations[0].dur - 2 }); // 停留
+
+    // === 场景 2: 市场 ===
+    tl.to("#scene1", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
+      .call(() => setSub(1))
+      .to("#scene2", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".center-node", { scale: 0, duration: 1, ease: "back.out(1.7)" })
+      .from(".node:not(.center-node)", { scale: 0, opacity: 0, stagger: 0.2, duration: 0.8 }, "-=0.5")
+      .from("line", { strokeDasharray: 200, strokeDashoffset: 200, stagger: 0.1, duration: 1 }, "<")
+      .to("#scene2", { duration: narrations[1].dur - 2 });
+
+    // === 场景 3: 对比 ===
+    tl.to("#scene2", { autoAlpha: 0, y: -50, duration: 0.8 })
+      .call(() => setSub(2))
+      .to("#scene3", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".panel-bad", { x: -100, opacity: 0, duration: 1 })
+      .from(".panel-good", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
+      .to("#scene3", { duration: narrations[2].dur - 2 });
+
+    // === 场景 4: 长期主义 ===
+    tl.to("#scene3", { autoAlpha: 0, scale: 0.9, duration: 0.8 })
+      .call(() => setSub(3))
+      .to("#scene4", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".hero-text", { letterSpacing: "50px", opacity: 0, duration: 2, ease: "power2.out" })
+      .from(".balance-scale", { scaleX: 0, duration: 1 }, "-=1")
+      .to(".scale-bar", { rotation: -5, duration: 4, ease: "power1.inOut", yoyo: true, repeat: 1 }, "-=0.5")
+      .to("#scene4", { duration: narrations[3].dur - 2 });
+
+    // === 场景 5: 流程 ===
+    tl.to("#scene4", { autoAlpha: 0, y: 50, duration: 0.8 })
+      .call(() => setSub(4))
+      .to("#scene5", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".p-step", { y: 50, opacity: 0, stagger: 0.3, duration: 0.8 })
+      .from(".p-arrow", { opacity: 0, x: -20, stagger: 0.3, duration: 0.5 }, "<+0.2")
+      .to("#scene5", { duration: narrations[4].dur - 2 });
+
+    // === 场景 6: 满意度 (饼图) ===
+    tl.to("#scene5", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
+      .call(() => setSub(5))
+      .to("#scene6", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".pie-text", { x: -50, opacity: 0, duration: 1 })
+      .from(".pie-bg", { opacity: 0, duration: 0.5 }, "<")
+      // 饼图动画
+      .to(".pie-segment", { strokeDasharray: "98 100", duration: 2.5, ease: "power2.out" })
+      .to(".pie-stat", { 
+        innerText: "98%", 
+        snap: { innerText: 1 }, 
+        duration: 2.5, 
+        onUpdate: function() { this.targets()[0].innerHTML = Math.ceil(this.progress() * 98) + "%"; }
+      }, "<")
+      .to("#scene6", { duration: narrations[5].dur - 2 });
+
+    // === 场景 7: KPI (全屏重点) ===
+    tl.to("#scene6", { autoAlpha: 0, duration: 0.8 })
+      .call(() => setSub(6))
+      .to("#scene7", { autoAlpha: 1, duration: 0.8 }, "<")
+      .from(".kpi-block", { 
+        scale: 0.8, 
+        opacity: 0, 
+        stagger: 0.4, 
+        duration: 0.8, 
+        ease: "back.out(1.2)" 
+      })
+      .to("#scene7", { duration: narrations[6].dur - 2 });
+
+</script>
+</body>
+</html>

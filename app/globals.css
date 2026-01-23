@@ -615,6 +615,40 @@
     white-space: normal !important;
   }
 
+  /* 放行横向滚动内容的“撑宽层”（否则 min-w-max 会被 max-width:100% 压扁，导致无法横向滚动） */
+  .wuye-subpage .overflow-x-auto > .min-w-max,
+  .wuye-subpage .overflow-x-scroll > .min-w-max {
+    max-width: none !important;
+    /* 同时避免被 `.wuye-subpage .flex { min-width: 0 !important; }` 规则压扁 */
+    min-width: max-content !important;
+  }
+
+  /* 资产增值页：成功案例卡片图片区 - 消除图片与卡片边缘的缝隙（Next/Image 的 span 包裹层也要贴边） */
+  .wuye-subpage [data-zengzhi-case-image="true"] {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .wuye-subpage [data-zengzhi-case-image="true"] > span {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .wuye-subpage [data-zengzhi-case-image="true"] img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    /* 某些原图自带白边/透明边，移动端稍微放大吃掉边缘 */
+    transform: scale(1.12) !important;
+    transform-origin: center center !important;
+  }
+
   /* 关键：flex 子元素默认 min-width:auto 可能导致无法收缩，从而出现右侧溢出 */
   .wuye-subpage .flex,
   .wuye-subpage [class*="flex-"] {
@@ -635,9 +669,10 @@
   }
 
   /* 确保卡片和容器内的文字不会溢出 */
-  .wuye-subpage section .container-custom > *,
-  .wuye-subpage section .container-custom > div > *,
-  .wuye-subpage section .container-custom > div > div > * {
+  /* 注意：这里不要误伤“横向滚动容器”（否则手机端无法手滑横向滚动） */
+  .wuye-subpage section .container-custom > *:not(.overflow-x-auto):not(.overflow-x-scroll):not(.scrollbar-hide),
+  .wuye-subpage section .container-custom > div > *:not(.overflow-x-auto):not(.overflow-x-scroll):not(.scrollbar-hide),
+  .wuye-subpage section .container-custom > div > div > *:not(.overflow-x-auto):not(.overflow-x-scroll):not(.scrollbar-hide) {
     max-width: 100% !important;
     overflow-x: hidden !important;
   }
@@ -1736,13 +1771,15 @@ section#partners.desktop-partners-network .yellow-network-container {
   align-items: start;
 }
 
-/* 董事长寄语（/company/ceo）：手机竖版排版兜底（用 pointer:coarse，不依赖 viewport 宽度，避免“切换到PC版”后规则失效） */
-@media (pointer: coarse) and (orientation: portrait) {
-  .company-ceo-message-stage {
+/* 董事长寄语（/company/ceo）：仅“手机”生效的兜底
+   - 不依赖 viewport 宽度（避免切换到PC版 width=1280 后 max-width 失效）
+   - 用高度阈值排除 iPad：iPhone 15 Pro Max 竖屏高度约 932px；iPad 竖屏常见 1024px+ */
+@media (orientation: portrait) and (pointer: coarse) and (max-height: 950px) {
+  .company-ceo-message-section .company-ceo-message-stage {
     min-height: auto !important;
   }
 
-  .company-ceo-message-text {
+  .company-ceo-message-section .company-ceo-message-text {
     /* 手机竖版：改为稳定版排版（不再用右侧预留 + 贴底绝对定位），避免大块空白/遮挡 */
     padding-right: 0 !important;
     /* 让中文段落更“整齐” */
@@ -1750,20 +1787,20 @@ section#partners.desktop-partners-network .yellow-network-container {
     text-justify: inter-ideograph;
   }
 
-  .company-ceo-message-float {
+  .company-ceo-message-section .company-ceo-message-float {
     display: none !important;
   }
 
-  .company-ceo-message-paragraphs > * {
+  .company-ceo-message-section .company-ceo-message-paragraphs > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-  .company-ceo-message-paragraphs > *:not(:first-child) {
+  .company-ceo-message-section .company-ceo-message-paragraphs > *:not(:first-child) {
     margin-top: 0.95em !important;
   }
 
   /* 明确层级：人物图永远在文案下方 */
-  .company-ceo-message-portrait {
+  .company-ceo-message-section .company-ceo-message-portrait {
     z-index: 0 !important;
     position: static !important;
     right: auto !important;
@@ -1774,29 +1811,29 @@ section#partners.desktop-partners-network .yellow-network-container {
     margin-left: auto;
     margin-top: 12px;
   }
-  .company-ceo-message-text {
+  .company-ceo-message-section .company-ceo-message-text {
     z-index: 10 !important;
   }
 }
 
-/* 董事长寄语（/company/ceo）：手机横版稳定布局（同样用 pointer:coarse，避免 viewport 被强制为 1280 时不生效） */
-@media (pointer: coarse) and (orientation: landscape) {
-  .company-ceo-message-stage {
+/* 手机横屏：同理用高度阈值排除 iPad 横屏（iPad 横屏高度常见 768px；手机横屏通常 < 500px） */
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 500px) {
+  .company-ceo-message-section .company-ceo-message-stage {
     min-height: auto !important;
   }
 
-  .company-ceo-message-text {
+  .company-ceo-message-section .company-ceo-message-text {
     padding-right: 0 !important;
     text-align: left;
     text-justify: auto;
   }
 
-  .company-ceo-message-float {
+  .company-ceo-message-section .company-ceo-message-float {
     display: none !important;
   }
 
   /* 人物图改回正常文档流，放在正文后面（结构上本来就在后面），彻底避免 overlap */
-  .company-ceo-message-portrait {
+  .company-ceo-message-section .company-ceo-message-portrait {
     position: static !important;
     right: auto !important;
     bottom: auto !important;
@@ -1807,9 +1844,9 @@ section#partners.desktop-partners-network .yellow-network-container {
     margin-top: 12px;
   }
 
-  .company-ceo-message-portrait > span,
-  .company-ceo-message-portrait > span > img,
-  .company-ceo-message-portrait img {
+  .company-ceo-message-section .company-ceo-message-portrait > span,
+  .company-ceo-message-section .company-ceo-message-portrait > span > img,
+  .company-ceo-message-section .company-ceo-message-portrait img {
     object-fit: contain !important;
     object-position: bottom right !important;
   }
