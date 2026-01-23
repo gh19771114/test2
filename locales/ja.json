@@ -28,7 +28,7 @@
     "news": "最新情報",
     "encyclopedia": "日本不動産投資百科",
     "careers": "採用情報",
-    "tenant": "テナント専用",
+    "tenant": "入居者専用",
     "contact": "お問い合わせ",
     "maimaiSub": {
       "sales": "販売中物件",
@@ -280,7 +280,7 @@
     "overview": {
       "title": "会社概要",
       "subtitle": "Company Profile",
-      "description1": "川雨流痕株式会社（Bourn Mark CO., LTD.）は東京中央区日本橋に根ざし、複数の地下鉄とビジネスハブに隣接し、首都圏から日本全国までサービスを提供する能力を持っています。",
+      "description1": "株式会社ボーンマーク（Bourn Mark CO., LTD.）は東京中央区日本橋に根ざし、複数の地下鉄とビジネスハブに隣接し、首都圏から日本全国までサービスを提供する能力を持っています。",
       "description2": "不動産運営、企業進出、自己投資の経験を統合し、多言語専門チームとデジタル管理システムにより、国境を越えたクライアントに透明で効率的な長期的な総合ソリューションを提供します。",
       "profileTitle": "会社概要一覧",
       "headquartersImageAlt": "本社外観",
@@ -297,7 +297,7 @@
         "affiliatedGroupsValue": "公益財団法人 全日本不動産協会、公益財団法人 保証協会、在日中国企业協会、全日本中国企业協会連合会",
         "qualifications": "資格認証",
         "qualificationsValue": "宅地建物取引業免許 東京都知事（3）第98009号\n賃貸住宅管理業者登録 国土交通大臣（01）第004834号\n等",
-        "companyNameValue": "川雨流痕股份有限公司（Bourn Mark CO., LTD.）",
+        "companyNameValue": "株式会社ボーンマーク",
         "establishmentDateValue": "2009年6月1日",
         "legalRepresentativeValue": "桂 小川",
         "capitalValue": "2,500万円",
