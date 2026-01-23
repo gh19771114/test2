@@ -3,7 +3,7 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Hand, Hammer, Coins, Building2, ArrowRight } from 'lucide-react'
+import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Hand, Hammer, Coins, Building2 } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useEffect, useMemo, useRef } from 'react'
 import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
@@ -273,8 +273,13 @@ export default function WuYePage() {
               </div>
             </div>
 
-            {/* 资产维护&增值服务 - 右侧大方块（更醒目的主视觉入口） */}
-            <div className="relative overflow-hidden rounded-3xl border-2 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300">
+            {/* 资产维护&增值服务 - 右侧大方块（移动端更紧凑、更统一） */}
+            <Link
+              href="/wuye/zengzhi"
+              className="relative block overflow-hidden rounded-3xl border-2 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300"
+              aria-label={t('wuye.zengzhi.title')}
+              data-wuye-appreciation="true"
+            >
               <div className="absolute inset-0">
                 <Image
                   src="/imgs/wuye/real/zengzhi-hero.jpg"
@@ -288,72 +293,67 @@ export default function WuYePage() {
                 <div className="absolute -bottom-28 -left-28 w-96 h-96 bg-blue-400/18 rounded-full blur-3xl" />
               </div>
 
-              <div className="relative p-8 md:p-10">
-                <div className="flex items-start justify-between gap-4">
+              <div className="relative p-5 sm:p-6 md:p-10">
+                <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-xs md:text-sm text-purple-200 font-semibold tracking-wide">
                       {t('wuye.zengzhi.subtitle')}
                     </p>
-                    <h3 className="text-2xl md:text-3xl font-extrabold text-white leading-tight break-words">
+                    <h3 className="mt-1 text-xl sm:text-2xl md:text-3xl font-extrabold text-white leading-tight break-words">
                       {t('wuye.services.appreciationTitle')}
                     </h3>
                   </div>
-                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center backdrop-blur-sm">
-                    <TrendingUp className="w-6 h-6 text-purple-200" />
+                  <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center backdrop-blur-sm">
+                    <TrendingUp className="w-5 h-5 text-purple-100" />
                   </div>
                 </div>
 
-                <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+                <p className="mt-3 text-sm md:text-base text-white/85 leading-relaxed">
                   {t('wuye.zengzhi.description')}
                 </p>
 
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* 手机竖版：两列网格，压缩高度 */}
+                <div className="mt-4 grid grid-cols-2 gap-3 md:mt-6 md:gap-4">
                   {assetAppreciationServices.map((item) => {
                     const Icon = item.icon
                     return (
-                      <Link
+                      <div
                         key={item.title}
-                        href={item.link}
-                        className="group block rounded-2xl bg-white/10 hover:bg-white/14 border border-white/15 hover:border-white/25 backdrop-blur-sm transition-all duration-300"
+                        className="rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm"
                       >
-                        <div className="flex items-center gap-3 p-4">
-                          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-5 h-5 text-white" />
+                        <div className="flex flex-col items-center justify-center text-center gap-2 p-3 md:p-4">
+                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/18 to-white/6 border border-white/15 flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-5 h-5 text-white/95" />
                           </div>
-                          <div className="min-w-0">
-                            <div className="text-sm md:text-base font-semibold text-white leading-snug break-words">
-                              {item.title}
-                            </div>
+                          <div className="wuye-appreciation-item-title text-[13px] md:text-base font-semibold text-white leading-snug whitespace-pre-line min-h-[2.4em]">
+                            {item.title}
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     )
                   })}
                 </div>
 
-                <div className="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
-                  <Link
-                    href="/wuye/zengzhi"
-                    className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-fuchsia-500 to-purple-500 px-5 py-3 text-white font-semibold shadow-lg hover:shadow-xl hover:brightness-110 transition-all duration-300"
-                  >
-                    <span className="truncate">{t('wuye.zengzhi.title')}</span>
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                {/* 突出指标：15年行业经验 / 500+成功案例 / 平均租金提升15%+ */}
+                <div className="mt-5 md:mt-7 grid grid-cols-3 gap-2">
+                  <div className="rounded-2xl bg-gradient-to-br from-white/18 to-white/8 border border-white/18 px-3 py-2 text-center">
+                    <div className="text-sm font-extrabold text-white leading-tight">
                       {t('wuye.zengzhi.features.experience')}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-gradient-to-br from-white/18 to-white/8 border border-white/18 px-3 py-2 text-center">
+                    <div className="text-sm font-extrabold text-white leading-tight">
                       {t('wuye.zengzhi.features.cases')}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-white/90">
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-gradient-to-br from-fuchsia-500/35 to-purple-500/20 border border-white/18 px-3 py-2 text-center">
+                    <div className="text-sm font-extrabold text-white leading-tight">
                       {t('wuye.zengzhi.features.rentIncrease')}
-                    </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

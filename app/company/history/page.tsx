@@ -3,11 +3,12 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function CompanyHistoryPage() {
   const { t } = useLanguage()
+  const timelineRef = useRef<HTMLDivElement | null>(null)
   
   const milestones = useMemo(() => [
   {
@@ -67,6 +68,49 @@ export default function CompanyHistoryPage() {
   },
   ], [t])
 
+  // 时间线：拖拽滚动兜底（解决部分移动端/WebView 无法横滑的问题）
+  useEffect(() => {
+    const el = timelineRef.current
+    if (!el) return
+
+    let isDragging = false
+    let startX = 0
+    let startScrollLeft = 0
+
+    const onPointerDown = (e: PointerEvent) => {
+      // 仅左键/触摸
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      isDragging = true
+      startX = e.clientX
+      startScrollLeft = el.scrollLeft
+      el.setPointerCapture?.(e.pointerId)
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      // 非 passive listener 下阻止页面纵向滚动抢手势
+      e.preventDefault()
+      const dx = e.clientX - startX
+      el.scrollLeft = startScrollLeft - dx
+    }
+
+    const endDrag = () => {
+      isDragging = false
+    }
+
+    el.addEventListener('pointerdown', onPointerDown, { passive: false })
+    el.addEventListener('pointermove', onPointerMove, { passive: false })
+    el.addEventListener('pointerup', endDrag, { passive: true })
+    el.addEventListener('pointercancel', endDrag, { passive: true })
+
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown as any)
+      el.removeEventListener('pointermove', onPointerMove as any)
+      el.removeEventListener('pointerup', endDrag as any)
+      el.removeEventListener('pointercancel', endDrag as any)
+    }
+  }, [])
+
   return (
     <PageLayout>
         <section className="relative pt-28 pb-16 bg-gradient-to-br from-teal-800 via-teal-700 to-navy-800 overflow-hidden">
@@ -104,7 +148,8 @@ export default function CompanyHistoryPage() {
 
               {/* 横向滚动时间轴：只显示文案 */}
               <div
-                className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory select-none"
+                ref={timelineRef}
+                className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory select-none cursor-grab active:cursor-grabbing"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',

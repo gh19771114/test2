@@ -314,7 +314,6 @@ export default function MaiMaiPage() {
 
   const sellingFees = useMemo(() => [
     { item: t('maimai.fees.selling.fee1.item'), rate: t('maimai.fees.selling.fee1.rate'), note: t('maimai.fees.selling.fee1.note') },
-    { item: t('maimai.fees.selling.fee2.item'), rate: t('maimai.fees.selling.fee2.rate'), note: t('maimai.fees.selling.fee2.note') },
     { item: t('maimai.fees.selling.fee3.item'), rate: t('maimai.fees.selling.fee3.rate'), note: t('maimai.fees.selling.fee3.note') },
     { item: t('maimai.fees.selling.fee4.item'), rate: t('maimai.fees.selling.fee4.rate'), note: t('maimai.fees.selling.fee4.note') },
   ], [t])

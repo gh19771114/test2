@@ -138,8 +138,7 @@
   /* 资产增值（/wuye/zengzhi）：成功案例卡片复用 /cases 的版式（手机竖版） */
   [data-cases-style="true"] .cases-card {
     padding: 0 !important;
-    /* 统一卡片高度，避免不同内容导致高度不一致 */
-    height: 460px !important;
+    /* 允许卡片随内容增长，避免各端文字被裁切 */
     display: flex !important;
     flex-direction: column !important;
   }
@@ -171,7 +170,7 @@
   }
 
   [data-cases-style="true"] .cases-card .cases-card-meta {
-    margin-bottom: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   [data-cases-style="true"] .cases-card .cases-card-title {
@@ -179,7 +178,7 @@
   }
 
   [data-cases-style="true"] .cases-card .cases-card-location {
-    margin-bottom: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   [data-cases-style="true"] .cases-card .cases-card-desc {
@@ -203,6 +202,14 @@
   /* 租金对比块贴底：保证各卡片视觉高度更一致 */
   [data-cases-style="true"] .cases-card .cases-card-bottom {
     margin-top: auto !important;
+  }
+
+  /* /wuye 资产维护&增值服务：移动端条目标题两行截断（不依赖 tailwind line-clamp 插件） */
+  [data-wuye-appreciation="true"] .wuye-appreciation-item-title {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
   }
   
   /* 确保视频容器可以接收点击事件 */

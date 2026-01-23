@@ -622,6 +622,7 @@
         <button class="media-btn" id="btn-play" type="button" aria-label="播放/暂停">▶</button>
         <input class="media-seek" id="seek" type="range" min="0" max="100" step="0.01" value="0" aria-label="进度" />
         <div class="media-time" id="time">0:00 / 0:00</div>
+        <button class="media-btn" id="btn-fullscreen" type="button" aria-label="全屏">⤢</button>
         <button class="media-btn" id="btn-mute" type="button" aria-label="静音/取消静音">🔊</button>
     </div>
 
@@ -648,6 +649,7 @@
     const startOverlay = document.getElementById('start-overlay');
     const controls = document.getElementById('media-controls');
     const btnPlay = document.getElementById('btn-play');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
     const btnMute = document.getElementById('btn-mute');
     const seek = document.getElementById('seek');
     const timeEl = document.getElementById('time');
@@ -726,6 +728,24 @@
             const playing = !!(audio && !audio.paused);
             btnPlay.textContent = playing ? '❚❚' : '▶';
         }
+        if (btnFullscreen) {
+            const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+            btnFullscreen.textContent = isFs ? '⤡' : '⤢';
+        }
+    }
+
+    function toggleFullscreen() {
+        const el = document.getElementById('stage') || document.documentElement;
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        try {
+            if (!isFs) {
+                if (el.requestFullscreen) return el.requestFullscreen();
+                if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) return document.exitFullscreen();
+                if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+            }
+        } catch (_) {}
     }
 
     function startSilentPlayback() {
@@ -910,6 +930,13 @@
             audio.muted = !audio.muted;
             updateUI();
         });
+    }
+    if (btnFullscreen) {
+        btnFullscreen.addEventListener('click', () => {
+            toggleFullscreen();
+        });
+        document.addEventListener('fullscreenchange', updateUI);
+        document.addEventListener('webkitfullscreenchange', updateUI);
     }
     if (seek && audio) {
         seek.addEventListener('input', () => {

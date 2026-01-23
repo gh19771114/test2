@@ -4,7 +4,7 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useEffect, useRef, useMemo, useState } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
 import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles, MapPin, Tag } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -14,27 +14,37 @@ export default function ZengzhiPage() {
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
   const casesRef = useRef(null)
-  const [isAnimOpen, setIsAnimOpen] = useState(false)
+  const animIframeRef = useRef<HTMLIFrameElement | null>(null)
   
   const isHeroInView = useInView(heroRef, { once: true })
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isCasesInView = useInView(casesRef, { once: true, margin: '-100px' })
 
-  // 动画弹窗：打开时锁滚动 + 支持 ESC 关闭
-  useEffect(() => {
-    if (!isAnimOpen) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsAnimOpen(false)
+  // 手机端：点击直接全屏（取消“放大弹窗”效果）
+  const enterAnimFullscreen = () => {
+    const iframe = animIframeRef.current
+    if (!iframe) return
+
+    const el = iframe as any
+    try {
+      if (typeof el.requestFullscreen === 'function') {
+        el.requestFullscreen()
+        return
+      }
+      if (typeof el.webkitRequestFullscreen === 'function') {
+        el.webkitRequestFullscreen()
+        return
+      }
+    } catch (_) {
+      // ignore
     }
-    window.addEventListener('keydown', onKeyDown)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = prevOverflow
+
+    // 全屏不支持时：退回新窗口打开
+    if (typeof window !== 'undefined') {
+      window.open('/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html', '_blank', 'noopener,noreferrer')
     }
-  }, [isAnimOpen])
+  }
 
   // 从多语言文件读取数据
   const stats = useMemo(() => [
@@ -328,39 +338,6 @@ export default function ZengzhiPage() {
   return (
     <PageLayout>
       <div className="relative wuye-subpage">
-        {/* 动画放大弹窗 */}
-        {isAnimOpen && (
-          <div
-            className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-            role="dialog"
-            aria-modal="true"
-            aria-label="动画播放窗口"
-            onClick={() => setIsAnimOpen(false)}
-          >
-            <div className="w-[min(96vw,1200px)]" onClick={(e) => e.stopPropagation()}>
-              <div className="flex justify-end mb-2">
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white px-3 py-2 text-sm transition-colors"
-                  onClick={() => setIsAnimOpen(false)}
-                  aria-label="关闭"
-                >
-                  关闭
-                </button>
-              </div>
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black shadow-2xl">
-                <iframe
-                  title="Bournmark 动画演示（放大）"
-                  src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
-                  className="absolute inset-0 w-full h-full"
-                  allow="autoplay"
-                  sandbox="allow-scripts allow-same-origin"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Hero Section */}
         <section ref={heroRef} className="relative pt-28 pb-20 md:pb-24 bg-gradient-to-br from-purple-800 via-purple-700 to-navy-800 overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -400,25 +377,6 @@ export default function ZengzhiPage() {
                 <p className="text-lg text-gray-200 max-w-3xl leading-relaxed mb-8">
                   {t('wuye.zengzhi.description')}
                 </p>
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="flex flex-wrap items-center gap-4"
-                >
-                  <div className="flex items-center gap-2 text-purple-200">
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span className="text-sm">{t('wuye.zengzhi.features.experience')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-purple-200">
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span className="text-sm">{t('wuye.zengzhi.features.cases')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-purple-200">
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span className="text-sm">{t('wuye.zengzhi.features.rentIncrease')}</span>
-                  </div>
-                </motion.div>
               </div>
 
               {/* 右侧：动画播放窗口（嵌入 public 下的 HTML 动画） */}
@@ -429,19 +387,21 @@ export default function ZengzhiPage() {
                     src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html?mode=embed"
                     className="absolute inset-0 w-full h-full"
                     loading="lazy"
-                    allow="autoplay"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
                     sandbox="allow-scripts allow-same-origin"
+                    ref={animIframeRef}
                   />
-                  {/* 覆盖层：点击放大（避免 iframe 吃掉点击事件） */}
+                  {/* 覆盖层：点击全屏（避免 iframe 吃掉点击事件） */}
                   <button
                     type="button"
-                    onClick={() => setIsAnimOpen(true)}
-                    className="absolute inset-0 cursor-zoom-in bg-black/0 hover:bg-black/10 transition-colors"
-                    aria-label="点击放大播放"
+                    onClick={enterAnimFullscreen}
+                    className="absolute inset-0 cursor-pointer bg-black/0 hover:bg-black/10 transition-colors"
+                    aria-label="点击全屏播放"
                   />
                   <div className="absolute bottom-3 right-3 pointer-events-none">
                     <span className="px-3 py-1 rounded-full bg-black/55 border border-white/15 text-white text-xs">
-                      点击放大
+                      点击全屏
                     </span>
                   </div>
                 </div>
@@ -585,7 +545,7 @@ export default function ZengzhiPage() {
                     className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px]"
                   >
                     {item.type === 'legacy' ? (
-                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px]">
+                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px] md:h-[500px]">
                         <div className="relative overflow-hidden">
                           <div className="relative w-full h-64 bg-gray-200 cases-card-media" data-zengzhi-case-image="true">
                             <Image
@@ -604,28 +564,29 @@ export default function ZengzhiPage() {
                         </div>
 
                         <div className="p-6 cases-card-body flex flex-col flex-1 min-h-0" data-carousel-selectable="true">
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
+                          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-3 cases-card-meta">
                             <Tag size={16} />
                             <span>{item.category}</span>
                           </div>
-                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
+                          <h3 className="text-base md:text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
                             {item.title}
                           </h3>
-                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-3 cases-card-location">
+                          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-700 mb-3 cases-card-location">
                             <MapPin size={16} />
-                            <span>{item.location}</span>
+                            <span className="min-w-0 truncate">{item.location}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                          {/* 手机端隐藏一行“结果”，避免内容过高导致裁切/遮挡 */}
+                          <div className="hidden sm:flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-3">
                             <TrendingUp size={16} className="text-green-600" />
                             <span className="font-semibold text-green-600">{item.result}</span>
                           </div>
-                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
+                          <p className="text-gray-700 text-xs md:text-sm leading-relaxed line-clamp-2 cases-card-desc">
                             {item.description}
                           </p>
                         </div>
                       </div>
                     ) : (
-                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px]">
+                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px] md:h-[500px]">
                         <div className="relative overflow-hidden">
                           <div className="relative w-full h-64 bg-gray-200 cases-card-media" data-zengzhi-case-image="true">
                             <Image
@@ -645,17 +606,17 @@ export default function ZengzhiPage() {
                         </div>
 
                         <div className="p-6 cases-card-body flex flex-col flex-1 min-h-0" data-carousel-selectable="true">
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
+                          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-3 cases-card-meta">
                             <Tag size={16} />
                             <span>{item.kind}</span>
                           </div>
-                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
+                          <h3 className="text-base md:text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
                             {item.address}
                           </h3>
-                          <div className="flex items-center justify-between text-sm text-gray-700 mb-3 cases-card-location">
+                          <div className="flex items-center justify-between text-xs md:text-sm text-gray-700 mb-3 cases-card-location">
                             <div className="flex items-center gap-2 min-w-0">
                               <MapPin size={16} />
-                              <span className="min-w-0 break-words">
+                              <span className="min-w-0 truncate">
                                 {t('wuye.zengzhi.cases.table.area')} {item.areaText}
                               </span>
                             </div>
