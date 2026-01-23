@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useEffect, useRef, useMemo, useState } from 'react'
-import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
+import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles, MapPin, Tag } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ZengzhiPage() {
@@ -353,6 +353,7 @@ export default function ZengzhiPage() {
                   title="Bournmark 动画演示（放大）"
                   src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
                   className="absolute inset-0 w-full h-full"
+                  allow="autoplay"
                   sandbox="allow-scripts allow-same-origin"
                 />
               </div>
@@ -425,9 +426,10 @@ export default function ZengzhiPage() {
                 <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black/20 shadow-2xl">
                   <iframe
                     title="Bournmark 动画演示"
-                    src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
+                    src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html?mode=embed"
                     className="absolute inset-0 w-full h-full"
                     loading="lazy"
+                    allow="autoplay"
                     sandbox="allow-scripts allow-same-origin"
                   />
                   {/* 覆盖层：点击放大（避免 iframe 吃掉点击事件） */}
@@ -549,7 +551,7 @@ export default function ZengzhiPage() {
         </section>
 
         {/* Success Cases Section */}
-        <section ref={casesRef} className="section-padding">
+        <section ref={casesRef} className="section-padding" data-cases-style="true">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -576,70 +578,91 @@ export default function ZengzhiPage() {
                 overscrollBehavior: 'contain',
               }}
             >
-              <div className="flex gap-4 min-w-max px-1">
+              <div className="flex gap-6 min-w-max px-1">
                 {casesLoop.map((item, index) => (
                   <div
                     key={`${item.type}-${index}-${item.type === 'legacy' ? item.title : item.address}`}
-                    className="flex-shrink-0 w-72 sm:w-80 md:w-[360px]"
+                    className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px]"
                   >
                     {item.type === 'legacy' ? (
-                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl flex flex-col h-[420px]">
-                        <div className="relative h-44 overflow-hidden bg-gray-200" data-zengzhi-case-image="true">
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            fill
-                            className="object-cover transform-gpu scale-[1.06]"
-                            sizes="(min-width: 768px) 360px, 320px"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/55 to-navy-900/45"></div>
-                          <div className="absolute top-3 left-3">
-                            <span className="px-2.5 py-1 bg-purple-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
+                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px]">
+                        <div className="relative overflow-hidden">
+                          <div className="relative w-full h-64 bg-gray-200 cases-card-media" data-zengzhi-case-image="true">
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              sizes="380px"
+                            />
+                          </div>
+                          <div className="absolute top-4 right-4">
+                            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                               {item.category}
                             </span>
                           </div>
-                          <div className="absolute bottom-3 left-3 right-3">
-                            <h3 className="text-base font-bold text-white mb-0.5 line-clamp-2">{item.title}</h3>
-                            <p className="text-xs text-white/90">{item.location}</p>
-                          </div>
                         </div>
-                        <div className="p-4 flex flex-col flex-1" data-carousel-selectable="true">
-                          <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="w-5 h-5 text-green-600" />
-                            <span className="text-base font-bold text-green-600">{item.result}</span>
+
+                        <div className="p-6 cases-card-body flex flex-col flex-1 min-h-0" data-carousel-selectable="true">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
+                            <Tag size={16} />
+                            <span>{item.category}</span>
                           </div>
-                          <p className="text-sm text-gray-700 leading-relaxed line-clamp-4">{item.description}</p>
+                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
+                            {item.title}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-3 cases-card-location">
+                            <MapPin size={16} />
+                            <span>{item.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <TrendingUp size={16} className="text-green-600" />
+                            <span className="font-semibold text-green-600">{item.result}</span>
+                          </div>
+                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 transition-all duration-300 hover:shadow-2xl flex flex-col h-[420px]">
-                        <div className="relative h-44 overflow-hidden bg-gray-200" data-zengzhi-case-image="true">
-                          <Image
-                            src={item.image}
-                            alt={`${item.kind} ${item.address}`}
-                            fill
-                            className="object-cover transform-gpu scale-[1.06]"
-                            sizes="(min-width: 768px) 360px, 320px"
-                            unoptimized={item.image.startsWith('/imgs/')}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-br from-navy-900/55 to-purple-900/35"></div>
-                          <div className="absolute top-3 left-3 flex items-center gap-2">
-                            <span className="px-2.5 py-1 bg-purple-600/90 backdrop-blur-sm text-white rounded-full text-xs font-semibold">
+                      <div className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card flex flex-col h-[460px]">
+                        <div className="relative overflow-hidden">
+                          <div className="relative w-full h-64 bg-gray-200 cases-card-media" data-zengzhi-case-image="true">
+                            <Image
+                              src={item.image}
+                              alt={`${item.kind} ${item.address}`}
+                              fill
+                              className="object-cover"
+                              sizes="380px"
+                              unoptimized={item.image.startsWith('/imgs/')}
+                            />
+                          </div>
+                          <div className="absolute top-4 right-4">
+                            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                               {item.kind}
                             </span>
-                            <span className="text-xs text-white/90">{t('wuye.zengzhi.cases.table.area')} {item.areaText}</span>
-                          </div>
-                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
-                            <h3 className="text-base font-bold text-white leading-snug line-clamp-2">{item.address}</h3>
-                            <div className="text-right flex-shrink-0">
-                              <div className="text-xs text-white/80">{t('wuye.zengzhi.cases.table.increase')}</div>
-                              <div className="text-base font-extrabold text-green-300">{item.rateText}</div>
-                            </div>
                           </div>
                         </div>
 
-                        <div className="p-4 flex flex-col flex-1" data-carousel-selectable="true">
-                          <div className="rounded-xl border border-gray-200 bg-white/70 p-3" data-carousel-selectable="true">
+                        <div className="p-6 cases-card-body flex flex-col flex-1 min-h-0" data-carousel-selectable="true">
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
+                            <Tag size={16} />
+                            <span>{item.kind}</span>
+                          </div>
+                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title line-clamp-2">
+                            {item.address}
+                          </h3>
+                          <div className="flex items-center justify-between text-sm text-gray-700 mb-3 cases-card-location">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <MapPin size={16} />
+                              <span className="truncate">
+                                {t('wuye.zengzhi.cases.table.area')} {item.areaText}
+                              </span>
+                            </div>
+                            <span className="font-semibold text-green-600">{item.rateText}</span>
+                          </div>
+
+                          <div className="mt-auto rounded-xl border border-gray-200 bg-white/70 p-3 cases-card-bottom" data-carousel-selectable="true">
                             <div className="flex items-center justify-between">
                               <div className="min-w-0">
                                 <div className="text-[11px] text-gray-500">{t('wuye.zengzhi.cases.table.rentBefore')}</div>

@@ -134,6 +134,62 @@
   .cases-page .cases-card .cases-card-desc {
     margin: 0 !important;
   }
+
+  /* 资产增值（/wuye/zengzhi）：成功案例卡片复用 /cases 的版式（手机竖版） */
+  [data-cases-style="true"] .cases-card {
+    padding: 0 !important;
+    /* 统一卡片高度，避免不同内容导致高度不一致 */
+    height: 460px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  [data-cases-style="true"] .cases-card > div.relative.overflow-hidden {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-body {
+    padding: 1rem !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-media {
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-media img {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-meta {
+    margin-bottom: 0.75rem !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-title {
+    margin-bottom: 0.5rem !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-location {
+    margin-bottom: 0.75rem !important;
+  }
+
+  [data-cases-style="true"] .cases-card .cases-card-desc {
+    margin: 0 !important;
+  }
+
+  /* 租金对比块贴底：保证各卡片视觉高度更一致 */
+  [data-cases-style="true"] .cases-card .cases-card-bottom {
+    margin-top: auto !important;
+  }
   
   /* 确保视频容器可以接收点击事件 */
   .lions-higashiginza-video-mobile-portrait > div {
@@ -3564,7 +3620,7 @@ section#partners.desktop-partners-network .yellow-network-container {
   }
 }
 
-/* Header 子菜单：资产增值——彩虹高光底色 + 闪烁强调 */
+/* Header 子菜单：资产维护&增值服务——彩虹高光底色 + 闪烁强调 */
 .nav-rainbow-flash {
   position: relative;
   display: inline-block;

@@ -176,6 +176,15 @@ export default function CompanyCeoPage() {
 
                 // 手机端（竖/横）寄语：使用“稳定布局”（正文全宽 + 人物图在正文后，不重叠）
                 if (handheldMode) {
+                  const p0 = messageParagraphsOriginal[0]
+                  const p1 = messageParagraphsOriginal[1]
+                  const p2 = messageParagraphsOriginal[2]
+                  const rest = messageParagraphsOriginal.slice(3)
+                  const narrowTextWidth = handheldMode === 'portrait' ? '40vw' : '70vw'
+                  // 横屏：人物图缩小到“当前的 50%”（原 min(46vw,320px) -> min(23vw,160px)）
+                  const portraitWidth =
+                    handheldMode === 'landscape' ? 'min(23vw, 160px)' : 'min(42vw, 240px)'
+
                   return (
                     <div className="container-custom pt-2 pb-0 company-ceo-message-container">
                       <div className="mx-auto max-w-5xl company-ceo-message-stage">
@@ -191,39 +200,55 @@ export default function CompanyCeoPage() {
                             </div>
                           </div>
 
-                          <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
-                            {messageParagraphsOriginal.map((paragraph, index) => (
-                              <p key={index} className="text-balance">
-                                {paragraph}
-                              </p>
-                            ))}
+                          {/* 第 1 段：全宽 */}
+                          {p0 ? (
+                            <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                              <p className="text-balance">{p0}</p>
+                            </div>
+                          ) : null}
+
+                          {/* 人物图：移动到第 1 段下方；第 2/3 段按指定比例收窄 */}
+                          <div className="mt-3 flex items-start justify-between gap-3">
+                            <div style={{ width: narrowTextWidth }} className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed">
+                              {p1 ? <p className="text-balance">{p1}</p> : null}
+                              {p2 ? <p className="text-balance">{p2}</p> : null}
+                            </div>
+
+                            <div
+                              className="relative company-ceo-message-portrait flex-shrink-0"
+                              style={{
+                                width: portraitWidth,
+                                aspectRatio: '3 / 4',
+                              }}
+                              aria-hidden="true"
+                            >
+                              <Image
+                                src={ceoPortrait1}
+                                alt="桂小川人物照片"
+                                fill
+                                className="object-contain object-bottom"
+                                priority={false}
+                                sizes="(min-width: 1024px) 420px, (min-width: 768px) 360px, 52vw"
+                              />
+                            </div>
                           </div>
+
+                          {/* 余下段落：保持全宽（避免内容被过度压缩） */}
+                          {rest.length ? (
+                            <div className="mt-4 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                              {rest.map((paragraph, index) => (
+                                <p key={`rest-${index}`} className="text-balance">
+                                  {paragraph}
+                                </p>
+                              ))}
+                            </div>
+                          ) : null}
 
                           <div className="pt-6 sm:pt-7 company-ceo-message-signature">
                             <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
                             <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
                               {t('company.ceo.message.presidentName')}
                             </p>
-                          </div>
-                        </div>
-
-                        <div className="mt-3 flex justify-end">
-                          <div
-                            className="relative company-ceo-message-portrait"
-                            style={{
-                              width: handheldMode === 'landscape' ? 'min(46vw, 320px)' : 'min(42vw, 240px)',
-                              aspectRatio: '3 / 4',
-                            }}
-                            aria-hidden="true"
-                          >
-                            <Image
-                              src={ceoPortrait1}
-                              alt="桂小川人物照片"
-                              fill
-                              className="object-contain object-bottom"
-                              priority={false}
-                              sizes="(min-width: 1024px) 420px, (min-width: 768px) 360px, 52vw"
-                            />
                           </div>
                         </div>
                       </div>

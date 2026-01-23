@@ -628,44 +628,15 @@
 </div>
 
 <script>
-    // --- 数据配置 (根据阅读语速调整时长) ---
-    // 假设中文阅读速度约 250字/分钟，即约 4字/秒
+    // --- 数据配置 ---
     const narrations = [
-        {
-            dur: 8, // 约35字 -> 8-9秒
-            cn: "物业管理的工作中有一项非常重要的项目，那就是维护和提升房产的价值。",
-            en: "A critical aspect of property management is the maintenance and enhancement of asset value."
-        },
-        {
-            dur: 9, // 35字，稍微复杂 -> 9秒
-            cn: "在特定市场环境中，具备资产增值能力的管理模式通常集中于大型投资机构。",
-            en: "In specific markets, asset appreciation capabilities are often concentrated in large investment institutions."
-        },
-        {
-            dur: 10, // 40字 -> 10秒
-            cn: "传统管理模式由于流程复杂、执行不稳定，往往难以持续投入资源用于资产价值提升。",
-            en: "Traditional models struggle to allocate resources for value enhancement due to complexity and instability."
-        },
-        {
-            dur: 11, // 45字 -> 11秒
-            cn: "在以客户长期利益为导向的管理理念下，企业在提供常规服务的同时，将资源持续投入于资产价值维护与提升。",
-            en: "Guided by long-term client interests, we continuously invest in asset value while providing routine services."
-        },
-        {
-            dur: 9, // 35字 -> 9秒
-            cn: "通过设立专门的业务模块，并结合市场调研与数据分析，形成系统化的价值提升流程。",
-            en: "By establishing specialized modules and data analysis, we form a systematic value enhancement process."
-        },
-        {
-            dur: 11, // 45字 -> 11秒
-            cn: "在复杂的市场环境下，通过结构化管理与协商机制，实现资产价值的稳定维护与提升，并获得较高整体满意度。",
-            en: "Structured management ensures stable asset value and achieves high overall satisfaction in complex markets."
-        },
-        {
-            dur: 12, // 45字 -> 12秒，重点展示
-            cn: "提高收入、降低支出、规避风险、服务可视化，是该管理模式的核心目标，使不动产投资过程更加可控。",
-            en: "Increasing income, reducing costs, mitigating risk, and service visibility make the investment process controllable."
-        }
+        { dur: 8,  cn: "物业管理的工作中有一项非常重要的项目，那就是维护和提升房产的价值。", en: "A critical aspect of property management is the maintenance and enhancement of asset value." },
+        { dur: 9,  cn: "在特定市场环境中，具备资产增值能力的管理模式通常集中于大型投资机构。", en: "In specific markets, asset appreciation capabilities are often concentrated in large investment institutions." },
+        { dur: 10, cn: "传统管理模式由于流程复杂、执行不稳定，往往难以持续投入资源用于资产价值提升。", en: "Traditional models struggle to allocate resources for value enhancement due to complexity and instability." },
+        { dur: 11, cn: "在以客户长期利益为导向的管理理念下，企业在提供常规服务的同时，将资源持续投入于资产价值维护与提升。", en: "Guided by long-term client interests, we continuously invest in asset value while providing routine services." },
+        { dur: 9,  cn: "通过设立专门的业务模块，并结合市场调研与数据分析，形成系统化的价值提升流程。", en: "By establishing specialized modules and data analysis, we form a systematic value enhancement process." },
+        { dur: 11, cn: "在复杂的市场环境下，通过结构化管理与协商机制，实现资产价值的稳定维护与提升，并获得较高整体满意度。", en: "Structured management ensures stable asset value and achieves high overall satisfaction in complex markets." },
+        { dur: 12, cn: "提高收入、降低支出、规避风险、服务可视化，是该管理模式的核心目标，使不动产投资过程更加可控。", en: "Increasing income, reducing costs, mitigating risk, and service visibility make the investment process controllable." }
     ];
 
     // --- GSAP 动画 ---
@@ -739,7 +710,6 @@
         const dur = getAudioDuration();
         if (!dur) return;
         const t = audio ? (audio.currentTime || 0) : 0;
-        // 与 timeScale 同步后的映射：timelineTime = audioTime * timeScale
         const s = tl.timeScale() || 1;
         tl.time(t * s, false);
     }
@@ -799,12 +769,16 @@
             if (audio) {
                 await audio.play();
             }
+
             // 根据 speech.wav 时长自动缩放时间轴：让整段动画与音频总时长对齐（每个镜头会等比拉伸/压缩）
-            const targetDur = getAudioDuration();
+            const targetDur = (audio && Number.isFinite(audio.duration) && audio.duration > 0)
+              ? audio.duration
+              : SPEECH_FALLBACK_DURATION_SEC;
             const actualDur = tl.duration();
             if (actualDur > 0 && targetDur > 0) {
                 tl.timeScale(actualDur / targetDur);
             }
+
             hideStartOverlay();
             showControls();
             started = true;
@@ -822,7 +796,7 @@
       .to("#scene1", { autoAlpha: 1, duration: 1 })
       .from(".icon-shield", { scale: 0.5, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" })
       .from(".big-title", { y: 50, opacity: 0, duration: 1 }, "-=1")
-      .to("#scene1", { duration: narrations[0].dur - 2 }); // 停留
+      .to("#scene1", { duration: Math.max(0, narrations[0].dur - 2) }); // 停留
 
     // === 场景 2: 市场 ===
     tl.to("#scene1", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
@@ -831,7 +805,7 @@
       .from(".center-node", { scale: 0, duration: 1, ease: "back.out(1.7)" })
       .from(".node:not(.center-node)", { scale: 0, opacity: 0, stagger: 0.2, duration: 0.8 }, "-=0.5")
       .from("line", { strokeDasharray: 200, strokeDashoffset: 200, stagger: 0.1, duration: 1 }, "<")
-      .to("#scene2", { duration: narrations[1].dur - 2 });
+      .to("#scene2", { duration: Math.max(0, narrations[1].dur - 2) });
 
     // === 场景 3: 对比 ===
     tl.to("#scene2", { autoAlpha: 0, y: -50, duration: 0.8 })
@@ -839,7 +813,7 @@
       .to("#scene3", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".panel-bad", { x: -100, opacity: 0, duration: 1 })
       .from(".panel-good", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
-      .to("#scene3", { duration: narrations[2].dur - 2 });
+      .to("#scene3", { duration: Math.max(0, narrations[2].dur - 2) });
 
     // === 场景 4: 长期主义 ===
     tl.to("#scene3", { autoAlpha: 0, scale: 0.9, duration: 0.8 })
@@ -848,7 +822,7 @@
       .from(".hero-text", { letterSpacing: "50px", opacity: 0, duration: 2, ease: "power2.out" })
       .from(".balance-scale", { scaleX: 0, duration: 1 }, "-=1")
       .to(".scale-bar", { rotation: -5, duration: 4, ease: "power1.inOut", yoyo: true, repeat: 1 }, "-=0.5")
-      .to("#scene4", { duration: narrations[3].dur - 2 });
+      .to("#scene4", { duration: Math.max(0, narrations[3].dur - 2) });
 
     // === 场景 5: 流程 ===
     tl.to("#scene4", { autoAlpha: 0, y: 50, duration: 0.8 })
@@ -856,7 +830,7 @@
       .to("#scene5", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".p-step", { y: 50, opacity: 0, stagger: 0.3, duration: 0.8 })
       .from(".p-arrow", { opacity: 0, x: -20, stagger: 0.3, duration: 0.5 }, "<+0.2")
-      .to("#scene5", { duration: narrations[4].dur - 2 });
+      .to("#scene5", { duration: Math.max(0, narrations[4].dur - 2) });
 
     // === 场景 6: 满意度 (饼图) ===
     tl.to("#scene5", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
@@ -872,7 +846,7 @@
         duration: 2.5, 
         onUpdate: function() { this.targets()[0].innerHTML = Math.ceil(this.progress() * 98) + "%"; }
       }, "<")
-      .to("#scene6", { duration: narrations[5].dur - 2 });
+      .to("#scene6", { duration: Math.max(0, narrations[5].dur - 2) });
 
     // === 场景 7: KPI (全屏重点) ===
     tl.to("#scene6", { autoAlpha: 0, duration: 0.8 })
@@ -885,7 +859,7 @@
         duration: 0.8, 
         ease: "back.out(1.2)" 
       })
-      .to("#scene7", { duration: narrations[6].dur - 2 });
+      .to("#scene7", { duration: Math.max(0, narrations[6].dur - 2) });
 
     // 完成后停止音频（避免长时间占用）
     tl.eventCallback('onComplete', () => {
@@ -918,7 +892,6 @@
             if (!audio) return;
             if (audio.paused) {
                 try {
-                    // 播放前强制对齐
                     syncTimelineToAudio();
                     await audio.play();
                     tl.play();
