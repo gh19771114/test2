@@ -186,6 +186,20 @@
     margin: 0 !important;
   }
 
+  /* 兼容：项目未启用 tailwind line-clamp 插件时，仍强制两行截断，避免文字被卡片裁切 */
+  [data-cases-style="true"] .cases-card .cases-card-title,
+  [data-cases-style="true"] .cases-card .cases-card-desc {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  [data-cases-style="true"] .cases-card .cases-card-title {
+    -webkit-line-clamp: 2 !important;
+  }
+  [data-cases-style="true"] .cases-card .cases-card-desc {
+    -webkit-line-clamp: 2 !important;
+  }
+
   /* 租金对比块贴底：保证各卡片视觉高度更一致 */
   [data-cases-style="true"] .cases-card .cases-card-bottom {
     margin-top: auto !important;

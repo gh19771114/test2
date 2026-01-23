@@ -655,7 +655,7 @@ export default function ZengzhiPage() {
                           <div className="flex items-center justify-between text-sm text-gray-700 mb-3 cases-card-location">
                             <div className="flex items-center gap-2 min-w-0">
                               <MapPin size={16} />
-                              <span className="truncate">
+                              <span className="min-w-0 break-words">
                                 {t('wuye.zengzhi.cases.table.area')} {item.areaText}
                               </span>
                             </div>
