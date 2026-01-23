@@ -397,7 +397,8 @@ function AutoScrollAssets() {
         {duplicatedAssets.map((property, index) => {
           const title = t(property.titleKey)
           const location = t(property.locationKey)
-          const contain = /(^|\/)(helte|logo|honsha)\b/i.test(property.image || '') || /logo/i.test(property.image || '')
+          // 仅对“Logo 类图片”使用 contain + 留白；本社大楼（honsha）为照片类，需贴边显示
+          const contain = /(^|\/)(helte|logo)\b/i.test(property.image || '') || /logo/i.test(property.image || '')
           return (
             <div
               key={`${property.titleKey}-${index}`}

@@ -13,6 +13,15 @@ export default function WuYePage() {
   const { t, language } = useLanguage()
   const propertiesScrollRef = useRef<HTMLDivElement | null>(null)
   const [ringSize, setRingSize] = useState<number>(260)
+  const ringLabels = useMemo(
+    () => [
+      t('wuye.services.appreciation.marketResearch'),
+      t('wuye.services.appreciation.majorRepair'),
+      t('wuye.services.appreciation.additionalIncome'),
+    ] as const,
+    [t]
+  )
+  const ringCenterText = t('wuye.services.appreciation.rentNegotiation')
 
   const regularServices = useMemo(() => [
     {
@@ -306,7 +315,15 @@ export default function WuYePage() {
 
                 {/* 去掉 4 个小方块，改成动态图形 */}
                 <div className="mt-4 md:mt-6 flex items-center justify-center">
-                  <RentNegotiationRing size={ringSize} maxDeg={14} durationSec={3.8} gapDeg={6} />
+                  <RentNegotiationRing
+                    size={ringSize}
+                    maxDeg={14}
+                    durationSec={3.8}
+                    gapDeg={6}
+                    labels={ringLabels}
+                    centerText={ringCenterText}
+                    ariaLabel={ringCenterText}
+                  />
                 </div>
 
                 {/* 突出指标：15年行业经验 / 500+成功案例 / 平均租金提升15%+ */}

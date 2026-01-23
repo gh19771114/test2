@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useId, useMemo } from 'react'
 
 type Props = {
   size?: number
@@ -8,6 +8,9 @@ type Props = {
   durationSec?: number
   gapDeg?: number
   className?: string
+  labels?: readonly [string, string, string]
+  centerText?: string
+  ariaLabel?: string
 }
 
 function polar(cx: number, cy: number, r: number, deg: number) {
@@ -37,15 +40,43 @@ function arcPath(cx: number, cy: number, r: number, a0: number, a1: number) {
   return `M ${p0.x.toFixed(2)} ${p0.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)}`
 }
 
+function wrapLabel(label: string): string[] {
+  const trimmed = (label || '').trim()
+  if (!trimmed) return ['']
+  if (trimmed.includes('\n')) return trimmed.split('\n').map((s) => s.trim()).filter(Boolean)
+
+  // Prefer splitting by spaces for English-like labels
+  if (/\s/.test(trimmed)) {
+    const parts = trimmed.split(/\s+/).filter(Boolean)
+    if (parts.length <= 2) return [parts.join(' ')]
+    const mid = Math.ceil(parts.length / 2)
+    return [parts.slice(0, mid).join(' '), parts.slice(mid).join(' ')]
+  }
+
+  // Fallback: split long CJK-like labels into 2 lines
+  if (trimmed.length > 6) {
+    const mid = Math.ceil(trimmed.length / 2)
+    return [trimmed.slice(0, mid), trimmed.slice(mid)]
+  }
+
+  return [trimmed]
+}
+
 export default function RentNegotiationRing({
   size = 420,
   maxDeg = 15,
   durationSec = 3.6,
   gapDeg = 6,
   className,
+  labels = ['市场调查', '大规模修缮', '相关附加收益'],
+  centerText = '租金交涉',
+  ariaLabel,
 }: Props) {
-  const labels = ['市场调查', '大规模修缮', '相关附加收益'] as const
   const centersDeg = [90, 210, 330] as const
+  const uid = useId()
+  const safeId = useMemo(() => uid.replace(/[^a-zA-Z0-9_-]/g, ''), [uid])
+  const filterId = `${safeId}-glassBlur`
+  const swayName = `${safeId}-sway`
 
   const outerR = 88
   const innerR = 62
@@ -79,9 +110,9 @@ export default function RentNegotiationRing({
 
   return (
     <div className={className} style={{ width: size, height: size }}>
-      <svg viewBox="0 0 200 200" width="100%" height="100%" aria-label="租金交涉流程环">
+      <svg viewBox="0 0 200 200" width="100%" height="100%" aria-label={ariaLabel || centerText || 'Ring'}>
         <defs>
-          <filter id="glassBlur" x="-20%" y="-20%" width="140%" height="140%">
+          <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="0.6" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -92,7 +123,7 @@ export default function RentNegotiationRing({
           {segs.map((s) => (
             <linearGradient
               key={`g-${s.i}`}
-              id={`segGrad${s.i}`}
+              id={`${safeId}-segGrad${s.i}`}
               gradientUnits="userSpaceOnUse"
               x1={s.gp0.x}
               y1={s.gp0.y}
@@ -108,11 +139,11 @@ export default function RentNegotiationRing({
         <style>{`
           .sway{
             transform-origin: 50% 50%;
-            animation: sway ${durationSec}s ease-in-out infinite;
+            animation: ${swayName} ${durationSec}s ease-in-out infinite;
             will-change: transform;
             filter: drop-shadow(0 0 12px rgba(255,255,255,.08));
           }
-          @keyframes sway{
+          @keyframes ${swayName}{
             0%   { transform: rotate(${-maxDeg}deg); }
             50%  { transform: rotate(${maxDeg}deg); }
             100% { transform: rotate(${-maxDeg}deg); }
@@ -127,12 +158,15 @@ export default function RentNegotiationRing({
         <g className="sway">
           {segs.map((s) => {
             const label = labels[s.i]
+            const lines = wrapLabel(label)
+            const lineStep = 14
+            const startDy = -(lineStep * (lines.length - 1)) / 2 + 4
             return (
               <g key={s.i}>
                 <path
                   d={s.d}
                   fill={segStyle[s.i].fill}
-                  stroke={`url(#segGrad${s.i})`}
+                  stroke={`url(#${safeId}-segGrad${s.i})`}
                   strokeWidth={2.4}
                   strokeLinejoin="round"
                 />
@@ -143,25 +177,18 @@ export default function RentNegotiationRing({
                   stroke="rgba(255,255,255,.22)"
                   strokeWidth={3}
                   strokeLinecap="round"
-                  filter="url(#glassBlur)"
+                  filter={`url(#${filterId})`}
                 />
 
                 <path d={s.d} fill="transparent" stroke="rgba(255,255,255,.14)" strokeWidth={1} />
 
-                {label === '相关附加收益' ? (
-                  <text x={s.pos.x} y={s.pos.y} fill="#fff" fontSize={11.5} textAnchor="middle" dominantBaseline="middle">
-                    <tspan x={s.pos.x} dy={-2}>
-                      相关附加
+                <text x={s.pos.x} y={s.pos.y} fill="#fff" fontSize={11.5} textAnchor="middle" dominantBaseline="middle">
+                  {lines.map((line, idx) => (
+                    <tspan key={idx} x={s.pos.x} dy={idx === 0 ? startDy : lineStep}>
+                      {line}
                     </tspan>
-                    <tspan x={s.pos.x} dy={14}>
-                      收益
-                    </tspan>
-                  </text>
-                ) : (
-                  <text x={s.pos.x} y={s.pos.y} fill="#fff" fontSize={11.5} textAnchor="middle" dominantBaseline="middle">
-                    {label}
-                  </text>
-                )}
+                  ))}
+                </text>
               </g>
             )
           })}
@@ -172,7 +199,7 @@ export default function RentNegotiationRing({
 
         <circle cx="100" cy="100" r="50" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.9)" strokeWidth="2" />
         <text x="100" y="100" fill="#fff" fontSize="18" fontWeight="700" textAnchor="middle" dominantBaseline="middle">
-          租金交涉
+          {centerText}
         </text>
       </svg>
     </div>
