@@ -3,14 +3,16 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Calendar, MapPin, Search, Hand, Hammer, Coins, Building2 } from 'lucide-react'
+import { ClipboardCheck, DollarSign, Wrench, Shield, TrendingUp, Users, Building2 } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
+import RentNegotiationRing from '@/components/RentNegotiationRing'
 
 export default function WuYePage() {
   const { t, language } = useLanguage()
   const propertiesScrollRef = useRef<HTMLDivElement | null>(null)
+  const [ringSize, setRingSize] = useState<number>(260)
 
   const regularServices = useMemo(() => [
     {
@@ -40,28 +42,18 @@ export default function WuYePage() {
     },
   ], [t])
 
-  const assetAppreciationServices = useMemo(() => [
-    {
-      title: t('wuye.services.appreciation.marketResearch'),
-      link: '/wuye/zengzhi',
-      icon: Search,
-    },
-    {
-      title: t('wuye.services.appreciation.rentNegotiation'),
-      link: '/wuye/zengzhi',
-      icon: Hand,
-    },
-    {
-      title: t('wuye.services.appreciation.majorRepair'),
-      link: '/wuye/zengzhi',
-      icon: Hammer,
-    },
-    {
-      title: t('wuye.services.appreciation.additionalIncome'),
-      link: '/wuye/zengzhi',
-      icon: Coins,
-    },
-  ], [t])
+  // 资产维护&增值服务动态图：根据视口自适应尺寸（避免移动端撑爆/桌面端过小）
+  useEffect(() => {
+    const update = () => {
+      const w = typeof window !== 'undefined' ? window.innerWidth : 0
+      // 经验值：手机更偏大一些，桌面封顶
+      const next = Math.round(Math.max(220, Math.min(360, w * 0.42 || 260)))
+      setRingSize(next)
+    }
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   const managedProperties = useMemo(() => {
     return activeManagedPropertyCards.map((card) => ({
@@ -312,26 +304,9 @@ export default function WuYePage() {
                   {t('wuye.zengzhi.description')}
                 </p>
 
-                {/* 手机竖版：两列网格，压缩高度 */}
-                <div className="mt-4 grid grid-cols-2 gap-3 md:mt-6 md:gap-4">
-                  {assetAppreciationServices.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <div
-                        key={item.title}
-                        className="rounded-2xl bg-white/10 border border-white/15 backdrop-blur-sm"
-                      >
-                        <div className="flex flex-col items-center justify-center text-center gap-2 p-3 md:p-4">
-                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/18 to-white/6 border border-white/15 flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-5 h-5 text-white/95" />
-                          </div>
-                          <div className="wuye-appreciation-item-title text-[13px] md:text-base font-semibold text-white leading-snug whitespace-pre-line min-h-[2.4em]">
-                            {item.title}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
+                {/* 去掉 4 个小方块，改成动态图形 */}
+                <div className="mt-4 md:mt-6 flex items-center justify-center">
+                  <RentNegotiationRing size={ringSize} maxDeg={14} durationSec={3.8} gapDeg={6} />
                 </div>
 
                 {/* 突出指标：15年行业经验 / 500+成功案例 / 平均租金提升15%+ */}

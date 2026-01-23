@@ -13,6 +13,7 @@ export const caseIds = [
   'nagoya-student-apartment',
   // 企业出海助力
   'kingsoft-wps-japan',
+  'suzhou-industrial-park',
   // 资产投资
   'shinjuku-daikan-plaza-a-201',
 ] as const
@@ -44,6 +45,7 @@ export const caseImages: Record<(typeof caseIds)[number], string> = {
   'yokohama-waterfront-complex': '/imgs/managed-properties/mp-09.jpeg',
   'nagoya-student-apartment': '/imgs/managed-properties/mp-18.jpeg',
   'kingsoft-wps-japan': '/imgs/WPS.jpeg',
+  'suzhou-industrial-park': '/imgs/qichu/suzhougongyeyuan.jpeg',
   'shinjuku-daikan-plaza-a-201': '/imgs/Shinjuku Daikan Plaza.jpeg',
 }
 
@@ -57,6 +59,7 @@ export const caseCategoryGroups: Record<(typeof caseIds)[number], 'maimai' | 'wu
   'yokohama-waterfront-complex': 'wuye',
   'nagoya-student-apartment': 'wuye',
   'kingsoft-wps-japan': 'qichu',
+  'suzhou-industrial-park': 'qichu',
   'shinjuku-daikan-plaza-a-201': 'touzi',
 }
 

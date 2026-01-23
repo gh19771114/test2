@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Building2, TrendingUp, Award, FileText, ArrowRight, ArrowDown, CheckCircle2, X, Calculator } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { maimaiPropertiesNoFee, maimaiPropertiesWithFee } from './propertiesData'
 
 const currencyLocales: Record<string, string> = {
   JPY: 'ja-JP',
@@ -147,121 +148,15 @@ export default function MaiMaiPage() {
     return `${t('maimai.currency.approx')}${formattedNumber}${label}`
   }
 
-  const propertiesNoFee = useMemo(() => [
-  {
-    title: 'ライオンズマンション東銀座2F',
-    price: '42,680万日元',
-    area: '127.6㎡',
-    type: '店舗・事務所',
-    location: '東京都中央区築地',
-      feature: t('maimai.properties.noFee'),
-      image: '/imgs/Lions Mansion Higashi-Ginza.jpeg',
-    href: '/maimai/lions-higashiginza-2f'
-  },
-  {
-      title: '新中野駅上プラザ305号室',
-      price: '2,100万日元',
-      area: '23.92㎡',
-      type: '1R',
-    location: '東京都中野区本町',
-      feature: t('maimai.properties.noFee'),
-    image: '/imgs/maimai/shinnakanoekiue.jpeg',
-    href: '/maimai/shin-nakano-ekijou-plaza-305'
-  },
-  {
-      title: '新中野駅上プラザ304号室',
-      price: '5,600万日元',
-      area: '71.73㎡',
-      type: '2LDK',
-    location: '東京都中野区本町',
-      feature: t('maimai.properties.noFee'),
-    image: '/imgs/maimai/shinnakanoekiue.jpeg',
-    href: '/maimai/shin-nakano-ekijou-plaza-304'
-  },
-  ], [t])
+  const propertiesNoFee = useMemo(
+    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey) })),
+    [t]
+  )
 
-  const propertiesWithFee = useMemo(() => [
-  {
-      title: 'パティオ杉並 2F',
-    price: '1,050万日元',
-    area: '19.2㎡',
-    type: '1R',
-    location: '东京都杉并区堀之内',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Patio Suginami 2F.jpeg',
-    href: '/maimai/patio-suginami-203'
-  },
-  {
-      title: 'セントヒルズ椎名町 4F',
-    price: '1,050万日元',
-    area: '13.84㎡',
-    type: '1R',
-    location: '东京都丰岛区长崎',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Saint Hills Shiinamachi 4F.jpeg',
-    href: '/maimai/cent-hills-shiinamachi-405'
-  },
-  {
-      title: 'パレ・ドール相模原 8F',
-    price: '420万日元',
-    area: '16.29㎡',
-    type: '1K',
-    location: '神奈川县相模原市',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Palais d\'Or Sagamihara 8F.jpeg',
-    href: '/maimai/pale-dor-sagamihara-808'
-  },
-  {
-      title: '日神パレス竹ノ塚 5F',
-    price: '700万日元',
-    area: '18.09㎡',
-    type: '1R',
-    location: '东京都足立区伊兴',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Nisshin Palace Takenotsuka 5f.jpeg',
-    href: '/maimai/nichishin-palace-takenotsuka-509'
-  },
-  {
-      title: 'セザール西高島平 2F',
-    price: '1,200万日元',
-    area: '27.13㎡',
-    type: '2〜3LDK',
-    location: '东京都板桥区德丸',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/Cesar Nishi Takashimadaira.jpeg',
-    href: '/maimai/cesar-takashimadaira-206'
-  },
-  {
-      title: '美和プラザ高井戸 1F',
-    price: '990万日元',
-    area: '—',
-    type: '1K×3戸',
-    location: '东京都杉并区上高井戸',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Miwa Plaza Takaido 1.jpeg',
-    href: '/maimai/miwa-plaza-takaido-101'
-  },
-  {
-      title: 'LM西八王子第3 7F',
-    price: '480万日元',
-    area: '18.2㎡',
-    type: '1K',
-    location: '东京都八王子市八木町',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Lions Mansion Nishi Hachioji 3-1.jpeg',
-    href: '/maimai/lm-nishihachioji-3-707'
-  },
-  {
-      title: 'スカイコート生田 2F',
-    price: '430万日元',
-    area: '约17㎡',
-    type: '1K',
-    location: '神奈川县川崎市多摩区',
-      feature: t('maimai.properties.withFee'),
-    image: '/imgs/maimai/Sky Court Ikuta.jpeg',
-    href: '/maimai/sky-court-ikuta-202'
-  },
-  ], [t])
+  const propertiesWithFee = useMemo(
+    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey) })),
+    [t]
+  )
 
   const recentDeals = useMemo(() => [
   {

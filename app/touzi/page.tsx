@@ -57,13 +57,22 @@ export default function TouZiPage() {
                     >
                       <div className="relative h-56 bg-gray-100 flex items-center justify-center">
                         {item.image ? (
-                          <Image
-                            src={item.image}
-                              alt={t(item.titleKey)}
-                            fill
-                              className={item.image.includes('helte') ? "object-contain transition-transform duration-300 group-hover:scale-105 p-4" : "object-cover transition-transform duration-300 group-hover:scale-105"}
-                              sizes="300px"
-                          />
+                          (() => {
+                            const contain = /(^|\/)(helte|logo|honsha)\b/i.test(item.image) || /logo/i.test(item.image)
+                            return (
+                              <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
+                                <div className="relative w-full h-full">
+                                  <Image
+                                    src={item.image}
+                                    alt={t(item.titleKey)}
+                                    fill
+                                    className={`${contain ? 'object-contain' : 'object-cover'} transition-transform duration-300 group-hover:scale-105`}
+                                    sizes="300px"
+                                  />
+                                </div>
+                              </div>
+                            )
+                          })()
                         ) : (
                           <div className="text-gray-400 text-sm">No Photo</div>
                         )}

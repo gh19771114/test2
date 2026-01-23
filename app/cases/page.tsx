@@ -9,6 +9,11 @@ import PageLayout from '@/components/PageLayout'
 import { Calendar, MapPin, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { caseIds, caseDates, caseImages, caseCategoryGroups } from '@/lib/casesData'
+import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
+import { investmentProperties } from '@/app/touzi/propertyData'
+import { maimaiAllPropertyCards } from '@/app/maimai/propertiesData'
+
+const shouldContainImage = (src: string) => /(^|\/)(helte|logo|honsha)\b/i.test(src) || /logo/i.test(src)
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,7 +37,7 @@ const itemVariants = {
 }
 
 export default function CasesPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const ref = useRef(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -40,7 +45,7 @@ export default function CasesPage() {
 
   // 构建案例数据（使用翻译）
   const cases = useMemo(() => {
-    return caseIds.map((id) => {
+    const base = caseIds.map((id) => {
       const detail = t(`cases.details.${id}`, { returnObjects: true }) as any
       return {
         id,
@@ -52,9 +57,54 @@ export default function CasesPage() {
         category: detail?.category || '',
         image: caseImages[id],
         description: detail?.description || '',
+        href: `/cases/${id}`,
       }
     })
-  }, [t])
+
+    // 物业管理：与 /wuye “管理房产”卡片同步（数量与图片一致）
+    const wuyeManaged = activeManagedPropertyCards.map((card) => ({
+      id: card.id,
+      date: '',
+      type: t('wuye.properties.type'),
+      categoryGroup: 'wuye',
+      title: getManagedPropertyTitle(card, language),
+      location: '',
+      category: '',
+      image: card.image,
+      description: '',
+      href: '/wuye',
+    }))
+
+    // 资产投资：与 /touzi 的投资卡片同步（数量与图文一致）
+    const touziAssets = investmentProperties.map((p, idx) => ({
+      id: `touzi-asset-${idx + 1}`,
+      date: '',
+      type: t('touzi.title'),
+      categoryGroup: 'touzi',
+      title: t(p.titleKey),
+      location: t(p.locationKey),
+      category: '',
+      image: p.image || '/imgs/honsha.png',
+      description: '',
+      href: '/touzi',
+    }))
+
+    // 买卖中介：与 /maimai “销售中房产”卡片同步（数量与图文一致）
+    const maimaiCards = maimaiAllPropertyCards.map((p) => ({
+      id: p.href,
+      date: '',
+      type: t('maimai.properties.title'),
+      categoryGroup: 'maimai',
+      title: p.title,
+      location: p.location,
+      category: '',
+      image: p.image,
+      description: '',
+      href: p.href,
+    }))
+
+    return [...base, ...wuyeManaged, ...touziAssets, ...maimaiCards]
+  }, [t, language])
 
   // 筛选案例
   const filteredCases = useMemo(() => {
@@ -162,51 +212,71 @@ export default function CasesPage() {
                   className="flex gap-6 min-w-max"
                   style={{ width: 'max-content' }}
                 >
-                  {filteredCases.map((caseItem) => (
-                    <motion.div
-                      key={caseItem.id}
-                      variants={itemVariants}
-                      className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card"
-                      style={{ width: '380px' }}
-                    >
-                      <div className="relative overflow-hidden">
-                        <div className="relative w-full h-64 cases-card-media">
-                          <Image
-                            src={caseItem.image}
-                            alt={caseItem.title}
-                            fill
-                            className="object-cover"
-                            sizes="380px"
-                            unoptimized={caseItem.image.startsWith('/imgs/')}
-                          />
+                  {filteredCases.map((caseItem) => {
+                    const contain = shouldContainImage(caseItem.image)
+                    return (
+                      <motion.div
+                        key={caseItem.id}
+                        variants={itemVariants}
+                        className="group bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg flex-shrink-0 cases-card"
+                        style={{ width: '380px' }}
+                      >
+                        <div className="relative overflow-hidden">
+                          <div className="relative w-full h-64 cases-card-media">
+                            <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
+                              <div className="relative w-full h-full">
+                                <Image
+                                  src={caseItem.image}
+                                  alt={caseItem.title}
+                                  fill
+                                  className={contain ? 'object-contain' : 'object-cover'}
+                                  sizes="380px"
+                                  unoptimized={caseItem.image.startsWith('/imgs/')}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="absolute top-4 right-4">
+                            <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                              {caseItem.type}
+                            </span>
+                          </div>
                         </div>
-                        <div className="absolute top-4 right-4">
-                          <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                            {caseItem.type}
-                          </span>
-                        </div>
-                      </div>
 
                       <div className="p-6 cases-card-body">
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
-                          <Calendar size={16} />
-                          <span>{caseItem.date}</span>
-                        </div>
-                        <Link href={`/cases/${caseItem.id}`}>
-                          <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title">
-                            {caseItem.title}
-                          </h3>
-                        </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-700 mb-3 cases-card-location">
-                          <MapPin size={16} />
-                          <span>{caseItem.location}</span>
-                        </div>
-                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
-                          {caseItem.description}
-                        </p>
+                        {caseItem.categoryGroup !== 'wuye' && caseItem.date ? (
+                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3 cases-card-meta">
+                            <Calendar size={16} />
+                            <span>{caseItem.date}</span>
+                          </div>
+                        ) : null}
+
+                        {caseItem.href ? (
+                          <Link href={caseItem.href}>
+                            <h3 className="text-xl font-semibold text-navy-900 mb-2 hover:text-blue-600 transition-colors cases-card-title">
+                              {caseItem.title}
+                            </h3>
+                          </Link>
+                        ) : (
+                          <h3 className="text-xl font-semibold text-navy-900 mb-2 cases-card-title">{caseItem.title}</h3>
+                        )}
+
+                        {caseItem.categoryGroup !== 'wuye' && caseItem.location ? (
+                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-3 cases-card-location">
+                            <MapPin size={16} />
+                            <span>{caseItem.location}</span>
+                          </div>
+                        ) : null}
+
+                        {caseItem.categoryGroup !== 'wuye' && caseItem.description ? (
+                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
+                            {caseItem.description}
+                          </p>
+                        ) : null}
                       </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    )
+                  })}
                 </motion.div>
               </div>
             </div>

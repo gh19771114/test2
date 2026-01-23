@@ -482,6 +482,12 @@
           "description": "Established the headquarters in Arakawa Ward, Tokyo, built the initial rental and sales consultant team, and opened Nippori Station Front Store in October of the same year.",
           "imageAlt": "Tokyo city street scene"
         },
+        "milestone13": {
+          "year": "2010.10",
+          "title": "Nippori Station Front Store Opens",
+          "description": "Opened a store in front of Nippori Station to strengthen on-the-ground consulting and service capabilities and improve customer reception.",
+          "imageAlt": "Nippori Station front store"
+        },
         "milestone3": {
           "year": "2012.01",
           "title": "Regional Expansion",
@@ -523,6 +529,12 @@
           "title": "Asset Expansion",
           "description": "Acquired \"Kyoto Karasuma Rokujo Hotel\", entering the hotel and commercial asset operation field.",
           "imageAlt": "Hotel lobby"
+        },
+        "milestone12": {
+          "year": "2019.02",
+          "title": "Giving Back to Society",
+          "description": "In Feb 2019, purchased the Bournmark building in Takanawadai, Tokyo. In Dec of the same year, the Chinese Consulate moved into the building, solving the issue of visitors having no place to queue at the former Roppongi consulate site.",
+          "imageAlt": "Bournmark building"
         },
         "milestone10": {
           "year": "2021.04",
@@ -2585,6 +2597,25 @@
             "label": "Service Team",
             "value": "Professional Team"
           }
+        ]
+      },
+      "suzhou-industrial-park": {
+        "type": "Enterprise Service",
+        "title": "Suzhou Industrial Park Strategic Partnership",
+        "location": "Suzhou, China / Japan",
+        "category": "Enterprise Expansion",
+        "description": "Strategic partnership with Suzhou Industrial Park to support companies expanding into Japan with landing services and resource matching.",
+        "details": [
+          "Established strategic partnership with Suzhou Industrial Park (Oct 2025)",
+          "Supports Japan market entry: advisory, resource matching, and operational support",
+          "Provides market research and location strategy for office/commercial needs",
+          "Coordinates local service providers to improve compliance and speed"
+        ],
+        "highlights": [
+          { "label": "Partnership", "value": "Strategic" },
+          { "label": "Focus", "value": "Japan market entry" },
+          { "label": "Strength", "value": "Resource matching" },
+          { "label": "Coverage", "value": "CN-JP" }
         ]
       },
       "shibuya-luxury-apartment": {

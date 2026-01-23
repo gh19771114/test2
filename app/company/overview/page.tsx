@@ -397,6 +397,7 @@ function AutoScrollAssets() {
         {duplicatedAssets.map((property, index) => {
           const title = t(property.titleKey)
           const location = t(property.locationKey)
+          const contain = /(^|\/)(helte|logo|honsha)\b/i.test(property.image || '') || /logo/i.test(property.image || '')
           return (
             <div
               key={`${property.titleKey}-${index}`}
@@ -404,17 +405,17 @@ function AutoScrollAssets() {
             >
               <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
                 {property.image ? (
-                  <Image
-                    src={property.image}
-                    alt={title}
-                    fill
-                    className={`object-cover transition-transform duration-300 group-hover:scale-105 ${
-                      property.image.includes('helte') || property.image.includes('LOGO') 
-                        ? 'object-contain p-4' 
-                        : ''
-                    }`}
-                    sizes="320px"
-                  />
+                  <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={property.image}
+                        alt={title}
+                        fill
+                        className={`${contain ? 'object-contain' : 'object-cover'} transition-transform duration-300 group-hover:scale-105`}
+                        sizes="320px"
+                      />
+                    </div>
+                  </div>
                 ) : (
                   <div className="flex items-center justify-center h-full text-gray-400 text-sm">
                     {t('company.overview.assets.noImage')}

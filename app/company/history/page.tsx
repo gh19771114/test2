@@ -15,11 +15,20 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone1.year'),
     title: t('company.history.milestones.milestone1.title'),
     description: t('company.history.milestones.milestone1.description'),
+    image: '/imgs/warmlight.jpg',
+    imageAlt: t('company.history.milestones.milestone1.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone2.year'),
     title: t('company.history.milestones.milestone2.title'),
     description: t('company.history.milestones.milestone2.description'),
+  },
+  {
+    year: t('company.history.milestones.milestone13.year'),
+    title: t('company.history.milestones.milestone13.title'),
+    description: t('company.history.milestones.milestone13.description'),
+    image: '/imgs/lou.jpg',
+    imageAlt: t('company.history.milestones.milestone13.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone3.year'),
@@ -30,6 +39,8 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone4.year'),
     title: t('company.history.milestones.milestone4.title'),
     description: t('company.history.milestones.milestone4.description'),
+    image: '/imgs/kaiye2.jpg',
+    imageAlt: t('company.history.milestones.milestone4.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone5.year'),
@@ -40,6 +51,8 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone6.year'),
     title: t('company.history.milestones.milestone6.title'),
     description: t('company.history.milestones.milestone6.description'),
+    image: '/imgs/honsha.png',
+    imageAlt: t('company.history.milestones.milestone6.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone7.year'),
@@ -55,16 +68,29 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone9.year'),
     title: t('company.history.milestones.milestone9.title'),
     description: t('company.history.milestones.milestone9.description'),
+    image: '/imgs/Karasuma Rokujo Hotel.jpeg',
+    imageAlt: t('company.history.milestones.milestone9.imageAlt'),
+  },
+  {
+    year: t('company.history.milestones.milestone12.year'),
+    title: t('company.history.milestones.milestone12.title'),
+    description: t('company.history.milestones.milestone12.description'),
+    image: '/imgs/lingshiguan.jpg',
+    imageAlt: t('company.history.milestones.milestone12.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone10.year'),
     title: t('company.history.milestones.milestone10.title'),
     description: t('company.history.milestones.milestone10.description'),
+    image: '/imgs/helte LOGO.png',
+    imageAlt: t('company.history.milestones.milestone10.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone11.year'),
     title: t('company.history.milestones.milestone11.title'),
     description: t('company.history.milestones.milestone11.description'),
+    image: '/imgs/logo2.jpg',
+    imageAlt: t('company.history.milestones.milestone11.imageAlt'),
   },
   ], [t])
 
@@ -176,6 +202,23 @@ export default function CompanyHistoryPage() {
                     </div>
 
                     <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                      {milestone.image ? (
+                        <div className="relative w-full h-40 md:h-44 rounded-xl overflow-hidden border border-gray-200 mb-4">
+                          <div className="absolute inset-0 p-2 bg-white">
+                            <div className="relative w-full h-full">
+                              <Image
+                                src={milestone.image}
+                                alt={milestone.imageAlt || milestone.title}
+                                fill
+                                className="object-contain"
+                                sizes="(min-width: 768px) 380px, 320px"
+                                unoptimized={milestone.image.startsWith('/imgs/')}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+
                       {/* 移动端：顶部时间点 */}
                       <div className="md:hidden flex items-center gap-2 mb-3">
                         <div className="w-3 h-3 rounded-full bg-blue-500 border border-white shadow" />

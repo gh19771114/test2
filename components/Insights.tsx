@@ -80,7 +80,9 @@ const Insights = () => {
   }, [])
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
+  const newsLoopList = useMemo(() => [...newsList, ...newsList], [newsList])
   const encyclopedia = useMemo(() => encyclopediaEntries, [])
+  const encyclopediaLoopList = useMemo(() => [...encyclopedia, ...encyclopedia], [encyclopedia])
 
   const getNewsTitle = (slug: string) => {
     const translated = t(`news.items.${slug}.title`)
@@ -139,6 +141,13 @@ const Insights = () => {
         animationRef.current = null
         return
       }
+
+      // 若内容不足以滚动，则不做自动滚动（也不做任何“重置”动作）
+      if (container.scrollHeight <= container.clientHeight + 1) {
+        lastScrollTimeRef.current = currentTime
+        animationRef.current = requestAnimationFrame(animate)
+        return
+      }
       
       // 如果用户正在滚动，不更新位置，但继续动画循环
       if (!isUserScrollingRef.current) {
@@ -147,13 +156,11 @@ const Insights = () => {
         
         // 计算基于时间的滚动距离（像素/秒转换为像素/毫秒）
         const scrollDistance = (SCROLL_SPEED_PX_PER_SEC * deltaTime) / 1000
-        
-        const maxScroll = container.scrollHeight - container.clientHeight
-        const currentScroll = container.scrollTop
-        
-        // 如果滚动到底部，平滑重置到顶部（无缝循环）
-        if (currentScroll >= maxScroll - 1) {
-          container.scrollTop = 0
+
+        // 无缝循环：渲染两份列表，滚到“第一份末尾”时回绕到对应位置（不会跳到第一条）
+        const half = container.scrollHeight / 2
+        if (half > 0 && container.scrollTop >= half) {
+          container.scrollTop -= half
         } else {
           container.scrollTop += scrollDistance
         }
@@ -209,6 +216,9 @@ const Insights = () => {
     const container = containerRef.current
     if (!container) return
 
+    // 内容不足以滚动时，不拦截页面滚动（避免用户在某些屏幕高度处“卡住/跳动”）
+    if (container.scrollHeight <= container.clientHeight + 1) return
+
     // 始终阻止事件冒泡，防止页面滚动（只要在滚动栏区域内）
     e.preventDefault()
     e.stopPropagation()
@@ -223,24 +233,13 @@ const Insights = () => {
     
     // 手动滚动
     const delta = e.deltaY
-    const currentScroll = container.scrollTop
-    const maxScroll = container.scrollHeight - container.clientHeight
-    
-    // 计算新的滚动位置
-    let newScroll = currentScroll + delta
-    
-    // 实现"撞墙反弹"效果
-    if (newScroll < 0) {
-      // 到达顶部，反弹效果（反弹30%的距离）
-      newScroll = -delta * 0.3
-      if (newScroll < 0) newScroll = 0
-    } else if (newScroll > maxScroll) {
-      // 到达底部，反弹效果（反弹30%的距离）
-      const overscroll = newScroll - maxScroll
-      newScroll = maxScroll - overscroll * 0.3
-      if (newScroll > maxScroll) newScroll = maxScroll
+    const half = container.scrollHeight / 2
+    let newScroll = container.scrollTop + delta
+    if (half > 0) {
+      // 上下回绕，保持无缝循环
+      if (newScroll >= half) newScroll -= half
+      if (newScroll < 0) newScroll += half
     }
-    
     container.scrollTop = newScroll
     
     // 设置新的定时器，在停止滚动后恢复自动滚动
@@ -311,7 +310,8 @@ const Insights = () => {
                 maxHeight: '400px',
                 minHeight: '400px',
                 willChange: 'scroll-position',
-                WebkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch',
+                overflowAnchor: 'none',
               } as React.CSSProperties}
               onWheel={(e) => handleWheel(e, newsScrollContainerRef, newsIsUserScrollingRef, newsScrollTimeoutRef)}
               onMouseLeave={() => handleMouseLeave(newsIsUserScrollingRef, newsLastScrollTimeRef)}
@@ -322,7 +322,7 @@ const Insights = () => {
                 </div>
               ) : (
                 <div style={{ paddingTop: '8px', paddingBottom: '8px' }}>
-                  {newsList.map((item, index) => (
+                  {newsLoopList.map((item, index) => (
                     <Link
                       key={`${item.slug}-${index}`}
                       href={`/news/${item.slug}`}
@@ -368,13 +368,14 @@ const Insights = () => {
                 height: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
                 maxHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
                 minHeight: pinnedBarHeight > 0 ? `${400 + pinnedBarHeight}px` : '400px',
-                willChange: 'scroll-position'
+                willChange: 'scroll-position',
+                overflowAnchor: 'none',
               }}
               onWheel={(e) => handleWheel(e, encyclopediaScrollContainerRef, encyclopediaIsUserScrollingRef, encyclopediaScrollTimeoutRef)}
               onMouseLeave={() => handleMouseLeave(encyclopediaIsUserScrollingRef, encyclopediaLastScrollTimeRef)}
             >
               <div style={{ paddingTop: '8px', paddingBottom: '8px' }}>
-                {encyclopedia.map((item, index) => (
+                {encyclopediaLoopList.map((item, index) => (
                   <Link
                     key={`${item.slug}-${index}`}
                     href={`/encyclopedia/${item.slug}`}
