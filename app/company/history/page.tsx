@@ -63,6 +63,8 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone8.year'),
     title: t('company.history.milestones.milestone8.title'),
     description: t('company.history.milestones.milestone8.description'),
+    image: '/imgs/Warm Light Residence.jpeg',
+    imageAlt: t('company.history.milestones.milestone8.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone9.year'),
