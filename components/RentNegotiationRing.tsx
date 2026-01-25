@@ -104,7 +104,23 @@ export default function RentNegotiationRing({
 
       const hi = arcPath(100, 100, outerR - 4, a0 + 10, a1 - 18)
 
-      return { i, a0, a1, d, gp0, gp1, pos, hi }
+      // IMPORTANT: round all SVG numeric attributes to fixed decimals
+      // to avoid SSR/CSR hydration mismatch caused by floating-point differences.
+      const fmt = (n: number) => n.toFixed(3)
+
+      return {
+        i,
+        a0,
+        a1,
+        d,
+        gp0x: fmt(gp0.x),
+        gp0y: fmt(gp0.y),
+        gp1x: fmt(gp1.x),
+        gp1y: fmt(gp1.y),
+        posx: fmt(pos.x),
+        posy: fmt(pos.y),
+        hi,
+      }
     })
   }, [gapDeg])
 
@@ -125,10 +141,10 @@ export default function RentNegotiationRing({
               key={`g-${s.i}`}
               id={`${safeId}-segGrad${s.i}`}
               gradientUnits="userSpaceOnUse"
-              x1={s.gp0.x}
-              y1={s.gp0.y}
-              x2={s.gp1.x}
-              y2={s.gp1.y}
+              x1={s.gp0x}
+              y1={s.gp0y}
+              x2={s.gp1x}
+              y2={s.gp1y}
             >
               <stop offset="0%" stopColor={segStyle[s.i].c1} stopOpacity={1} />
               <stop offset="100%" stopColor={segStyle[s.i].c2} stopOpacity={1} />
@@ -182,9 +198,9 @@ export default function RentNegotiationRing({
 
                 <path d={s.d} fill="transparent" stroke="rgba(255,255,255,.14)" strokeWidth={1} />
 
-                <text x={s.pos.x} y={s.pos.y} fill="#fff" fontSize={11.5} textAnchor="middle" dominantBaseline="middle">
+                <text x={s.posx} y={s.posy} fill="#fff" fontSize={11.5} textAnchor="middle" dominantBaseline="middle">
                   {lines.map((line, idx) => (
-                    <tspan key={idx} x={s.pos.x} dy={idx === 0 ? startDy : lineStep}>
+                    <tspan key={idx} x={s.posx} dy={idx === 0 ? startDy : lineStep}>
                       {line}
                     </tspan>
                   ))}

@@ -4,8 +4,8 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useEffect, useRef, useMemo } from 'react'
-import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles, MapPin, Tag } from 'lucide-react'
+import { useEffect, useRef, useMemo, useState } from 'react'
+import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building2, Target, CheckCircle2, ArrowRight, Sparkles, MapPin, Tag, X } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ZengzhiPage() {
@@ -14,36 +14,54 @@ export default function ZengzhiPage() {
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
   const casesRef = useRef(null)
-  const animIframeRef = useRef<HTMLIFrameElement | null>(null)
+  const [isAnimOpen, setIsAnimOpen] = useState(false)
+  const [isMobileAnimOpen, setIsMobileAnimOpen] = useState(false)
+  const [animKey, setAnimKey] = useState(0)
   
   const isHeroInView = useInView(heroRef, { once: true })
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' })
   const isCasesInView = useInView(casesRef, { once: true, margin: '-100px' })
 
-  // 手机端：点击直接全屏（取消“放大弹窗”效果）
-  const enterAnimFullscreen = () => {
-    const iframe = animIframeRef.current
-    if (!iframe) return
-
-    const el = iframe as any
-    try {
-      if (typeof el.requestFullscreen === 'function') {
-        el.requestFullscreen()
-        return
-      }
-      if (typeof el.webkitRequestFullscreen === 'function') {
-        el.webkitRequestFullscreen()
-        return
-      }
-    } catch (_) {
-      // ignore
+  // 交互规则：
+  // - 小窗（embed）：静音自动播放
+  // - 手机：点击小窗直接“大屏弹层”（不直接进入系统全屏）
+  // - 其它设备：维持“点开放大弹层”
+  // - 需要系统全屏：在大屏弹层内点击动画自带全屏按钮
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia?.('(pointer: coarse)') // touch device hint
+    const update = () => {
+      const coarse = mq?.matches ?? false
+      const narrow = window.innerWidth <= 768
+      setIsMobileAnimOpen(coarse || narrow)
     }
-
-    // 全屏不支持时：退回新窗口打开
-    if (typeof window !== 'undefined') {
-      window.open('/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html', '_blank', 'noopener,noreferrer')
+    update()
+    mq?.addEventListener?.('change', update)
+    window.addEventListener('resize', update)
+    return () => {
+      mq?.removeEventListener?.('change', update)
+      window.removeEventListener('resize', update)
     }
+  }, [])
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    if (!isAnimOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [isAnimOpen])
+
+  const openAnimLarge = () => {
+    setAnimKey((k) => k + 1) // remount to restart audio from 0
+    setIsAnimOpen(true)
+  }
+
+  const closeAnimLarge = () => {
+    setIsAnimOpen(false)
   }
 
   // 从多语言文件读取数据
@@ -390,23 +408,22 @@ export default function ZengzhiPage() {
                     allow="autoplay; fullscreen"
                     allowFullScreen
                     sandbox="allow-scripts allow-same-origin"
-                    ref={animIframeRef}
                   />
-                  {/* 覆盖层：点击全屏（避免 iframe 吃掉点击事件） */}
+                  {/* 覆盖层：点击放大/大屏（避免 iframe 吃掉点击事件） */}
                   <button
                     type="button"
-                    onClick={enterAnimFullscreen}
+                    onClick={openAnimLarge}
                     className="absolute inset-0 cursor-pointer bg-black/0 hover:bg-black/10 transition-colors"
-                    aria-label="点击全屏播放"
+                    aria-label={isMobileAnimOpen ? '点击大屏播放' : '点击放大播放'}
                   />
                   <div className="absolute bottom-3 right-3 pointer-events-none">
                     <span className="px-3 py-1 rounded-full bg-black/55 border border-white/15 text-white text-xs">
-                      点击全屏
+                      {isMobileAnimOpen ? '点击大屏' : '点击放大'}
                     </span>
                   </div>
                 </div>
                 <div className="mt-2 text-xs text-white/70">
-                  若无法播放，可
+                  小窗默认静音；点击进入大屏后可播放声音；若无法播放，可
                   <a
                     href="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
                     target="_blank"
@@ -419,6 +436,51 @@ export default function ZengzhiPage() {
                 </div>
               </div>
             </div>
+
+            {/* 大屏/放大弹层（手机：全屏大小；其它：居中放大） */}
+            {isAnimOpen ? (
+              <div
+                className={`fixed inset-0 z-[9999] bg-black/70 ${isMobileAnimOpen ? 'p-2' : 'p-4 md:p-8'} flex items-center justify-center`}
+                role="dialog"
+                aria-modal="true"
+                aria-label="MG 动画播放"
+              >
+                <div
+                  className={`relative bg-black ${
+                    isMobileAnimOpen
+                      ? 'w-[min(100%,980px)] h-[92svh] rounded-2xl'
+                      : 'w-[min(96vw,1100px)] h-[min(78vh,680px)] rounded-2xl'
+                  } overflow-hidden shadow-2xl`}
+                >
+                  <button
+                    type="button"
+                    onClick={closeAnimLarge}
+                    className="absolute z-10 w-10 h-10 rounded-full bg-black/55 border border-white/15 text-white flex items-center justify-center hover:bg-black/70"
+                    style={
+                      isMobileAnimOpen
+                        ? {
+                            top: 'calc(12px + env(safe-area-inset-top))',
+                            right: 'calc(12px + env(safe-area-inset-right))',
+                          }
+                        : { top: 12, right: 12 }
+                    }
+                    aria-label="关闭"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  <iframe
+                    key={animKey}
+                    title="Bournmark 动画演示（大屏）"
+                    src="/imgs/wuye/real/animationHTMLCodes-2026-01-23-10-43-50.html"
+                    className="absolute inset-0 w-full h-full"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                </div>
+              </div>
+            ) : null}
           </motion.div>
         </section>
 

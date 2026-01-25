@@ -46,6 +46,17 @@
             background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
         }
 
+        /* --- 自适应缩放层（解决嵌入小窗时内容被裁切） --- */
+        #stage-fit {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            --fit-scale: 1;
+            transform: scale(var(--fit-scale));
+            transform-origin: 50% 50%;
+        }
+
         /* 背景纹理 */
         .grid-bg {
             position: absolute;
@@ -127,7 +138,12 @@
             align-items: center;
             gap: 12px;
         }
-        .logo-icon { width: clamp(28px, 4vw, 40px); height: clamp(28px, 4vw, 40px); fill: var(--accent-gold); }
+        .logo-icon {
+            width: clamp(28px, 4vw, 40px);
+            height: clamp(28px, 4vw, 40px);
+            display: block;
+            object-fit: contain;
+        }
         .logo-text { font-family: 'Times New Roman', serif; font-size: clamp(16px, 2.2vw, 24px); letter-spacing: clamp(1px, 0.25vw, 2px); color: #fff; font-weight: bold; text-transform: uppercase; }
 
         /* --- 字幕条 --- */
@@ -135,7 +151,7 @@
             position: absolute;
             /* 尽量不遮挡画面主体：缩小底部占位 */
             /* 给底部播放控制条留空间 */
-            bottom: clamp(56px, 8.5vh, 86px);
+            bottom: clamp(44px, 7.2vh, 76px);
             left: 50%;
             transform: translateX(-50%);
             width: min(92vw, 1400px);
@@ -144,6 +160,12 @@
             z-index: 200;
             padding: 0 12px;
             pointer-events: none;
+        }
+        /* 网页小窗（embed）字幕放到窗口底部 */
+        .embed-mode .subtitle-container {
+            bottom: calc(10px + env(safe-area-inset-bottom));
+            width: min(94vw, 1400px);
+            padding: 0 10px;
         }
         .sub-cn {
             /* 字幕需随播放窗口自适应（iframe/手机/桌面） */
@@ -183,9 +205,9 @@
             position: absolute;
             left: 50%;
             bottom: 10px;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(10px);
             width: min(94vw, 980px);
-            display: none;
+            display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px 12px;
@@ -196,6 +218,13 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+        .media-controls.is-visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
             pointer-events: auto;
         }
         .media-btn {
@@ -312,9 +341,32 @@
         }
 
         /* --- 场景 5: 流程 (Process) --- */
-        .process-row { display: flex; width: min(92vw, 1400px); justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+        /* 需求：把“价值兑现”移动到“数据分析”下方，并加宽；“机制协商”右侧箭头指向“价值兑现” */
+        .process-row {
+            display: grid;
+            width: min(92vw, 1400px);
+            grid-template-columns: 1fr 56px 1fr 56px 1fr;
+            grid-template-rows: auto auto;
+            grid-template-areas:
+              "step1 a12 step2 a23 step3"
+              ".     .   step4 .     a34";
+            gap: 14px;
+            align-items: center;
+        }
+        .process-row .step-1 { grid-area: step1; }
+        .process-row .arrow-12 { grid-area: a12; }
+        .process-row .step-2 { grid-area: step2; }
+        .process-row .arrow-23 { grid-area: a23; }
+        .process-row .step-3 { grid-area: step3; }
+        .process-row .step-4 { grid-area: step4; }
+        .process-row .arrow-34 {
+            grid-area: a34;
+            justify-self: start;
+            align-self: center;
+            transform: translateX(-6px) translateY(-8px);
+        }
         .p-step {
-            width: 22%; height: clamp(160px, 26vh, 240px);
+            width: 100%; height: clamp(160px, 26vh, 240px);
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             position: relative;
@@ -330,6 +382,21 @@
         .pie-text { flex: 1; }
         .pie-stat { font-size: clamp(56px, 10vw, 120px); font-weight: bold; color: var(--text-main); line-height: 1; }
         .pie-label { font-size: clamp(16px, 3vw, 32px); color: var(--accent-gold); margin-top: 10px; display: block; }
+        .hs-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(22px, 3.4vw, 40px);
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1;
+            /* 按你的要求：在当前基础上放大到 200% */
+            transform: scale(2);
+            transform-origin: left center;
+        }
+        .hs-icons { display: inline-flex; align-items: center; gap: 8px; }
+        .hs-icon-svg { width: 1.25em; height: 1.25em; display: block; }
+        .hs-value { color: var(--accent-gold); letter-spacing: 0.5px; }
         .pie-chart-container { width: min(72vw, 500px); aspect-ratio: 1 / 1; height: auto; position: relative; }
         svg.pie-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
         circle.pie-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 40; }
@@ -338,10 +405,12 @@
         /* --- 场景 7: KPI 全屏 (Highlights) --- */
         .kpi-fullscreen {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: 1fr;
             width: min(92vw, 1400px); height: 80%;
             gap: clamp(14px, 3vw, 30px);
+            align-items: stretch;
         }
         .kpi-block {
             background: rgba(15, 23, 42, 0.8);
@@ -351,14 +420,29 @@
             text-align: center;
             position: relative; overflow: hidden;
             transition: transform 0.3s;
+            width: 100%;
+            height: 100%;
+            border-radius: 18px;
         }
-        .kpi-icon-lg { font-size: clamp(44px, 8vw, 80px); margin-bottom: 16px; display: block; }
+        .kpi-icon-lg {
+            width: clamp(44px, 8vw, 80px);
+            height: clamp(44px, 8vw, 80px);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .kpi-icon-svg { width: 100%; height: 100%; display: block; }
         .kpi-label-lg { font-size: clamp(14px, 2.2vw, 24px); color: var(--text-sub); letter-spacing: clamp(1px, 0.4vw, 2px); text-transform: uppercase; }
         .kpi-value-lg { font-size: clamp(22px, 4vw, 56px); font-weight: bold; margin-top: 10px; }
+        .kpi-subtext { font-size: clamp(12px, 1.6vw, 20px); color: rgba(255,255,255,0.40); margin-top: 10px; line-height: 1.2; min-height: 1.2em; }
         
         /* 颜色修饰 */
         .k-income { border-left: 5px solid var(--accent-green); }
         .k-income .kpi-icon-lg { color: var(--accent-green); }
+        /* “提高收入”图标视觉留白更大：做轻微放大补偿，保证四块看起来一致 */
+        .k-income .kpi-icon-svg { transform: scale(1.12); transform-origin: center; }
         
         .k-cost { border-left: 5px solid var(--accent-green); }
         .k-cost .kpi-icon-lg { color: var(--accent-green); }
@@ -374,14 +458,22 @@
             .split-screen { flex-direction: column; height: auto; }
             .panel-list { line-height: 1.6; }
 
-            .process-row { justify-content: center; }
-            .p-step { width: 46%; }
-            .p-arrow { display: none; }
+            .process-row { grid-template-columns: 1fr 40px 1fr 40px 1fr; gap: 10px; }
+            .p-arrow { display: block; font-size: clamp(18px, 4vw, 34px); }
 
             .pie-layout { flex-direction: column; justify-content: center; }
             .pie-text { text-align: center; }
 
-            .kpi-fullscreen { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
+            /* KPI：保持 2×2（横竖两排），仅缩小间距与容器高度，确保四块等大 */
+            .kpi-fullscreen {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-rows: repeat(2, minmax(0, 1fr));
+                width: min(94vw, 980px);
+                height: min(64vh, 520px);
+                gap: 12px;
+            }
+            .kpi-block { padding: 14px 12px; }
+            .kpi-icon-lg { margin-bottom: 10px; }
         }
 
         @media (max-width: 600px) {
@@ -390,9 +482,26 @@
             /* 进一步收紧小屏的留白与容器尺寸 */
             .split-panel { border-radius: 14px; }
             .pie-chart-container { width: min(78vw, 360px); }
-            .p-step { width: 100%; height: auto; padding: 20px 14px; }
-            .p-num { position: static; margin-bottom: 6px; }
+            .process-row { grid-template-columns: 1fr 28px 1fr 28px 1fr; gap: 8px; }
+            .p-step { height: clamp(140px, 24vh, 210px); padding: 18px 10px; }
+            /* KPI：继续保持 2×2 */
+            .kpi-fullscreen {
+                width: min(96vw, 980px);
+                height: min(56vh, 460px);
+                gap: 10px;
+            }
+            .kpi-block { padding: 12px 10px; }
+            .kpi-icon-lg { margin-bottom: 8px; }
+            .kpi-value-lg { margin-top: 6px; }
         }
+
+        /* 手机大屏：保持桌面排版（不堆叠），依赖整体缩放来适配 */
+        .mobile-cover .split-screen { flex-direction: row !important; height: 70% !important; }
+        .mobile-cover .process-row { width: min(92vw, 1400px) !important; }
+        .mobile-cover .p-step { width: 100% !important; height: clamp(160px, 26vh, 240px) !important; }
+        .mobile-cover .p-arrow { display: block !important; }
+        .mobile-cover .pie-layout { flex-direction: row !important; }
+        .mobile-cover .pie-text { text-align: left !important; }
 
     </style>
 </head>
@@ -413,15 +522,13 @@
 
     <!-- 语音音轨（与动画同步启动） -->
     <audio id="speech-audio" preload="auto" playsinline webkit-playsinline>
-        <source src="/imgs/wuye/real/speech.wav" type="audio/wav" />
+        <source src="/imgs/wuye/real/sounde0120.wav" type="audio/wav" />
     </audio>
 
+    <div id="stage-fit">
     <!-- 公司 Logo -->
     <div class="brand-logo">
-        <svg class="logo-icon" viewBox="0 0 50 50">
-            <path d="M25,2 L45,12 L45,38 L25,48 L5,38 L5,12 Z" fill="none" stroke="currentColor" stroke-width="3"/>
-            <path d="M25,12 L35,20 L35,30 L25,38 L15,30 L15,20 Z" fill="currentColor"/>
-        </svg>
+        <img class="logo-icon" src="/imgs/logo-icon.png" alt="Bournmark logo" />
         <div class="logo-text">Bournmark</div>
     </div>
 
@@ -521,28 +628,29 @@
     <!-- 场景 5: 流程 (Process) -->
     <div class="scene" id="scene5">
         <div class="process-row">
-            <div class="p-step">
+            <div class="p-step step-1">
                 <div class="p-num">01</div>
                 <div class="p-icon">📊</div>
                 <div class="p-title">市场调研</div>
                 <div style="font-size: 14px; color: #aaa;">深入分析环境</div>
             </div>
-            <div class="p-arrow">→</div>
-            <div class="p-step">
+            <div class="p-arrow arrow-12">→</div>
+            <div class="p-step step-2">
                 <div class="p-num">02</div>
                 <div class="p-icon">🧠</div>
                 <div class="p-title">数据分析</div>
                 <div style="font-size: 14px; color: #aaa;">定制增值策略</div>
             </div>
-            <div class="p-arrow">→</div>
-            <div class="p-step">
+            <div class="p-arrow arrow-23">→</div>
+            <div class="p-step step-3">
                 <div class="p-num">03</div>
                 <div class="p-icon">🤝</div>
                 <div class="p-title">机制协商</div>
                 <div style="font-size: 14px; color: #aaa;">结构化管理</div>
             </div>
-            <div class="p-arrow">→</div>
-            <div class="p-step p-final">
+            <!-- 机制协商右侧箭头指向下方“价值兑现” -->
+            <div class="p-arrow arrow-34">↙</div>
+            <div class="p-step p-final step-4">
                 <div class="p-num" style="color: rgba(207, 170, 104, 0.2);">04</div>
                 <div class="p-icon">💎</div>
                 <div class="p-title" style="color: var(--accent-gold);">价值兑现</div>
@@ -560,7 +668,24 @@
                     通过结构化管理实现资产稳定维护<br>获得业界领先的客户认可
                 </p>
                 <div style="border-left: 4px solid var(--accent-gold); padding-left: 20px;">
-                    <div style="font-size: 30px; color: var(--accent-blue);">High Stability</div>
+                    <div class="hs-badge" aria-label="500亿+">
+                        <span class="hs-icons" aria-hidden="true">
+                            <!-- 价值提升（金币 + 上升趋势）SVG -->
+                            <svg class="hs-icon-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                                <!-- coin stack -->
+                                <ellipse cx="22" cy="20" rx="14" ry="6" stroke="currentColor" stroke-width="3.5" opacity="0.95"/>
+                                <path d="M8 20v10c0 3.5 6.3 6.3 14 6.3s14-2.8 14-6.3V20" stroke="currentColor" stroke-width="3.5" opacity="0.92" stroke-linejoin="round"/>
+                                <ellipse cx="22" cy="30" rx="14" ry="6" stroke="currentColor" stroke-width="3.5" opacity="0.88"/>
+                                <path d="M22 17.3v6" stroke="currentColor" stroke-width="3" opacity="0.85" stroke-linecap="round"/>
+                                <path d="M18.8 19.6h6.4" stroke="currentColor" stroke-width="3" opacity="0.85" stroke-linecap="round"/>
+
+                                <!-- growth arrow/chart -->
+                                <path d="M36 44l9-9 6 6 9-9" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+                                <path d="M53 23h10v10" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+                            </svg>
+                        </span>
+                        <span class="hs-value">500亿+</span>
+                    </div>
                 </div>
             </div>
             
@@ -582,31 +707,50 @@
         <div class="kpi-fullscreen">
             <!-- 收入 -->
             <div class="kpi-block k-income">
-                <span class="kpi-icon-lg">📈</span>
+                <span class="kpi-icon-lg" aria-hidden="true">
+                    <svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 7h7v7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
                 <span class="kpi-label-lg">Revenue</span>
                 <div class="kpi-value-lg">提高收入</div>
-                <div style="font-size: 20px; color: #666; margin-top: 10px;">资产增值最大化</div>
+                <div class="kpi-subtext">资产增值最大化</div>
             </div>
             <!-- 支出 -->
             <div class="kpi-block k-cost">
-                <span class="kpi-icon-lg">📉</span>
+                <span class="kpi-icon-lg" aria-hidden="true">
+                    <svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 7l6 6 4-4 8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 17h7v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
                 <span class="kpi-label-lg">Cost Efficiency</span>
                 <div class="kpi-value-lg">降低支出</div>
-                <div style="font-size: 20px; color: #666; margin-top: 10px;">运营成本优化</div>
+                <div class="kpi-subtext">运营成本优化</div>
             </div>
             <!-- 风险 -->
             <div class="kpi-block k-risk">
-                <span class="kpi-icon-lg">🛡️</span>
+                <span class="kpi-icon-lg" aria-hidden="true">
+                    <svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2l8 4v6c0 5-3.2 9.4-8 10-4.8-.6-8-5-8-10V6l8-4Z" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
                 <span class="kpi-label-lg">Risk Control</span>
                 <div class="kpi-value-lg">规避风险</div>
-                <div style="font-size: 20px; color: #666; margin-top: 10px;">稳健投资回报</div>
+                <div class="kpi-subtext">稳健投资回报</div>
             </div>
             <!-- 可视化 -->
             <div class="kpi-block k-vis">
-                <span class="kpi-icon-lg">👁️</span>
+                <span class="kpi-icon-lg" aria-hidden="true">
+                    <svg class="kpi-icon-svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2.4"/>
+                    </svg>
+                </span>
                 <span class="kpi-label-lg">Transparency</span>
                 <div class="kpi-value-lg">服务可视化</div>
-                <div style="font-size: 20px; color: #666; margin-top: 10px;">过程透明可控</div>
+                <div class="kpi-subtext">过程透明可控</div>
             </div>
         </div>
     </div>
@@ -626,19 +770,42 @@
         <button class="media-btn" id="btn-mute" type="button" aria-label="静音/取消静音">🔊</button>
     </div>
 
+    </div>
 </div>
 
 <script>
     // --- 数据配置 ---
+    // 字幕时间点：基于 sounde0120.wav 的停顿（能量低区间）自动分析得出
+    // 你要求“每条字幕拆成两条”：这里将 7 段旁白拆为 14 条字幕，并按旁白停顿点对齐
+    // t0 为该段字幕的开始秒数；字幕切换严格跟随 audio.currentTime（见 setSubByAudioTime）
+    // 字幕文本：按你的要求去掉标点符号（中文逗号/句号等）
     const narrations = [
-        { dur: 8,  cn: "物业管理的工作中有一项非常重要的项目，那就是维护和提升房产的价值。", en: "A critical aspect of property management is the maintenance and enhancement of asset value." },
-        { dur: 9,  cn: "在特定市场环境中，具备资产增值能力的管理模式通常集中于大型投资机构。", en: "In specific markets, asset appreciation capabilities are often concentrated in large investment institutions." },
-        { dur: 10, cn: "传统管理模式由于流程复杂、执行不稳定，往往难以持续投入资源用于资产价值提升。", en: "Traditional models struggle to allocate resources for value enhancement due to complexity and instability." },
-        { dur: 11, cn: "在以客户长期利益为导向的管理理念下，企业在提供常规服务的同时，将资源持续投入于资产价值维护与提升。", en: "Guided by long-term client interests, we continuously invest in asset value while providing routine services." },
-        { dur: 9,  cn: "通过设立专门的业务模块，并结合市场调研与数据分析，形成系统化的价值提升流程。", en: "By establishing specialized modules and data analysis, we form a systematic value enhancement process." },
-        { dur: 11, cn: "在复杂的市场环境下，通过结构化管理与协商机制，实现资产价值的稳定维护与提升，并获得较高整体满意度。", en: "Structured management ensures stable asset value and achieves high overall satisfaction in complex markets." },
-        { dur: 12, cn: "提高收入、降低支出、规避风险、服务可视化，是该管理模式的核心目标，使不动产投资过程更加可控。", en: "Increasing income, reducing costs, mitigating risk, and service visibility make the investment process controllable." }
+        { t0: 0.00,  dur: 4.00,  cn: "物业管理的工作中有一项非常重要的项目", en: "" },
+        { t0: 4.00,  dur: 3.28,  cn: "那就是维护和提升房产的价值", en: "" },
+
+        { t0: 7.28,  dur: 3.52,  cn: "在日本 拥有这项业务的不动产管理公司", en: "" },
+        { t0: 10.80, dur: 4.20,  cn: "大多都是以房地产交易为目的的大型投资公司", en: "" },
+
+        { t0: 15.00, dur: 5.28,  cn: "而一般的房地产管理公司由于相关手续繁琐 成功率不稳定等因素", en: "" },
+        { t0: 20.28, dur: 5.18,  cn: "对于业主房产的价值提升并没有注入过多的精力", en: "" },
+
+        { t0: 25.46, dur: 7.36,  cn: "然而对于川雨留痕 我们一直秉着维护和提升客户利益的宗旨", en: "" },
+        { t0: 29.00, dur: 6.90,  cn: "在提供常规服务的同时 一直致力于为客户的房地产价值的维护与提升的业务", en: "" },
+
+        { t0: 36.00, dur: 6.44,  cn: "自2010年以来 公司专门设立了相关业务部门", en: "" },
+        { t0: 41.36, dur: 4.56,  cn: "通过对市场的调查和相关数据的分析 为客户提供租金交涉的代理业务", en: "" },
+
+        { t0: 47.00, dur: 8.88,  cn: "到目前为止 租金的平均涨幅超过了15% 为客户增加了总额约500亿日元的收入", en: "" },
+        { t0: 55.00, dur: 8.68,  cn: "在通货膨胀趋势居高不下的日本市场 成功的维护和提升了客户的资产价值 整体满意率高达98%", en: "" },
+
+        { t0: 65.00, dur: 6.46,  cn: "提高收入 降低支出 规避风险 服务可视化", en: "" },
+        { t0: 70.00, dur: 6.14,  cn: "川雨留痕一直致力于以维护和提升客户利益为最优先考虑 让日本房地产投资变得更加可控", en: "" }
     ];
+
+    // 7 个场景对应的旁白总时长（用于动画场景停留；字幕不使用这个，字幕由音频时间点驱动）
+    // 场景切换时间点也要跟随旁白（画面内容与字幕同步）
+    // 0/7.28/15.00/25.46/36.00/47.00/65.00/80.875
+    const sceneDurations = [7.28, 7.72, 10.46, 10.54, 11.00, 18.00, 15.875];
 
     // --- GSAP 动画 ---
     // 默认暂停：先确保音频能否启动，避免“动画先跑、音频后开始”
@@ -656,8 +823,8 @@
     let started = false;
     let isSeeking = false;
 
-    // speech.wav 的真实时长（本地探测约 92.20s）；若浏览器能读到 duration，则优先用 duration
-    const SPEECH_FALLBACK_DURATION_SEC = 92.200227;
+    // sounde0120.wav 的真实时长（本地探测约 80.875s）；若浏览器能读到 duration，则优先用 duration
+    const SPEECH_FALLBACK_DURATION_SEC = 80.875;
 
     // 模式：embed（资产增值页标题旁的小窗）自动播放无声版，不弹授权遮罩
     const EMBED_MODE = (() => {
@@ -668,6 +835,60 @@
             return false;
         }
     })();
+    try {
+        if (EMBED_MODE) document.documentElement.classList.add('embed-mode');
+    } catch (_) {}
+
+    // 移动端识别：用于“保持桌面排版 + 等比铺满屏幕”
+    const IS_MOBILE = (() => {
+        try {
+            const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            return !!(coarse || window.innerWidth <= 820);
+        } catch (_) {
+            return (window.innerWidth || 0) <= 820;
+        }
+    })();
+    try {
+        if (!EMBED_MODE && IS_MOBILE) document.documentElement.classList.add('mobile-cover');
+    } catch (_) {}
+
+    // 自适应缩放：按 iframe/窗口实际尺寸等比缩放
+    // - 小窗（embed）：不裁切，整体放大 150%
+    // - 手机大屏：保持桌面排版，用 cover 等比铺满屏幕（允许裁切边缘）
+    //   竖屏需要更激进的放大，否则内容会“挤在中间”
+    // - 其它：不裁切完整显示
+    const STAGE_BASE_W = EMBED_MODE ? 1200 : 1400;
+    const STAGE_BASE_H = EMBED_MODE ? 700 : 820;
+    const EMBED_SCALE_BOOST = 1.5;
+    function updateFitScale() {
+        const fit = document.getElementById('stage-fit');
+        if (!fit) return;
+        const w = window.innerWidth || 0;
+        const h = window.innerHeight || 0;
+        if (!w || !h) return;
+        const isPortrait = !!(IS_MOBILE && h > w);
+        // 手机竖屏用更贴近内容的基准尺寸，让 cover 更“敢放大”
+        const baseW = (!EMBED_MODE && IS_MOBILE && isPortrait) ? 1200 : STAGE_BASE_W;
+        const baseH = (!EMBED_MODE && IS_MOBILE && isPortrait) ? 700 : STAGE_BASE_H;
+        const contain = Math.min(w / baseW, h / baseH);
+        const cover = Math.max(w / baseW, h / baseH);
+        let s = contain;
+        if (EMBED_MODE) {
+            s = Math.min(1, contain) * EMBED_SCALE_BOOST;
+            s = Math.min(1, s); // 仍不裁切
+        } else if (IS_MOBILE) {
+            // 手机大屏：铺满屏幕但不要过度放大（避免只看到中间一小块）
+            // - 竖屏：用 cover，但限制在温和范围内
+            // - 横屏：更保守
+            const maxScale = isPortrait ? 1.35 : 1.15;
+            s = Math.min(maxScale, cover); // 铺满屏幕（可能轻微裁切边缘）
+        } else {
+            s = Math.min(1, contain); // 桌面默认不裁切
+        }
+        fit.style.setProperty('--fit-scale', String(s));
+    }
+    updateFitScale();
+    window.addEventListener('resize', updateFitScale);
 
     // 字幕切换辅助函数
     function setSub(index) {
@@ -676,6 +897,37 @@
             subEn.innerText = narrations[index].en;
             gsap.to(".subtitle-container", { opacity: 1, duration: 0.5 });
         }});
+    }
+
+    // 按音频时间切换字幕（更精确：与旁白时间点对齐，不受 timeScale 影响）
+    let currentSubIndex = -1;
+    function setSubByAudioTime(tSec) {
+        if (!Number.isFinite(tSec)) return;
+        let idx = 0;
+        for (let i = narrations.length - 1; i >= 0; i--) {
+            if (tSec >= (narrations[i].t0 || 0)) { idx = i; break; }
+        }
+        if (idx !== currentSubIndex) {
+            currentSubIndex = idx;
+            try { setSub(idx); } catch (_) {}
+        }
+    }
+
+    // embed 小窗无音频：用时间轴进度驱动字幕（并可用于循环播放时的字幕复位）
+    let subtitleRaf = null;
+    function startSubtitleRafLoop() {
+        if (subtitleRaf) return;
+        const tick = () => {
+            try {
+                if (started && EMBED_MODE && tl) {
+                    const s = tl.timeScale() || 1;
+                    const t = (tl.time() || 0) / s; // 映射回“音频秒”
+                    setSubByAudioTime(t);
+                }
+            } catch (_) {}
+            subtitleRaf = requestAnimationFrame(tick);
+        };
+        subtitleRaf = requestAnimationFrame(tick);
     }
 
     function showStartOverlay() {
@@ -687,13 +939,21 @@
         startOverlay.style.display = 'none';
     }
 
-    function showControls() {
+    let controlsHideTimer = null;
+    function showControls(holdMs = 2500) {
         if (!controls) return;
-        controls.style.display = 'flex';
+        controls.classList.add('is-visible');
+        if (controlsHideTimer) clearTimeout(controlsHideTimer);
+        controlsHideTimer = setTimeout(() => {
+            if (EMBED_MODE) return;
+            if (isSeeking) return;
+            controls.classList.remove('is-visible');
+        }, Math.max(400, holdMs || 0));
     }
     function hideControls() {
         if (!controls) return;
-        controls.style.display = 'none';
+        if (controlsHideTimer) clearTimeout(controlsHideTimer);
+        controls.classList.remove('is-visible');
     }
 
     function fmt(sec) {
@@ -751,7 +1011,7 @@
     function startSilentPlayback() {
         if (started) return;
         // 字幕从第 1 句开始
-        try { setSub(0); } catch (_) {}
+        try { setSubByAudioTime(0); } catch (_) {}
         // 确保音频不播放
         try {
             if (audio) {
@@ -764,17 +1024,21 @@
         tl.pause(0);
         tl.seek(0);
         tl.timeScale(1);
+        // 小窗：无限循环播放
+        try { tl.repeat(-1).repeatDelay(0); } catch (_) {}
         hideStartOverlay();
         hideControls();
         started = true;
         tl.play(0);
+        // 小窗字幕跟随时间轴
+        startSubtitleRafLoop();
     }
 
     async function startPlayback() {
         if (started) return;
 
         // 让字幕从第 1 句开始
-        try { setSub(0); } catch (_) {}
+        try { setSubByAudioTime(0); } catch (_) {}
 
         // 同步重置：音频与动画都从头开始
         try {
@@ -812,49 +1076,50 @@
     }
 
     // === 场景 1: 价值 ===
-    tl.call(() => setSub(0))
+    // 字幕由音频时间驱动，不在时间轴里硬切（避免重复/错位）
+    tl.call(() => {})
       .to("#scene1", { autoAlpha: 1, duration: 1 })
       .from(".icon-shield", { scale: 0.5, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" })
       .from(".big-title", { y: 50, opacity: 0, duration: 1 }, "-=1")
-      .to("#scene1", { duration: Math.max(0, narrations[0].dur - 2) }); // 停留
+      .to("#scene1", { duration: Math.max(0, sceneDurations[0] - 2) }); // 停留
 
     // === 场景 2: 市场 ===
     tl.to("#scene1", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
-      .call(() => setSub(1))
+      .call(() => {})
       .to("#scene2", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".center-node", { scale: 0, duration: 1, ease: "back.out(1.7)" })
       .from(".node:not(.center-node)", { scale: 0, opacity: 0, stagger: 0.2, duration: 0.8 }, "-=0.5")
       .from("line", { strokeDasharray: 200, strokeDashoffset: 200, stagger: 0.1, duration: 1 }, "<")
-      .to("#scene2", { duration: Math.max(0, narrations[1].dur - 2) });
+      .to("#scene2", { duration: Math.max(0, sceneDurations[1] - 2) });
 
     // === 场景 3: 对比 ===
     tl.to("#scene2", { autoAlpha: 0, y: -50, duration: 0.8 })
-      .call(() => setSub(2))
+      .call(() => {})
       .to("#scene3", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".panel-bad", { x: -100, opacity: 0, duration: 1 })
       .from(".panel-good", { x: 100, opacity: 0, duration: 1 }, "-=0.5")
-      .to("#scene3", { duration: Math.max(0, narrations[2].dur - 2) });
+      .to("#scene3", { duration: Math.max(0, sceneDurations[2] - 2) });
 
     // === 场景 4: 长期主义 ===
     tl.to("#scene3", { autoAlpha: 0, scale: 0.9, duration: 0.8 })
-      .call(() => setSub(3))
+      .call(() => {})
       .to("#scene4", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".hero-text", { letterSpacing: "50px", opacity: 0, duration: 2, ease: "power2.out" })
       .from(".balance-scale", { scaleX: 0, duration: 1 }, "-=1")
       .to(".scale-bar", { rotation: -5, duration: 4, ease: "power1.inOut", yoyo: true, repeat: 1 }, "-=0.5")
-      .to("#scene4", { duration: Math.max(0, narrations[3].dur - 2) });
+      .to("#scene4", { duration: Math.max(0, sceneDurations[3] - 2) });
 
     // === 场景 5: 流程 ===
     tl.to("#scene4", { autoAlpha: 0, y: 50, duration: 0.8 })
-      .call(() => setSub(4))
+      .call(() => {})
       .to("#scene5", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".p-step", { y: 50, opacity: 0, stagger: 0.3, duration: 0.8 })
       .from(".p-arrow", { opacity: 0, x: -20, stagger: 0.3, duration: 0.5 }, "<+0.2")
-      .to("#scene5", { duration: Math.max(0, narrations[4].dur - 2) });
+      .to("#scene5", { duration: Math.max(0, sceneDurations[4] - 2) });
 
     // === 场景 6: 满意度 (饼图) ===
     tl.to("#scene5", { autoAlpha: 0, scale: 1.1, duration: 0.8 })
-      .call(() => setSub(5))
+      .call(() => {})
       .to("#scene6", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".pie-text", { x: -50, opacity: 0, duration: 1 })
       .from(".pie-bg", { opacity: 0, duration: 0.5 }, "<")
@@ -866,11 +1131,11 @@
         duration: 2.5, 
         onUpdate: function() { this.targets()[0].innerHTML = Math.ceil(this.progress() * 98) + "%"; }
       }, "<")
-      .to("#scene6", { duration: Math.max(0, narrations[5].dur - 2) });
+      .to("#scene6", { duration: Math.max(0, sceneDurations[5] - 2) });
 
     // === 场景 7: KPI (全屏重点) ===
     tl.to("#scene6", { autoAlpha: 0, duration: 0.8 })
-      .call(() => setSub(6))
+      .call(() => {})
       .to("#scene7", { autoAlpha: 1, duration: 0.8 }, "<")
       .from(".kpi-block", { 
         scale: 0.8, 
@@ -879,7 +1144,7 @@
         duration: 0.8, 
         ease: "back.out(1.2)" 
       })
-      .to("#scene7", { duration: Math.max(0, narrations[6].dur - 2) });
+      .to("#scene7", { duration: Math.max(0, sceneDurations[6] - 2) });
 
     // 完成后停止音频（避免长时间占用）
     tl.eventCallback('onComplete', () => {
@@ -928,11 +1193,13 @@
     if (btnMute && audio) {
         btnMute.addEventListener('click', () => {
             audio.muted = !audio.muted;
+            showControls();
             updateUI();
         });
     }
     if (btnFullscreen) {
         btnFullscreen.addEventListener('click', () => {
+            showControls();
             toggleFullscreen();
         });
         document.addEventListener('fullscreenchange', updateUI);
@@ -944,23 +1211,52 @@
             try {
                 audio.currentTime = parseFloat(seek.value || '0');
                 syncTimelineToAudio();
+                setSubByAudioTime(audio.currentTime || 0);
             } catch (_) {}
+            showControls(4000);
             updateUI();
         });
         seek.addEventListener('change', () => {
             isSeeking = false;
+            showControls(2500);
             updateUI();
         });
     }
     if (audio) {
         audio.addEventListener('timeupdate', () => {
             if (!isSeeking) syncTimelineToAudio();
+            setSubByAudioTime(audio.currentTime || 0);
             updateUI();
         });
         audio.addEventListener('loadedmetadata', updateUI);
         audio.addEventListener('play', updateUI);
         audio.addEventListener('pause', updateUI);
         audio.addEventListener('ended', updateUI);
+    }
+    // 播放条自动隐藏：鼠标移动/触摸/键盘操作时短暂显示
+    const stageEl = document.getElementById('stage');
+    function bumpControls() {
+        if (EMBED_MODE) return;
+        if (!started) return;
+        showControls(2500);
+    }
+    if (stageEl) {
+        stageEl.addEventListener('mousemove', bumpControls, { passive: true });
+        stageEl.addEventListener('pointermove', bumpControls, { passive: true });
+        stageEl.addEventListener('touchstart', bumpControls, { passive: true });
+    }
+    document.addEventListener('keydown', bumpControls, { passive: true });
+    if (controls) {
+        controls.addEventListener('mouseenter', () => {
+            if (EMBED_MODE) return;
+            if (!started) return;
+            showControls(999999);
+        });
+        controls.addEventListener('mouseleave', () => {
+            if (EMBED_MODE) return;
+            if (!started) return;
+            showControls(1200);
+        });
     }
     updateUI();
 
