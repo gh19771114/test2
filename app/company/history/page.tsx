@@ -179,23 +179,15 @@ export default function CompanyHistoryPage() {
                 }}
               >
                 {/* 让时间线线条跟随横向滚动（移动端也可见），并在末尾延长 + 箭头 */}
-                <div
-                  className="relative flex gap-6 min-w-max pb-6 pt-10 pr-32"
-                  style={
-                    {
-                      // 用于让时间线在箭头处“精确收尾”
-                      ['--timelineArrowW' as any]: '56px',
-                    } as any
-                  }
-                >
+                <div className="relative flex gap-6 min-w-max pb-6 pt-10 pr-32">
                   {/* 时间轴线（全端可见，随内容滚动） */}
                   <div
                     className="absolute left-0 top-7 -translate-y-1/2 z-0 pointer-events-none"
-                    // 让时间线右端与箭头“无缝相连”（略微叠加到箭头下方，避免出现可见缝隙）
-                    style={{ right: 'calc(24px + var(--timelineArrowW) - 4px)' }}
+                    // 让时间线直接延伸到箭头下方，由箭头头部覆盖收口，彻底避免“没连上”的视觉缝隙
+                    style={{ right: '24px', height: '24px', overflow: 'hidden' }}
                   >
-                    <div className="relative h-0.5">
-                      {/* 柔光底线 */}
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5">
+                      {/* 柔光底线（被外层裁切，避免右侧溢出） */}
                       <div className="absolute inset-x-0 -top-0.5 h-1 rounded-full bg-gradient-to-r from-sky-400/40 via-blue-500/40 to-indigo-500/40 blur-[6px]" />
                       {/* 清晰主线 */}
                       <div className="absolute inset-0 rounded-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 shadow-[0_0_12px_rgba(59,130,246,0.28)]" />
@@ -203,7 +195,7 @@ export default function CompanyHistoryPage() {
                   </div>
 
                   {/* 末尾箭头（延长时间线的视觉收尾） */}
-                  <div className="absolute right-6 top-7 -translate-y-1/2 z-0 pointer-events-none">
+                  <div className="absolute right-6 top-7 -translate-y-1/2 z-10 pointer-events-none">
                     <svg
                       width="56"
                       height="28"
@@ -238,12 +230,6 @@ export default function CompanyHistoryPage() {
                         </filter>
                       </defs>
                       <g filter="url(#timelineArrowGlow)">
-                        <path
-                          d="M0 14H36"
-                          stroke="url(#timelineArrowGradient)"
-                          strokeWidth="2.75"
-                          strokeLinecap="round"
-                        />
                         <path
                           d="M36.5 6.4L55 14L36.5 21.6Z"
                           fill="url(#timelineArrowGradient)"
