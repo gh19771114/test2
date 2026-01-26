@@ -172,7 +172,7 @@ export default function CompanyCeoPage() {
                 // 手机竖版：降低最小宽度，避免为人物图预留过多空间导致文案列过窄（对齐 iPad 的比例观感）
                 const portraitW = 'clamp(160px, 42vw, 380px)'
                 const portraitH = 'clamp(320px, 60vh, 620px)'
-                const gap = 6
+                const gap = 2
 
                 // 手机端（竖/横）寄语：使用“稳定布局”（正文全宽 + 人物图在正文后，不重叠）
                 if (handheldMode) {

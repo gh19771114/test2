@@ -196,7 +196,7 @@ export default function CompanyHistoryPage() {
                     className="relative snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px]"
                   >
                     {/* 桌面端：连接到轴线的圆点 */}
-                    <div className="hidden md:flex absolute left-6 -top-2 z-10 items-center justify-center">
+                    <div className="hidden md:flex absolute left-6 top-7 -translate-y-1/2 z-10 items-center justify-center">
                       <div
                         className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-lg"
                         style={{ boxShadow: '0 0 14px rgba(59, 130, 246, 0.6)' }}
