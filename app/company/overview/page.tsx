@@ -293,89 +293,149 @@ export default function CompanyOverviewPage() {
 // 自动横向滚动资产展示组件
 function AutoScrollAssets() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const { t } = useLanguage()
 
   useEffect(() => {
     const container = scrollContainerRef.current
-    if (!container) return
+    const track = trackRef.current
+    if (!container || !track) return
 
-    let scrollPosition = 0
-    const scrollSpeed = 1 // 滚动速度（像素/帧）
-    let animationFrameId: number | null = null
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(pointer: coarse)').matches
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
+        isCoarsePointer)
+
+    // 触摸设备保留原生惯性滚动；桌面端启用更丝滑的 transform 自动滚动
+    const enableAuto = !isTouchDevice && !prefersReducedMotion
+
+    let offsetPx = 0
+    const scrollPxPerSec = 140
+    let rafId: number | null = null
     let isPaused = false
     let isDragging = false
     let startX = 0
-    let startScrollLeft = 0
+    let startOffset = 0
+    let resumeTimeout: number | null = null
+    let lastTs: number | null = null
 
-    const scroll = () => {
-      if (isPaused || isDragging) {
-        animationFrameId = requestAnimationFrame(scroll)
-        return
-      }
+    const prevWillChange = track.style.willChange
+    track.style.willChange = 'transform'
 
-      scrollPosition += scrollSpeed
-      const maxScroll = container.scrollWidth - container.clientWidth
-      
-      if (scrollPosition >= maxScroll) {
-        scrollPosition = 0 // 重置到开始位置，实现无缝循环
-      }
-      
-      container.scrollLeft = scrollPosition
-      animationFrameId = requestAnimationFrame(scroll)
+    const getHalf = () => {
+      const half = track.scrollWidth / 2
+      return Number.isFinite(half) ? half : 0
     }
 
-    // 鼠标悬停时暂停滚动
-    const handleMouseEnter = () => {
+    const normalize = () => {
+      const half = getHalf()
+      if (half <= 0) return
+      offsetPx = ((offsetPx % half) + half) % half
+    }
+
+    const apply = () => {
+      track.style.transform = `translate3d(${-offsetPx}px, 0, 0)`
+    }
+
+    const tick = (ts: number) => {
+      if (lastTs === null) lastTs = ts
+      const dt = Math.max(0, ts - lastTs) / 1000
+      lastTs = ts
+
+      if (enableAuto && !isPaused && !isDragging) {
+        offsetPx += scrollPxPerSec * dt
+        normalize()
+        apply()
+      }
+
+      rafId = requestAnimationFrame(tick)
+    }
+
+    const pauseBriefly = (ms: number) => {
       isPaused = true
-    }
-    const handleMouseLeave = () => {
-      isPaused = false
-      if (animationFrameId === null) {
-        animationFrameId = requestAnimationFrame(scroll)
-      }
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, ms)
     }
 
-    // 鼠标/触摸拖动滚动
+    const onWheel = (e: WheelEvent) => {
+      if (!enableAuto) return
+      const half = getHalf()
+      if (half <= 0) return
+
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (delta === 0) return
+
+      e.preventDefault()
+      e.stopPropagation()
+      offsetPx += delta
+      normalize()
+      apply()
+      pauseBriefly(600)
+    }
+
     const onPointerDown = (e: PointerEvent) => {
+      // 桌面鼠标拖拽；触摸设备走原生滚动
+      if (!enableAuto || e.pointerType !== 'mouse') return
+      if (e.button !== 0) return
       isDragging = true
       isPaused = true
       startX = e.clientX
-      startScrollLeft = container.scrollLeft
+      startOffset = offsetPx
       container.setPointerCapture?.(e.pointerId)
     }
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return
+      e.preventDefault()
       const dx = e.clientX - startX
-      container.scrollLeft = startScrollLeft - dx
+      offsetPx = startOffset - dx
+      normalize()
+      apply()
     }
     const endDrag = () => {
       if (!isDragging) return
       isDragging = false
-      // 更新 scrollPosition 为当前实际滚动位置，避免回弹
-      scrollPosition = container.scrollLeft
       isPaused = false
     }
 
-    container.addEventListener('mouseenter', handleMouseEnter)
-    container.addEventListener('mouseleave', handleMouseLeave)
-    container.addEventListener('pointerdown', onPointerDown, { passive: true })
-    container.addEventListener('pointermove', onPointerMove, { passive: true })
+    // 启用自动滚动时，把外层滚动关掉（避免 scrollLeft 与 transform 互相打架）
+    const prevOverflowX = container.style.overflowX
+    if (enableAuto) {
+      container.style.overflowX = 'hidden'
+      container.scrollLeft = 0
+      offsetPx = 0
+      apply()
+    }
+
+    container.addEventListener('pointerdown', onPointerDown, { passive: false })
+    container.addEventListener('pointermove', onPointerMove, { passive: false })
     container.addEventListener('pointerup', endDrag, { passive: true })
     container.addEventListener('pointercancel', endDrag, { passive: true })
+    container.addEventListener('wheel', onWheel, { passive: false })
 
-    // 开始滚动
-    animationFrameId = requestAnimationFrame(scroll)
+    rafId = requestAnimationFrame(tick)
 
     return () => {
-      if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId)
-      }
-      container.removeEventListener('mouseenter', handleMouseEnter)
-      container.removeEventListener('mouseleave', handleMouseLeave)
+      if (rafId !== null) cancelAnimationFrame(rafId)
       container.removeEventListener('pointerdown', onPointerDown as any)
       container.removeEventListener('pointermove', onPointerMove as any)
       container.removeEventListener('pointerup', endDrag as any)
       container.removeEventListener('pointercancel', endDrag as any)
+      container.removeEventListener('wheel', onWheel as any)
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      track.style.willChange = prevWillChange
+      track.style.transform = ''
+      container.style.overflowX = prevOverflowX
     }
   }, [])
 
@@ -391,49 +451,57 @@ function AutoScrollAssets() {
       
       <div
         ref={scrollContainerRef}
-        className="flex gap-4 md:gap-6 overflow-x-hidden scrollbar-hide cursor-grab active:cursor-grabbing"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-x',
+          overscrollBehavior: 'contain',
+        }}
       >
-        {duplicatedAssets.map((property, index) => {
-          const title = t(property.titleKey)
-          const location = t(property.locationKey)
-          // 仅对“Logo 类图片”使用 contain + 留白；本社大楼（honsha）为照片类，需贴边显示
-          const contain = /(^|\/)(helte|logo)\b/i.test(property.image || '') || /logo/i.test(property.image || '')
-          return (
-            <div
-              key={`${property.titleKey}-${index}`}
-              className="flex-shrink-0 w-64 md:w-80 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
-            >
-              <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
-                {property.image ? (
-                  <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={property.image}
-                        alt={title}
-                        fill
-                        className={`${contain ? 'object-contain' : 'object-cover'} transition-transform duration-300 group-hover:scale-105`}
-                        sizes="320px"
-                      />
+        <div ref={trackRef} className="flex gap-4 md:gap-6 min-w-max">
+          {duplicatedAssets.map((property, index) => {
+            const title = t(property.titleKey)
+            const location = t(property.locationKey)
+            // 仅对“Logo 类图片”使用 contain + 留白；本社大楼（honsha）为照片类，需贴边显示
+            const contain = /(^|\/)(helte|logo)\b/i.test(property.image || '') || /logo/i.test(property.image || '')
+            return (
+              <div
+                key={`${property.titleKey}-${index}`}
+                className="flex-shrink-0 w-64 md:w-80 bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
+              >
+                <div className="relative h-48 md:h-56 bg-gradient-to-br from-gray-100 to-gray-200">
+                  {property.image ? (
+                    <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={property.image}
+                          alt={title}
+                          fill
+                          className={`${contain ? 'object-contain' : 'object-cover'} transition-transform duration-300 group-hover:scale-105`}
+                          sizes="320px"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-                    {t('company.overview.assets.noImage')}
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                      {t('company.overview.assets.noImage')}
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 md:p-5">
+                  <h3 className="text-lg md:text-xl font-bold text-navy-800 mb-2 line-clamp-2">
+                    {title}
+                  </h3>
+                  <p className="text-sm md:text-base text-gray-600">
+                    {location}
+                  </p>
+                </div>
               </div>
-              <div className="p-4 md:p-5">
-                <h3 className="text-lg md:text-xl font-bold text-navy-800 mb-2 line-clamp-2">
-                  {title}
-                </h3>
-                <p className="text-sm md:text-base text-gray-600">
-                  {location}
-                </p>
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )

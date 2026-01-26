@@ -1,10 +1,25 @@
 import type { MetadataRoute } from 'next'
+import { headers } from 'next/headers'
 
 import { encyclopediaEntries, latestNews } from '@/lib/knowledge'
 import { caseDates, caseIds } from '@/lib/casesData'
 import { maimaiAllPropertyCards } from '@/app/maimai/propertiesData'
 
-function getBaseUrl() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
+async function getBaseUrl() {
+  // Prefer runtime request host so custom domains work
+  // even when env vars are missing/mis-scoped on Vercel.
+  try {
+    const h = await headers()
+    const host = h.get('x-forwarded-host') || h.get('host')
+    const proto = h.get('x-forwarded-proto') || 'https'
+    if (host) return `${proto}://${host}`.replace(/\/+$/, '')
+  } catch {
+    // ignore
+  }
+
   const raw =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.SITE_URL ||
@@ -32,8 +47,8 @@ function parseLooseDate(input: string | undefined): Date | undefined {
   return dt
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = getBaseUrl()
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = await getBaseUrl()
   const now = new Date()
 
   const items: MetadataRoute.Sitemap = []
