@@ -166,18 +166,10 @@ export default function CompanyHistoryPage() {
         <section className="py-16 md:py-24 bg-white">
           <div className="container-custom max-w-6xl mx-auto">
             <div className="relative">
-              {/* 横向时间轴线（桌面端） */}
-              <div className="hidden md:block absolute left-0 right-0 top-7">
-                <div
-                  className="h-0.5 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600"
-                  style={{ boxShadow: '0 0 10px rgba(59, 130, 246, 0.35)' }}
-                />
-              </div>
-
               {/* 横向滚动时间轴：只显示文案 */}
               <div
                 ref={timelineRef}
-                className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory select-none cursor-grab active:cursor-grabbing"
+                className="overflow-x-auto scrollbar-hide snap-x snap-mandatory select-none cursor-grab active:cursor-grabbing"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
@@ -186,59 +178,123 @@ export default function CompanyHistoryPage() {
                   overscrollBehavior: 'contain',
                 }}
               >
-                {milestones.map((milestone, index) => (
-                  <motion.div
-                    key={`${milestone.year}-${index}`}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.35 }}
-                    transition={{ duration: 0.35 }}
-                    className="relative snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px]"
+                {/* 让时间线线条跟随横向滚动（移动端也可见），并在末尾延长 + 箭头 */}
+                <div
+                  className="relative flex gap-6 min-w-max pb-6 pt-10 pr-32"
+                  style={
+                    {
+                      // 用于让时间线在箭头处“精确收尾”
+                      ['--timelineArrowW' as any]: '56px',
+                    } as any
+                  }
+                >
+                  {/* 时间轴线（全端可见，随内容滚动） */}
+                  <div
+                    className="absolute left-0 top-7 -translate-y-1/2 z-0 pointer-events-none"
+                    // 让时间线右端与箭头“无缝相连”（略微叠加到箭头下方，避免出现可见缝隙）
+                    style={{ right: 'calc(24px + var(--timelineArrowW) - 4px)' }}
                   >
-                    {/* 桌面端：连接到轴线的圆点 */}
-                    <div className="hidden md:flex absolute left-6 top-7 -translate-y-1/2 z-10 items-center justify-center">
-                      <div
-                        className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-lg"
-                        style={{ boxShadow: '0 0 14px rgba(59, 130, 246, 0.6)' }}
-                      />
+                    <div className="relative h-0.5">
+                      {/* 柔光底线 */}
+                      <div className="absolute inset-x-0 -top-0.5 h-1 rounded-full bg-gradient-to-r from-sky-400/40 via-blue-500/40 to-indigo-500/40 blur-[6px]" />
+                      {/* 清晰主线 */}
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 shadow-[0_0_12px_rgba(59,130,246,0.28)]" />
                     </div>
+                  </div>
 
-                    <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                      {milestone.image ? (
-                        <div className="relative w-full h-40 md:h-44 rounded-xl overflow-hidden border border-gray-200 mb-4">
-                          <div className="absolute inset-0 p-2 bg-white">
-                            <div className="relative w-full h-full">
-                              <Image
-                                src={milestone.image}
-                                alt={milestone.imageAlt || milestone.title}
-                                fill
-                                className="object-contain"
-                                sizes="(min-width: 768px) 380px, 320px"
-                                unoptimized={milestone.image.startsWith('/imgs/')}
-                              />
+                  {/* 末尾箭头（延长时间线的视觉收尾） */}
+                  <div className="absolute right-6 top-7 -translate-y-1/2 z-0 pointer-events-none">
+                    <svg
+                      width="56"
+                      height="28"
+                      viewBox="0 0 56 28"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <defs>
+                        <linearGradient id="timelineArrowGradient" x1="0" y1="0" x2="56" y2="0">
+                          <stop stopColor="#38BDF8" />
+                          <stop offset="0.55" stopColor="#3B82F6" />
+                          <stop offset="1" stopColor="#4F46E5" />
+                        </linearGradient>
+                        <filter id="timelineArrowGlow" x="-30%" y="-80%" width="160%" height="260%">
+                          <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur" />
+                          <feColorMatrix
+                            in="blur"
+                            type="matrix"
+                            values="
+                              1 0 0 0 0
+                              0 1 0 0 0
+                              0 0 1 0 0
+                              0 0 0 0.55 0
+                            "
+                            result="glow"
+                          />
+                          <feMerge>
+                            <feMergeNode in="glow" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <g filter="url(#timelineArrowGlow)">
+                        <path
+                          d="M0 14H36"
+                          stroke="url(#timelineArrowGradient)"
+                          strokeWidth="2.75"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M36.5 6.4L55 14L36.5 21.6Z"
+                          fill="url(#timelineArrowGradient)"
+                          stroke="rgba(255,255,255,0.55)"
+                          strokeWidth="1"
+                          strokeLinejoin="round"
+                        />
+                      </g>
+                    </svg>
+                  </div>
+
+                  {milestones.map((milestone, index) => (
+                    <motion.div
+                      key={`${milestone.year}-${index}`}
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.35 }}
+                      transition={{ duration: 0.35 }}
+                      className="relative z-10 snap-start flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px]"
+                    >
+                      <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                        {milestone.image ? (
+                          <div className="relative w-full h-40 md:h-44 rounded-xl overflow-hidden border border-gray-200 mb-4">
+                            <div className="absolute inset-0 p-2 bg-white">
+                              <div className="relative w-full h-full">
+                                <Image
+                                  src={milestone.image}
+                                  alt={milestone.imageAlt || milestone.title}
+                                  fill
+                                  className="object-contain"
+                                  sizes="(min-width: 768px) 380px, 320px"
+                                  unoptimized={milestone.image.startsWith('/imgs/')}
+                                />
+                              </div>
                             </div>
                           </div>
+                        ) : null}
+
+                        <div className="text-2xl font-bold text-navy-700 mb-2">
+                          {milestone.year}
                         </div>
-                      ) : null}
-
-                      {/* 移动端：顶部时间点 */}
-                      <div className="md:hidden flex items-center gap-2 mb-3">
-                        <div className="w-3 h-3 rounded-full bg-blue-500 border border-white shadow" />
-                        <span className="text-sm font-semibold text-navy-700">{milestone.year}</span>
+                        <h3 className="text-lg md:text-xl font-bold text-navy-900 mb-3">
+                          {milestone.title}
+                        </h3>
+                        <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                          {milestone.description}
+                        </p>
                       </div>
-
-                      <div className="hidden md:block text-2xl font-bold text-navy-700 mb-2">
-                        {milestone.year}
-                      </div>
-                      <h3 className="text-lg md:text-xl font-bold text-navy-900 mb-3">
-                        {milestone.title}
-                      </h3>
-                      <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-                        {milestone.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
