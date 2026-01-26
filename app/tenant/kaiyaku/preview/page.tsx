@@ -78,9 +78,9 @@ export default function TerminationPreviewPage() {
   const [submitResult, setSubmitResult] = useState<string | null>(null)
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const recaptchaRef = useRef<ReCAPTCHA>(null)
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-  const isRecaptchaConfigured =
-    typeof recaptchaSiteKey === 'string' && recaptchaSiteKey.trim().length > 0
+  const [recaptchaSiteKey, setRecaptchaSiteKey] = useState<string>('')
+  const [recaptchaKeyChecked, setRecaptchaKeyChecked] = useState(false)
+  const isRecaptchaConfigured = recaptchaSiteKey.trim().length > 0
 
   useEffect(() => {
     // 从 sessionStorage 读取主页面保存的表单数据
@@ -99,8 +99,33 @@ export default function TerminationPreviewPage() {
     }
   }, [router])
 
+  useEffect(() => {
+    // 运行时从服务端读取 site key，避免依赖前端构建期 env 内联
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/recaptcha-sitekey', { cache: 'no-store' })
+        const data = await res.json()
+        const key = typeof data?.siteKey === 'string' ? data.siteKey : ''
+        if (!cancelled) setRecaptchaSiteKey(key)
+      } catch (e) {
+        // ignore (will be treated as not configured)
+      } finally {
+        if (!cancelled) setRecaptchaKeyChecked(true)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const handleConfirm = async () => {
     if (!formData) return
+
+    if (!recaptchaKeyChecked) {
+      setSubmitResult('reCAPTCHA 配置检查中，请稍后再试。')
+      return
+    }
 
     if (!isRecaptchaConfigured) {
       setSubmitResult('系统未配置 reCAPTCHA，请在环境变量中设置 NEXT_PUBLIC_RECAPTCHA_SITE_KEY 后再提交。')
@@ -487,7 +512,7 @@ export default function TerminationPreviewPage() {
               {/* 按钮 + 提示 */}
               <div className="flex flex-col gap-4 pt-4">
                 <div className="flex justify-center">
-                  {isRecaptchaConfigured ? (
+                  {recaptchaKeyChecked && isRecaptchaConfigured ? (
                     <ReCAPTCHA
                       ref={recaptchaRef}
                       sitekey={recaptchaSiteKey}
@@ -497,14 +522,21 @@ export default function TerminationPreviewPage() {
                     />
                   ) : (
                     <div className="max-w-lg rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
-                      未配置 reCAPTCHA（缺少环境变量 NEXT_PUBLIC_RECAPTCHA_SITE_KEY），当前无法提交。请配置后刷新页面。
+                      {recaptchaKeyChecked
+                        ? `未配置 reCAPTCHA（缺少环境变量 NEXT_PUBLIC_RECAPTCHA_SITE_KEY），当前无法提交。请配置后刷新页面。`
+                        : '正在检查 reCAPTCHA 配置…'}
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
                   <button
                     onClick={handleConfirm}
-                    disabled={loading || (isRecaptchaConfigured && !recaptchaToken)}
+                    disabled={
+                      loading ||
+                      !recaptchaKeyChecked ||
+                      !isRecaptchaConfigured ||
+                      !recaptchaToken
+                    }
                     className="btn-primary w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? t('tenant.kaiyaku.preview.submitting') : t('tenant.kaiyaku.preview.confirmSubmit')}

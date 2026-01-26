@@ -2569,33 +2569,33 @@
         ]
       },
       "kingsoft-wps-japan": {
-        "type": "Enterprise Service",
-        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-        "location": "Tokyo",
-        "category": "Enterprise Expansion",
-        "description": "Signed with a major Japanese real estate company to establish an office and provided recruitment support.",
+        "type": "企业服务",
+        "title": "金山 WPS 日本子公司设立服务",
+        "location": "东京都",
+        "category": "企业出海",
+        "description": "签约日本大型不动产公司设立办公室，并提供招聘协助。",
         "details": [
-          "Successfully completed Kingsoft WPS Japan subsidiary setup service on November 15, 2024",
-          "Signed with a major Japanese real estate company and successfully established an office",
-          "Provided recruitment support to help form a local team",
-          "Providing ongoing enterprise expansion support services"
+          "成功完成金山 WPS 日本子公司的设立服务",
+          "签约日本大型不动产公司，成功设立办公室",
+          "招聘协助，协助组建本地团队",
+          "提供持续的企业出海支持服务"
         ],
         "highlights": [
           {
-            "label": "Service Type",
-            "value": "Corporate Setup"
+            "label": "服务类型",
+            "value": "企业设立"
           },
           {
-            "label": "Service Content",
-            "value": "Office setup, recruitment support"
+            "label": "服务内容",
+            "value": "办公室设立、招聘协助"
           },
           {
-            "label": "Service Period",
-            "value": "Ongoing support"
+            "label": "服务周期",
+            "value": "持续支持"
           },
           {
-            "label": "Service Team",
-            "value": "Professional Team"
+            "label": "服务团队",
+            "value": "专业团队"
           }
         ]
       },
