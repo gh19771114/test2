@@ -172,7 +172,7 @@ export default function CompanyCeoPage() {
                 // 手机竖版：降低最小宽度，避免为人物图预留过多空间导致文案列过窄（对齐 iPad 的比例观感）
                 const portraitW = 'clamp(160px, 42vw, 380px)'
                 const portraitH = 'clamp(320px, 60vh, 620px)'
-                const gap = 12
+                const gap = 6
 
                 // 手机端（竖/横）寄语：使用“稳定布局”（正文全宽 + 人物图在正文后，不重叠）
                 if (handheldMode) {
@@ -207,10 +207,17 @@ export default function CompanyCeoPage() {
                             </div>
                           ) : null}
 
+                          {/* 手机竖版：第 2 段也保持全宽（避免比第 1 段更窄） */}
+                          {handheldMode === 'portrait' && p1 ? (
+                            <div className="mt-3 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                              <p className="text-balance">{p1}</p>
+                            </div>
+                          ) : null}
+
                           {/* 人物图：移动到第 1 段下方；第 2/3 段按指定比例收窄 */}
                           <div className="mt-3 flex items-start justify-between gap-3">
                             <div style={{ width: narrowTextWidth }} className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed">
-                              {p1 ? <p className="text-balance">{p1}</p> : null}
+                              {handheldMode !== 'portrait' && p1 ? <p className="text-balance">{p1}</p> : null}
                               {p2 ? <p className="text-balance">{p2}</p> : null}
                             </div>
 
@@ -219,6 +226,9 @@ export default function CompanyCeoPage() {
                               style={{
                                 width: portraitWidth,
                                 aspectRatio: '3 / 4',
+                                // 人物图下移约“两行正文高度”
+                                // 再下移约“一行正文高度”（合计约 3 行）
+                                marginTop: '4.85em',
                               }}
                               aria-hidden="true"
                             >
