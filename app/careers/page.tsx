@@ -11,6 +11,33 @@ export default function CareersPage() {
   const positions = t('careers.positions', { returnObjects: true }) as any[]
   const [selectedPosition, setSelectedPosition] = useState<number | null>(null)
 
+  const renderLinkifiedText = (text: string) => {
+    const re = /(https?:\/\/[^\s]+)/g
+    const parts = text.split(re)
+    return parts.map((part, idx) => {
+      if (!part) return null
+      const isUrl = part.startsWith('http://') || part.startsWith('https://')
+      if (isUrl) {
+        return (
+          <a
+            key={`link-${idx}`}
+            href={part}
+            target="_blank"
+            rel="noreferrer"
+            className="text-indigo-600 hover:text-indigo-700 underline underline-offset-2 break-all"
+          >
+            {part}
+          </a>
+        )
+      }
+      return (
+        <span key={`txt-${idx}`} className="break-words">
+          {part}
+        </span>
+      )
+    })
+  }
+
   return (
     <PageLayout>
       <section className="relative section-padding">
@@ -217,7 +244,9 @@ export default function CareersPage() {
                     <p className="text-gray-700 mb-2">
                       <strong>{t('careers.howToApply')}:</strong>
                     </p>
-                    <p className="text-gray-600">{positions[selectedPosition].contact}</p>
+                    <p className="text-gray-600">
+                      {renderLinkifiedText(String(positions[selectedPosition].contact))}
+                    </p>
                   </div>
                 )}
               </div>

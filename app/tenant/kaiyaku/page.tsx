@@ -5,8 +5,8 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 
-const KAIYAKU_FORM_URL =
-  'https://storage.googleapis.com/bournmark_hp_assets/articles/kaiyaku.pdf'
+// 下载用 PDF（需放在 public/ 下才能被网页访问）
+const KAIYAKU_FORM_URL = '/imgs/解約通知書.pdf'
 
 // 这里的字段结构要和我们生成 PDF 时用的一致
 type TerminationForm = {

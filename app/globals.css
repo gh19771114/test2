@@ -3626,11 +3626,19 @@ section#partners.desktop-partners-network .yellow-network-container {
 
   .careers-divider {
     display: block;
-    width: 2px;
+    width: 6px;
     align-self: stretch;
     border-radius: 9999px;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.12));
-    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08), 0 8px 22px rgba(15, 23, 42, 0.18);
+    background: linear-gradient(
+      180deg,
+      rgba(207, 170, 104, 0.20),
+      rgba(59, 130, 246, 0.55),
+      rgba(207, 170, 104, 0.20)
+    );
+    box-shadow:
+      0 0 0 1px rgba(15, 23, 42, 0.10),
+      0 10px 28px rgba(15, 23, 42, 0.22),
+      0 0 18px rgba(59, 130, 246, 0.25);
   }
 
   .careers-side {
