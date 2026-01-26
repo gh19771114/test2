@@ -356,6 +356,118 @@ export const encyclopediaEntries = [
         },
       },
     ],
+    i18n: {
+      en: {
+        content: `Japanese rental contracts can be clause-heavy. Understanding key clauses and common risks is essential for both landlords and tenants.
+
+[TABLE:0]
+
+Lease terms are typically 2 years. Renewal conditions should clearly state the renewal procedure and any fees. Notice periods for termination should also be explicitly defined in the contract.
+
+Routine maintenance is generally the tenant’s responsibility, while major repairs are the landlord’s responsibility. The allocation of responsibility for equipment failures should be clearly written in the contract.
+
+[COMPARISON:0]
+
+Risk prevention includes selecting reliable tenants and conducting background checks, purchasing rental insurance, and working with a professional property management company.`,
+        charts: [
+          {
+            type: 'table',
+            title: 'Rental Cost Components',
+            data: {
+              headers: ['Item', 'Typical amount', 'Notes'],
+              rows: [
+                ['Monthly rent', 'Based on market rent', 'Paid monthly'],
+                ['Security deposit', '1–2 months’ rent', 'Refunded after deducting restoration costs'],
+                ['Key money', '1–2 months’ rent (varies by area)', 'One-time fee, non-refundable'],
+                ['Agent fee', '0.5–1 month’s rent', 'One-time fee at signing'],
+                ['Fire insurance', 'Approx. JPY 10,000–20,000/year', 'Usually paid by the tenant'],
+              ],
+            },
+          },
+          {
+            type: 'comparison',
+            title: 'Risk Comparison',
+            data: {
+              items: [
+                {
+                  title: 'Landlord risks',
+                  points: [
+                    'Rent delinquency',
+                    'Property damage and compensation',
+                    'Restoration costs at move-out',
+                    'Vacancy loss',
+                  ],
+                },
+                {
+                  title: 'Tenant risks',
+                  points: [
+                    'Deposit deduction disputes',
+                    'Rent increases',
+                    'Early termination penalties',
+                    'Maintenance responsibility for equipment failures',
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+      ja: {
+        content: `日本の賃貸契約は条項が多く、重要条項とリスクポイントの理解は、貸主・借主の双方にとって不可欠です。
+
+[TABLE:0]
+
+契約期間は一般的に2年です。更新条件は、更新手続きと費用を明確に定める必要があります。解約の通知期限も契約書に明記しておくことが重要です。
+
+日常的な維持管理は借主負担、大規模修繕は貸主負担となるのが一般的です。設備故障時の責任範囲は契約書で明確にしておきましょう。
+
+[COMPARISON:0]
+
+リスク対策としては、信頼できる入居者の選定と与信確認、賃貸保険の加入、そして専門の管理会社への委託が有効です。`,
+        charts: [
+          {
+            type: 'table',
+            title: '賃貸費用の構成',
+            data: {
+              headers: ['費用項目', '目安', '説明'],
+              rows: [
+                ['月額賃料', '相場により決定', '毎月の固定支払い'],
+                ['敷金', '賃料1〜2か月分', '退去時に原状回復費等を差し引いて返還'],
+                ['礼金', '賃料1〜2か月分（地域差あり）', '一時金で返還されない'],
+                ['仲介手数料', '賃料0.5〜1か月分', '契約時に一括支払い'],
+                ['火災保険', '年額 約1〜2万円', '通常は借主負担'],
+              ],
+            },
+          },
+          {
+            type: 'comparison',
+            title: 'リスク比較',
+            data: {
+              items: [
+                {
+                  title: '貸主側のリスク',
+                  points: [
+                    '賃料の滞納',
+                    '室内損傷の補償',
+                    '退去時の原状回復費',
+                    '空室期間による損失',
+                  ],
+                },
+                {
+                  title: '借主側のリスク',
+                  points: [
+                    '敷金精算のトラブル',
+                    '賃料の値上げ',
+                    '途中解約の違約金',
+                    '設備故障時の修理負担範囲',
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     title: '公寓管理费与修缮基金的组成',

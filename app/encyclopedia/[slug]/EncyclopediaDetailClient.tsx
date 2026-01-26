@@ -7,7 +7,7 @@ import EncyclopediaContent from '@/components/EncyclopediaContent'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function EncyclopediaDetailClient({ entry }: { entry: any }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   // 获取翻译后的标题和标签
   const getEncyclopediaTitle = (slug: string, fallback: string) => {
@@ -21,6 +21,11 @@ export default function EncyclopediaDetailClient({ entry }: { entry: any }) {
     const translated = t(key)
     return translated !== key ? translated : fallback
   }
+
+  // 正文与图表：如果该条目提供了对应语言的内容，则优先使用；否则回退到中文原文
+  const localized = entry?.i18n?.[language]
+  const content = (localized?.content as string | undefined) || entry.content
+  const charts = (localized?.charts as any[] | undefined) || (entry.charts as any)
 
   return (
     <PageLayout>
@@ -54,8 +59,8 @@ export default function EncyclopediaDetailClient({ entry }: { entry: any }) {
         <section className="section-padding" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
           <div className="container-custom max-w-4xl">
             <EncyclopediaContent 
-              content={entry.content} 
-              charts={entry.charts as any}
+              content={content} 
+              charts={charts as any}
             />
 
             {/* 返回按钮 */}

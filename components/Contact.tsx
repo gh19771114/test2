@@ -282,11 +282,6 @@ const Contact = () => {
                         {submitResult}
                       </p>
                     )}
-                    {!submitResult && (
-                      <p className="text-sm text-gray-500 text-center">
-                        {t('home.contact.submitHint')}
-                      </p>
-                    )}
                   </div>
                 </form>
               </>
