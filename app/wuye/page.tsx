@@ -12,6 +12,7 @@ import RentNegotiationRing from '@/components/RentNegotiationRing'
 export default function WuYePage() {
   const { t, language } = useLanguage()
   const propertiesScrollRef = useRef<HTMLDivElement | null>(null)
+  const propertiesTrackRef = useRef<HTMLDivElement | null>(null)
   const [ringSize, setRingSize] = useState<number>(260)
   const ringLabels = useMemo(
     () => [
@@ -81,47 +82,68 @@ export default function WuYePage() {
   // 管理房产：自动滚动 + 鼠标/触摸拖拽（参照 /company/overview 的 AutoScrollAssets 逻辑）
   useEffect(() => {
     const container = propertiesScrollRef.current
-    if (!container) return
+    const track = propertiesTrackRef.current
+    if (!container || !track) return
 
-    let scrollPosition = container.scrollLeft || 0
-    // 参照企业概要页：用“像素/帧”推进，体感更稳定；这里调快一些
-    const scrollSpeed = 2.8 // px/frame（约 168px/s @60fps）
-    let animationFrameId: number | null = null
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(pointer: coarse)').matches
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
+        isCoarsePointer)
+
+    // 触摸设备优先保留原生滚动（惯性更丝滑），并关闭自动滚动避免“抢滚动”
+    const enableAuto = !isTouchDevice && !prefersReducedMotion
+
+    let offsetPx = 0
+    // 速度更快 & 更丝滑：用“像素/秒”按时间推进（不受帧率波动影响）
+    const scrollPxPerSec = 220
+    let rafId: number | null = null
     let isPaused = false
     let isDragging = false
     let startX = 0
-    let startScrollLeft = 0
+    let startOffset = 0
     let resumeTimeout: number | null = null
+    let lastTs: number | null = null
+
+    // compositor hint
+    const prevWillChange = track.style.willChange
+    track.style.willChange = 'transform'
 
     const getHalf = () => {
-      const half = container.scrollWidth / 2
+      const half = track.scrollWidth / 2
       return Number.isFinite(half) ? half : 0
     }
 
     const normalize = () => {
       const half = getHalf()
       if (half <= 0) return
-      if (container.scrollLeft >= half) {
-        container.scrollLeft -= half
-      } else if (container.scrollLeft < 0) {
-        container.scrollLeft += half
-      }
-      scrollPosition = container.scrollLeft
+      // 允许负值（向左拖拽），统一归一化到 [0, half)
+      offsetPx = ((offsetPx % half) + half) % half
     }
 
-    const scroll = () => {
-      if (isPaused || isDragging) {
-        animationFrameId = requestAnimationFrame(scroll)
-        return
-      }
+    const apply = () => {
+      track.style.transform = `translate3d(${-offsetPx}px, 0, 0)`
+    }
 
-      scrollPosition += scrollSpeed
-      const half = getHalf()
-      if (half > 0 && scrollPosition >= half) {
-        scrollPosition -= half
+    const tick = (ts: number) => {
+      if (lastTs === null) lastTs = ts
+      const dt = Math.max(0, ts - lastTs) / 1000
+      lastTs = ts
+
+      if (enableAuto && !isPaused && !isDragging) {
+        offsetPx += scrollPxPerSec * dt
+        normalize()
+        apply()
       }
-      container.scrollLeft = scrollPosition
-      animationFrameId = requestAnimationFrame(scroll)
+      rafId = requestAnimationFrame(tick)
     }
 
     const handleMouseEnter = () => {
@@ -129,13 +151,11 @@ export default function WuYePage() {
     }
     const handleMouseLeave = () => {
       isPaused = false
-      if (animationFrameId === null) {
-        animationFrameId = requestAnimationFrame(scroll)
-      }
+      if (rafId === null) rafId = requestAnimationFrame(tick)
     }
 
-    // 触摸板/鼠标滚轮：将 deltaX/deltaY 映射为横向滚动，并阻止页面上下滚动“抢手势”
     const onWheel = (e: WheelEvent) => {
+      if (!enableAuto) return
       const half = getHalf()
       if (half <= 0) return
 
@@ -145,75 +165,63 @@ export default function WuYePage() {
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
       if (delta === 0) return
 
-      // 需要 non-passive 才能 preventDefault
       e.preventDefault()
       e.stopPropagation()
-      container.scrollLeft += delta
+      offsetPx += delta
       normalize()
+      apply()
 
-      window.setTimeout(() => {
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
         isPaused = false
       }, 600)
     }
 
     const onPointerDown = (e: PointerEvent) => {
-      // 移动端用原生滚动（带惯性）更丝滑：这里只保留鼠标拖拽
-      if (e.pointerType !== 'mouse') {
-        isPaused = true
-        if (resumeTimeout) window.clearTimeout(resumeTimeout)
-        resumeTimeout = window.setTimeout(() => {
-          isPaused = false
-        }, 900)
-        return
-      }
+      // 仅桌面鼠标拖拽；触摸设备用原生滚动
+      if (!enableAuto || e.pointerType !== 'mouse') return
       if (e.button !== 0) return
       isDragging = true
       isPaused = true
       startX = e.clientX
-      startScrollLeft = container.scrollLeft
+      startOffset = offsetPx
       container.setPointerCapture?.(e.pointerId)
     }
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return
-      // 非 passive listener 下可阻止默认滚动，避免页面上下移动
       e.preventDefault()
       const dx = e.clientX - startX
-      container.scrollLeft = startScrollLeft - dx
+      offsetPx = startOffset - dx
       normalize()
+      apply()
     }
     const endDrag = () => {
       if (!isDragging) return
       isDragging = false
-      // 同步 scrollPosition，避免松手后“跳回”或速度突变
-      scrollPosition = container.scrollLeft
       isPaused = false
     }
 
-    // 原生滚动（手机惯性/触摸板）时，同步 scrollPosition 并短暂停止自动滚动，避免“抢滚动”
-    const onScroll = () => {
-      normalize()
-      isPaused = true
-      if (resumeTimeout) window.clearTimeout(resumeTimeout)
-      resumeTimeout = window.setTimeout(() => {
-        isPaused = false
-      }, 450)
+    // 启用自动滚动时，把外层滚动关掉（避免 scrollLeft 与 transform 互相打架）
+    const prevOverflowX = container.style.overflowX
+    if (enableAuto) {
+      container.style.overflowX = 'hidden'
+      container.scrollLeft = 0
+      offsetPx = 0
+      apply()
     }
 
     container.addEventListener('mouseenter', handleMouseEnter)
     container.addEventListener('mouseleave', handleMouseLeave)
-    // 关键：pointermove 必须 non-passive，才能 preventDefault 阻止页面滚动
     container.addEventListener('pointerdown', onPointerDown, { passive: false })
     container.addEventListener('pointermove', onPointerMove, { passive: false })
     container.addEventListener('pointerup', endDrag, { passive: true })
     container.addEventListener('pointercancel', endDrag, { passive: true })
-    // 关键：wheel 必须 non-passive，才能接管触摸板横向手势
     container.addEventListener('wheel', onWheel, { passive: false })
-    container.addEventListener('scroll', onScroll, { passive: true })
 
-    animationFrameId = requestAnimationFrame(scroll)
+    rafId = requestAnimationFrame(tick)
 
     return () => {
-      if (animationFrameId !== null) cancelAnimationFrame(animationFrameId)
+      if (rafId !== null) cancelAnimationFrame(rafId)
       container.removeEventListener('mouseenter', handleMouseEnter)
       container.removeEventListener('mouseleave', handleMouseLeave)
       container.removeEventListener('pointerdown', onPointerDown as any)
@@ -221,8 +229,10 @@ export default function WuYePage() {
       container.removeEventListener('pointerup', endDrag as any)
       container.removeEventListener('pointercancel', endDrag as any)
       container.removeEventListener('wheel', onWheel as any)
-      container.removeEventListener('scroll', onScroll as any)
       if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      track.style.willChange = prevWillChange
+      track.style.transform = ''
+      container.style.overflowX = prevOverflowX
     }
   }, [])
   return (
@@ -367,7 +377,7 @@ export default function WuYePage() {
               overscrollBehavior: 'contain',
             }}
           >
-            <div className="flex gap-4 min-w-max wuye-properties-scroll-wrapper px-1">
+            <div ref={propertiesTrackRef} className="flex gap-4 min-w-max wuye-properties-scroll-wrapper px-1">
               {managedPropertiesLoop.map((property, index) => (
                 <div
                   key={`${property.id}-${index < managedProperties.length ? 'a' : 'b'}`}

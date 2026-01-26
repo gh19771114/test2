@@ -196,14 +196,17 @@ export default function ZengzhiPage() {
     const enableAutoScroll = !isTouchDevice && !prefersReducedMotion
 
     let scrollPosition = container.scrollLeft || 0
-    // 桌面端自动滚动速度（用户反馈原来过慢）
-    const scrollSpeed = 2.6 // px/frame
+    // 桌面端自动滚动速度：对齐“企业概要/企业持有资产”滚动栏体验
+    // - 企业概要当前实现是 1px/frame（≈ 60px/s @ 60fps）
+    // - 本页内容更重，帧率波动会导致“按帧加 px”变慢，所以这里用“按时间”滚动保证一致速度
+    const scrollPxPerSec = 60
     let animationFrameId: number | null = null
     let isPaused = false
     let isDragging = false
     let startX = 0
     let startScrollLeft = 0
     let resumeTimeout: number | null = null
+    let lastTs: number | null = null
 
     const getHalf = () => {
       const half = container.scrollWidth / 2
@@ -221,9 +224,14 @@ export default function ZengzhiPage() {
       scrollPosition = container.scrollLeft
     }
 
-    const tick = () => {
+    const tick = (ts: number) => {
+      // 保证暂停/拖拽期间也更新时间戳，避免恢复时 dt 过大导致“瞬移”
+      if (lastTs === null) lastTs = ts
+      const dt = Math.max(0, ts - lastTs) / 1000
+      lastTs = ts
+
       if (!isPaused && !isDragging) {
-        scrollPosition += scrollSpeed
+        scrollPosition += scrollPxPerSec * dt
         const half = getHalf()
         if (half > 0 && scrollPosition >= half) scrollPosition -= half
         container.scrollLeft = scrollPosition

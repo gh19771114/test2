@@ -58,7 +58,8 @@ export default function TouZiPage() {
                       <div className="relative h-56 bg-gray-100 flex items-center justify-center">
                         {item.image ? (
                           (() => {
-                            const contain = /(^|\/)(helte|logo|honsha)\b/i.test(item.image) || /logo/i.test(item.image)
+                            // 仅对“Logo 类图片”使用 contain + 留白；本社大楼（honsha）为照片类，需贴边显示
+                            const contain = /(^|\/)(helte|logo)\b/i.test(item.image) || /logo/i.test(item.image)
                             return (
                               <div className={`absolute inset-0 ${contain ? 'p-6 bg-white' : ''}`}>
                                 <div className="relative w-full h-full">
