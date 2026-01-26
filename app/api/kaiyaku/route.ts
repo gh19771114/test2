@@ -1,12 +1,14 @@
 // 2版/app/api/kaiyaku/route.ts
 import { NextResponse } from 'next/server'
-import { chromium } from 'playwright'
 import nodemailer from 'nodemailer'
 import { constants } from 'crypto'
-import {
-  renderKaiyakuPdfHtml,
-  type KaiyakuFormData,
-} from '@/lib/kaiyakuPdfTemplate'
+import { PDFDocument, rgb } from 'pdf-lib'
+import * as fontkit from 'fontkit'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
+import { type KaiyakuFormData } from '@/lib/kaiyakuPdfTemplate'
+
+export const runtime = 'nodejs'
 
 // 只允许 POST
 export async function POST(req: Request) {
@@ -27,11 +29,9 @@ export async function POST(req: Request) {
       submittedAt: new Date(),
     }
 
-    // 1. 用模板生成 HTML
-    const html = renderKaiyakuPdfHtml(data)
-
-    // 2. 用 Playwright 把 HTML 变成 PDF（二进制 Buffer）
-    const pdfBuffer = await generatePdfFromHtml(html)
+    // 生成 PDF（二进制 Buffer）
+    // NOTE: 不使用 Playwright（Vercel 运行时默认没有浏览器可执行文件）
+    const pdfBuffer = await generateKaiyakuPdf(data)
 
     // 3. 用 Nodemailer 把 PDF 作为附件发到公司邮箱
     // 正确解析 SMTP_SECURE（环境变量是字符串）
@@ -101,26 +101,172 @@ export async function POST(req: Request) {
   }
 }
 
-// 用 Playwright 把 HTML 渲染成 PDF
-async function generatePdfFromHtml(html: string): Promise<Buffer> {
-  const browser = await chromium.launch()
-  try {
-    const page = await browser.newPage()
-    await page.setContent(html, { waitUntil: 'networkidle' })
-    const pdf = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '10mm',
-        bottom: '10mm',
-        left: '10mm',
-        right: '10mm',
-      },
-    })
-    return pdf as Buffer
-  } finally {
-    await browser.close()
+async function generateKaiyakuPdf(data: KaiyakuFormData): Promise<Buffer> {
+  // A4
+  const pageW = 595.28
+  const pageH = 841.89
+
+  const pdfDoc = await PDFDocument.create()
+  // @ts-expect-error fontkit types mismatch in pdf-lib, runtime is compatible
+  pdfDoc.registerFontkit(fontkit)
+
+  const fontPath = join(process.cwd(), 'public', 'fonts', 'NotoSansSC-Regular.ttf')
+  const fontBytes = await readFile(fontPath)
+  const font = await pdfDoc.embedFont(fontBytes)
+
+  const page = pdfDoc.addPage([pageW, pageH])
+
+  const marginX = 46
+  const marginTop = 54
+  const usableW = pageW - marginX * 2
+
+  const titleSize = 18
+  const labelSize = 11
+  const valueSize = 11
+  const lineGap = 6
+
+  let y = pageH - marginTop
+
+  const drawLine = (text: string, size: number, color = rgb(0.08, 0.12, 0.18)) => {
+    page.drawText(text, { x: marginX, y, size, font, color })
+    y -= size + lineGap
   }
+
+  const drawWrapped = (text: string, size: number, indent = 0, color = rgb(0.08, 0.12, 0.18)) => {
+    const lines = wrapTextCJK(text, usableW - indent, font, size)
+    for (const line of lines) {
+      page.drawText(line, { x: marginX + indent, y, size, font, color })
+      y -= size + 4
+    }
+    y -= 2
+  }
+
+  // Title
+  drawLine('解約通知書（オンライン申請）', titleSize, rgb(0.12, 0.16, 0.22))
+  const submittedAtText = data.submittedAt
+    ? `提交时间：${formatDateTimeForPdf(data.submittedAt)}`
+    : ''
+  if (submittedAtText) drawLine(submittedAtText, 9, rgb(0.45, 0.45, 0.45))
+  y -= 8
+
+  const kv = (label: string, value: string) => `${label}：${value || '（未填写）'}`
+
+  drawLine('一、物件信息', labelSize, rgb(0.2, 0.25, 0.32))
+  drawWrapped(kv('物件名', data.propertyName), valueSize)
+  drawWrapped(kv('部屋番号', data.roomNumber), valueSize)
+  drawWrapped(kv('物件所在地', data.propertyAddress), valueSize)
+  drawWrapped(kv('契約者名', data.contractHolder), valueSize)
+  y -= 6
+
+  drawLine('二、日程', labelSize, rgb(0.2, 0.25, 0.32))
+  drawWrapped(kv('解約日', data.cancelDate), valueSize)
+  drawWrapped(kv('退去予定日', data.moveOutDate), valueSize)
+  drawWrapped(kv('立会希望日時', data.inspectionDateTime ? formatInspectionDateTimeForEmail(data.inspectionDateTime) : ''), valueSize)
+  y -= 6
+
+  drawLine('三、设施利用状况', labelSize, rgb(0.2, 0.25, 0.32))
+  drawWrapped(kv('使用駐輪場', data.bicycleParking), valueSize)
+  drawWrapped(kv('メールボックスの開け方', buildMailboxLine(data)), valueSize)
+  drawWrapped(kv('使用駐車場', data.carParking), valueSize)
+  drawWrapped(kv('オートロック', buildAutoLockLine(data)), valueSize)
+  drawWrapped(kv('使用バイク置場', data.bikeSpace), valueSize)
+  drawWrapped(kv('宅配ボックス', buildDeliveryBoxLine(data)), valueSize)
+  y -= 6
+
+  drawLine('四、返金账户', labelSize, rgb(0.2, 0.25, 0.32))
+  drawWrapped(kv('銀行', data.bankName), valueSize)
+  drawWrapped(kv('支店', data.bankBranch), valueSize)
+  drawWrapped(kv('口座種別', data.accountType || ''), valueSize)
+  drawWrapped(kv('口座番号', data.accountNumber), valueSize)
+  drawWrapped(kv('名義人', data.accountHolder), valueSize)
+  y -= 6
+
+  drawLine('五、解約理由・転居先', labelSize, rgb(0.2, 0.25, 0.32))
+  const reason =
+    data.reason === 'その他'
+      ? `その他（${data.reasonOtherText || ''}）`
+      : data.reason || ''
+  drawWrapped(kv('解約理由', reason), valueSize)
+  drawWrapped(kv('転居先住所', data.newAddress || '未定'), valueSize)
+  drawWrapped(kv('建物名・号室', data.newBuildingAndRoom || ''), valueSize)
+  drawWrapped(kv('电话', `${data.phoneCountryCode || '+81'} ${data.phoneNumber || ''}`.trim()), valueSize)
+  y -= 10
+
+  drawWrapped(`氏名（署名欄）：${data.signerName || data.contractHolder || '（未填写）'}`, valueSize)
+
+  const bytes = await pdfDoc.save()
+  return Buffer.from(bytes)
+}
+
+function wrapTextCJK(text: string, maxWidth: number, font: any, fontSize: number): string[] {
+  const normalized = (text || '').replace(/\r\n/g, '\n')
+  const paras = normalized.split('\n')
+  const out: string[] = []
+
+  for (const p of paras) {
+    const s = p.trimEnd()
+    if (!s) {
+      out.push('')
+      continue
+    }
+
+    let line = ''
+    for (const ch of Array.from(s)) {
+      const test = line + ch
+      const w = font.widthOfTextAtSize(test, fontSize)
+      if (w > maxWidth && line) {
+        out.push(line)
+        line = ch
+      } else {
+        line = test
+      }
+    }
+    if (line) out.push(line)
+  }
+
+  return out
+}
+
+function formatDateTimeForPdf(d: Date): string {
+  // Asia/Tokyo
+  const fmt = new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  return fmt.format(d)
+}
+
+function buildMailboxLine(data: KaiyakuFormData) {
+  const part1 = `(${data.mailbox1Direction}) ${data.mailbox1Turns || '＿'}回${data.mailbox1Number || '＿'}番`
+  const part2 = `(${data.mailbox2Direction}) ${data.mailbox2Turns || '＿'}回${data.mailbox2Number || '＿'}番`
+  return `${part1} ・ ${part2}`
+}
+
+function buildAutoLockLine(data: KaiyakuFormData) {
+  if (data.autoLock === '無') return '□有　□鍵式　□ダイヤル（　　　　　）　■無'
+  const keyType =
+    data.autoLockKeyType === '鍵式'
+      ? '■鍵式　□ダイヤル（　　　　　）'
+      : data.autoLockKeyType === 'ダイヤル'
+      ? `□鍵式　■ダイヤル（${data.autoLockDial || '　　　　　'}）`
+      : '□鍵式　□ダイヤル（　　　　　）'
+  return `■有　${keyType}　□無`
+}
+
+function buildDeliveryBoxLine(data: KaiyakuFormData) {
+  if (data.deliveryBox === '無') return '□有　□鍵式　□カード式　番号：（　　　　　）　■無'
+  const type =
+    data.deliveryBoxType === '鍵式'
+      ? '■鍵式　□カード式'
+      : data.deliveryBoxType === 'カード式'
+      ? '□鍵式　■カード式'
+      : '□鍵式　□カード式'
+  const num = data.deliveryBoxNumber || '　　　　　'
+  return `■有　${type}　番号：（${num}）　□無`
 }
 
 // 格式化立会希望日時用于邮件
