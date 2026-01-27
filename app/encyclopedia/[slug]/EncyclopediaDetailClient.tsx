@@ -44,7 +44,7 @@ export default function EncyclopediaDetailClient({ entry }: { entry: any }) {
             
             <div className="flex items-center gap-3 md:mb-4" style={{ marginBottom: '0.5rem' }}>
               <BookOpen className="w-5 h-5 text-green-600" />
-              <span className="inline-flex items-center px-3 py-1 text-sm rounded-full bg-green-100 text-green-700 border border-green-200" suppressHydrationWarning>
+              <span className="inline-flex items-center px-3 py-1 text-sm rounded-full bg-green-600 text-white border border-green-500" suppressHydrationWarning>
                 {getEncyclopediaTag(entry.slug, entry.tag)}
               </span>
             </div>

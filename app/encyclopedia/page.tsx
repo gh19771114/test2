@@ -70,7 +70,7 @@ export default function EncyclopediaListPage() {
                 const translatedTag = getEncyclopediaTag(firstEntry.slug, tag)
                 return (
                 <div key={tag}>
-                    <h2 className="text-2xl font-bold text-navy-900 md:mb-4 pb-2 border-b border-gray-300" style={{ marginBottom: '0.375rem', paddingBottom: '0.375rem' }} suppressHydrationWarning>
+                    <h2 className="text-2xl font-bold text-white md:mb-4 pb-2 border-b border-white/25" style={{ marginBottom: '0.375rem', paddingBottom: '0.375rem' }} suppressHydrationWarning>
                       {translatedTag}
                   </h2>
                     <div className="md:space-y-3" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -86,7 +86,7 @@ export default function EncyclopediaListPage() {
                               <h3 className="text-xl font-bold text-navy-900 md:mb-2 group-hover:text-navy-700 transition-colors" style={{ marginBottom: '0.0625rem' }} suppressHydrationWarning>
                                 {getEncyclopediaTitle(entry.slug, entry.title)}
                             </h3>
-                              <span className="inline-flex items-center px-3 py-1 text-xs rounded-full bg-green-50 text-green-700 border border-green-200" suppressHydrationWarning>
+                              <span className="inline-flex items-center px-3 py-1 text-xs rounded-full bg-green-600 text-white border border-green-500" suppressHydrationWarning>
                                 {getEncyclopediaTag(entry.slug, entry.tag)}
                             </span>
                           </div>

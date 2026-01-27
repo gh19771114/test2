@@ -1,8 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { Mail, Phone, MapPin, Printer, Send, Copy, Check, Edit, CheckCircle } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: any) => string
+      reset?: (widgetId?: string) => void
+      remove?: (widgetId?: string) => void
+    }
+  }
+}
 
 const Contact = () => {
   const { t } = useLanguage()
@@ -12,6 +22,19 @@ const Contact = () => {
     email: '',
     message: ''
   })
+  // anti-bot: honeypot + timing
+  const [honeypot, setHoneypot] = useState('')
+  const [formStartedAt] = useState(() => Date.now())
+
+  // anti-bot: optional Cloudflare Turnstile
+  const turnstileSiteKey = useMemo(
+    () => process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
+    []
+  )
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileContainerRef = useRef<HTMLDivElement | null>(null)
+  const turnstileWidgetIdRef = useRef<string | null>(null)
+
   const [copied, setCopied] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
@@ -40,6 +63,75 @@ const Contact = () => {
     }
   }, [])
 
+  // 可选 Turnstile：只有配置了 site key 才渲染；不配置不会影响提交（仍有蜜罐+限流保护）
+  useEffect(() => {
+    if (!turnstileSiteKey) return
+    if (!showConfirm) return
+    if (!turnstileContainerRef.current) return
+
+    let cancelled = false
+
+    const ensureScript = () =>
+      new Promise<void>((resolve, reject) => {
+        if (window.turnstile) return resolve()
+        const existing = document.querySelector<HTMLScriptElement>(
+          'script[data-turnstile="true"]'
+        )
+        if (existing) {
+          existing.addEventListener('load', () => resolve(), { once: true })
+          existing.addEventListener('error', () => reject(new Error('turnstile script load failed')), { once: true })
+          return
+        }
+        const script = document.createElement('script')
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+        script.async = true
+        script.defer = true
+        script.dataset.turnstile = 'true'
+        script.onload = () => resolve()
+        script.onerror = () => reject(new Error('turnstile script load failed'))
+        document.head.appendChild(script)
+      })
+
+    const render = async () => {
+      try {
+        await ensureScript()
+        if (cancelled) return
+        if (!window.turnstile || !turnstileContainerRef.current) return
+
+        // 清空并重新渲染，避免重复实例
+        turnstileContainerRef.current.innerHTML = ''
+        setTurnstileToken(null)
+
+        const widgetId = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: turnstileSiteKey,
+          theme: 'light',
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(null),
+          'error-callback': () => setTurnstileToken(null),
+        })
+        turnstileWidgetIdRef.current = widgetId
+      } catch {
+        // 加载失败也不阻塞：后端仍有蜜罐+限流
+      }
+    }
+
+    render()
+
+    return () => {
+      cancelled = true
+      const widgetId = turnstileWidgetIdRef.current
+      if (widgetId && window.turnstile?.remove) {
+        try {
+          window.turnstile.remove(widgetId)
+        } catch {
+          // ignore
+        }
+      }
+      turnstileWidgetIdRef.current = null
+      setTurnstileToken(null)
+    }
+  }, [showConfirm, turnstileSiteKey])
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -62,6 +154,9 @@ const Contact = () => {
     setSubmitResultType(null)
 
     try {
+      if (turnstileSiteKey && !turnstileToken) {
+        throw new Error('请先完成机器人验证后再提交。')
+      }
       // 提交到 Pages Router API: /api/send-form
       // 字段：name (必填), email (必填), message (必填), company (可选)
       const res = await fetch('/api/send-form', {
@@ -72,6 +167,10 @@ const Contact = () => {
           email: formData.email,
           message: formData.message,
           ...(formData.company && { company: formData.company }), // 可选字段
+          // anti-bot signals
+          website: honeypot,
+          formStartedAt,
+          ...(turnstileToken ? { turnstileToken } : {}),
         }),
       })
 
@@ -92,6 +191,8 @@ const Contact = () => {
         email: '',
         message: ''
       })
+      setHoneypot('')
+      setTurnstileToken(null)
     } catch (err: any) {
       console.error(err)
       setSubmitResult(err.message || t('home.contact.errors.submitFailed'))
@@ -106,6 +207,7 @@ const Contact = () => {
     setShowConfirm(false)
     setSubmitResult(null)
     setSubmitResultType(null)
+    setTurnstileToken(null)
   }
 
   const handleCopy = async (text: string, type: string) => {
@@ -200,6 +302,19 @@ const Contact = () => {
                   {t('home.contact.formTitle')}
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-6" suppressHydrationWarning>
+                  {/* anti-bot honeypot: should stay empty */}
+                  <div style={{ position: 'absolute', left: '-10000px', top: 'auto', width: 1, height: 1, overflow: 'hidden' }} aria-hidden="true">
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                    />
+                  </div>
                   <div className={isMobilePortrait ? 'flex flex-col items-center' : ''}>
                     <label htmlFor="company" className={`block text-sm font-medium text-gray-700 mb-2 ${isMobilePortrait ? 'w-[90%]' : 'w-full'}`}>
                       {t('home.contact.companyName')} <span className="text-red-500">*</span>
@@ -334,6 +449,13 @@ const Contact = () => {
                       </p>
                     </div>
                   </div>
+
+                  {turnstileSiteKey && (
+                    <div className="mt-4">
+                      <div ref={turnstileContainerRef} />
+                      <p className="text-xs text-gray-500 mt-2">Powered by Cloudflare Turnstile</p>
+                    </div>
+                  )}
 
                   <div className="space-y-3 mt-8 pt-6 border-t border-gray-200">
                     <button

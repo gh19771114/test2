@@ -101,16 +101,94 @@ export default function CompanyHistoryPage() {
     const el = timelineRef.current
     if (!el) return
 
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const isCoarsePointer =
+      typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)')?.matches
+
     let isDragging = false
     let startX = 0
     let startScrollLeft = 0
+    let lastX: number | null = null
+    let lastTs: number | null = null
+    let velocity = 0 // px/sec (scrollLeft direction)
+
+    let applyRaf: number | null = null
+    let pendingScrollLeft: number | null = null
+
+    let momentumRaf: number | null = null
+
+    const clampScroll = (v: number) => {
+      const max = Math.max(0, el.scrollWidth - el.clientWidth)
+      return Math.max(0, Math.min(max, v))
+    }
+
+    const applyScroll = () => {
+      if (pendingScrollLeft === null) return
+      el.scrollLeft = clampScroll(pendingScrollLeft)
+      pendingScrollLeft = null
+    }
+
+    const scheduleApply = () => {
+      if (applyRaf !== null) return
+      applyRaf = requestAnimationFrame(() => {
+        applyRaf = null
+        applyScroll()
+      })
+    }
+
+    const stopMomentum = () => {
+      if (momentumRaf !== null) {
+        cancelAnimationFrame(momentumRaf)
+        momentumRaf = null
+      }
+    }
+
+    const startMomentum = () => {
+      if (prefersReducedMotion) return
+      // 速度太小不启动
+      if (Math.abs(velocity) < 80) return
+
+      stopMomentum()
+      let ts0: number | null = null
+
+      const tick = (ts: number) => {
+        if (ts0 === null) ts0 = ts
+        const dt = Math.max(0, ts - ts0) / 1000
+        ts0 = ts
+
+        // 位置更新
+        const next = clampScroll(el.scrollLeft + velocity * dt)
+        const hitEdge = next === 0 || next === Math.max(0, el.scrollWidth - el.clientWidth)
+        el.scrollLeft = next
+
+        // 指数衰减（接近“丝滑惯性”手感）
+        velocity *= Math.exp(-6 * dt)
+
+        if (hitEdge || Math.abs(velocity) < 25) {
+          momentumRaf = null
+          return
+        }
+
+        momentumRaf = requestAnimationFrame(tick)
+      }
+
+      momentumRaf = requestAnimationFrame(tick)
+    }
 
     const onPointerDown = (e: PointerEvent) => {
+      // 触摸/平板：使用浏览器原生滚动，避免 JS 拖拽导致“卡一卡”，并且允许上下滚动页面
+      if (isCoarsePointer || e.pointerType === 'touch') return
       // 仅左键/触摸
       if (e.pointerType === 'mouse' && e.button !== 0) return
+      stopMomentum()
       isDragging = true
       startX = e.clientX
       startScrollLeft = el.scrollLeft
+      lastX = e.clientX
+      lastTs = performance.now()
+      velocity = 0
       el.setPointerCapture?.(e.pointerId)
     }
 
@@ -119,11 +197,28 @@ export default function CompanyHistoryPage() {
       // 非 passive listener 下阻止页面纵向滚动抢手势
       e.preventDefault()
       const dx = e.clientX - startX
-      el.scrollLeft = startScrollLeft - dx
+      pendingScrollLeft = startScrollLeft - dx
+      scheduleApply()
+
+      // 估算松手后的惯性速度（scrollLeft 方向）
+      const now = performance.now()
+      if (lastX !== null && lastTs !== null) {
+        const dt = Math.max(1, now - lastTs) / 1000
+        const pointerV = (e.clientX - lastX) / dt // px/sec (pointer direction)
+        // pointer 往右拖时 scrollLeft 往左，所以取反
+        velocity = -pointerV
+      }
+      lastX = e.clientX
+      lastTs = now
     }
 
     const endDrag = () => {
       isDragging = false
+      lastX = null
+      lastTs = null
+      // 统一一次最终位置，避免最后一帧未落地
+      applyScroll()
+      startMomentum()
     }
 
     el.addEventListener('pointerdown', onPointerDown, { passive: false })
@@ -132,6 +227,8 @@ export default function CompanyHistoryPage() {
     el.addEventListener('pointercancel', endDrag, { passive: true })
 
     return () => {
+      stopMomentum()
+      if (applyRaf !== null) cancelAnimationFrame(applyRaf)
       el.removeEventListener('pointerdown', onPointerDown as any)
       el.removeEventListener('pointermove', onPointerMove as any)
       el.removeEventListener('pointerup', endDrag as any)
@@ -169,22 +266,27 @@ export default function CompanyHistoryPage() {
               {/* 横向滚动时间轴：只显示文案 */}
               <div
                 ref={timelineRef}
-                className="overflow-x-auto scrollbar-hide snap-x snap-mandatory select-none cursor-grab active:cursor-grabbing"
+                className="overflow-x-auto scrollbar-hide snap-x snap-mandatory [@media(pointer:coarse)]:snap-none select-none cursor-grab active:cursor-grabbing"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
                   WebkitOverflowScrolling: 'touch',
-                  touchAction: 'pan-x',
-                  overscrollBehavior: 'contain',
+                  // 允许上下滚动页面（不锁死竖向手势）
+                  touchAction: 'auto',
+                  // 只限制横向越界，不影响竖向页面滚动
+                  overscrollBehaviorX: 'contain',
+                  overscrollBehaviorY: 'auto',
                 }}
               >
                 {/* 让时间线线条跟随横向滚动（移动端也可见），并在末尾延长 + 箭头 */}
-                <div className="relative flex gap-6 min-w-max pb-6 pt-10 pr-32">
+                {/* 让卡片以时间线为中轴纵向居中，从而形成“横跨时间线中间”的视觉效果 */}
+                <div className="relative flex items-center gap-6 min-w-max py-14 pr-32">
                   {/* 时间轴线（全端可见，随内容滚动） */}
                   <div
-                    className="absolute left-0 top-7 -translate-y-1/2 z-0 pointer-events-none"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-0 pointer-events-none"
                     // 让时间线直接延伸到箭头下方，由箭头头部覆盖收口，彻底避免“没连上”的视觉缝隙
-                    style={{ right: '24px', height: '24px', overflow: 'hidden' }}
+                    // 右侧额外内收一些像素，避免抗锯齿/柔光导致“超过箭头尖端”的视觉残留
+                    style={{ right: '36px', height: '24px', overflow: 'hidden' }}
                   >
                     <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5">
                       {/* 柔光底线（被外层裁切，避免右侧溢出） */}
@@ -195,7 +297,7 @@ export default function CompanyHistoryPage() {
                   </div>
 
                   {/* 末尾箭头（延长时间线的视觉收尾） */}
-                  <div className="absolute right-6 top-7 -translate-y-1/2 z-10 pointer-events-none">
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
                     <svg
                       width="56"
                       height="28"
@@ -252,14 +354,15 @@ export default function CompanyHistoryPage() {
                     >
                       <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
                         {milestone.image ? (
-                          <div className="relative w-full h-40 md:h-44 rounded-xl overflow-hidden border border-gray-200 mb-4">
-                            <div className="absolute inset-0 p-2 bg-white">
+                          <div className="relative w-full h-44 md:h-52 rounded-xl overflow-hidden border border-gray-200 mb-4 bg-white">
+                            <div className="absolute inset-0">
                               <div className="relative w-full h-full">
                                 <Image
                                   src={milestone.image}
                                   alt={milestone.imageAlt || milestone.title}
                                   fill
-                                  className="object-contain"
+                                  // 图片尽量“贴边铺满”容器，避免出现边缘空隙
+                                  className="object-cover"
                                   sizes="(min-width: 768px) 380px, 320px"
                                   unoptimized={milestone.image.startsWith('/imgs/')}
                                 />

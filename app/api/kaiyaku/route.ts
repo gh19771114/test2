@@ -13,8 +13,15 @@ export const runtime = 'nodejs'
 // 只允许 POST
 export async function POST(req: Request) {
   try {
+    const smtpHost = (process.env.SMTP_HOST || '').trim()
+    const smtpUser = (process.env.SMTP_USER || '').trim()
+    // Gmail / Google Workspace 的 App Password 常以 "xxxx xxxx xxxx xxxx" 展示
+    // 这里自动去空格/换行，避免因复制粘贴导致 535 BadCredentials
+    const smtpPass = (process.env.SMTP_PASS || '').trim().replace(/\s+/g, '')
+    const mailTo = (process.env.MAIL_TO || '').trim()
+
     // 验证环境变量
-    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.MAIL_TO) {
+    if (!smtpHost || !smtpUser || !smtpPass || !mailTo) {
       return NextResponse.json(
         { error: '邮件配置不完整，请检查环境变量：SMTP_HOST, SMTP_USER, SMTP_PASS, MAIL_TO' },
         { status: 500 }
@@ -39,12 +46,12 @@ export async function POST(req: Request) {
     const smtpPort = Number(process.env.SMTP_PORT || 587)
 
     const transporterConfig: any = {
-      host: process.env.SMTP_HOST,
+      host: smtpHost,
       port: smtpPort,
       secure: isSecure, // 根据环境变量设置
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: smtpUser,
+        pass: smtpPass,
       },
       // 添加连接超时和调试选项
       connectionTimeout: 15000,
@@ -74,8 +81,8 @@ export async function POST(req: Request) {
         : '解約通知書（オンライン申請）'
 
     const info = await transporter.sendMail({
-      from: `"解約通知フォーム" <${process.env.SMTP_USER}>`,
-      to: process.env.MAIL_TO,
+      from: `"解約通知フォーム" <${smtpUser}>`,
+      to: mailTo,
       subject: mailSubject,
       text: buildPlainTextSummary(data),
       attachments: [

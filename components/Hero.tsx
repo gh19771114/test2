@@ -9,7 +9,7 @@ const VideoPlayer = dynamic(() => import('./VideoPlayer'), {
 })
 
 const Hero = () => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   const headlineLines = [
     t('hero.headlineLine1'),
@@ -38,7 +38,14 @@ const Hero = () => {
                         : 'text-white/95'
                     }`}
                   >
-                    {line}
+                    {index === headlineLines.length - 1 && language === 'ja' && line.includes('、') ? (
+                      <>
+                        {line.split('、')[0]}
+                        <span className="whitespace-nowrap">{line.split('、').slice(1).join('、')}</span>
+                      </>
+                    ) : (
+                      line
+                    )}
                   </span>
                 ))}
               </h1>

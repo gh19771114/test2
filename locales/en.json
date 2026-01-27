@@ -1293,7 +1293,7 @@
       },
       "payment": {
         "title": "Rent Payment",
-        "description": "Please pay rent through bank transfer or online payment.",
+        "description": "Please pay rent through bank transfer.",
         "phone": "Rent payment consultation hotline: 03-6661-7745"
       },
       "renewal": {
@@ -1526,7 +1526,11 @@
       "noFeeTitle": "No Fee Properties",
       "withFeeTitle": "Properties with Fee",
       "viewDetails": "View Details",
-      "jpyPrice": "JPY Price"
+      "jpyPrice": "JPY Price",
+      "comingSoon": "Coming Soon",
+      "preparing": "New property in preparation",
+      "inPreparation": "In preparation",
+      "newPropertyInfo": "New Property Info"
     },
     "deals": {
       "deal1": {
@@ -2568,33 +2572,33 @@
         ]
       },
       "kingsoft-wps-japan": {
-        "type": "企业服务",
-        "title": "金山 WPS 日本子公司设立服务",
-        "location": "东京都",
-        "category": "企业出海",
-        "description": "签约日本大型不动产公司设立办公室，并提供招聘协助。",
+        "type": "Enterprise Service",
+        "title": "Kingsoft WPS Japan Subsidiary Setup Service",
+        "location": "Tokyo",
+        "category": "Enterprise Expansion",
+        "description": "Signed with a major Japanese real estate company to establish an office and provided recruitment support.",
         "details": [
-          "成功完成金山 WPS 日本子公司的设立服务",
-          "签约日本大型不动产公司，成功设立办公室",
-          "招聘协助，协助组建本地团队",
-          "提供持续的企业出海支持服务"
+          "Successfully completed the setup support for Kingsoft WPS Japan subsidiary",
+          "Signed with a major Japanese real estate company and successfully established an office",
+          "Provided recruitment support to help build a local team",
+          "Provided ongoing support for Japan market entry and operations"
         ],
         "highlights": [
           {
-            "label": "服务类型",
-            "value": "企业设立"
+            "label": "Service Type",
+            "value": "Company Establishment Support"
           },
           {
-            "label": "服务内容",
-            "value": "办公室设立、招聘协助"
+            "label": "Service Scope",
+            "value": "Office setup, recruitment support"
           },
           {
-            "label": "服务周期",
-            "value": "持续支持"
+            "label": "Service Period",
+            "value": "Ongoing support"
           },
           {
-            "label": "服务团队",
-            "value": "专业团队"
+            "label": "Service Team",
+            "value": "Professional team"
           }
         ]
       },

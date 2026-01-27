@@ -10,6 +10,58 @@ import nodemailer from "nodemailer";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import fontkit from "fontkit";
 
+// ------------------------------
+// Anti-bot protections (no 3rd-party required)
+// ------------------------------
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX = 5; // max submissions per window per IP
+const rateLimitStore = new Map<string, number[]>();
+
+function getClientIp(req: NextApiRequest): string {
+  const xff = req.headers["x-forwarded-for"];
+  const raw =
+    (typeof xff === "string" ? xff : Array.isArray(xff) ? xff[0] : "") ||
+    req.socket?.remoteAddress ||
+    "";
+  return raw.split(",")[0]?.trim() || "";
+}
+
+function isRateLimited(ip: string, now: number): boolean {
+  if (!ip) return false;
+  const timestamps = rateLimitStore.get(ip) || [];
+  const fresh = timestamps.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS);
+  fresh.push(now);
+  rateLimitStore.set(ip, fresh);
+  return fresh.length > RATE_LIMIT_MAX;
+}
+
+async function verifyTurnstile(params: {
+  token: string;
+  ip?: string;
+}): Promise<boolean> {
+  const secret = (process.env.TURNSTILE_SECRET_KEY || "").trim();
+  if (!secret) return true; // not enabled
+  if (!params.token) return false;
+
+  const body = new URLSearchParams();
+  body.set("secret", secret);
+  body.set("response", params.token);
+  if (params.ip) body.set("remoteip", params.ip);
+
+  try {
+    const resp = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body,
+    });
+    const json: any = await resp.json().catch(() => null);
+    return !!json?.success;
+  } catch {
+    // verification endpoint unreachable -> fail closed when enabled
+    return false;
+  }
+}
+
 // 本地字体文件路径
 const CHINESE_FONT_PATH = join(process.cwd(), 'public', 'fonts', 'NotoSansSC-Regular.ttf');
 
@@ -757,8 +809,15 @@ async function generateTerminationPDF(formData: {
 
 // 创建邮件传输器（共享配置）
 function createTransporter() {
+  const smtpHost = (process.env.SMTP_HOST || '').trim();
+  const smtpUser = (process.env.SMTP_USER || '').trim();
+  // Gmail / Google Workspace 的 App Password 常以 "xxxx xxxx xxxx xxxx" 展示
+  // 这里自动去空格/换行，避免因复制粘贴导致 535 BadCredentials
+  const smtpPass = (process.env.SMTP_PASS || '').trim().replace(/\s+/g, '');
+  const mailTo = (process.env.MAIL_TO || '').trim();
+
   // 验证环境变量
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS || !process.env.MAIL_TO) {
+  if (!smtpHost || !smtpUser || !smtpPass || !mailTo) {
     throw new Error('邮件配置不完整，请检查环境变量：SMTP_HOST, SMTP_USER, SMTP_PASS, MAIL_TO');
   }
 
@@ -767,21 +826,21 @@ function createTransporter() {
   const smtpPort = Number(process.env.SMTP_PORT || 465);
   
   console.log('SMTP 配置:', {
-    host: process.env.SMTP_HOST,
+    host: smtpHost,
     port: smtpPort,
     secure: isSecure,
-    user: process.env.SMTP_USER,
-    hasPassword: !!process.env.SMTP_PASS,
-    mailTo: process.env.MAIL_TO,
+    user: smtpUser,
+    hasPassword: !!smtpPass,
+    mailTo: mailTo,
   });
 
   const transporterConfig: any = {
-    host: process.env.SMTP_HOST,
+    host: smtpHost,
     port: smtpPort,
     secure: isSecure, // 465 端口需要 secure: true, 587 端口需要 secure: false
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: smtpUser,
+      pass: smtpPass,
       // 尝试不同的认证方法
       method: 'PLAIN', // 或 'LOGIN', 'XOAUTH2'
     },
@@ -820,8 +879,8 @@ async function sendMail(
   const transporter = createTransporter();
 
   const mailOptions = {
-    from: process.env.SMTP_USER,
-    to: process.env.MAIL_TO,
+    from: (process.env.SMTP_USER || '').trim(),
+    to: (process.env.MAIL_TO || '').trim(),
     subject: subject,
     text: textContent,
   };
@@ -913,7 +972,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  const { formType, ...formData } = req.body || {};
+  const ip = getClientIp(req);
+  const now = Date.now();
+
+  // 1) Rate limit (per IP)
+  if (isRateLimited(ip, now)) {
+    return res.status(429).json({ error: "请求过于频繁，请稍后再试。" });
+  }
+
+  // 2) Honeypot (bots tend to fill hidden fields)
+  const hp = String((req.body || {}).website || "").trim();
+  if (hp) {
+    // pretend success to reduce attacker feedback loop
+    return res.status(200).json({ ok: true, message: "表单已提交，我们会尽快与您联系。" });
+  }
+
+  // 3) Too-fast submission heuristic (optional)
+  const startedAt = Number((req.body || {}).formStartedAt || 0);
+  if (startedAt && Number.isFinite(startedAt)) {
+    const elapsed = now - startedAt;
+    if (elapsed >= 0 && elapsed < 1200) {
+      return res.status(400).json({ error: "提交过快，请稍后再试。" });
+    }
+  }
+
+  const rawFormType = String((req.body || {}).formType || "");
+
+  // 4) Optional Turnstile verification (only when TURNSTILE_SECRET_KEY is configured)
+  // 为避免影响其它可能复用此接口的表单，这里仅对“联系表单（默认）”启用验证
+  const turnstileToken = String((req.body || {}).turnstileToken || "").trim();
+  if (rawFormType !== "termination") {
+    const turnstileOk = await verifyTurnstile({ token: turnstileToken, ip });
+    if (!turnstileOk) {
+      return res.status(400).json({ error: "机器人验证失败，请重试。" });
+    }
+  }
+
+  const { formType, website, formStartedAt, turnstileToken: _ts, ...formData } = req.body || {};
 
   try {
     let pdfBuffer: Buffer;

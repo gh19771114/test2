@@ -1293,7 +1293,7 @@
       },
       "payment": {
         "title": "租金繳納",
-        "description": "請通過銀行轉賬或在線支付方式繳納租金。",
+        "description": "請通過銀行轉賬方式繳納租金。",
         "phone": "租金繳納諮詢專線：03-6661-7745"
       },
       "renewal": {
@@ -1559,7 +1559,11 @@
       "noFeeTitle": "免中介费房源",
       "withFeeTitle": "需中介费房源",
       "viewDetails": "查看详情",
-      "jpyPrice": "日元价格"
+      "jpyPrice": "日元价格",
+      "comingSoon": "敬請期待",
+      "preparing": "新物件準備中",
+      "inPreparation": "準備中",
+      "newPropertyInfo": "新物件資訊"
     },
     "deals": {
       "deal1": {
@@ -2593,33 +2597,33 @@
         ]
       },
       "kingsoft-wps-japan": {
-        "type": "企业服务",
-        "title": "金山 WPS 日本子公司设立服务",
-        "location": "东京都",
-        "category": "企业出海",
-        "description": "签约日本大型不动产公司设立办公室，并提供招聘协助。",
+        "type": "企業服務",
+        "title": "金山 WPS 日本子公司設立服務",
+        "location": "東京都",
+        "category": "企業出海",
+        "description": "簽約日本大型不動產公司設立辦公室，並提供招聘協助。",
         "details": [
-          "成功完成金山 WPS 日本子公司的设立服务",
-          "签约日本大型不动产公司，成功设立办公室",
-          "招聘协助，协助组建本地团队",
-          "提供持续的企业出海支持服务"
+          "成功完成金山 WPS 日本子公司的設立服務",
+          "簽約日本大型不動產公司，成功設立辦公室",
+          "招聘協助，協助組建本地團隊",
+          "提供持續的企業出海支持服務"
         ],
         "highlights": [
           {
-            "label": "服务类型",
-            "value": "企业设立"
+            "label": "服務類型",
+            "value": "企業設立協助"
           },
           {
-            "label": "服务内容",
-            "value": "办公室设立、招聘协助"
+            "label": "服務內容",
+            "value": "辦公室設立、招聘協助"
           },
           {
-            "label": "服务周期",
-            "value": "持续支持"
+            "label": "服務週期",
+            "value": "持續支持"
           },
           {
-            "label": "服务团队",
-            "value": "专业团队"
+            "label": "服務團隊",
+            "value": "專業團隊"
           }
         ]
       },

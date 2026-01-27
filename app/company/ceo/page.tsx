@@ -11,6 +11,8 @@ export default function CompanyCeoPage() {
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<'profile' | 'message'>('profile')
   const [handheldMode, setHandheldMode] = useState<'portrait' | 'landscape' | null>(null)
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false)
+  const [coarseShortSide, setCoarseShortSide] = useState<number | null>(null)
 
   // 仅用于“手机端寄语页稳定布局”判断：
   // - 不依赖 viewport 宽度（因为用户可能点过“切换到PC版”，会把 viewport 强制到 1280）
@@ -20,25 +22,30 @@ export default function CompanyCeoPage() {
 
     const compute = () => {
       const isCoarse = window.matchMedia('(pointer: coarse)').matches
+      setIsCoarsePointer(isCoarse)
       if (!isCoarse) {
         setHandheldMode(null)
+        setCoarseShortSide(null)
         return
       }
 
       const isPortrait = window.matchMedia('(orientation: portrait)').matches
+      const w = window.innerWidth || 0
       const h = window.innerHeight || 0
-      // iPhone 15 Pro Max 竖屏约 932；这里留一点余量
-      if (isPortrait && h > 0 && h <= 950) {
-        setHandheldMode('portrait')
-        return
-      }
-      // 手机横屏高度通常 < 500；排除 iPad 横屏 768
-      if (!isPortrait && h > 0 && h <= 500) {
-        setHandheldMode('landscape')
+
+      // 用“短边”区分手机与平板：
+      // - 手机短边通常 <= 600px（包含部分大屏安卓机；即使高度很大也不会误判）
+      // - iPad 竖屏短边 768px、横屏短边 768px，都不会命中
+      const shortSide = Math.min(w || 0, h || 0)
+      setCoarseShortSide(shortSide > 0 ? shortSide : null)
+
+      const isPhone = shortSide > 0 && shortSide <= 600
+      if (!isPhone) {
+        setHandheldMode(null)
         return
       }
 
-      setHandheldMode(null)
+      setHandheldMode(isPortrait ? 'portrait' : 'landscape')
     }
 
     compute()
@@ -181,6 +188,12 @@ export default function CompanyCeoPage() {
                   const p2 = messageParagraphsOriginal[2]
                   const rest = messageParagraphsOriginal.slice(3)
                   const narrowTextWidth = handheldMode === 'portrait' ? '40vw' : '70vw'
+                  // 手机竖版：正文左右留出约“一列文字”的空间
+                  const portraitTextPaddingInline = handheldMode === 'portrait' ? '1.4em' : undefined
+                  // 手机竖版：正文顶部/底部各留出约“一行文字高度”的空间
+                  const portraitTextPaddingBlock = handheldMode === 'portrait' ? '1.6em' : undefined
+                  // “撒花姑娘”上下各留一行正文高度的空间（手机竖版）
+                  const portraitExtraSpace = handheldMode === 'portrait' ? '1.6em' : undefined
                   // 横屏：人物图缩小到“当前的 50%”（原 min(46vw,320px) -> min(23vw,160px)）
                   const portraitWidth =
                     handheldMode === 'landscape' ? 'min(23vw, 160px)' : 'min(42vw, 240px)'
@@ -188,7 +201,18 @@ export default function CompanyCeoPage() {
                   return (
                     <div className="container-custom pt-2 pb-0 company-ceo-message-container">
                       <div className="mx-auto max-w-5xl company-ceo-message-stage">
-                        <div className="text-slate-900 company-ceo-message-text">
+                        <div
+                          className="text-slate-900 company-ceo-message-text"
+                          style={
+                            portraitTextPaddingInline || portraitTextPaddingBlock
+                              ? ({
+                                  paddingInline: portraitTextPaddingInline,
+                                  paddingTop: portraitTextPaddingBlock,
+                                  paddingBottom: portraitTextPaddingBlock,
+                                } as any)
+                              : undefined
+                          }
+                        >
                           <div className="mb-2">
                             <div className="space-y-1">
                               <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
@@ -202,14 +226,22 @@ export default function CompanyCeoPage() {
 
                           {/* 第 1 段：全宽 */}
                           {p0 ? (
-                            <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                            <div
+                              className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs"
+                              // 手机竖版：第 1 段右侧再多留“一字宽”
+                              style={handheldMode === 'portrait' ? ({ paddingRight: '1em' } as any) : undefined}
+                            >
                               <p className="text-balance">{p0}</p>
                             </div>
                           ) : null}
 
                           {/* 手机竖版：第 2 段也保持全宽（避免比第 1 段更窄） */}
                           {handheldMode === 'portrait' && p1 ? (
-                            <div className="mt-3 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                            <div
+                              className="mt-3 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs"
+                              // 手机竖版：第 2 段右侧再多留“一字宽”
+                              style={{ paddingRight: '1em' }}
+                            >
                               <p className="text-balance">{p1}</p>
                             </div>
                           ) : null}
@@ -228,7 +260,8 @@ export default function CompanyCeoPage() {
                                 aspectRatio: '3 / 4',
                                 // 人物图下移约“两行正文高度”
                                 // 再下移约“一行正文高度”（合计约 3 行）
-                                marginTop: '4.85em',
+                                marginTop: portraitExtraSpace ? `calc(4.85em + ${portraitExtraSpace})` : '4.85em',
+                                marginBottom: portraitExtraSpace || undefined,
                               }}
                               aria-hidden="true"
                             >
@@ -282,6 +315,12 @@ export default function CompanyCeoPage() {
                       {/* 文案区：整体向中间收窄、并为人物图预留右侧空间（全端一致） */}
                       <div
                         className="text-slate-900 relative z-10 company-ceo-message-text"
+                        // iPad 等粗指针设备：正文上下留出一行文字高度的空间
+                        style={
+                          isCoarsePointer && coarseShortSide !== null && coarseShortSide > 600
+                            ? ({ paddingTop: '1.6em', paddingBottom: '1.6em' } as any)
+                            : undefined
+                        }
                       >
                         {/* 右侧浮动占位块：让正文像杂志一样环绕人物图
                             注意：这里不再额外使用 paddingRight，否则会“预留两次”导致大量空白 */}
