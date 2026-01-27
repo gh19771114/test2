@@ -3,8 +3,45 @@
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
+
+function MilestoneImage({
+  src,
+  alt,
+  sizes,
+}: {
+  src: string
+  alt: string
+  sizes: string
+}) {
+  const [aspectRatio, setAspectRatio] = useState<string | null>(null)
+
+  return (
+    <div
+      className="relative w-full rounded-xl overflow-hidden border border-gray-200 mb-4 bg-white"
+      // 先给一个合理的兜底比例，图片加载完后会自动更新为真实比例，从而“容器大小=图片大小”
+      style={{ aspectRatio: aspectRatio || '16 / 9' }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        // 不裁切：完整显示图片内容；容器比例会自动贴合图片比例，因此不会出现“黑色空隙”
+        className="object-contain"
+        sizes={sizes}
+        unoptimized={src.startsWith('/imgs/')}
+        onLoadingComplete={(img) => {
+          if (aspectRatio) return
+          const w = img.naturalWidth
+          const h = img.naturalHeight
+          if (!w || !h) return
+          setAspectRatio(`${w} / ${h}`)
+        }}
+      />
+    </div>
+  )
+}
 
 export default function CompanyHistoryPage() {
   const { t } = useLanguage()
@@ -51,7 +88,7 @@ export default function CompanyHistoryPage() {
     year: t('company.history.milestones.milestone6.year'),
     title: t('company.history.milestones.milestone6.title'),
     description: t('company.history.milestones.milestone6.description'),
-    image: '/imgs/honsha.png',
+    image: '/imgs/honnsya2.jpeg',
     imageAlt: t('company.history.milestones.milestone6.imageAlt'),
   },
   {
@@ -221,10 +258,37 @@ export default function CompanyHistoryPage() {
       startMomentum()
     }
 
+    // 鼠标滚轮：纵向滚动映射为横向时间线滚动（不影响触摸板原生手势）
+    const onWheel = (e: WheelEvent) => {
+      // 触摸/平板：不接管，保持原生
+      if (isCoarsePointer) return
+      // Ctrl+滚轮常用于缩放，不劫持
+      if ((e as any).ctrlKey) return
+      // 触摸板通常会带 deltaX（或 deltaY 很小且连续），不接管
+      const absX = Math.abs(e.deltaX)
+      const absY = Math.abs(e.deltaY)
+      const isLikelyMouseWheel =
+        // 传统鼠标滚轮常见：按行滚动（deltaMode=1）
+        e.deltaMode === 1 ||
+        // 或像素模式但步进较大且基本没有 deltaX
+        (e.deltaMode === 0 && absY >= 50 && absX < 5)
+
+      if (!isLikelyMouseWheel) return
+
+      // 阻止页面纵向滚动，把滚轮用于横向时间线
+      e.preventDefault()
+      stopMomentum()
+
+      const factor = e.deltaMode === 1 ? 24 : 1
+      pendingScrollLeft = el.scrollLeft + e.deltaY * factor
+      scheduleApply()
+    }
+
     el.addEventListener('pointerdown', onPointerDown, { passive: false })
     el.addEventListener('pointermove', onPointerMove, { passive: false })
     el.addEventListener('pointerup', endDrag, { passive: true })
     el.addEventListener('pointercancel', endDrag, { passive: true })
+    el.addEventListener('wheel', onWheel, { passive: false })
 
     return () => {
       stopMomentum()
@@ -233,6 +297,7 @@ export default function CompanyHistoryPage() {
       el.removeEventListener('pointermove', onPointerMove as any)
       el.removeEventListener('pointerup', endDrag as any)
       el.removeEventListener('pointercancel', endDrag as any)
+      el.removeEventListener('wheel', onWheel as any)
     }
   }, [])
 
@@ -354,21 +419,11 @@ export default function CompanyHistoryPage() {
                     >
                       <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
                         {milestone.image ? (
-                          <div className="relative w-full h-44 md:h-52 rounded-xl overflow-hidden border border-gray-200 mb-4 bg-white">
-                            <div className="absolute inset-0">
-                              <div className="relative w-full h-full">
-                                <Image
-                                  src={milestone.image}
-                                  alt={milestone.imageAlt || milestone.title}
-                                  fill
-                                  // 图片尽量“贴边铺满”容器，避免出现边缘空隙
-                                  className="object-cover"
-                                  sizes="(min-width: 768px) 380px, 320px"
-                                  unoptimized={milestone.image.startsWith('/imgs/')}
-                                />
-                              </div>
-                            </div>
-                          </div>
+                          <MilestoneImage
+                            src={milestone.image}
+                            alt={milestone.imageAlt || milestone.title}
+                            sizes="(min-width: 768px) 380px, 320px"
+                          />
                         ) : null}
 
                         <div className="text-2xl font-bold text-navy-700 mb-2">
