@@ -92,6 +92,11 @@ export default function TerminationPreviewPage() {
     []
   )
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileStatus, setTurnstileStatus] = useState<
+    'idle' | 'loading' | 'ready' | 'error'
+  >('idle')
+  const [turnstileError, setTurnstileError] = useState<string | null>(null)
+  const [turnstileRetry, setTurnstileRetry] = useState(0)
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null)
   const turnstileWidgetIdRef = useRef<string | null>(null)
 
@@ -118,6 +123,8 @@ export default function TerminationPreviewPage() {
     if (!turnstileContainerRef.current) return
 
     let cancelled = false
+    setTurnstileStatus('loading')
+    setTurnstileError(null)
 
     const ensureScript = () =>
       new Promise<void>((resolve, reject) => {
@@ -149,7 +156,11 @@ export default function TerminationPreviewPage() {
       try {
         await ensureScript()
         if (cancelled) return
-        if (!window.turnstile || !turnstileContainerRef.current) return
+        if (!window.turnstile || !turnstileContainerRef.current) {
+          setTurnstileStatus('error')
+          setTurnstileError('验证组件初始化失败（turnstile 未注入）。')
+          return
+        }
 
         // Avoid duplicate widgets
         turnstileContainerRef.current.innerHTML = ''
@@ -158,13 +169,29 @@ export default function TerminationPreviewPage() {
         const widgetId = window.turnstile.render(turnstileContainerRef.current, {
           sitekey: turnstileSiteKey,
           theme: 'light',
-          callback: (token: string) => setTurnstileToken(token),
-          'expired-callback': () => setTurnstileToken(null),
-          'error-callback': () => setTurnstileToken(null),
+          callback: (token: string) => {
+            setTurnstileToken(token)
+            setTurnstileStatus('ready')
+            setTurnstileError(null)
+          },
+          'expired-callback': () => {
+            setTurnstileToken(null)
+            setTurnstileStatus('ready')
+          },
+          'error-callback': () => {
+            setTurnstileToken(null)
+            setTurnstileStatus('error')
+            setTurnstileError('验证组件加载失败（可能被广告拦截/网络拦截）。')
+          },
         })
         turnstileWidgetIdRef.current = widgetId
-      } catch {
-        // If script fails, keep silent; backend still has non-visual protections
+        setTurnstileStatus('ready')
+      } catch (e: any) {
+        setTurnstileStatus('error')
+        setTurnstileError(
+          e?.message ||
+            '验证脚本加载失败（可能被广告拦截/网络拦截），请刷新或点击重试。'
+        )
       }
     }
 
@@ -183,19 +210,23 @@ export default function TerminationPreviewPage() {
       turnstileWidgetIdRef.current = null
       setTurnstileToken(null)
     }
-  }, [turnstileSiteKey])
+  }, [turnstileSiteKey, turnstileRetry])
 
   const handleConfirm = async () => {
     if (!formData) return
 
-    setLoading(true)
-    setSubmitResult(null)
-
     try {
       if (turnstileSiteKey && !turnstileToken) {
-        setSubmitResult('请先完成机器人验证后再提交。')
+        setSubmitResult(
+          turnstileStatus === 'error'
+            ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
+            : '请先完成机器人验证后再提交。'
+        )
         return
       }
+
+      setLoading(true)
+      setSubmitResult(null)
       // 提交到生成 PDF + 发邮件的 API（你后端那边用 Playwright 的 route）
       const res = await fetch('/api/kaiyaku', {
         method: 'POST',
@@ -546,8 +577,28 @@ export default function TerminationPreviewPage() {
               {/* 按钮 + 提示 */}
               <div className="flex flex-col gap-4 pt-4">
                 {turnstileSiteKey && (
-                  <div>
-                    <div ref={turnstileContainerRef} />
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+                    <div ref={turnstileContainerRef} style={{ minHeight: 72 }} />
+                    {turnstileStatus === 'loading' && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        正在加载机器人验证…
+                      </p>
+                    )}
+                    {turnstileStatus === 'error' && (
+                      <div className="mt-2 flex flex-col gap-2">
+                        <p className="text-xs text-red-600">
+                          {turnstileError ||
+                            '机器人验证加载失败，请刷新或关闭广告拦截后重试。'}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setTurnstileRetry((v) => v + 1)}
+                          className="self-start text-xs px-3 py-1 rounded-md border border-gray-300 bg-white hover:bg-gray-100 transition"
+                        >
+                          重试加载验证
+                        </button>
+                      </div>
+                    )}
                     <p className="text-xs text-gray-500 mt-2">
                       Powered by Cloudflare Turnstile
                     </p>
