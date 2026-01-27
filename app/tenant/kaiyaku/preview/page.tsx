@@ -105,6 +105,9 @@ export default function TerminationPreviewPage() {
   const turnstileWidgetIdRef = useRef<string | null>(null)
   const turnstileWaitersRef = useRef<Array<(token: string) => void>>([])
 
+  // 只有当表单数据已加载，预览页渲染出验证容器后，才初始化 Turnstile
+  const shouldInitTurnstile = !!turnstileSiteKey && !!formData
+
   useEffect(() => {
     // 从 sessionStorage 读取主页面保存的表单数据
     const storedData = sessionStorage.getItem('terminationFormData')
@@ -122,9 +125,9 @@ export default function TerminationPreviewPage() {
     }
   }, [router])
 
-  // Render Turnstile only if site key configured
+  // Render Turnstile only if site key configured (and formData is ready)
   useEffect(() => {
-    if (!turnstileSiteKey) return
+    if (!shouldInitTurnstile) return
     if (!turnstileContainerRef.current) return
 
     let cancelled = false
@@ -257,7 +260,7 @@ export default function TerminationPreviewPage() {
       setTurnstileToken(null)
       setTurnstileIsInvisible(false)
     }
-  }, [turnstileSiteKey, turnstileRetry])
+  }, [shouldInitTurnstile, turnstileRetry])
 
   const handleConfirm = async () => {
     if (!formData) return

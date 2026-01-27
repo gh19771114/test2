@@ -46,6 +46,12 @@ function MilestoneImage({
 export default function CompanyHistoryPage() {
   const { t } = useLanguage()
   const timelineRef = useRef<HTMLDivElement | null>(null)
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+  const transformModeRef = useRef(false)
+  const offsetRef = useRef(0) // px
+  const maxOffsetRef = useRef(0)
   
   const milestones = useMemo(() => [
   {
@@ -133,173 +139,202 @@ export default function CompanyHistoryPage() {
   },
   ], [t])
 
-  // 时间线：拖拽滚动兜底（解决部分移动端/WebView 无法横滑的问题）
+  // 时间线：拖拽/滚轮逻辑（对齐 /company/overview 的“企业持有资产”滚动栏）
   useEffect(() => {
-    const el = timelineRef.current
-    if (!el) return
+    const container = timelineRef.current
+    const track = trackRef.current
+    if (!container || !track) return
 
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
     const isCoarsePointer =
       typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)')?.matches
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
+        isCoarsePointer)
 
+    // 桌面端使用 transform 拖拽/滚轮，触摸设备保留原生滚动
+    const enableTransform = !isTouchDevice && !prefersReducedMotion
+    transformModeRef.current = enableTransform
+
+    let offsetPx = offsetRef.current
+    let isPaused = false
     let isDragging = false
     let startX = 0
-    let startScrollLeft = 0
-    let lastX: number | null = null
-    let lastTs: number | null = null
-    let velocity = 0 // px/sec (scrollLeft direction)
+    let startOffset = 0
+    let resumeTimeout: number | null = null
 
-    let applyRaf: number | null = null
-    let pendingScrollLeft: number | null = null
+    const prevWillChange = track.style.willChange
+    track.style.willChange = 'transform'
 
-    let momentumRaf: number | null = null
-
-    const clampScroll = (v: number) => {
-      const max = Math.max(0, el.scrollWidth - el.clientWidth)
+    const getMax = () => {
+      const max = Math.max(0, track.scrollWidth - container.clientWidth)
+      maxOffsetRef.current = max
+      return max
+    }
+    const clamp = (v: number) => {
+      const max = getMax()
       return Math.max(0, Math.min(max, v))
     }
-
-    const applyScroll = () => {
-      if (pendingScrollLeft === null) return
-      el.scrollLeft = clampScroll(pendingScrollLeft)
-      pendingScrollLeft = null
+    const apply = () => {
+      offsetPx = clamp(offsetPx)
+      offsetRef.current = offsetPx
+      track.style.transform = `translate3d(${-offsetPx}px, 0, 0)`
+      setCanScrollLeft(offsetPx > 4)
+      setCanScrollRight(offsetPx < maxOffsetRef.current - 4)
     }
 
-    const scheduleApply = () => {
-      if (applyRaf !== null) return
-      applyRaf = requestAnimationFrame(() => {
-        applyRaf = null
-        applyScroll()
-      })
+    const pauseBriefly = (ms: number) => {
+      isPaused = true
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, ms)
     }
 
-    const stopMomentum = () => {
-      if (momentumRaf !== null) {
-        cancelAnimationFrame(momentumRaf)
-        momentumRaf = null
+    const onWheel = (e: WheelEvent) => {
+      if (!enableTransform) return
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (delta === 0) return
+      e.preventDefault()
+      e.stopPropagation()
+      if (!isPaused && !isDragging) {
+        offsetPx += delta
+        apply()
+        pauseBriefly(250)
+      } else {
+        offsetPx += delta
+        apply()
       }
-    }
-
-    const startMomentum = () => {
-      if (prefersReducedMotion) return
-      // 速度太小不启动
-      if (Math.abs(velocity) < 80) return
-
-      stopMomentum()
-      let ts0: number | null = null
-
-      const tick = (ts: number) => {
-        if (ts0 === null) ts0 = ts
-        const dt = Math.max(0, ts - ts0) / 1000
-        ts0 = ts
-
-        // 位置更新
-        const next = clampScroll(el.scrollLeft + velocity * dt)
-        const hitEdge = next === 0 || next === Math.max(0, el.scrollWidth - el.clientWidth)
-        el.scrollLeft = next
-
-        // 指数衰减（接近“丝滑惯性”手感）
-        velocity *= Math.exp(-6 * dt)
-
-        if (hitEdge || Math.abs(velocity) < 25) {
-          momentumRaf = null
-          return
-        }
-
-        momentumRaf = requestAnimationFrame(tick)
-      }
-
-      momentumRaf = requestAnimationFrame(tick)
     }
 
     const onPointerDown = (e: PointerEvent) => {
-      // 触摸/平板：使用浏览器原生滚动，避免 JS 拖拽导致“卡一卡”，并且允许上下滚动页面
-      if (isCoarsePointer || e.pointerType === 'touch') return
-      // 仅左键/触摸
-      if (e.pointerType === 'mouse' && e.button !== 0) return
-      stopMomentum()
+      // 桌面鼠标拖拽；触摸/触摸板走 wheel/原生
+      if (!enableTransform || e.pointerType !== 'mouse') return
+      if (e.button !== 0) return
       isDragging = true
+      isPaused = true
       startX = e.clientX
-      startScrollLeft = el.scrollLeft
-      lastX = e.clientX
-      lastTs = performance.now()
-      velocity = 0
-      el.setPointerCapture?.(e.pointerId)
+      startOffset = offsetPx
+      container.setPointerCapture?.(e.pointerId)
     }
-
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return
-      // 非 passive listener 下阻止页面纵向滚动抢手势
       e.preventDefault()
       const dx = e.clientX - startX
-      pendingScrollLeft = startScrollLeft - dx
-      scheduleApply()
-
-      // 估算松手后的惯性速度（scrollLeft 方向）
-      const now = performance.now()
-      if (lastX !== null && lastTs !== null) {
-        const dt = Math.max(1, now - lastTs) / 1000
-        const pointerV = (e.clientX - lastX) / dt // px/sec (pointer direction)
-        // pointer 往右拖时 scrollLeft 往左，所以取反
-        velocity = -pointerV
-      }
-      lastX = e.clientX
-      lastTs = now
+      offsetPx = startOffset - dx
+      apply()
     }
-
     const endDrag = () => {
+      if (!isDragging) return
       isDragging = false
-      lastX = null
-      lastTs = null
-      // 统一一次最终位置，避免最后一帧未落地
-      applyScroll()
-      startMomentum()
+      isPaused = false
     }
 
-    // 鼠标滚轮：纵向滚动映射为横向时间线滚动（不影响触摸板原生手势）
-    const onWheel = (e: WheelEvent) => {
-      // 触摸/平板：不接管，保持原生
-      if (isCoarsePointer) return
-      // Ctrl+滚轮常用于缩放，不劫持
-      if ((e as any).ctrlKey) return
-      // 触摸板通常会带 deltaX（或 deltaY 很小且连续），不接管
-      const absX = Math.abs(e.deltaX)
-      const absY = Math.abs(e.deltaY)
-      const isLikelyMouseWheel =
-        // 传统鼠标滚轮常见：按行滚动（deltaMode=1）
-        e.deltaMode === 1 ||
-        // 或像素模式但步进较大且基本没有 deltaX
-        (e.deltaMode === 0 && absY >= 50 && absX < 5)
-
-      if (!isLikelyMouseWheel) return
-
-      // 阻止页面纵向滚动，把滚轮用于横向时间线
-      e.preventDefault()
-      stopMomentum()
-
-      const factor = e.deltaMode === 1 ? 24 : 1
-      pendingScrollLeft = el.scrollLeft + e.deltaY * factor
-      scheduleApply()
+    const prevOverflowX = container.style.overflowX
+    if (enableTransform) {
+      container.style.overflowX = 'hidden'
+      container.scrollLeft = 0
+      offsetPx = clamp(offsetPx)
+      apply()
     }
 
-    el.addEventListener('pointerdown', onPointerDown, { passive: false })
-    el.addEventListener('pointermove', onPointerMove, { passive: false })
-    el.addEventListener('pointerup', endDrag, { passive: true })
-    el.addEventListener('pointercancel', endDrag, { passive: true })
-    el.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('pointerdown', onPointerDown, { passive: false })
+    container.addEventListener('pointermove', onPointerMove, { passive: false })
+    container.addEventListener('pointerup', endDrag, { passive: true })
+    container.addEventListener('pointercancel', endDrag, { passive: true })
+    container.addEventListener('wheel', onWheel, { passive: false })
+
+    const ro = new ResizeObserver(() => {
+      if (!enableTransform) return
+      apply()
+    })
+    ro.observe(container)
+    ro.observe(track)
+
+    // native scroll mode arrow state
+    const onScrollNative = () => {
+      if (enableTransform) return
+      const max = Math.max(0, container.scrollWidth - container.clientWidth)
+      const left = container.scrollLeft
+      setCanScrollLeft(left > 4)
+      setCanScrollRight(left < max - 4)
+    }
+    if (!enableTransform) {
+      onScrollNative()
+      container.addEventListener('scroll', onScrollNative, { passive: true })
+    }
 
     return () => {
-      stopMomentum()
-      if (applyRaf !== null) cancelAnimationFrame(applyRaf)
-      el.removeEventListener('pointerdown', onPointerDown as any)
-      el.removeEventListener('pointermove', onPointerMove as any)
-      el.removeEventListener('pointerup', endDrag as any)
-      el.removeEventListener('pointercancel', endDrag as any)
-      el.removeEventListener('wheel', onWheel as any)
+      container.removeEventListener('pointerdown', onPointerDown as any)
+      container.removeEventListener('pointermove', onPointerMove as any)
+      container.removeEventListener('pointerup', endDrag as any)
+      container.removeEventListener('pointercancel', endDrag as any)
+      container.removeEventListener('wheel', onWheel as any)
+      container.removeEventListener('scroll', onScrollNative as any)
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      ro.disconnect()
+      track.style.willChange = prevWillChange
+      track.style.transform = ''
+      container.style.overflowX = prevOverflowX
     }
   }, [])
+
+  // 时间线：左右箭头可用性（仅用于桌面鼠标用户提示）
+  useEffect(() => {
+    const el = timelineRef.current
+    if (!el) return
+
+    let raf: number | null = null
+    const update = () => {
+      if (raf !== null) return
+      raf = requestAnimationFrame(() => {
+        raf = null
+        const max = Math.max(0, el.scrollWidth - el.clientWidth)
+        const left = el.scrollLeft
+        setCanScrollLeft(left > 4)
+        setCanScrollRight(left < max - 4)
+      })
+    }
+
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+
+    return () => {
+      if (raf !== null) cancelAnimationFrame(raf)
+      el.removeEventListener('scroll', update as any)
+      window.removeEventListener('resize', update as any)
+      ro.disconnect()
+    }
+  }, [])
+
+  const scrollTimelineBy = (dir: -1 | 1) => {
+    const container = timelineRef.current
+    if (!container) return
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const step = Math.max(320, Math.floor(container.clientWidth * 0.7))
+    if (transformModeRef.current) {
+      offsetRef.current = Math.max(0, Math.min(maxOffsetRef.current, offsetRef.current + dir * step))
+      // 直接更新 transform
+      const track = trackRef.current
+      if (track) track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`
+      setCanScrollLeft(offsetRef.current > 4)
+      setCanScrollRight(offsetRef.current < maxOffsetRef.current - 4)
+    } else {
+      container.scrollBy({
+        left: dir * step,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      })
+    }
+  }
 
   return (
     <PageLayout>
@@ -345,7 +380,7 @@ export default function CompanyHistoryPage() {
               >
                 {/* 让时间线线条跟随横向滚动（移动端也可见），并在末尾延长 + 箭头 */}
                 {/* 让卡片以时间线为中轴纵向居中，从而形成“横跨时间线中间”的视觉效果 */}
-                <div className="relative flex items-center gap-6 min-w-max py-14 pr-32">
+                <div ref={trackRef} className="relative flex items-center gap-6 min-w-max py-14 pr-32">
                   {/* 时间轴线（全端可见，随内容滚动） */}
                   <div
                     className="absolute left-0 top-1/2 -translate-y-1/2 z-0 pointer-events-none"
@@ -439,6 +474,34 @@ export default function CompanyHistoryPage() {
                     </motion.div>
                   ))}
                 </div>
+              </div>
+
+              {/* 左右箭头（仅鼠标设备显示；不影响触摸板/触摸） */}
+              <div className="hidden [@media(pointer:fine)]:block pointer-events-none">
+                {canScrollLeft && (
+                  <button
+                    type="button"
+                    aria-label="Scroll timeline left"
+                    onClick={() => scrollTimelineBy(-1)}
+                    className="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/90 border border-gray-200 shadow-lg hover:bg-white transition flex items-center justify-center"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M15 18l-6-6 6-6" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                )}
+                {canScrollRight && (
+                  <button
+                    type="button"
+                    aria-label="Scroll timeline right"
+                    onClick={() => scrollTimelineBy(1)}
+                    className="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white/90 border border-gray-200 shadow-lg hover:bg-white transition flex items-center justify-center"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M9 6l6 6-6 6" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
           </div>

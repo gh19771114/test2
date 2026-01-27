@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PageLayout from '@/components/PageLayout'
@@ -38,9 +38,13 @@ const itemVariants = {
 
 export default function CasesPage() {
   const { t, language } = useLanguage()
-  const ref = useRef(null)
+  const inViewRef = useRef<HTMLDivElement | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  const transformModeRef = useRef(false)
+  const offsetRef = useRef(0)
+  const maxOffsetRef = useRef(0)
+  const isInView = useInView(inViewRef, { once: true, margin: '-100px' })
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
   // 构建案例数据（使用翻译）
@@ -114,15 +118,163 @@ export default function CasesPage() {
     return cases.filter((caseItem) => caseItem.categoryGroup === selectedCategory)
   }, [cases, selectedCategory])
 
+  // 让 /cases 的横向拖拽体验与 /company/overview “企业持有资产”一致
+  useEffect(() => {
+    const container = scrollRef.current
+    const track = trackRef.current
+    if (!container || !track) return
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(pointer: coarse)').matches
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) ||
+        (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
+        isCoarsePointer)
+
+    // 桌面端：transform（丝滑 + 可控）；触摸端：原生滚动（惯性更自然）
+    const enableTransform = !isTouchDevice && !prefersReducedMotion
+    transformModeRef.current = enableTransform
+
+    let offsetPx = offsetRef.current
+    let isPaused = false
+    let isDragging = false
+    let startX = 0
+    let startOffset = 0
+    let resumeTimeout: number | null = null
+
+    const prevWillChange = track.style.willChange
+    track.style.willChange = 'transform'
+
+    const getMax = () => {
+      const max = Math.max(0, track.scrollWidth - container.clientWidth)
+      maxOffsetRef.current = max
+      return max
+    }
+    const clamp = (v: number) => {
+      const max = getMax()
+      return Math.max(0, Math.min(max, v))
+    }
+    const apply = () => {
+      offsetPx = clamp(offsetPx)
+      offsetRef.current = offsetPx
+      track.style.transform = `translate3d(${-offsetPx}px, 0, 0)`
+    }
+
+    const pauseBriefly = (ms: number) => {
+      isPaused = true
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, ms)
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      if (!enableTransform) return
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (delta === 0) return
+      e.preventDefault()
+      e.stopPropagation()
+      offsetPx += delta
+      apply()
+      // 轻微暂停（避免某些触摸板连滑时“漂移感”太强）
+      if (!isDragging) pauseBriefly(180)
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      // 桌面鼠标拖拽；触摸设备保留原生滚动
+      if (!enableTransform || e.pointerType !== 'mouse') return
+      if (e.button !== 0) return
+      isDragging = true
+      isPaused = true
+      startX = e.clientX
+      startOffset = offsetPx
+      container.setPointerCapture?.(e.pointerId)
+    }
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      e.preventDefault()
+      const dx = e.clientX - startX
+      offsetPx = startOffset - dx
+      apply()
+    }
+    const endDrag = () => {
+      if (!isDragging) return
+      isDragging = false
+      isPaused = false
+    }
+
+    const prevOverflowX = container.style.overflowX
+    if (enableTransform) {
+      container.style.overflowX = 'hidden'
+      container.scrollLeft = 0
+      offsetPx = clamp(offsetPx)
+      apply()
+    }
+
+    container.addEventListener('pointerdown', onPointerDown, { passive: false })
+    container.addEventListener('pointermove', onPointerMove, { passive: false })
+    container.addEventListener('pointerup', endDrag, { passive: true })
+    container.addEventListener('pointercancel', endDrag, { passive: true })
+    container.addEventListener('wheel', onWheel, { passive: false })
+
+    const ro = new ResizeObserver(() => {
+      if (!enableTransform) return
+      apply()
+    })
+    ro.observe(container)
+    ro.observe(track)
+
+    return () => {
+      container.removeEventListener('pointerdown', onPointerDown as any)
+      container.removeEventListener('pointermove', onPointerMove as any)
+      container.removeEventListener('pointerup', endDrag as any)
+      container.removeEventListener('pointercancel', endDrag as any)
+      container.removeEventListener('wheel', onWheel as any)
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      ro.disconnect()
+      track.style.willChange = prevWillChange
+      track.style.transform = ''
+      container.style.overflowX = prevOverflowX
+    }
+  }, [filteredCases.length])
+
+  // 切换筛选后回到起点（避免变更后处于“空白尾部”）
+  useEffect(() => {
+    const container = scrollRef.current
+    const track = trackRef.current
+    if (!container) return
+    if (transformModeRef.current && track) {
+      offsetRef.current = 0
+      track.style.transform = 'translate3d(0, 0, 0)'
+    } else {
+      container.scrollLeft = 0
+    }
+  }, [selectedCategory])
+
   // 滚动函数
   const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const scrollAmount = 400
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      })
+    const container = scrollRef.current
+    if (!container) return
+    const scrollAmount = 400
+    if (transformModeRef.current) {
+      const next = offsetRef.current + (direction === 'left' ? -scrollAmount : scrollAmount)
+      offsetRef.current = Math.max(0, Math.min(maxOffsetRef.current, next))
+      const track = trackRef.current
+      if (track) track.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`
+      return
     }
+
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -202,10 +354,20 @@ export default function CasesPage() {
               {/* 横向滚动容器 */}
               <div
                 ref={scrollRef}
-                className="overflow-x-auto scroll-smooth pb-4 scrollbar-hide"
+                className="overflow-x-auto scroll-smooth pb-4 scrollbar-hide cursor-grab active:cursor-grabbing"
+                style={{
+                  WebkitOverflowScrolling: 'touch',
+                  // 不锁死竖向页面滚动
+                  touchAction: 'auto',
+                  overscrollBehaviorX: 'contain',
+                  overscrollBehaviorY: 'auto',
+                }}
               >
                 <motion.div
-                  ref={ref}
+                  ref={(node) => {
+                    inViewRef.current = node
+                    trackRef.current = node
+                  }}
                   initial="hidden"
                   animate={isInView ? 'visible' : 'hidden'}
                   variants={containerVariants}
