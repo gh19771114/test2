@@ -430,7 +430,7 @@
       },
       "mission": {
         "title": "私たちの使命",
-        "description": "「異文化協力を通じて、中日ビジネスと不動産サービスを相互に成就させる。」私たちは透明なコミュニケーション、専門的判断、デジタル管理により、クライアントが日本での事業を安定して拡大するのを支援し、同時にパートナーが新しいエコシステムで価値の増加を実現することを推進します。",
+        "description": "20年以上にわたり日本で培ってきた社会資源と情報ネットワークを基盤に、私たちは日本の優良不動産資産を、必要とする投資家へ的確につなぎます。\n「収入を増やす、支出を減らす、リスクを回避する、情報を可視化する」を核として、体系的な不動産管理と投資支援の仕組みを構築し、資産運用効率を継続的に高め、長期的で安定した不動産価値の成長を支援します。\n私たちの誠実で専門的なサービスを通じて、国と地域のより緊密で持続可能な経済交流の促進に貢献します。",
         "longTermValue": {
           "title": "長期価値",
           "description": "資産を慎重に配置し、リスク管理を強化し、持続可能な収益とブランド影響力でクライアントの期待に応えます。"
@@ -1310,7 +1310,13 @@
           "accountNumber": "口座番号",
           "accountHolder": "名義人",
           "reason": "解約理由",
-          "phoneNumber": "電話"
+          "phoneNumber": "電話",
+          "email": "メールアドレス",
+          "signature": "署名"
+        },
+        "signature": {
+          "hint": "上の署名欄に手書きで署名してください（マウス／トラックパッド／スマホのタッチに対応）。",
+          "clear": "署名をクリア"
         },
         "placeholders": {
           "propertyName": "例：ボーンマーク日本橋人形町",
@@ -1325,6 +1331,7 @@
           "newAddress": "未定の場合は一時的に「未定」と記入できますが、退去立会時に必ずお知らせください",
           "newBuildingAndRoom": "例：〇〇マンション 101号室",
           "phoneNumber": "電話番号を入力してください（国番号を除く）",
+          "email": "メールアドレスを入力してください",
           "reasonOther": "その他の具体的な理由を入力してください",
           "autoLockDial": "現在設定されている番号を入力してください",
           "deliveryBoxNumber": "宅配ボックス番号"
@@ -1391,6 +1398,24 @@
           "description": "以下の情報が正しいことを確認してから申請を提出してください。提出後、システムはこれらの内容に基づいて日本語版解約通知書PDFを生成します。",
           "contentTitle": "解約内容確認",
           "loading": "読み込み中...",
+          "notProvided": "（未記入）",
+          "notSelected": "（未選択）",
+          "undecided": "未定",
+          "backEdit": "修正する",
+          "serverResponseError": "サーバー応答エラー（{status}）",
+          "turnstileLoading": "ロボット認証を読み込み中…",
+          "turnstileInvisibleHint": "現在は不可視認証です。「送信を確認」を押すと自動で認証します。",
+          "turnstileLoadFailed": "ロボット認証の読み込みに失敗しました。更新するか、広告ブロックを無効にして再試行してください。",
+          "turnstileRetry": "認証を再読み込み",
+          "turnstilePoweredBy": "Cloudflare Turnstile",
+          "turnstileVerifying": "ロボット認証中です。しばらくお待ちください…",
+          "turnstileExecuteFailed": "ロボット認証の実行に失敗しました。ページを更新して再試行してください。",
+          "turnstileComponentLoadFailed": "ロボット認証コンポーネントの読み込みに失敗しました：{error}",
+          "turnstileTimeoutOrFailed": "ロボット認証がタイムアウト、または失敗しました。再試行してください。",
+          "turnstilePleaseComplete": "ロボット認証を完了してから送信してください。",
+          "turnstileErrorWithCode": "ロボット認証の読み込みに失敗しました（code: {code}）。iframe がブロックされているか、ネットワークで遮断されている可能性があります。",
+          "turnstileRenderFailed": "認証領域の描画に失敗しました（要素が挿入されませんでした）。「認証を再読み込み」をお試しください。",
+          "turnstileScriptLoadFailed": "認証スクリプトの読み込みに失敗しました（広告ブロック/ネットワーク遮断の可能性）。更新するか再試行してください。",
           "alt": "解約申請",
           "submitSuccess": "解約申請を送信しました。システムが日本語PDF解約通知書を生成し、管理会社に送信します。",
           "submitFailed": "送信に失敗しました：{error}",

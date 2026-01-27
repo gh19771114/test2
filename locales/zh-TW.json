@@ -454,7 +454,7 @@
       },
       "mission": {
         "title": "我們的使命",
-        "description": "「通過跨文化協作，讓中日商務與不動產服務互相成就。」我們以透明溝通、專業判斷與數字化管理，幫助客戶穩健拓展在日業務，同時推動合作夥伴在新生態中實現價值遞增。",
+        "description": "依託二十餘年深耕日本所累積的社會資源與資訊網絡，我們致力於將日本優質的不動產資產，精準地連接有需求的投資者。\n以增加收入、降低支出、規避風險、資訊可視化為核心理念，通過構建系統化的不動產管理與投資支持體系，持續提升資產運營效率，助力客戶實現不動產價值的長期穩步增長。\n希望通過我們專業負責的服務，促進國家與地區之間更加緊密和可持續的經濟交流。",
         "longTermValue": {
           "title": "長期價值",
           "description": "審慎配置資產、強化風險控制，以可持續收益與品牌影響力回應客戶期待。"
@@ -1334,7 +1334,13 @@
           "accountNumber": "口座番號",
           "accountHolder": "名義人",
           "reason": "解約理由",
-          "phoneNumber": "電話"
+          "phoneNumber": "電話",
+          "email": "電郵",
+          "signature": "簽名"
+        },
+        "signature": {
+          "hint": "請在上方簽名框中手寫簽名（支援滑鼠、觸控板與手機觸摸）。",
+          "clear": "清除簽名"
         },
         "placeholders": {
           "propertyName": "例：ボーンマーク日本橋人形町",
@@ -1349,6 +1355,7 @@
           "newAddress": "如未定可暫時填寫「未定」，但需在退房立會時告知",
           "newBuildingAndRoom": "例：〇〇マンション 101号室",
           "phoneNumber": "請輸入電話號碼（不含區號）",
+          "email": "請輸入電郵地址",
           "reasonOther": "請輸入其它具體理由",
           "autoLockDial": "請填寫當前設置的號碼",
           "deliveryBoxNumber": "快遞櫃號碼"
@@ -1415,6 +1422,24 @@
           "description": "請確認以下資訊無誤後提交申請。提交後系統將根據這些內容生成日文版解約通知書PDF。",
           "contentTitle": "解約內容確認",
           "loading": "正在載入...",
+          "notProvided": "（未填寫）",
+          "notSelected": "（未選擇）",
+          "undecided": "未定",
+          "backEdit": "返回修改",
+          "serverResponseError": "服務器響應錯誤（{status}）",
+          "turnstileLoading": "正在載入機器人驗證…",
+          "turnstileInvisibleHint": "當前為隱形機器人驗證：點擊「確認提交」時將自動完成驗證。",
+          "turnstileLoadFailed": "機器人驗證載入失敗，請刷新或關閉廣告攔截後重試。",
+          "turnstileRetry": "重試載入驗證",
+          "turnstilePoweredBy": "Cloudflare Turnstile",
+          "turnstileVerifying": "正在進行機器人驗證，請稍候…",
+          "turnstileExecuteFailed": "機器人驗證執行失敗，請刷新頁面重試。",
+          "turnstileComponentLoadFailed": "機器人驗證組件未成功載入：{error}",
+          "turnstileTimeoutOrFailed": "機器人驗證未通過或超時，請重試。",
+          "turnstilePleaseComplete": "請先完成機器人驗證後再提交。",
+          "turnstileErrorWithCode": "驗證組件載入失敗（code: {code}）。這通常表示 iframe 被攔截或網絡阻斷。",
+          "turnstileRenderFailed": "驗證區域渲染失敗（未注入任何元素）。請點擊「重試載入驗證」。",
+          "turnstileScriptLoadFailed": "驗證腳本載入失敗（可能被廣告攔截/網絡攔截），請刷新或點擊重試。",
           "alt": "解約申請",
           "submitSuccess": "解約申請已提交。系統將生成日文PDF解約通知書並發送至管理公司。",
           "submitFailed": "提交失敗：{error}",

@@ -78,6 +78,12 @@ type TerminationForm = {
   phoneCountryCode: string     // 国际电话区号
   phoneNumber: string         // 電話番号
 
+  // 邮箱（必填）
+  email: string
+
+  // 手写签名（PNG dataURL）
+  signatureDataUrl: string
+
   // 签名
   signerName: string          // 氏名（PDF右下）
 }
@@ -88,6 +94,11 @@ export default function TerminationPreviewPage() {
   const [formData, setFormData] = useState<TerminationForm | null>(null)
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
+  const [submitIsError, setSubmitIsError] = useState(false)
+
+  const notProvided = t('tenant.kaiyaku.preview.notProvided')
+  const notSelected = t('tenant.kaiyaku.preview.notSelected')
+  const undecided = t('tenant.kaiyaku.preview.undecided')
 
   // anti-bot: optional Cloudflare Turnstile (shared with homepage contact form)
   const turnstileSiteKey = useMemo(
@@ -202,7 +213,9 @@ export default function TerminationPreviewPage() {
             const waiters = turnstileWaitersRef.current.splice(0)
             waiters.forEach((fn) => fn(''))
             setTurnstileError(
-              `验证组件加载失败（code: ${code || 'unknown'}）。这通常表示 iframe 被拦截或网络阻断（Turnstile 的 api.js 可打开，但 iframe 无法加载）。`
+              t('tenant.kaiyaku.preview.turnstileErrorWithCode', {
+                code: code || 'unknown',
+              })
             )
           },
         })
@@ -227,9 +240,7 @@ export default function TerminationPreviewPage() {
           // If Turnstile didn't inject any element at all, treat as render failure.
           if (el.childElementCount === 0) {
             setTurnstileStatus('error')
-            setTurnstileError(
-              '验证区域渲染失败（未注入任何元素）。请点击“重试加载验证”。'
-            )
+            setTurnstileError(t('tenant.kaiyaku.preview.turnstileRenderFailed'))
           } else {
             setTurnstileIsInvisible(false)
             setTurnstileStatus('ready')
@@ -239,7 +250,7 @@ export default function TerminationPreviewPage() {
         setTurnstileStatus('error')
         setTurnstileError(
           e?.message ||
-            '验证脚本加载失败（可能被广告拦截/网络拦截），请刷新或点击重试。'
+            t('tenant.kaiyaku.preview.turnstileScriptLoadFailed')
         )
       }
     }
@@ -264,19 +275,30 @@ export default function TerminationPreviewPage() {
 
   const handleConfirm = async () => {
     if (!formData) return
+    if (!formData.signatureDataUrl) {
+      setSubmitIsError(true)
+      setSubmitResult(
+        t('tenant.kaiyaku.validation.pleaseFill', {
+          field: t('tenant.kaiyaku.fields.signature'),
+        })
+      )
+      return
+    }
 
     try {
       if (turnstileSiteKey && !turnstileToken) {
         // If Turnstile is configured but token not available, try execute on-demand first.
         if (window.turnstile?.execute && turnstileWidgetIdRef.current) {
           setLoading(true)
-          setSubmitResult('正在进行机器人验证，请稍候…')
+          setSubmitIsError(false)
+          setSubmitResult(t('tenant.kaiyaku.preview.turnstileVerifying'))
 
           try {
             window.turnstile.execute(turnstileWidgetIdRef.current)
           } catch {
             setLoading(false)
-            setSubmitResult('机器人验证执行失败，请刷新页面重试。')
+            setSubmitIsError(true)
+            setSubmitResult(t('tenant.kaiyaku.preview.turnstileExecuteFailed'))
             return
           }
 
@@ -293,20 +315,26 @@ export default function TerminationPreviewPage() {
 
           if (!token) {
             setLoading(false)
+            setSubmitIsError(true)
             setSubmitResult(
               turnstileStatus === 'error'
-                ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
-                : '机器人验证未通过或超时，请重试。'
+                ? t('tenant.kaiyaku.preview.turnstileComponentLoadFailed', {
+                    error: turnstileError || t('tenant.kaiyaku.preview.turnstileLoadFailed'),
+                  })
+                : t('tenant.kaiyaku.preview.turnstileTimeoutOrFailed')
             )
             return
           }
           // token now set via callback; continue submission below
           setSubmitResult(null)
         } else {
+          setSubmitIsError(true)
           setSubmitResult(
             turnstileStatus === 'error'
-              ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
-              : '请先完成机器人验证后再提交。'
+              ? t('tenant.kaiyaku.preview.turnstileComponentLoadFailed', {
+                  error: turnstileError || t('tenant.kaiyaku.preview.turnstileLoadFailed'),
+                })
+              : t('tenant.kaiyaku.preview.turnstilePleaseComplete')
           )
           return
         }
@@ -314,6 +342,7 @@ export default function TerminationPreviewPage() {
 
       setLoading(true)
       setSubmitResult(null)
+      setSubmitIsError(false)
       // 提交到生成 PDF + 发邮件的 API（你后端那边用 Playwright 的 route）
       const res = await fetch('/api/kaiyaku', {
         method: 'POST',
@@ -330,7 +359,7 @@ export default function TerminationPreviewPage() {
         if (text) data = JSON.parse(text)
       } catch (parseError) {
         console.error('无法解析响应:', parseError)
-        data = { error: `服务器响应错误 (${res.status})` }
+        data = { error: t('tenant.kaiyaku.preview.serverResponseError', { status: res.status }) }
       }
 
       if (!res.ok) {
@@ -341,10 +370,12 @@ export default function TerminationPreviewPage() {
           statusText: res.statusText,
           data,
         })
+        setSubmitIsError(true)
         setSubmitResult(t('tenant.kaiyaku.preview.submitFailed', { error: errorMsg }))
         return
       }
 
+      setSubmitIsError(false)
       setSubmitResult(
         data.message || t('tenant.kaiyaku.preview.submitSuccess')
       )
@@ -355,6 +386,7 @@ export default function TerminationPreviewPage() {
     } catch (err: any) {
       console.error('提交错误:', err)
       const errorMsg = err.message || t('tenant.kaiyaku.preview.networkError')
+      setSubmitIsError(true)
       setSubmitResult(
         t('tenant.kaiyaku.preview.submitFailedRetry', { error: errorMsg })
       )
@@ -384,7 +416,7 @@ export default function TerminationPreviewPage() {
     ? `■その他（${formData.reasonOtherText || ''}）`
     : formData.reason 
     ? `■${formData.reason}`
-    : '（未选择）'
+    : notSelected
 
   // 邮箱开锁方式一行
   const mailboxLine = buildMailboxLine(formData)
@@ -438,23 +470,23 @@ export default function TerminationPreviewPage() {
               <div className="border border-gray-200 rounded-xl overflow-hidden text-sm text-gray-800">
                 {/* 一、物件信息 */}
                 <div className="bg-gray-50 px-4 py-2 font-semibold border-b border-gray-200">
-                  一、物件信息
+                  {t('tenant.kaiyaku.sections.propertyInfo')}
                 </div>
                 <table className="w-full border-t border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
                       <th className="w-32 bg-gray-50 px-3 py-2 text-left align-top">
-                        物件名
+                        {t('tenant.kaiyaku.fields.propertyName')}
                       </th>
                       <td className="px-3 py-2">{formData.propertyName}</td>
                       <th className="w-32 bg-gray-50 px-3 py-2 text-left align-top">
-                        部屋番号
+                        {t('tenant.kaiyaku.fields.roomNumber')}
                       </th>
                       <td className="px-3 py-2">{formData.roomNumber}</td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        物件所在地
+                        {t('tenant.kaiyaku.fields.propertyAddress')}
                       </th>
                       <td className="px-3 py-2" colSpan={3}>
                         {formData.propertyAddress}
@@ -462,7 +494,7 @@ export default function TerminationPreviewPage() {
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        契約者名
+                        {t('tenant.kaiyaku.fields.contractHolder')}
                       </th>
                       <td className="px-3 py-2" colSpan={3}>
                         {formData.contractHolder}
@@ -473,30 +505,30 @@ export default function TerminationPreviewPage() {
 
                 {/* 二、日程 */}
                 <div className="bg-gray-50 px-4 py-2 font-semibold border-y border-gray-200 mt-4">
-                  二、日程
+                  {t('tenant.kaiyaku.sections.schedule')}
                 </div>
                 <table className="w-full border-t border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-32">
-                        解約日
+                        {t('tenant.kaiyaku.fields.cancelDate')}
                       </th>
                       <td className="px-3 py-2">
-                        {formatDateForPreview(formData.cancelDate)}
+                        {formatDateForPreview(formData.cancelDate, notProvided)}
                       </td>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-32">
-                        退去予定日
+                        {t('tenant.kaiyaku.fields.moveOutDate')}
                       </th>
                       <td className="px-3 py-2">
-                        {formatDateForPreview(formData.moveOutDate)}
+                        {formatDateForPreview(formData.moveOutDate, notProvided)}
                       </td>
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        立会希望日時
+                        {t('tenant.kaiyaku.fields.inspectionDateTime')}
                       </th>
                       <td className="px-3 py-2" colSpan={3}>
-                        {formatInspectionDateTime(formData.inspectionDateTime)}
+                        {formatInspectionDateTime(formData.inspectionDateTime, notProvided)}
                       </td>
                     </tr>
                   </tbody>
@@ -504,13 +536,13 @@ export default function TerminationPreviewPage() {
 
                 {/* 三、施設利用状況 */}
                 <div className="bg-gray-50 px-4 py-2 font-semibold border-y border-gray-200 mt-4">
-                  三、施設利用状況
+                  {t('tenant.kaiyaku.sections.facilities')}
                 </div>
                 <table className="w-full border-t border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-40">
-                        使用駐輪場
+                        {t('tenant.kaiyaku.labels.bicycleParking')}
                       </th>
                       <td className="px-3 py-2">
                         {ynLine(formData.bicycleParking)}
@@ -518,13 +550,13 @@ export default function TerminationPreviewPage() {
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        メールボックスの開け方
+                        {t('tenant.kaiyaku.labels.mailbox')}
                       </th>
                       <td className="px-3 py-2">{mailboxLine}</td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        使用駐車場
+                        {t('tenant.kaiyaku.labels.carParking')}
                       </th>
                       <td className="px-3 py-2">
                         {ynLine(formData.carParking)}
@@ -532,13 +564,13 @@ export default function TerminationPreviewPage() {
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        オートロック
+                        {t('tenant.kaiyaku.labels.autoLock')}
                       </th>
                       <td className="px-3 py-2">{autoLockLine}</td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        使用バイク置場
+                        {t('tenant.kaiyaku.labels.bikeSpace')}
                       </th>
                       <td className="px-3 py-2">
                         {ynLine(formData.bikeSpace)}
@@ -546,7 +578,7 @@ export default function TerminationPreviewPage() {
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        宅配ボックス
+                        {t('tenant.kaiyaku.labels.deliveryBox')}
                       </th>
                       <td className="px-3 py-2">{deliveryBoxLine}</td>
                     </tr>
@@ -555,50 +587,50 @@ export default function TerminationPreviewPage() {
 
                 {/* 四、返金口座 */}
                 <div className="bg-gray-50 px-4 py-2 font-semibold border-y border-gray-200 mt-4">
-                  四、返金账户
+                  {t('tenant.kaiyaku.sections.bankAccount')}
                 </div>
                 <table className="w-full border-t border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-32">
-                        銀行
+                        {t('tenant.kaiyaku.fields.bankName')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.bankName || '（未填写）'}
+                        {formData.bankName || notProvided}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        支店
+                        {t('tenant.kaiyaku.fields.bankBranch')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.bankBranch || '（未填写）'}
+                        {formData.bankBranch || notProvided}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        口座種別
+                        {t('tenant.kaiyaku.fields.accountType')}
                       </th>
                       <td className="px-3 py-2">
                         {formData.accountType
                           ? formData.accountType
-                          : '（未选择）'}
+                          : notSelected}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        口座番号
+                        {t('tenant.kaiyaku.fields.accountNumber')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.accountNumber || '（未填写）'}
+                        {formData.accountNumber || notProvided}
                       </td>
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        名義人
+                        {t('tenant.kaiyaku.fields.accountHolder')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.accountHolder || '（未填写）'}
+                        {formData.accountHolder || notProvided}
                       </td>
                     </tr>
                   </tbody>
@@ -606,57 +638,77 @@ export default function TerminationPreviewPage() {
 
                 {/* 五、解約理由 & 転居先 */}
                 <div className="bg-gray-50 px-4 py-2 font-semibold border-y border-gray-200 mt-4">
-                  五、解約理由・転居先
+                  {t('tenant.kaiyaku.sections.reasonAndMove')}
                 </div>
                 <table className="w-full border-t border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-32">
-                        解約理由
+                        {t('tenant.kaiyaku.fields.reason')}
                       </th>
                       <td className="px-3 py-2">
-                        {reasons || '（未选择）'}
+                        {reasons || notSelected}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        転居先住所
+                        {t('tenant.kaiyaku.labels.newAddress')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.newAddress || '未定'}
+                        {formData.newAddress || undecided}
                         <div className="text-xs text-gray-500 mt-2">
-                          ※ 如未定，请在解约立会时务必告知。
+                          {t('tenant.kaiyaku.labels.newAddressNote')}
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        建物名・号室
+                        {t('tenant.kaiyaku.labels.newBuildingAndRoom')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.newBuildingAndRoom || '（未填写）'}
+                        {formData.newBuildingAndRoom || notProvided}
                       </td>
                     </tr>
                     <tr>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top">
-                        电话
+                        {t('tenant.kaiyaku.fields.phoneNumber')}
                       </th>
                       <td className="px-3 py-2">
-                        {formData.phoneNumber 
+                        {formData.phoneNumber
                           ? `${formData.phoneCountryCode || '+81'} ${formData.phoneNumber}`
-                          : '（未填写）'}
+                          : notProvided}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="bg-gray-50 px-3 py-2 text-left align-top">
+                        {t('tenant.kaiyaku.fields.email')}
+                      </th>
+                      <td className="px-3 py-2">
+                        {formData.email || notProvided}
                       </td>
                     </tr>
                   </tbody>
                 </table>
 
                 {/* 签名（氏名） */}
-                <div className="px-4 py-4 flex justify-end text-sm">
-                  <div>
-                    氏名：
+                <div className="px-4 py-4 flex flex-col sm:flex-row sm:items-end sm:justify-end gap-3 text-sm">
+                  <div className="flex items-center justify-end gap-2">
+                    <span className="text-gray-700">{t('tenant.kaiyaku.labels.signerName')}：</span>
                     <span className="inline-block min-w-[8rem] border-b border-gray-300 text-center">
                       {formData.signerName || formData.contractHolder}
                     </span>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <span className="text-gray-700">{t('tenant.kaiyaku.fields.signature')}：</span>
+                    {formData.signatureDataUrl ? (
+                      <img
+                        src={formData.signatureDataUrl}
+                        alt={t('tenant.kaiyaku.fields.signature')}
+                        className="h-12 w-44 border border-gray-300 rounded bg-white object-contain"
+                      />
+                    ) : (
+                      <span className="text-gray-500">{notProvided}</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -668,31 +720,31 @@ export default function TerminationPreviewPage() {
                     <div ref={turnstileContainerRef} style={{ minHeight: 72 }} />
                     {turnstileStatus === 'loading' && (
                       <p className="text-xs text-gray-500 mt-2">
-                        正在加载机器人验证…
+                        {t('tenant.kaiyaku.preview.turnstileLoading')}
                       </p>
                     )}
                     {turnstileStatus === 'ready' && turnstileIsInvisible && (
                       <p className="text-xs text-gray-500 mt-2">
-                        当前为隐形机器人验证：点击“确认提交”时将自动完成验证。
+                        {t('tenant.kaiyaku.preview.turnstileInvisibleHint')}
                       </p>
                     )}
                     {turnstileStatus === 'error' && (
                       <div className="mt-2 flex flex-col gap-2">
                         <p className="text-xs text-red-600">
                           {turnstileError ||
-                            '机器人验证加载失败，请刷新或关闭广告拦截后重试。'}
+                            t('tenant.kaiyaku.preview.turnstileLoadFailed')}
                         </p>
                         <button
                           type="button"
                           onClick={() => setTurnstileRetry((v) => v + 1)}
                           className="self-start text-xs px-3 py-1 rounded-md border border-gray-300 bg-white hover:bg-gray-100 transition"
                         >
-                          重试加载验证
+                          {t('tenant.kaiyaku.preview.turnstileRetry')}
                         </button>
                       </div>
                     )}
                     <p className="text-xs text-gray-500 mt-2">
-                      Powered by Cloudflare Turnstile
+                      {t('tenant.kaiyaku.preview.turnstilePoweredBy')}
                     </p>
                     <p className="text-[11px] text-gray-400 mt-1 break-all">
                       {TURNSTILE_DEBUG_TAG} · status={turnstileStatus} · siteKey=
@@ -715,7 +767,7 @@ export default function TerminationPreviewPage() {
                     disabled={loading}
                     className="w-full sm:w-auto px-8 py-3 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    返回修改
+                    {t('tenant.kaiyaku.preview.backEdit')}
                   </button>
                 </div>
               </div>
@@ -723,7 +775,7 @@ export default function TerminationPreviewPage() {
               {submitResult && (
                 <div
                   className={`p-4 rounded-lg ${
-                    submitResult.includes('失败')
+                    submitIsError
                       ? 'bg-red-50 text-red-600 border border-red-200'
                       : 'bg-green-50 text-green-600 border border-green-200'
                   }`}
@@ -747,15 +799,15 @@ export default function TerminationPreviewPage() {
 /** —— 一些小工具函数 —— */
 
 // 把 yyyy-mm-dd 格式，简单显示成 yyyy年mm月dd日（空就原样）
-function formatDateForPreview(value: string) {
-  if (!value) return '（未填写）'
+function formatDateForPreview(value: string, fallback = '') {
+  if (!value) return fallback
   const [y, m, d] = value.split('-')
   if (!y || !m || !d) return value
   return `${y}年${m}月${d}日`
 }
 
-function formatInspectionDateTime(dateTime?: string) {
-  if (!dateTime) return '（未填写）'
+function formatInspectionDateTime(dateTime?: string, fallback = '') {
+  if (!dateTime) return fallback
   // datetime-local格式：YYYY-MM-DDTHH:mm
   const [datePart, timePart] = dateTime.split('T')
   if (!datePart) return dateTime

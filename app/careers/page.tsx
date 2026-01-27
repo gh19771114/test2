@@ -137,46 +137,49 @@ export default function CareersPage() {
                 className="bg-white rounded-2xl p-6 md:p-8 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto my-8"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex-1">
+                <div className="relative mb-6">
+                  <button
+                    onClick={() => setSelectedPosition(null)}
+                    className="absolute right-0 top-0 p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="关闭"
+                  >
+                    <X size={24} className="text-gray-500" />
+                  </button>
+
+                  <div className="pr-14">
                     <h2 className="text-2xl md:text-3xl font-bold text-navy-800 mb-4">
                       {positions[selectedPosition].title}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm md:text-base text-gray-600 mb-4">
                       <div className="flex flex-col gap-1 min-w-0">
                         <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.workLocation')}</span>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <MapPin size={18} className="text-indigo-600 flex-shrink-0" />
-                          <span className="truncate">{positions[selectedPosition].location}</span>
+                        <div className="flex items-start gap-2 min-w-0">
+                          <MapPin size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+                          <span className="break-words whitespace-normal leading-snug">{positions[selectedPosition].location}</span>
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1 min-w-0">
                         <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.employmentType')}</span>
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Clock size={18} className="text-indigo-600 flex-shrink-0" />
-                          <span className="truncate">{positions[selectedPosition].workType}</span>
+                        <div className="flex items-start gap-2 min-w-0">
+                          <Clock size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+                          <span className="break-words whitespace-normal leading-snug">{positions[selectedPosition].workType}</span>
                         </div>
                       </div>
 
                       {positions[selectedPosition].salary && (
                         <div className="flex flex-col gap-1 min-w-0">
                           <span className="text-xs md:text-sm text-gray-500 font-medium">{t('careers.salary')}</span>
-                          <div className="flex items-center gap-2 min-w-0">
-                            <Briefcase size={18} className="text-indigo-600 flex-shrink-0" />
-                            <span className="truncate">{positions[selectedPosition].salary}</span>
+                          <div className="flex items-start gap-2 min-w-0">
+                            <Briefcase size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+                            <span className="break-words whitespace-normal leading-snug">
+                              {positions[selectedPosition].salary}
+                            </span>
                           </div>
                         </div>
                       )}
                     </div>
                   </div>
-                  <button
-                    onClick={() => setSelectedPosition(null)}
-                    className="ml-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    aria-label="关闭"
-                  >
-                    <X size={24} className="text-gray-500" />
-                  </button>
                 </div>
 
                 {positions[selectedPosition].description && (

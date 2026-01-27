@@ -57,6 +57,12 @@ export type KaiyakuFormData = {
     // 电话
     phoneCountryCode: string     // 国际电话区号
     phoneNumber: string         // 電話番号
+
+    // 邮箱（必填）
+    email: string
+
+    // 手写签名（PNG dataURL）
+    signatureDataUrl: string
   
     // 签名
     signerName: string          // 氏名
@@ -364,6 +370,12 @@ export function renderKaiyakuPdfHtml(data: KaiyakuFormData) {
         <div style="text-align: right; margin-top: 8px;">
           <span style="margin-right: 8px;">TEL：</span>
           <span style="display:inline-block; min-width:10rem; border-bottom:1px solid #000; text-align:left; margin-right: 24px;">${e(data.phoneCountryCode || '+81')} ${e(data.phoneNumber)}</span>
+          <span style="margin-right: 8px;">E-mail：</span>
+          <span style="display:inline-block; min-width:12rem; border-bottom:1px solid #000; text-align:left; margin-right: 24px;">${e(data.email)}</span>
+          <span style="margin-right: 8px;">署名：</span>
+          <span style="display:inline-block; width: 160px; height: 52px; border:1px solid #000; vertical-align: middle; background: #fff; margin-right: 24px;">
+            ${data.signatureDataUrl ? `<img src="${data.signatureDataUrl}" alt="署名" style="width:100%; height:100%; object-fit:contain;" />` : ''}
+          </span>
           氏名：
           <span style="display:inline-block; min-width:10rem; border-bottom:1px solid #000; text-align:center;">
             ${e(data.contractHolder)}

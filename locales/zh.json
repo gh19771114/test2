@@ -430,7 +430,7 @@
       },
       "mission": {
         "title": "我们的使命",
-        "description": "「通过跨文化协作，让中日商务与不动产服务互相成就。」我们以透明沟通、专业判断与数字化管理，帮助客户稳健拓展在日业务，同时推动合作伙伴在新生态中实现价值递增。",
+        "description": "依托二十余年深耕日本所积累的社会资源与信息网络，我们致力于将日本优质的不动产资产，精准地连接有需求的投资者。\n以增加收入、降低支出、规避风险、信息可视化为核心理念，通过构建系统化的不动产管理与投资支持体系，持续提升资产运营效率，助力客户实现不动产价值的长期稳步增长。\n希望通过我们专业负责的服务，促进国家与地区之间更加紧密和可持续的经济交流。",
         "longTermValue": {
           "title": "长期价值",
           "description": "审慎配置资产、强化风险控制，以可持续收益与品牌影响力回应客户期待。"
@@ -1310,7 +1310,13 @@
         "accountNumber": "口座番号",
         "accountHolder": "名義人",
         "reason": "解約理由",
-        "phoneNumber": "电话"
+        "phoneNumber": "电话",
+        "email": "邮箱",
+        "signature": "签名"
+      },
+      "signature": {
+        "hint": "请在上方签名框中手写签名（支持鼠标、触控板与手机触摸）。",
+        "clear": "清除签名"
       },
       "placeholders": {
         "propertyName": "例：ボーンマーク日本橋人形町",
@@ -1325,6 +1331,7 @@
         "newAddress": "如未定可暂时填写「未定」，但需在退房立会时告知",
         "newBuildingAndRoom": "例：〇〇マンション 101号室",
         "phoneNumber": "请输入电话号码（不含区号）",
+        "email": "请输入邮箱地址",
         "reasonOther": "请输入其它具体理由",
         "autoLockDial": "请填写当前设置的号码",
         "deliveryBoxNumber": "快递柜号码"
@@ -1393,6 +1400,24 @@
         "description": "请确认以下信息无误后提交申请。提交后系统将根据这些内容生成日文版解約通知書PDF。",
         "contentTitle": "解约内容确认",
         "loading": "正在加载...",
+        "notProvided": "（未填写）",
+        "notSelected": "（未选择）",
+        "undecided": "未定",
+        "backEdit": "返回修改",
+        "serverResponseError": "服务器响应错误（{status}）",
+        "turnstileLoading": "正在加载机器人验证…",
+        "turnstileInvisibleHint": "当前为隐形机器人验证：点击“确认提交”时将自动完成验证。",
+        "turnstileLoadFailed": "机器人验证加载失败，请刷新或关闭广告拦截后重试。",
+        "turnstileRetry": "重试加载验证",
+        "turnstilePoweredBy": "Cloudflare Turnstile",
+        "turnstileVerifying": "正在进行机器人验证，请稍候…",
+        "turnstileExecuteFailed": "机器人验证执行失败，请刷新页面重试。",
+        "turnstileComponentLoadFailed": "机器人验证组件未成功加载：{error}",
+        "turnstileTimeoutOrFailed": "机器人验证未通过或超时，请重试。",
+        "turnstilePleaseComplete": "请先完成机器人验证后再提交。",
+        "turnstileErrorWithCode": "验证组件加载失败（code: {code}）。这通常表示 iframe 被拦截或网络阻断（Turnstile 的 api.js 可打开，但 iframe 无法加载）。",
+        "turnstileRenderFailed": "验证区域渲染失败（未注入任何元素）。请点击“重试加载验证”。",
+        "turnstileScriptLoadFailed": "验证脚本加载失败（可能被广告拦截/网络拦截），请刷新或点击重试。",
         "alt": "解约申请",
         "submitSuccess": "解约申请已提交。系统将生成日文PDF解約通知書并发送至管理公司。",
         "submitFailed": "提交失败：{error}",
@@ -1450,10 +1475,6 @@
           "mexico": "墨西哥",
           "other": "其他"
         }
-      },
-      "validation": {
-        "phoneDigits": "电话号码位数不正确。{country}电话号码应为{min}{max}位数字。\n示例：{example}",
-        "phoneMinDigits": "电话号码位数不正确，请输入至少8位数字"
       }
     }
   },

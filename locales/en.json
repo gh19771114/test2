@@ -454,7 +454,7 @@
       },
       "mission": {
         "title": "Our Mission",
-        "description": "\"Through cross-cultural collaboration, we enable Chinese-Japanese business and real estate services to achieve mutual success.\" Through transparent communication, professional judgment, and digital management, we help clients steadily expand their business in Japan while promoting partners to achieve value appreciation in the new ecosystem.",
+        "description": "Leveraging the social resources and information network we have built over more than two decades in Japan, we connect high-quality Japanese real estate assets with investors who need them—precisely and efficiently.\nGuided by four principles—growing income, reducing expenses, mitigating risk, and making information visible—we build a systematic real estate management and investment support framework to continually improve operational efficiency and help clients achieve steady, long-term growth in real estate value.\nThrough our professional and responsible service, we aim to foster closer and more sustainable economic exchange between countries and regions.",
         "longTermValue": {
           "title": "Long-term Value",
           "description": "We prudently allocate assets and strengthen risk control to respond to customer expectations with sustainable returns and brand influence."
@@ -1334,7 +1334,13 @@
           "accountNumber": "Account Number",
           "accountHolder": "Account Holder Name",
           "reason": "Termination Reason",
-          "phoneNumber": "Phone"
+          "phoneNumber": "Phone",
+          "email": "Email",
+          "signature": "Signature"
+        },
+        "signature": {
+          "hint": "Please sign in the box above (supports mouse, trackpad, and touch).",
+          "clear": "Clear signature"
         },
         "placeholders": {
           "propertyName": "Example: Bourn Mark Nihonbashi Ningyocho",
@@ -1349,6 +1355,7 @@
           "newAddress": "If undecided, you may temporarily enter \"Undecided\", but must inform at the move-out inspection",
           "newBuildingAndRoom": "Example: XX Mansion Room 101",
           "phoneNumber": "Please enter phone number (without country code)",
+          "email": "Please enter email address",
           "reasonOther": "Please enter specific reason",
           "autoLockDial": "Please enter the currently set number",
           "deliveryBoxNumber": "Delivery box number"
@@ -1417,6 +1424,24 @@
           "description": "Please confirm the following information is correct before submitting. After submission, the system will generate a Japanese PDF termination notice based on this content.",
           "contentTitle": "Termination Content Confirmation",
           "loading": "Loading...",
+          "notProvided": "(Not provided)",
+          "notSelected": "(Not selected)",
+          "undecided": "Undecided",
+          "backEdit": "Back to edit",
+          "serverResponseError": "Server response error ({status})",
+          "turnstileLoading": "Loading bot verification…",
+          "turnstileInvisibleHint": "Invisible verification is enabled. It will run automatically when you click “Confirm Submission”.",
+          "turnstileLoadFailed": "Bot verification failed to load. Please refresh or disable ad blockers and try again.",
+          "turnstileRetry": "Retry verification",
+          "turnstilePoweredBy": "Cloudflare Turnstile",
+          "turnstileVerifying": "Verifying… Please wait.",
+          "turnstileExecuteFailed": "Failed to run bot verification. Please refresh and try again.",
+          "turnstileComponentLoadFailed": "Bot verification component failed to load: {error}",
+          "turnstileTimeoutOrFailed": "Bot verification timed out or failed. Please try again.",
+          "turnstilePleaseComplete": "Please complete bot verification before submitting.",
+          "turnstileErrorWithCode": "Bot verification failed to load (code: {code}). This usually means the iframe is blocked or the network is restricting it.",
+          "turnstileRenderFailed": "Verification area failed to render (no elements injected). Please click “Retry verification”.",
+          "turnstileScriptLoadFailed": "Failed to load verification script (may be blocked by ad blockers or network policies). Please refresh or retry.",
           "alt": "Termination Application",
           "submitSuccess": "Termination application has been submitted. The system will generate a Japanese PDF termination notice and send it to the management company.",
           "submitFailed": "Submission failed: {error}",

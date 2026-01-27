@@ -8,7 +8,7 @@ export const investmentProperties: InvestmentProperty[] = [
   {
     titleKey: 'company.overview.assets.property1.title',
     locationKey: 'company.overview.assets.property1.location',
-    image: '/imgs/honsha.png',
+    image: '/imgs/honnsya2.jpeg',
   },
   {
     titleKey: 'company.overview.assets.property2.title',

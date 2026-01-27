@@ -4,6 +4,7 @@ import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+import SignaturePad from '@/components/SignaturePad'
 
 // 下载用 PDF（需放在 public/ 下才能被网页访问）
 const KAIYAKU_FORM_URL = '/imgs/解約通知書.pdf'
@@ -67,6 +68,12 @@ type TerminationForm = {
   phoneCountryCode: string     // 国际电话区号（默认：+81 日本）
   phoneNumber: string         // 電話番号
 
+  // 邮箱（必填）
+  email: string
+
+  // 手写签名（PNG dataURL）
+  signatureDataUrl: string
+
   // 署名（PDF右下 氏名）
   signerName: string
 }
@@ -116,6 +123,8 @@ const initialForm: TerminationForm = {
 
   phoneCountryCode: '+81', // 默认日本
   phoneNumber: '',
+  email: '',
+  signatureDataUrl: '',
 
   signerName: '',
 }
@@ -239,6 +248,14 @@ const convertFromJapanese = (data: any): TerminationForm => {
     converted.reason = reverseMap.reason[data.reason] as TerminationForm['reason']
   }
 
+  // 新增字段兜底：避免旧缓存缺字段导致受控输入报错
+  if (typeof (converted as any).email !== 'string') {
+    ;(converted as any).email = ''
+  }
+  if (typeof (converted as any).signatureDataUrl !== 'string') {
+    ;(converted as any).signatureDataUrl = ''
+  }
+
   return converted as TerminationForm
 }
 
@@ -332,6 +349,8 @@ export default function TenantTerminationPage() {
       { name: 'accountHolder', id: 'accountHolder', label: t('tenant.kaiyaku.fields.accountHolder') },
       { name: 'reason', id: 'reason', label: t('tenant.kaiyaku.fields.reason'), isRadio: true },
       { name: 'phoneNumber', id: 'phoneNumber', label: t('tenant.kaiyaku.fields.phoneNumber') },
+      { name: 'email', id: 'email', label: t('tenant.kaiyaku.fields.email') },
+      { name: 'signatureDataUrl', id: 'signaturePad', label: t('tenant.kaiyaku.fields.signature') },
     ]
 
     // 检查每个必填字段
@@ -533,11 +552,12 @@ export default function TenantTerminationPage() {
               onSubmit={handleSubmit}
               className="bg-white rounded-2xl shadow-lg border border-gray-100 p-3 md:p-8 space-y-4 md:space-y-8 lg:col-span-2"
               suppressHydrationWarning
+              noValidate
             >
               {/* 物件信息 */}
               <div>
                 <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-4">
-                  一、物件信息
+                  {t('tenant.kaiyaku.sections.propertyInfo')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
                   <div>
@@ -1258,6 +1278,59 @@ export default function TenantTerminationPage() {
                       placeholder={t('tenant.kaiyaku.placeholders.phoneNumber')}
                     />
                   </div>
+                </div>
+
+                <div className="mb-3 md:mb-4">
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+                    htmlFor="email"
+                  >
+                    {t('tenant.kaiyaku.fields.email')}
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full max-w-md px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent"
+                    placeholder={t('tenant.kaiyaku.placeholders.email')}
+                  />
+                </div>
+
+                {/* 签名（必填） */}
+                <div className="mb-3 md:mb-4" id="signaturePad">
+                  <div className="flex items-center justify-between gap-3 mb-1 md:mb-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {t('tenant.kaiyaku.fields.signature')}
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          signatureDataUrl: '',
+                        }))
+                      }
+                      className="text-xs px-3 py-1 rounded-md border border-gray-300 bg-white hover:bg-gray-100 transition"
+                    >
+                      {t('tenant.kaiyaku.signature.clear')}
+                    </button>
+                  </div>
+                  <SignaturePad
+                    value={formData.signatureDataUrl}
+                    onChange={(dataUrl) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        signatureDataUrl: dataUrl,
+                      }))
+                    }
+                    height={160}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {t('tenant.kaiyaku.signature.hint')}
+                  </p>
                 </div>
 
               </div>

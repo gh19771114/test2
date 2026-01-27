@@ -7,6 +7,14 @@ import { useLanguage } from '@/contexts/LanguageContext'
 const Philosophy = () => {
   const { t } = useLanguage()
 
+  const missionParagraphs = useMemo(() => {
+    const raw = String(t('company.philosophy.mission.description') || '')
+    return raw
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  }, [t])
+
   const values = useMemo(() => [
     {
       icon: Users,
@@ -61,24 +69,16 @@ const Philosophy = () => {
         </div>
 
         <div className="mt-16">
-          <div className="bg-white text-navy-900 rounded-2xl p-8 md:p-12 shadow-2xl border border-blue-100 space-y-6 text-center mx-auto max-w-4xl">
-            <h3 className="text-2xl md:text-3xl font-bold">{t('company.philosophy.mission.title')}</h3>
-            <p className="text-lg leading-relaxed text-slate-700 text-balance">
-              {t('company.philosophy.mission.description')}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-              <div className="bg-blue-50 rounded-xl px-5 py-4 border border-blue-100 shadow-sm">
-                <p className="font-semibold text-navy-800 mb-2">{t('company.philosophy.mission.longTermValue.title')}</p>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  {t('company.philosophy.mission.longTermValue.description')}
+          <div className="bg-white text-navy-900 rounded-2xl p-8 md:p-12 shadow-2xl border border-blue-100 space-y-6 mx-auto max-w-4xl">
+            <h3 className="text-2xl md:text-3xl font-bold text-center">
+              {t('company.philosophy.mission.title')}
+            </h3>
+            <div className="text-left space-y-4">
+              {missionParagraphs.map((p, idx) => (
+                <p key={idx} className="text-lg leading-relaxed text-slate-700">
+                  {p}
                 </p>
-              </div>
-              <div className="bg-purple-50 rounded-xl px-5 py-4 border border-purple-100 shadow-sm">
-                <p className="font-semibold text-navy-800 mb-2">{t('company.philosophy.mission.collaborativeNetwork.title')}</p>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  {t('company.philosophy.mission.collaborativeNetwork.description')}
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -180,9 +180,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   // 翻译函数
   const t = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any => {
-    const resolve = (fullKey: string) => {
+    const resolveFrom = (source: Record<string, any>, fullKey: string) => {
       const keys = fullKey.split('.')
-      let value: any = translations
+      let value: any = source
       for (const k of keys) {
         if (value && typeof value === 'object' && k in value) {
           value = value[k]
@@ -194,14 +194,28 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
 
     // 先尝试原始 key
-    let resolved = resolve(key)
+    let resolved = resolveFrom(translations, key)
 
     // 兼容旧的翻译结构：tenant.kaiyaku.* 在部分语言文件里位于 tenant.services.kaiyaku.*
     if (!resolved.found && key.startsWith('tenant.kaiyaku.')) {
-      resolved = resolve(key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
+      resolved = resolveFrom(translations, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
     }
 
-    if (!resolved.found) return key // 如果找不到翻译，返回key
+    // 最终兜底：如果当前语言包里找不到，回退到中文（避免 UI 直接显示 key）
+    if (!resolved.found) {
+      let fallbackResolved = resolveFrom(zhTranslations as any, key)
+      if (!fallbackResolved.found && key.startsWith('tenant.kaiyaku.')) {
+        fallbackResolved = resolveFrom(
+          zhTranslations as any,
+          key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.')
+        )
+      }
+      if (fallbackResolved.found) {
+        resolved = fallbackResolved
+      } else {
+        return key
+      }
+    }
 
     const value = resolved.value
     if (options?.returnObjects && (Array.isArray(value) || typeof value === 'object')) {

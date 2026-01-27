@@ -13,7 +13,8 @@ import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/manag
 import { investmentProperties } from '@/app/touzi/propertyData'
 import { maimaiAllPropertyCards } from '@/app/maimai/propertiesData'
 
-const shouldContainImage = (src: string) => /(^|\/)(helte|logo|honsha)\b/i.test(src) || /logo/i.test(src)
+// 仅对“Logo 类图片”使用 contain + 留白；本社大楼为照片类，需贴边显示
+const shouldContainImage = (src: string) => /(^|\/)(helte|logo)\b/i.test(src) || /logo/i.test(src)
 
 const containerVariants = {
   hidden: { opacity: 0 },

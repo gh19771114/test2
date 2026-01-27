@@ -80,6 +80,14 @@ export async function POST(req: Request) {
       submittedAt: new Date(),
     }
 
+    // 必填兜底：邮箱 / 署名
+    if (!String((data as any).email || '').trim()) {
+      return NextResponse.json({ error: 'メールアドレスが未記入です。' }, { status: 400 })
+    }
+    if (!String((data as any).signatureDataUrl || '').trim()) {
+      return NextResponse.json({ error: '署名が未記入です。' }, { status: 400 })
+    }
+
     // 生成 PDF（二进制 Buffer）
     // NOTE: 不使用 Playwright（Vercel 运行时默认没有浏览器可执行文件）
     const pdfBuffer = await generateKaiyakuPdf(data)
@@ -195,14 +203,14 @@ async function generateKaiyakuPdf(data: KaiyakuFormData): Promise<Buffer> {
   // Title
   drawLine('解約通知書（オンライン申請）', titleSize, rgb(0.12, 0.16, 0.22))
   const submittedAtText = data.submittedAt
-    ? `提交时间：${formatDateTimeForPdf(data.submittedAt)}`
+    ? `送信日時：${formatDateTimeForPdf(data.submittedAt)}`
     : ''
   if (submittedAtText) drawLine(submittedAtText, 9, rgb(0.45, 0.45, 0.45))
   y -= 8
 
-  const kv = (label: string, value: string) => `${label}：${value || '（未填写）'}`
+  const kv = (label: string, value: string) => `${label}：${value || '（未記入）'}`
 
-  drawLine('一、物件信息', labelSize, rgb(0.2, 0.25, 0.32))
+  drawLine('一、物件情報', labelSize, rgb(0.2, 0.25, 0.32))
   drawWrapped(kv('物件名', data.propertyName), valueSize)
   drawWrapped(kv('部屋番号', data.roomNumber), valueSize)
   drawWrapped(kv('物件所在地', data.propertyAddress), valueSize)
@@ -215,7 +223,7 @@ async function generateKaiyakuPdf(data: KaiyakuFormData): Promise<Buffer> {
   drawWrapped(kv('立会希望日時', data.inspectionDateTime ? formatInspectionDateTimeForEmail(data.inspectionDateTime) : ''), valueSize)
   y -= 6
 
-  drawLine('三、设施利用状况', labelSize, rgb(0.2, 0.25, 0.32))
+  drawLine('三、施設使用状況', labelSize, rgb(0.2, 0.25, 0.32))
   drawWrapped(kv('使用駐輪場', data.bicycleParking), valueSize)
   drawWrapped(kv('メールボックスの開け方', buildMailboxLine(data)), valueSize)
   drawWrapped(kv('使用駐車場', data.carParking), valueSize)
@@ -224,7 +232,7 @@ async function generateKaiyakuPdf(data: KaiyakuFormData): Promise<Buffer> {
   drawWrapped(kv('宅配ボックス', buildDeliveryBoxLine(data)), valueSize)
   y -= 6
 
-  drawLine('四、返金账户', labelSize, rgb(0.2, 0.25, 0.32))
+  drawLine('四、返金口座', labelSize, rgb(0.2, 0.25, 0.32))
   drawWrapped(kv('銀行', data.bankName), valueSize)
   drawWrapped(kv('支店', data.bankBranch), valueSize)
   drawWrapped(kv('口座種別', data.accountType || ''), valueSize)
@@ -240,10 +248,57 @@ async function generateKaiyakuPdf(data: KaiyakuFormData): Promise<Buffer> {
   drawWrapped(kv('解約理由', reason), valueSize)
   drawWrapped(kv('転居先住所', data.newAddress || '未定'), valueSize)
   drawWrapped(kv('建物名・号室', data.newBuildingAndRoom || ''), valueSize)
-  drawWrapped(kv('电话', `${data.phoneCountryCode || '+81'} ${data.phoneNumber || ''}`.trim()), valueSize)
+  drawWrapped(kv('電話', `${data.phoneCountryCode || '+81'} ${data.phoneNumber || ''}`.trim()), valueSize)
+  drawWrapped(kv('E-mail', data.email || ''), valueSize)
   y -= 10
 
-  drawWrapped(`氏名（署名欄）：${data.signerName || data.contractHolder || '（未填写）'}`, valueSize)
+  drawWrapped(`氏名（署名欄）：${data.signerName || data.contractHolder || '（未記入）'}`, valueSize)
+
+  // 署名画像（手書き）
+  // NOTE: dataURL (image/png) を想定
+  if (data.signatureDataUrl) {
+    try {
+      const m = String(data.signatureDataUrl).match(/^data:(image\/\w+);base64,(.+)$/)
+      const b64 = m?.[2]
+      if (b64) {
+        const bytes = Buffer.from(b64, 'base64')
+        const sigImage =
+          (m?.[1] || '').toLowerCase().includes('jpeg') || (m?.[1] || '').toLowerCase().includes('jpg')
+            ? await pdfDoc.embedJpg(bytes)
+            : await pdfDoc.embedPng(bytes)
+
+        const sigW = 180
+        const sigH = 60
+        const sigX = pageW - marginX - sigW
+        const sigY = Math.max(48, y - sigH - 8)
+
+        page.drawText('署名：', {
+          x: sigX,
+          y: sigY + sigH + 4,
+          size: 10,
+          font,
+          color: rgb(0.08, 0.12, 0.18),
+        })
+        page.drawRectangle({
+          x: sigX,
+          y: sigY,
+          width: sigW,
+          height: sigH,
+          borderWidth: 1,
+          borderColor: rgb(0, 0, 0),
+          color: rgb(1, 1, 1),
+        })
+        page.drawImage(sigImage, {
+          x: sigX + 4,
+          y: sigY + 4,
+          width: sigW - 8,
+          height: sigH - 8,
+        })
+      }
+    } catch (e) {
+      console.warn('failed to embed signature image:', e)
+    }
+  }
 
   const bytes = await pdfDoc.save()
   return Buffer.from(bytes)
@@ -280,7 +335,7 @@ function wrapTextCJK(text: string, maxWidth: number, font: any, fontSize: number
 
 function formatDateTimeForPdf(d: Date): string {
   // Asia/Tokyo
-  const fmt = new Intl.DateTimeFormat('zh-CN', {
+  const fmt = new Intl.DateTimeFormat('ja-JP', {
     timeZone: 'Asia/Tokyo',
     year: 'numeric',
     month: '2-digit',
@@ -349,7 +404,7 @@ function buildPlainTextSummary(data: KaiyakuFormData): string {
 
 解約日：${data.cancelDate}
 退去予定日：${data.moveOutDate}
-立会希望日時：${data.inspectionDateTime ? formatInspectionDateTimeForEmail(data.inspectionDateTime) : '未填写'}
+立会希望日時：${data.inspectionDateTime ? formatInspectionDateTimeForEmail(data.inspectionDateTime) : '（未記入）'}
 
 使用駐輪場：${data.bicycleParking}
 使用駐車場：${data.carParking}
@@ -363,11 +418,12 @@ function buildPlainTextSummary(data: KaiyakuFormData): string {
   口座番号：${data.accountNumber}
   名義人：${data.accountHolder}
 
-解約理由：${data.reason || '未选择'}${data.reason === 'その他' && data.reasonOtherText ? `（${data.reasonOtherText}）` : ''}
+解約理由：${data.reason || '（未選択）'}${data.reason === 'その他' && data.reasonOtherText ? `（${data.reasonOtherText}）` : ''}
 
 転居先住所：${data.newAddress || '未定'}
 建物名・号室：${data.newBuildingAndRoom || ''}
-电话：${data.phoneCountryCode || '+81'} ${data.phoneNumber || '未填写'}
+電話：${data.phoneCountryCode || '+81'} ${data.phoneNumber || '（未記入）'}
+E-mail：${data.email || '（未記入）'}
 
 氏名（署名欄）：${data.signerName || data.contractHolder}
 
