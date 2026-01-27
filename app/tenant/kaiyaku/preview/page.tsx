@@ -128,6 +128,7 @@ export default function TerminationPreviewPage() {
     let cancelled = false
     setTurnstileStatus('loading')
     setTurnstileError(null)
+    setTurnstileIsInvisible(false)
 
     const ensureScript = () =>
       new Promise<void>((resolve, reject) => {
@@ -175,6 +176,8 @@ export default function TerminationPreviewPage() {
         const widgetId = window.turnstile.render(turnstileContainerRef.current, {
           sitekey: turnstileSiteKey,
           theme: 'light',
+          appearance: 'always',
+          size: 'flexible',
           callback: (token: string) => {
             setTurnstileToken(token)
             setTurnstileStatus('ready')
@@ -187,10 +190,15 @@ export default function TerminationPreviewPage() {
             setTurnstileToken(null)
             setTurnstileStatus('ready')
           },
-          'error-callback': () => {
+          'error-callback': (code?: string) => {
             setTurnstileToken(null)
             setTurnstileStatus('error')
-            setTurnstileError('验证组件加载失败（可能被广告拦截/网络拦截）。')
+            // wake waiters (resolve empty token)
+            const waiters = turnstileWaitersRef.current.splice(0)
+            waiters.forEach((fn) => fn(''))
+            setTurnstileError(
+              `验证组件加载失败（code: ${code || 'unknown'}）。这通常表示 iframe 被拦截或网络阻断（Turnstile 的 api.js 可打开，但 iframe 无法加载）。`
+            )
           },
         })
         turnstileWidgetIdRef.current = widgetId
@@ -201,8 +209,8 @@ export default function TerminationPreviewPage() {
           if (cancelled) return
           const el = turnstileContainerRef.current
           if (!el) return
-          const first = el.firstElementChild as HTMLElement | null
-          const rect = first?.getBoundingClientRect()
+          const iframe = el.querySelector('iframe') as HTMLIFrameElement | null
+          const rect = iframe?.getBoundingClientRect()
           const sizeLooksInvisible = !!rect && rect.width < 40 && rect.height < 40
 
           if (sizeLooksInvisible) {
@@ -211,11 +219,11 @@ export default function TerminationPreviewPage() {
             return
           }
 
-          const hasContent = el.childElementCount > 0
-          if (!hasContent) {
+          const hasIframe = !!iframe
+          if (!hasIframe) {
             setTurnstileStatus('error')
             setTurnstileError(
-              '验证区域渲染为空白（可能被浏览器插件拦截或网络拦截）。请关闭广告拦截/隐私拦截后重试，或更换网络。'
+              '验证区域渲染为空白（未检测到 iframe）。这通常是浏览器插件/隐私拦截或网络策略阻断导致。'
             )
           } else {
             setTurnstileIsInvisible(false)
@@ -254,15 +262,12 @@ export default function TerminationPreviewPage() {
 
     try {
       if (turnstileSiteKey && !turnstileToken) {
-        // If Turnstile is configured but UI is invisible, execute on-demand.
-        if (turnstileIsInvisible && window.turnstile && turnstileWidgetIdRef.current) {
+        // If Turnstile is configured but token not available, try execute on-demand first.
+        if (window.turnstile?.execute && turnstileWidgetIdRef.current) {
           setLoading(true)
           setSubmitResult('正在进行机器人验证，请稍候…')
 
           try {
-            if (!window.turnstile.execute) {
-              throw new Error('turnstile.execute unavailable')
-            }
             window.turnstile.execute(turnstileWidgetIdRef.current)
           } catch {
             setLoading(false)
