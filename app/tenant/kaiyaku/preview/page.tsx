@@ -10,6 +10,7 @@ declare global {
   interface Window {
     turnstile?: {
       render: (container: HTMLElement, options: any) => string
+      execute?: (widgetId?: string) => void
       reset?: (widgetId?: string) => void
       remove?: (widgetId?: string) => void
     }
@@ -96,9 +97,11 @@ export default function TerminationPreviewPage() {
     'idle' | 'loading' | 'ready' | 'error'
   >('idle')
   const [turnstileError, setTurnstileError] = useState<string | null>(null)
+  const [turnstileIsInvisible, setTurnstileIsInvisible] = useState(false)
   const [turnstileRetry, setTurnstileRetry] = useState(0)
   const turnstileContainerRef = useRef<HTMLDivElement | null>(null)
   const turnstileWidgetIdRef = useRef<string | null>(null)
+  const turnstileWaitersRef = useRef<Array<(token: string) => void>>([])
 
   useEffect(() => {
     // 从 sessionStorage 读取主页面保存的表单数据
@@ -176,6 +179,9 @@ export default function TerminationPreviewPage() {
             setTurnstileToken(token)
             setTurnstileStatus('ready')
             setTurnstileError(null)
+            // wake any pending waiters
+            const waiters = turnstileWaitersRef.current.splice(0)
+            waiters.forEach((fn) => fn(token))
           },
           'expired-callback': () => {
             setTurnstileToken(null)
@@ -189,19 +195,30 @@ export default function TerminationPreviewPage() {
         })
         turnstileWidgetIdRef.current = widgetId
 
-        // Detect blank render: if still empty after a short delay, treat as error
+        // Detect "invisible" widgets: they may render 0x0 and never show UI.
+        // Also detect truly blank renders.
         setTimeout(() => {
           if (cancelled) return
           const el = turnstileContainerRef.current
           if (!el) return
-          const hasContent =
-            el.childElementCount > 0 || (el.textContent || '').trim().length > 0
+          const first = el.firstElementChild as HTMLElement | null
+          const rect = first?.getBoundingClientRect()
+          const sizeLooksInvisible = !!rect && rect.width < 40 && rect.height < 40
+
+          if (sizeLooksInvisible) {
+            setTurnstileIsInvisible(true)
+            setTurnstileStatus('ready')
+            return
+          }
+
+          const hasContent = el.childElementCount > 0
           if (!hasContent) {
             setTurnstileStatus('error')
             setTurnstileError(
               '验证区域渲染为空白（可能被浏览器插件拦截或网络拦截）。请关闭广告拦截/隐私拦截后重试，或更换网络。'
             )
           } else {
+            setTurnstileIsInvisible(false)
             setTurnstileStatus('ready')
           }
         }, 300)
@@ -228,6 +245,7 @@ export default function TerminationPreviewPage() {
       }
       turnstileWidgetIdRef.current = null
       setTurnstileToken(null)
+      setTurnstileIsInvisible(false)
     }
   }, [turnstileSiteKey, turnstileRetry])
 
@@ -236,12 +254,52 @@ export default function TerminationPreviewPage() {
 
     try {
       if (turnstileSiteKey && !turnstileToken) {
-        setSubmitResult(
-          turnstileStatus === 'error'
-            ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
-            : '请先完成机器人验证后再提交。'
-        )
-        return
+        // If Turnstile is configured but UI is invisible, execute on-demand.
+        if (turnstileIsInvisible && window.turnstile && turnstileWidgetIdRef.current) {
+          setLoading(true)
+          setSubmitResult('正在进行机器人验证，请稍候…')
+
+          try {
+            if (!window.turnstile.execute) {
+              throw new Error('turnstile.execute unavailable')
+            }
+            window.turnstile.execute(turnstileWidgetIdRef.current)
+          } catch {
+            setLoading(false)
+            setSubmitResult('机器人验证执行失败，请刷新页面重试。')
+            return
+          }
+
+          const token = await new Promise<string>((resolve, reject) => {
+            const timer = setTimeout(
+              () => reject(new Error('timeout')),
+              8000
+            )
+            turnstileWaitersRef.current.push((t) => {
+              clearTimeout(timer)
+              resolve(t)
+            })
+          }).catch(() => null)
+
+          if (!token) {
+            setLoading(false)
+            setSubmitResult(
+              turnstileStatus === 'error'
+                ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
+                : '机器人验证未通过或超时，请重试。'
+            )
+            return
+          }
+          // token now set via callback; continue submission below
+          setSubmitResult(null)
+        } else {
+          setSubmitResult(
+            turnstileStatus === 'error'
+              ? `机器人验证组件未成功加载：${turnstileError || '请刷新页面或关闭广告拦截后重试。'}`
+              : '请先完成机器人验证后再提交。'
+          )
+          return
+        }
       }
 
       setLoading(true)
@@ -601,6 +659,11 @@ export default function TerminationPreviewPage() {
                     {turnstileStatus === 'loading' && (
                       <p className="text-xs text-gray-500 mt-2">
                         正在加载机器人验证…
+                      </p>
+                    )}
+                    {turnstileStatus === 'ready' && turnstileIsInvisible && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        当前为隐形机器人验证：点击“确认提交”时将自动完成验证。
                       </p>
                     )}
                     {turnstileStatus === 'error' && (

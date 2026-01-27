@@ -8,6 +8,7 @@ declare global {
   interface Window {
     turnstile?: {
       render: (container: HTMLElement, options: any) => string
+      execute?: (widgetId?: string) => void
       reset?: (widgetId?: string) => void
       remove?: (widgetId?: string) => void
     }
