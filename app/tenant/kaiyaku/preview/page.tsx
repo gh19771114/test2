@@ -166,6 +166,9 @@ export default function TerminationPreviewPage() {
         turnstileContainerRef.current.innerHTML = ''
         setTurnstileToken(null)
 
+        // Wait one frame to ensure layout is ready (some environments render blank otherwise)
+        await new Promise<void>((r) => requestAnimationFrame(() => r()))
+
         const widgetId = window.turnstile.render(turnstileContainerRef.current, {
           sitekey: turnstileSiteKey,
           theme: 'light',
@@ -185,7 +188,23 @@ export default function TerminationPreviewPage() {
           },
         })
         turnstileWidgetIdRef.current = widgetId
-        setTurnstileStatus('ready')
+
+        // Detect blank render: if still empty after a short delay, treat as error
+        setTimeout(() => {
+          if (cancelled) return
+          const el = turnstileContainerRef.current
+          if (!el) return
+          const hasContent =
+            el.childElementCount > 0 || (el.textContent || '').trim().length > 0
+          if (!hasContent) {
+            setTurnstileStatus('error')
+            setTurnstileError(
+              '验证区域渲染为空白（可能被浏览器插件拦截或网络拦截）。请关闭广告拦截/隐私拦截后重试，或更换网络。'
+            )
+          } else {
+            setTurnstileStatus('ready')
+          }
+        }, 300)
       } catch (e: any) {
         setTurnstileStatus('error')
         setTurnstileError(
