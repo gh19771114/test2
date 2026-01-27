@@ -20,8 +20,22 @@ export const metadata: Metadata = {
   title: 'Bourn Mark - 日本房产投资与企业落地服务',
   description:
     '提供日本房产买卖中介、物业管理与企业出海助力等一站式解决方案，让您的在日投资更省心、更增值。',
-  keywords:
-    '日本房产, 买卖中介, 物业管理, 企业出海, 投资顾问, 东京房产',
+  keywords: [
+    'Bourn Mark',
+    'BournMark',
+    '川雨留痕',
+    'ボーンマーク',
+    '日本不动产管理公司',
+    '官网',
+    '公式サイト',
+    'Official website',
+    '日本房产',
+    '买卖中介',
+    '物业管理',
+    '企业出海',
+    '投资顾问',
+    '东京房产',
+  ],
   authors: [{ name: 'Bourn Mark' }],
   icons: {
     icon: '/imgs/logo-icon.png',        // 请把文件改名成无空格英文名
