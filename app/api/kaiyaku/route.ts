@@ -10,6 +10,30 @@ import { type KaiyakuFormData } from '@/lib/kaiyakuPdfTemplate'
 
 export const runtime = 'nodejs'
 
+async function verifyTurnstile(params: { token: string; ip?: string }) {
+  const secret = (process.env.TURNSTILE_SECRET_KEY || '').trim()
+  if (!secret) return true // not enabled
+  if (!params.token) return false
+
+  const body = new URLSearchParams()
+  body.set('secret', secret)
+  body.set('response', params.token)
+  if (params.ip) body.set('remoteip', params.ip)
+
+  try {
+    const resp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body,
+    })
+    const json: any = await resp.json().catch(() => null)
+    return !!json?.success
+  } catch {
+    // fail closed when enabled
+    return false
+  }
+}
+
 // 只允许 POST
 export async function POST(req: Request) {
   try {
@@ -29,10 +53,30 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json()
+    const turnstileToken = String(body?.turnstileToken || '').trim()
+    const turnstileSecretEnabled = !!(process.env.TURNSTILE_SECRET_KEY || '').trim()
+
+    // Turnstile enabled -> require token and verify
+    if (turnstileSecretEnabled && !turnstileToken) {
+      return NextResponse.json(
+        {
+          error:
+            '未检测到机器人验证信息。请返回预览页完成验证后再提交；若预览页未出现验证框，请确认已配置 NEXT_PUBLIC_TURNSTILE_SITE_KEY 并重新部署（Redeploy），同时检查 Turnstile Hostnames 是否包含当前访问域名。',
+        },
+        { status: 400 }
+      )
+    }
+
+    const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0]?.trim()
+    const ok = await verifyTurnstile({ token: turnstileToken, ip })
+    if (!ok) {
+      return NextResponse.json({ error: '机器人验证失败，请重试。' }, { status: 400 })
+    }
 
     // 把前端传来的字段补上 submittedAt
+    const { turnstileToken: _ts, ...pureBody } = body || {}
     const data: KaiyakuFormData = {
-      ...body,
+      ...(pureBody as KaiyakuFormData),
       submittedAt: new Date(),
     }
 

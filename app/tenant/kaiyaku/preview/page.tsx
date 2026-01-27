@@ -1,10 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: any) => string
+      reset?: (widgetId?: string) => void
+      remove?: (widgetId?: string) => void
+    }
+  }
+}
 
 // 注意：这里的结构要和「主申请页面」里的 TerminationForm 保持一致
 type TerminationForm = {
@@ -76,6 +86,15 @@ export default function TerminationPreviewPage() {
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState<string | null>(null)
 
+  // anti-bot: optional Cloudflare Turnstile (shared with homepage contact form)
+  const turnstileSiteKey = useMemo(
+    () => process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
+    []
+  )
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileContainerRef = useRef<HTMLDivElement | null>(null)
+  const turnstileWidgetIdRef = useRef<string | null>(null)
+
   useEffect(() => {
     // 从 sessionStorage 读取主页面保存的表单数据
     const storedData = sessionStorage.getItem('terminationFormData')
@@ -93,6 +112,79 @@ export default function TerminationPreviewPage() {
     }
   }, [router])
 
+  // Render Turnstile only if site key configured
+  useEffect(() => {
+    if (!turnstileSiteKey) return
+    if (!turnstileContainerRef.current) return
+
+    let cancelled = false
+
+    const ensureScript = () =>
+      new Promise<void>((resolve, reject) => {
+        if (window.turnstile) return resolve()
+        const existing = document.querySelector<HTMLScriptElement>(
+          'script[data-turnstile="true"]'
+        )
+        if (existing) {
+          existing.addEventListener('load', () => resolve(), { once: true })
+          existing.addEventListener(
+            'error',
+            () => reject(new Error('turnstile script load failed')),
+            { once: true }
+          )
+          return
+        }
+        const script = document.createElement('script')
+        script.src =
+          'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+        script.async = true
+        script.defer = true
+        script.dataset.turnstile = 'true'
+        script.onload = () => resolve()
+        script.onerror = () => reject(new Error('turnstile script load failed'))
+        document.head.appendChild(script)
+      })
+
+    const render = async () => {
+      try {
+        await ensureScript()
+        if (cancelled) return
+        if (!window.turnstile || !turnstileContainerRef.current) return
+
+        // Avoid duplicate widgets
+        turnstileContainerRef.current.innerHTML = ''
+        setTurnstileToken(null)
+
+        const widgetId = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: turnstileSiteKey,
+          theme: 'light',
+          callback: (token: string) => setTurnstileToken(token),
+          'expired-callback': () => setTurnstileToken(null),
+          'error-callback': () => setTurnstileToken(null),
+        })
+        turnstileWidgetIdRef.current = widgetId
+      } catch {
+        // If script fails, keep silent; backend still has non-visual protections
+      }
+    }
+
+    render()
+
+    return () => {
+      cancelled = true
+      const widgetId = turnstileWidgetIdRef.current
+      if (widgetId && window.turnstile?.remove) {
+        try {
+          window.turnstile.remove(widgetId)
+        } catch {
+          // ignore
+        }
+      }
+      turnstileWidgetIdRef.current = null
+      setTurnstileToken(null)
+    }
+  }, [turnstileSiteKey])
+
   const handleConfirm = async () => {
     if (!formData) return
 
@@ -100,11 +192,18 @@ export default function TerminationPreviewPage() {
     setSubmitResult(null)
 
     try {
+      if (turnstileSiteKey && !turnstileToken) {
+        setSubmitResult('请先完成机器人验证后再提交。')
+        return
+      }
       // 提交到生成 PDF + 发邮件的 API（你后端那边用 Playwright 的 route）
       const res = await fetch('/api/kaiyaku', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          ...(turnstileToken ? { turnstileToken } : {}),
+        }),
       })
 
       let data: any = {}
@@ -134,6 +233,7 @@ export default function TerminationPreviewPage() {
 
       // 提交成功后清掉缓存
       sessionStorage.removeItem('terminationFormData')
+      setTurnstileToken(null)
     } catch (err: any) {
       console.error('提交错误:', err)
       const errorMsg = err.message || t('tenant.kaiyaku.preview.networkError')
@@ -445,6 +545,14 @@ export default function TerminationPreviewPage() {
 
               {/* 按钮 + 提示 */}
               <div className="flex flex-col gap-4 pt-4">
+                {turnstileSiteKey && (
+                  <div>
+                    <div ref={turnstileContainerRef} />
+                    <p className="text-xs text-gray-500 mt-2">
+                      Powered by Cloudflare Turnstile
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
                   <button
                     onClick={handleConfirm}

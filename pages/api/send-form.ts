@@ -1002,6 +1002,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // 为避免影响其它可能复用此接口的表单，这里仅对“联系表单（默认）”启用验证
   const turnstileToken = String((req.body || {}).turnstileToken || "").trim();
   if (rawFormType !== "termination") {
+    const turnstileSecretEnabled = !!(process.env.TURNSTILE_SECRET_KEY || "").trim();
+    if (turnstileSecretEnabled && !turnstileToken) {
+      return res.status(400).json({
+        error:
+          "未检测到机器人验证信息。请刷新页面后重试；若确认页仍未出现验证框，请确认已配置 NEXT_PUBLIC_TURNSTILE_SITE_KEY 并重新部署（Redeploy），同时检查 Turnstile Hostnames 是否包含当前访问域名。",
+      });
+    }
+
     const turnstileOk = await verifyTurnstile({ token: turnstileToken, ip });
     if (!turnstileOk) {
       return res.status(400).json({ error: "机器人验证失败，请重试。" });
