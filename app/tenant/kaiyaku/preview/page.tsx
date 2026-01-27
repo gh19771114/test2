@@ -6,6 +6,8 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 
+const TURNSTILE_DEBUG_TAG = 'kaiyaku-turnstile-debug@2026-01-27'
+
 declare global {
   interface Window {
     turnstile?: {
@@ -204,13 +206,13 @@ export default function TerminationPreviewPage() {
         turnstileWidgetIdRef.current = widgetId
 
         // Detect "invisible" widgets: they may render 0x0 and never show UI.
-        // Also detect truly blank renders.
+        // NOTE: Turnstile uses *closed* shadow DOM, so we cannot query inner iframe.
         setTimeout(() => {
           if (cancelled) return
           const el = turnstileContainerRef.current
           if (!el) return
-          const iframe = el.querySelector('iframe') as HTMLIFrameElement | null
-          const rect = iframe?.getBoundingClientRect()
+          const first = el.firstElementChild as HTMLElement | null
+          const rect = first?.getBoundingClientRect()
           const sizeLooksInvisible = !!rect && rect.width < 40 && rect.height < 40
 
           if (sizeLooksInvisible) {
@@ -219,11 +221,11 @@ export default function TerminationPreviewPage() {
             return
           }
 
-          const hasIframe = !!iframe
-          if (!hasIframe) {
+          // If Turnstile didn't inject any element at all, treat as render failure.
+          if (el.childElementCount === 0) {
             setTurnstileStatus('error')
             setTurnstileError(
-              '验证区域渲染为空白（未检测到 iframe）。这通常是浏览器插件/隐私拦截或网络策略阻断导致。'
+              '验证区域渲染失败（未注入任何元素）。请点击“重试加载验证”。'
             )
           } else {
             setTurnstileIsInvisible(false)
@@ -688,6 +690,12 @@ export default function TerminationPreviewPage() {
                     )}
                     <p className="text-xs text-gray-500 mt-2">
                       Powered by Cloudflare Turnstile
+                    </p>
+                    <p className="text-[11px] text-gray-400 mt-1 break-all">
+                      {TURNSTILE_DEBUG_TAG} · status={turnstileStatus} · siteKey=
+                      {turnstileSiteKey ? 'on' : 'off'} · widgetId=
+                      {turnstileWidgetIdRef.current ? 'set' : 'none'} · token=
+                      {turnstileToken ? 'set' : 'none'}
                     </p>
                   </div>
                 )}
