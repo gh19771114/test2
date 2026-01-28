@@ -1383,7 +1383,7 @@
       },
       "validation": {
         "pleaseSelect": "请选择{field}",
-        "pleaseFill": "请填写{field}",
+        "pleaseFill": "请填写此内容",
         "pleaseFillOtherReason": "请填写\"その他\"的具体理由",
         "cancelDateMustBeFuture": "解約日必须晚于今天，请选择未来的日期",
         "moveOutDateMustBeFuture": "退去予定日必须晚于今天，请选择未来的日期",

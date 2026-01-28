@@ -1407,7 +1407,7 @@
         },
         "validation": {
           "pleaseSelect": "請選擇{field}",
-          "pleaseFill": "請填寫{field}",
+          "pleaseFill": "請填寫此內容",
           "pleaseFillOtherReason": "請填寫\"その他\"的具體理由",
           "cancelDateMustBeFuture": "解約日必須晚於今天，請選擇未來的日期",
           "moveOutDateMustBeFuture": "退去予定日必須晚於今天，請選擇未來的日期",

@@ -263,6 +263,7 @@ export default function TenantTerminationPage() {
   const { t } = useLanguage()
   const [formData, setFormData] = useState<TerminationForm>(initialForm)
   const [isMounted, setIsMounted] = useState(false)
+  const [signatureMissing, setSignatureMissing] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
@@ -307,6 +308,8 @@ export default function TenantTerminationPage() {
     >
   ) => {
     const { name, value, type, checked } = event.target as HTMLInputElement
+    // Clear any previous custom validity message (so browser tooltip feels "normal")
+    ;(event.target as any)?.setCustomValidity?.('')
 
     // 处理单选按钮（解約理由）
     if (type === 'radio' && name === 'reason') {
@@ -332,6 +335,20 @@ export default function TenantTerminationPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    const showInvalid = (
+      el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null,
+      message: string
+    ) => {
+      if (!el) return
+      // Do NOT clear immediately after reportValidity().
+      // Some browsers will fall back to their default message if we clear too fast.
+      // We clear the message on user input change in handleChange().
+      el.setCustomValidity(message)
+      el.reportValidity()
+      el.focus()
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
 
     // 验证所有必填字段
     const requiredFields = [
@@ -361,22 +378,30 @@ export default function TenantTerminationPage() {
       if (field.isRadio) {
         if (!formData.reason) {
           const firstRadio = document.querySelector('input[name="reason"]') as HTMLInputElement
-          if (firstRadio) {
-            firstRadio.focus()
-            firstRadio.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-          alert(t('tenant.kaiyaku.validation.pleaseSelect', { field: field.label }))
+          showInvalid(
+            firstRadio,
+            t('tenant.kaiyaku.validation.pleaseSelect', { field: field.label })
+          )
           return
         }
       } else {
         // 检查普通字段
         if (!value || (typeof value === 'string' && !value.trim())) {
-          const element = document.getElementById(field.id)
-          if (element) {
-            element.focus()
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          if (field.name === 'signatureDataUrl') {
+            setSignatureMissing(true)
+            const sig = document.getElementById('signaturePad')
+            sig?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          } else {
+            const element = document.getElementById(field.id) as
+              | HTMLInputElement
+              | HTMLSelectElement
+              | HTMLTextAreaElement
+              | null
+            showInvalid(
+              element,
+              t('tenant.kaiyaku.validation.pleaseFill', { field: field.label })
+            )
           }
-          alert(t('tenant.kaiyaku.validation.pleaseFill', { field: field.label }))
           return
         }
       }
@@ -385,11 +410,7 @@ export default function TenantTerminationPage() {
     // 验证：如果选择"その他"，必须填写具体理由
     if (formData.reason === 'other' && !formData.reasonOtherText.trim()) {
       const textarea = document.querySelector('textarea[name="reasonOtherText"]') as HTMLTextAreaElement
-      if (textarea) {
-        textarea.focus()
-        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
-      alert(t('tenant.kaiyaku.validation.pleaseFillOtherReason'))
+      showInvalid(textarea, t('tenant.kaiyaku.validation.pleaseFillOtherReason'))
       return
     }
 
@@ -402,12 +423,8 @@ export default function TenantTerminationPage() {
       const cancelDate = new Date(formData.cancelDate)
       cancelDate.setHours(0, 0, 0, 0)
       if (cancelDate <= today) {
-        const element = document.getElementById('cancelDate')
-        if (element) {
-          element.focus()
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-        alert(t('tenant.kaiyaku.validation.cancelDateMustBeFuture'))
+        const element = document.getElementById('cancelDate') as HTMLInputElement | null
+        showInvalid(element, t('tenant.kaiyaku.validation.cancelDateMustBeFuture'))
         return
       }
     }
@@ -417,12 +434,8 @@ export default function TenantTerminationPage() {
       const moveOutDate = new Date(formData.moveOutDate)
       moveOutDate.setHours(0, 0, 0, 0)
       if (moveOutDate <= today) {
-        const element = document.getElementById('moveOutDate')
-        if (element) {
-          element.focus()
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-        alert(t('tenant.kaiyaku.validation.moveOutDateMustBeFuture'))
+        const element = document.getElementById('moveOutDate') as HTMLInputElement | null
+        showInvalid(element, t('tenant.kaiyaku.validation.moveOutDateMustBeFuture'))
         return
       }
     }
@@ -435,12 +448,8 @@ export default function TenantTerminationPage() {
       tomorrow.setHours(0, 0, 0, 0) // 设置为明天的00:00:00
       
       if (inspectionDateTime < tomorrow) {
-        const element = document.getElementById('inspectionDateTime')
-        if (element) {
-          element.focus()
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-        alert(t('tenant.kaiyaku.validation.inspectionDateTimeMustBeFuture'))
+        const element = document.getElementById('inspectionDateTime') as HTMLInputElement | null
+        showInvalid(element, t('tenant.kaiyaku.validation.inspectionDateTimeMustBeFuture'))
         return
       }
     }
@@ -473,16 +482,12 @@ export default function TenantTerminationPage() {
     const rule = phoneValidationRules[countryCode]
     if (rule) {
       if (phoneNumberDigits.length < rule.min || phoneNumberDigits.length > rule.max) {
-        const phoneInput = document.getElementById('phoneNumber')
-        if (phoneInput) {
-          phoneInput.focus()
-          phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
+        const phoneInput = document.getElementById('phoneNumber') as HTMLInputElement | null
         const countryName = countryCode === '+81' ? t('tenant.kaiyaku.phoneFormat.countries.japan') : 
                            countryCode === '+86' ? t('tenant.kaiyaku.phoneFormat.countries.china') : 
                            countryCode === '+1' ? t('tenant.kaiyaku.phoneFormat.countries.usCanada') : 
                            t('tenant.kaiyaku.phoneFormat.countries.other')
-        alert(t('tenant.kaiyaku.validation.phoneDigits', { 
+        showInvalid(phoneInput, t('tenant.kaiyaku.validation.phoneDigits', { 
           country: countryName, 
           min: rule.min, 
           max: rule.max !== rule.min ? `-${rule.max}` : '',
@@ -493,12 +498,8 @@ export default function TenantTerminationPage() {
     } else {
       // 对于未定义的国家，至少要求8位数字
       if (phoneNumberDigits.length < 8) {
-        const phoneInput = document.getElementById('phoneNumber')
-        if (phoneInput) {
-          phoneInput.focus()
-          phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
-        alert(t('tenant.kaiyaku.validation.phoneMinDigits'))
+        const phoneInput = document.getElementById('phoneNumber') as HTMLInputElement | null
+        showInvalid(phoneInput, t('tenant.kaiyaku.validation.phoneMinDigits'))
         return
       }
     }
@@ -1320,17 +1321,25 @@ export default function TenantTerminationPage() {
                   </div>
                   <SignaturePad
                     value={formData.signatureDataUrl}
-                    onChange={(dataUrl) =>
+                    onChange={(dataUrl) => {
                       setFormData((prev) => ({
                         ...prev,
                         signatureDataUrl: dataUrl,
                       }))
-                    }
+                      if (dataUrl) setSignatureMissing(false)
+                    }}
                     height={160}
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     {t('tenant.kaiyaku.signature.hint')}
                   </p>
+                  {signatureMissing && (
+                    <p className="text-xs text-red-600 mt-1">
+                      {t('tenant.kaiyaku.validation.pleaseFill', {
+                        field: t('tenant.kaiyaku.fields.signature'),
+                      })}
+                    </p>
+                  )}
                 </div>
 
               </div>

@@ -1383,7 +1383,7 @@
         },
         "validation": {
           "pleaseSelect": "{field}を選択してください",
-          "pleaseFill": "{field}を記入してください",
+          "pleaseFill": "この内容を入力してください",
           "pleaseFillOtherReason": "\"その他\"の具体的な理由を記入してください",
           "cancelDateMustBeFuture": "解約日は今日より後である必要があります。将来の日付を選択してください",
           "moveOutDateMustBeFuture": "退去予定日は今日より後である必要があります。将来の日付を選択してください",
