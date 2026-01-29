@@ -531,10 +531,9 @@ export default function MaiMaiPage() {
               className={`currency-sticky top-16 md:top-20 lg:top-20 bg-gradient-to-br from-emerald-800 via-emerald-700 to-navy-800 py-4 mb-6 shadow-lg backdrop-blur-sm transition-none ${
                 isCurrencyMenuFixed ? 'fixed left-0 right-0 z-[60]' : 'sticky -mx-6 px-6 z-50'
               }`}
-              style={isCurrencyMenuFixed ? {
-                top: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '80px' : '64px',
-                width: '100%',
-              } : {}}
+              // Avoid hydration mismatch: do not read window.* during render.
+              // Responsive top offset is handled by Tailwind classes (top-16 / lg:top-20).
+              style={isCurrencyMenuFixed ? { width: '100%' } : {}}
             >
               <div className={`flex flex-col md:flex-row md:items-center md:justify-between gap-4 ${isCurrencyMenuFixed ? 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' : ''}`}>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white whitespace-nowrap">{t('maimai.properties.title')}</h2>

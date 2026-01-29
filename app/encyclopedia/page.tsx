@@ -37,7 +37,9 @@ export default function EncyclopediaListPage() {
     <PageLayout>
       <div className="min-h-screen">
         {/* 头部 */}
-        <section className="relative md:pt-28 md:pb-16 bg-gradient-to-br from-green-50 to-white" style={{ paddingTop: '4rem', paddingBottom: '1rem' }}>
+        <section
+          className="relative bg-gradient-to-br from-green-50 to-white pt-[calc(5rem+env(safe-area-inset-top))] pb-4 md:pt-28 md:pb-16"
+        >
           <div className="container-custom">
             <Link
               href="/"

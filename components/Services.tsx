@@ -824,9 +824,13 @@ const Services = () => {
                   const popupCenterX = isRightSide 
                     ? pieCenterX + minDistance - 100 - 80 - 200  // 右侧（物业管理）：1100 + 470 - 100 - 80 - 200 = 1190px（向左移动200px）
                     : pieCenterX - minDistance - 100 - 80 - 300 - 50 - 150 + 350 - 50  // 左侧（其他三个）：1100 - 470 - 100 - 80 - 300 - 50 - 150 + 350 - 50 = 250px（向右移动350px，再向左移动50px）
-                  const popupCenterY = isRightSide 
+                  const popupCenterYRaw = isRightSide 
                     ? pieCenterY + verticalOffset + 500 + 300 + 350  // 物业管理：向下移动500px + 300px + 350px = 1300px左右
                     : pieCenterY + verticalOffset + 500 + 200 + 300 + 100  // 其他三个：向下移动500px + 200px + 300px + 100px = 1250px左右
+
+                  // 仅英文版：英文内容更容易撑高弹窗，避免底部被裁切 → 整体上移并限制在容器高度内
+                  const isEnglish = language === 'en'
+                  const popupCenterY = isEnglish ? popupCenterYRaw - 220 : popupCenterYRaw
                   
                   // 边界检查：确保弹窗完全在父容器内（1800x1550）
                   // 弹窗宽度280px，高度约320px
@@ -835,7 +839,9 @@ const Services = () => {
                   // 顶部边界：物业管理弹窗中心Y在1300px左右，其他三个在1250px左右
                   // 底部边界：物业管理弹窗中心Y在1300px左右（底部在1460px左右），其他三个在1250px左右（底部在1410px左右）
                   const clampedX = Math.max(140, Math.min(1660, popupCenterX))
-                  const clampedY = popupCenterY // 不限制Y坐标，容器高度已扩大到1550px
+                  const clampedY = isEnglish
+                    ? Math.max(220, Math.min(1550 - 220, popupCenterY))
+                    : popupCenterY // 其他语言保持原逻辑
                   
                   return (
                     <motion.div

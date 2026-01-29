@@ -135,7 +135,7 @@ const caseDetails: Record<string, CaseDetail> = {
     ],
   },
   'kingsoft-wps-japan': {
-    date: '2024/11/15',
+    date: '2025/11/15',
     type: '企业服务',
     title: '金山 WPS 日本子公司设立服务',
     location: '东京都',
@@ -209,7 +209,7 @@ const caseDetails: Record<string, CaseDetail> = {
 }
 
 export default function CaseDetailPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const params = useParams()
   const slug = params?.slug as string | undefined
   
@@ -218,6 +218,11 @@ export default function CaseDetailPage() {
     if (!slug) return undefined
     const baseCase = caseDetails[slug]
     if (!baseCase) return undefined
+
+    // WPS 案例：日语模式下不切换为日语内容（保持中文不变）
+    if (slug === 'kingsoft-wps-japan' && language === 'ja') {
+      return baseCase
+    }
     
     // 尝试从翻译文件中获取翻译
     try {
@@ -241,7 +246,7 @@ export default function CaseDetailPage() {
     } catch {
       return baseCase
     }
-  }, [slug, t])
+  }, [slug, t, language])
   
   // 所有 Hooks 必须在早期返回之前调用
   const [mapCoordinates, setMapCoordinates] = useState<{ lat: number; lng: number } | null>(null)

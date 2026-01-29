@@ -25,7 +25,11 @@ const Contact = () => {
   })
   // anti-bot: honeypot + timing
   const [honeypot, setHoneypot] = useState('')
-  const [formStartedAt] = useState(() => Date.now())
+  // Avoid hydration mismatch: don't call Date.now() during initial render.
+  const formStartedAtRef = useRef<number>(0)
+  useEffect(() => {
+    formStartedAtRef.current = Date.now()
+  }, [])
 
   // anti-bot: optional Cloudflare Turnstile
   const turnstileSiteKey = useMemo(
@@ -170,7 +174,7 @@ const Contact = () => {
           ...(formData.company && { company: formData.company }), // 可选字段
           // anti-bot signals
           website: honeypot,
-          formStartedAt,
+          formStartedAt: formStartedAtRef.current || Date.now(),
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       })

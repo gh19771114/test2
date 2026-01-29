@@ -27,7 +27,8 @@ const Insights = () => {
 
   // 分离置顶和非置顶资讯
   const pinnedNewsList = useMemo(() => {
-    const pinnedNews = latestNews.filter(news => news.isPinned)
+    // 首页“置顶栏”不展示“通知”类型（但不影响 /news/[slug] 子页面）
+    const pinnedNews = latestNews.filter((news) => news.isPinned && !news.isNotice && news.category !== '通知')
     // 按日期排序（最新的在前）
     return [...pinnedNews].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime()

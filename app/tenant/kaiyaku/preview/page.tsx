@@ -5,6 +5,13 @@ import { useRouter } from 'next/navigation'
 import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+import {
+  convertToJapanesePayload,
+  reasonKeyForI18n,
+  looksLikeJapaneseKaiyakuData,
+  convertFromJapaneseToInternal,
+  type KaiyakuInternalForm,
+} from '@/lib/kaiyakuConvertClient'
 
 const TURNSTILE_DEBUG_TAG = 'kaiyaku-turnstile-debug@2026-01-27'
 
@@ -19,77 +26,10 @@ declare global {
   }
 }
 
-// 注意：这里的结构要和「主申请页面」里的 TerminationForm 保持一致
-type TerminationForm = {
-  // 物件信息
-  propertyName: string        // 物件名
-  roomNumber: string          // 部屋番号
-  propertyAddress: string     // 物件所在地
-  contractHolder: string      // 契約者名
-
-  // 日程
-  cancelDate: string          // 解約日
-  moveOutDate: string         // 退去予定日
-  inspectionDateTime: string  // 立会希望日時（datetime-local格式）
-
-  // 使用駐輪場 有・無
-  bicycleParking: '有' | '無'
-
-  // メールボックスの開け方 ( 左 / 右 )＿回＿番 ・ ( 左 / 右 )＿回＿番
-  mailbox1Direction: '左' | '右'
-  mailbox1Turns: string
-  mailbox1Number: string
-  mailbox2Direction: '左' | '右'
-  mailbox2Turns: string
-  mailbox2Number: string
-
-  // 使用駐車場 有・無
-  carParking: '有' | '無'
-
-  // オートロック 有 （ 鍵式 ・ ダイヤル：＿ ） ・ 無
-  autoLock: '有' | '無'
-  autoLockKeyType: '' | '鍵式' | 'ダイヤル'
-  autoLockDial: string
-
-  // 使用バイク置場 有 ・ 無
-  bikeSpace: '有' | '無'
-
-  // 宅配ボックス 有 （ 鍵式 ・ カード式 ・ 番号： ） ・ 無
-  deliveryBox: '有' | '無'
-  deliveryBoxType: '' | '鍵式' | 'カード式'
-  deliveryBoxNumber: string
-
-  // 返金口座
-  bankName: string            // 銀行
-  bankBranch: string          // 支店
-  accountType: '普通' | '当座' | '' // 口座種別
-  accountNumber: string       // 口座番号
-  accountHolder: string       // 名義人
-
-  // 解約理由（单选）
-  reason: '' | '進学' | '就職' | '転勤' | '自宅購入' | '帰国' | '家賃金額' | '契約期間満了' | 'その他'  // 解約理由
-  reasonOtherText: string     // その他内容（当reason为その他时）
-
-  // 転居先
-  newAddress: string          // 転居先住所
-  newBuildingAndRoom: string  // 建物名・号室
-
-  // 电话
-  phoneCountryCode: string     // 国际电话区号
-  phoneNumber: string         // 電話番号
-
-  // 邮箱（必填）
-  email: string
-
-  // 手写签名（PNG dataURL）
-  signatureDataUrl: string
-
-  // 签名
-  signerName: string          // 氏名（PDF右下）
-}
+type TerminationForm = KaiyakuInternalForm
 
 export default function TerminationPreviewPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const router = useRouter()
   const [formData, setFormData] = useState<TerminationForm | null>(null)
   const [loading, setLoading] = useState(false)
@@ -125,7 +65,11 @@ export default function TerminationPreviewPage() {
     if (storedData) {
       try {
         const parsed = JSON.parse(storedData)
-        setFormData(parsed)
+        if (looksLikeJapaneseKaiyakuData(parsed)) {
+          setFormData(convertFromJapaneseToInternal(parsed))
+        } else {
+          setFormData(parsed)
+        }
       } catch (e) {
         console.error('Failed to parse form data:', e)
         router.push('/tenant/kaiyaku')
@@ -348,7 +292,7 @@ export default function TerminationPreviewPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          ...convertToJapanesePayload(formData),
           ...(turnstileToken ? { turnstileToken } : {}),
         }),
       })
@@ -412,20 +356,24 @@ export default function TerminationPreviewPage() {
   }
 
   // 把解约理由整理成一行文字，和 PDF 里类似
-  const reasons = formData.reason === 'その他' 
-    ? `■その他（${formData.reasonOtherText || ''}）`
-    : formData.reason 
-    ? `■${formData.reason}`
-    : notSelected
+  const reasons = (() => {
+    if (!formData.reason) return notSelected
+    const key = reasonKeyForI18n(formData.reason)
+    const label = key ? t(`tenant.kaiyaku.reasons.${key}`) : ''
+    if (formData.reason === 'other') {
+      return `■${label || t('tenant.kaiyaku.reasons.その他')}（${formData.reasonOtherText || ''}）`
+    }
+    return `■${label || ''}`
+  })()
 
   // 邮箱开锁方式一行
-  const mailboxLine = buildMailboxLine(formData)
+  const mailboxLine = buildMailboxLine(formData, t)
 
   // オートロック显示内容
-  const autoLockLine = buildAutoLockLine(formData)
+  const autoLockLine = buildAutoLockLine(formData, t)
 
   // 宅配ボックス显示内容
-  const deliveryBoxLine = buildDeliveryBoxLine(formData)
+  const deliveryBoxLine = buildDeliveryBoxLine(formData, t)
 
   return (
     <PageLayout>
@@ -514,13 +462,13 @@ export default function TerminationPreviewPage() {
                         {t('tenant.kaiyaku.fields.cancelDate')}
                       </th>
                       <td className="px-3 py-2">
-                        {formatDateForPreview(formData.cancelDate, notProvided)}
+                        {formatDateForPreview(formData.cancelDate, notProvided, language)}
                       </td>
                       <th className="bg-gray-50 px-3 py-2 text-left align-top w-32">
                         {t('tenant.kaiyaku.fields.moveOutDate')}
                       </th>
                       <td className="px-3 py-2">
-                        {formatDateForPreview(formData.moveOutDate, notProvided)}
+                        {formatDateForPreview(formData.moveOutDate, notProvided, language)}
                       </td>
                     </tr>
                     <tr>
@@ -528,7 +476,7 @@ export default function TerminationPreviewPage() {
                         {t('tenant.kaiyaku.fields.inspectionDateTime')}
                       </th>
                       <td className="px-3 py-2" colSpan={3}>
-                        {formatInspectionDateTime(formData.inspectionDateTime, notProvided)}
+                        {formatInspectionDateTime(formData.inspectionDateTime, notProvided, language)}
                       </td>
                     </tr>
                   </tbody>
@@ -545,7 +493,11 @@ export default function TerminationPreviewPage() {
                         {t('tenant.kaiyaku.labels.bicycleParking')}
                       </th>
                       <td className="px-3 py-2">
-                        {ynLine(formData.bicycleParking)}
+                        {ynLine(
+                          formData.bicycleParking,
+                          t('tenant.kaiyaku.options.yes'),
+                          t('tenant.kaiyaku.options.no')
+                        )}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
@@ -559,7 +511,11 @@ export default function TerminationPreviewPage() {
                         {t('tenant.kaiyaku.labels.carParking')}
                       </th>
                       <td className="px-3 py-2">
-                        {ynLine(formData.carParking)}
+                        {ynLine(
+                          formData.carParking,
+                          t('tenant.kaiyaku.options.yes'),
+                          t('tenant.kaiyaku.options.no')
+                        )}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-200">
@@ -573,7 +529,11 @@ export default function TerminationPreviewPage() {
                         {t('tenant.kaiyaku.labels.bikeSpace')}
                       </th>
                       <td className="px-3 py-2">
-                        {ynLine(formData.bikeSpace)}
+                        {ynLine(
+                          formData.bikeSpace,
+                          t('tenant.kaiyaku.options.yes'),
+                          t('tenant.kaiyaku.options.no')
+                        )}
                       </td>
                     </tr>
                     <tr>
@@ -799,14 +759,15 @@ export default function TerminationPreviewPage() {
 /** —— 一些小工具函数 —— */
 
 // 把 yyyy-mm-dd 格式，简单显示成 yyyy年mm月dd日（空就原样）
-function formatDateForPreview(value: string, fallback = '') {
+function formatDateForPreview(value: string, fallback = '', language: string) {
   if (!value) return fallback
   const [y, m, d] = value.split('-')
   if (!y || !m || !d) return value
+  if (language === 'en') return `${y}-${m}-${d}`
   return `${y}年${m}月${d}日`
 }
 
-function formatInspectionDateTime(dateTime?: string, fallback = '') {
+function formatInspectionDateTime(dateTime?: string, fallback = '', language: string = 'zh') {
   if (!dateTime) return fallback
   // datetime-local格式：YYYY-MM-DDTHH:mm
   const [datePart, timePart] = dateTime.split('T')
@@ -815,53 +776,85 @@ function formatInspectionDateTime(dateTime?: string, fallback = '') {
   const [y, m, d] = datePart.split('-')
   if (!y || !m || !d) return dateTime
   
+  if (language === 'en') {
+    return timePart ? `${y}-${m}-${d} ${timePart}` : `${y}-${m}-${d}`
+  }
+
   const parts: string[] = [`${y}年${m}月${d}日`]
-  if (timePart) {
-    const [hour, minute] = timePart.split(':')
-    if (hour) parts.push(`${hour}時`)
-    if (minute) parts.push(`${minute}分`)
+  if (!timePart) return parts[0]
+  const [hour, minute] = timePart.split(':')
+  if (!hour && !minute) return parts[0]
+  // CN/JA share this visual; language-specific PDF is handled server-side
+  const hh = hour || '00'
+  const mm = minute || '00'
+  return `${parts[0]} ${hh}:${mm}`
+}
+
+function ynLine(v: 'yes' | 'no', yesLabel: string, noLabel: string) {
+  return v === 'yes' ? `■${yesLabel}　□${noLabel}` : `□${yesLabel}　■${noLabel}`
+}
+
+function buildMailboxLine(
+  data: TerminationForm,
+  t: (key: string, vars?: any) => string
+) {
+  const left = t('tenant.kaiyaku.options.left')
+  const right = t('tenant.kaiyaku.options.right')
+  const turnsLabel = t('tenant.kaiyaku.labels.turns')
+  const numberLabel = t('tenant.kaiyaku.labels.number')
+
+  const dir1 = data.mailbox1Direction === 'left' ? left : right
+  const dir2 = data.mailbox2Direction === 'left' ? left : right
+
+  const part1 = `(${dir1}) ${data.mailbox1Turns || '＿'}${turnsLabel}${data.mailbox1Number || '＿'}${numberLabel}`
+  const part2 = `(${dir2}) ${data.mailbox2Turns || '＿'}${turnsLabel}${data.mailbox2Number || '＿'}${numberLabel}`
+  return `${part1} · ${part2}`
+}
+
+function buildAutoLockLine(
+  data: TerminationForm,
+  t: (key: string, vars?: any) => string
+) {
+  const yes = t('tenant.kaiyaku.options.yes')
+  const no = t('tenant.kaiyaku.options.no')
+  const keyTypeLabel = t('tenant.kaiyaku.options.keyType')
+  const dialLabel = t('tenant.kaiyaku.options.dial')
+
+  if (data.autoLock === 'no') {
+    return `□${yes}　□${keyTypeLabel}　□${dialLabel}(${''.padEnd(10, ' ')})　■${no}`
   }
-  return parts.join('')
-}
 
-function ynLine(v: '有' | '無') {
-  return v === '有' ? '■有　□無' : '□有　■無'
-}
-
-function buildMailboxLine(data: TerminationForm) {
-  const part1 = `(${data.mailbox1Direction}) ${data.mailbox1Turns || '＿'}回${
-    data.mailbox1Number || '＿'
-  }番`
-  const part2 = `(${data.mailbox2Direction}) ${data.mailbox2Turns || '＿'}回${
-    data.mailbox2Number || '＿'
-  }番`
-  return `${part1} ・ ${part2}`
-}
-
-function buildAutoLockLine(data: TerminationForm) {
-  if (data.autoLock === '無') {
-    return '□有　□鍵式　□ダイヤル（　　　　　）　■無'
-  }
   const keyType =
-    data.autoLockKeyType === '鍵式'
-      ? '■鍵式　□ダイヤル（　　　　　）'
-      : data.autoLockKeyType === 'ダイヤル'
-      ? `□鍵式　■ダイヤル（${data.autoLockDial || '　　　　　'}）`
-      : '□鍵式　□ダイヤル（　　　　　）'
-  return `■有　${keyType}　□無`
+    data.autoLockKeyType === 'keyType'
+      ? `■${keyTypeLabel}　□${dialLabel}(${''.padEnd(10, ' ')})`
+      : data.autoLockKeyType === 'dial'
+      ? `□${keyTypeLabel}　■${dialLabel}(${data.autoLockDial || ''.padEnd(10, ' ')})`
+      : `□${keyTypeLabel}　□${dialLabel}(${''.padEnd(10, ' ')})`
+  return `■${yes}　${keyType}　□${no}`
 }
 
-function buildDeliveryBoxLine(data: TerminationForm) {
-  if (data.deliveryBox === '無') {
-    return '□有　□鍵式　□カード式　番号：（　　　　　）　■無'
+function buildDeliveryBoxLine(
+  data: TerminationForm,
+  t: (key: string, vars?: any) => string
+) {
+  const yes = t('tenant.kaiyaku.options.yes')
+  const no = t('tenant.kaiyaku.options.no')
+  const keyTypeLabel = t('tenant.kaiyaku.options.keyType')
+  const cardTypeLabel = t('tenant.kaiyaku.options.cardType')
+  const numberLabel = t('tenant.kaiyaku.labels.deliveryBoxNumber')
+
+  if (data.deliveryBox === 'no') {
+    return `□${yes}　□${keyTypeLabel}　□${cardTypeLabel}　${numberLabel}(${''.padEnd(10, ' ')})　■${no}`
   }
+
   const type =
-    data.deliveryBoxType === '鍵式'
-      ? '■鍵式　□カード式'
-      : data.deliveryBoxType === 'カード式'
-      ? '□鍵式　■カード式'
-      : '□鍵式　□カード式'
-  const num = data.deliveryBoxNumber || '　　　　　'
-  return `■有　${type}　番号：（${num}）　□無`
+    data.deliveryBoxType === 'keyType'
+      ? `■${keyTypeLabel}　□${cardTypeLabel}`
+      : data.deliveryBoxType === 'cardType'
+      ? `□${keyTypeLabel}　■${cardTypeLabel}`
+      : `□${keyTypeLabel}　□${cardTypeLabel}`
+
+  const num = data.deliveryBoxNumber || ''.padEnd(10, ' ')
+  return `■${yes}　${type}　${numberLabel}(${num})　□${no}`
 }
 

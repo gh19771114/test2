@@ -1693,7 +1693,8 @@ div.map-container-border {
   box-sizing: border-box !important;
 }
 
-/* 全局规则：确保地图颜色在所有版本中都正确（防止横竖屏切换时变白） */
+/* 全局规则：确保地图颜色在所有版本中都正确（防止横竖屏切换时变白）
+   注意：/qichu 的移动端需要更高可见度，因此在下方提供 qichu 专用覆盖。 */
 .white-box-container,
 .desktop-partners-network .white-box-container,
 section#partners .white-box-container,
@@ -1723,6 +1724,82 @@ section#partners .mobile-portrait-partners .white-box-container {
 .yellow-network-container,
 section#partners.desktop-partners-network .yellow-network-container {
   z-index: 2 !important;
+}
+
+/* qichu：合作伙伴网络强制显示（所有方向/尺寸）
+   - 只负责 display/visibility/opacity，避免横版“整张图消失”
+   - transform/缩放仍由 qichu/page.tsx 的内联样式控制
+*/
+section#partners.qichu-partners-network,
+section#partners.qichu-partners-network .white-box-container,
+section#partners.qichu-partners-network .yellow-network-container,
+section#partners.qichu-partners-network > div[style*="position: absolute"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* /qichu：无论任何媒体查询如何命中，都不要把网络图竖向裁掉（“消失”大多来自 overflow/height 的误伤） */
+section#partners.qichu-partners-network {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+/* /qichu：移动端地图要更明显（否则看起来像“整块空白”）
+   这里必须用 !important 才能压过全局 .white-box-container 的 !important。 */
+@media (max-width: 1023px) {
+  section#partners.qichu-partners-network .white-box-container {
+    opacity: 0.55 !important;
+    filter: none !important;
+  }
+  section#partners.qichu-partners-network .yellow-network-container {
+    opacity: 1 !important;
+  }
+}
+
+/* 关键：qichu 的 Partners Network 在移动端不要被全局规则强制固定高度/裁切，
+   否则网络图会压到标题/说明文字造成“遮挡”，也会产生大量黑边空白。 */
+@media (max-width: 1023px) {
+  section#partners.qichu-partners-network {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+/* /qichu：Related Services（手机端按桌面逻辑缩放/排版）
+   - 竖版：单列（避免两列变窄导致长英文溢出）
+   - 横版：两列（利用横向空间）
+   - 卡片内部：减小无用边距 + 字号更正常 + 强制断词换行
+*/
+@media (max-width: 1023px) and (orientation: portrait) {
+  #services .qichu-related-services-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 1023px) and (orientation: landscape) {
+  #services .qichu-related-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 1023px) {
+  #services .qichu-related-service-card {
+    padding: 0.65rem !important; /* 更贴边，利用空间 */
+    overflow: visible !important;
+  }
+  #services .qichu-related-service-card h3 {
+    font-size: 0.98rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.35rem !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+  #services .qichu-related-service-card p {
+    font-size: 0.82rem !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
 }
 
 @media (max-width: 767px) and (orientation: portrait) {
@@ -5125,8 +5202,8 @@ section.desktop-message {
     overflow: visible !important;
   }
 
-  #partners div[style*="scale(0.6)"],
-  #partners div[style*="scale(0.4)"] {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"],
+  section#partners.desktop-partners-network div[style*="scale(0.4)"] {
     display: block !important;
     overflow: visible !important;
     visibility: visible !important;
@@ -5135,8 +5212,8 @@ section.desktop-message {
     position: relative !important;
   }
 
-  #partners div[style*="scale(0.6)"]>div,
-  #partners div[style*="scale(0.4)"]>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div {
     overflow: visible !important;
     max-width: 100vw !important;
     visibility: visible !important;
@@ -5144,10 +5221,10 @@ section.desktop-message {
     position: relative !important;
   }
 
-  #partners div[style*="scale(0.6)"]>div>div,
-  #partners div[style*="scale(0.5)"]>div>div,
-  #partners div[style*="scale(0.4)"]>div>div,
-  #partners div[style*="scale(0.35)"]>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -5155,10 +5232,10 @@ section.desktop-message {
   }
 
   /* 确保PartnersNetwork组件本身可见 */
-  #partners div[style*="scale(0.6)"]>div>div>div,
-  #partners div[style*="scale(0.5)"]>div>div>div,
-  #partners div[style*="scale(0.4)"]>div>div>div,
-  #partners div[style*="scale(0.35)"]>div>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -5166,10 +5243,10 @@ section.desktop-message {
     pointer-events: none !important;
   }
 
-  #partners div[style*="scale(0.6)"]>div>div>div>div,
-  #partners div[style*="scale(0.5)"]>div>div>div>div,
-  #partners div[style*="scale(0.4)"]>div>div>div>div,
-  #partners div[style*="scale(0.35)"]>div>div>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -6027,8 +6104,8 @@ section.desktop-message {
     z-index: 100 !important;
   }
 
-  #partners div[style*="scale(0.6)"],
-  #partners div[style*="scale(0.4)"] {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"],
+  section#partners.desktop-partners-network div[style*="scale(0.4)"] {
     display: block !important;
     overflow: visible !important;
     visibility: visible !important;
@@ -6038,8 +6115,8 @@ section.desktop-message {
     z-index: 1 !important; /* 文案层级低于人物图 */
   }
 
-  #partners div[style*="scale(0.6)"]>div,
-  #partners div[style*="scale(0.4)"]>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div {
     overflow: visible !important;
     max-width: 100vw !important;
     visibility: visible !important;
@@ -6047,10 +6124,10 @@ section.desktop-message {
     position: relative !important;
   }
 
-  #partners div[style*="scale(0.6)"]>div>div,
-  #partners div[style*="scale(0.5)"]>div>div,
-  #partners div[style*="scale(0.4)"]>div>div,
-  #partners div[style*="scale(0.35)"]>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -6058,10 +6135,10 @@ section.desktop-message {
   }
 
   /* 确保PartnersNetwork组件本身可见 */
-  #partners div[style*="scale(0.6)"]>div>div>div,
-  #partners div[style*="scale(0.5)"]>div>div>div,
-  #partners div[style*="scale(0.4)"]>div>div>div,
-  #partners div[style*="scale(0.35)"]>div>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -6069,10 +6146,10 @@ section.desktop-message {
     pointer-events: none !important;
   }
 
-  #partners div[style*="scale(0.6)"]>div>div>div>div,
-  #partners div[style*="scale(0.5)"]>div>div>div>div,
-  #partners div[style*="scale(0.4)"]>div>div>div>div,
-  #partners div[style*="scale(0.35)"]>div>div>div>div {
+  section#partners.desktop-partners-network div[style*="scale(0.6)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.5)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.4)"]>div>div>div>div,
+  section#partners.desktop-partners-network div[style*="scale(0.35)"]>div>div>div>div {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
@@ -6121,9 +6198,9 @@ section.desktop-message {
   }
 
   /* 手机竖版：确保section有足够padding显示容器边框 - 根据缩小的网络图调整高度 */
-  section#partners.partners-section.section-padding,
-  section#partners.section-padding,
-  section#partners.partners-section,
+  section#partners.partners-section.section-padding:not(.qichu-partners-network),
+  section#partners.section-padding:not(.qichu-partners-network),
+  section#partners.partners-section:not(.qichu-partners-network),
   section#partners.desktop-partners-network {
     padding-top: 0 !important;
     padding-bottom: 8px !important;
@@ -6131,10 +6208,29 @@ section.desktop-message {
     height: 600px !important;
     overflow: hidden !important;
   }
+  
+  /* /qichu：手机竖版 partners 不要被全局规则固定高度/裁切（否则会出现“网络图消失/被遮挡”） */
+  section#partners.partners-section.section-padding.qichu-partners-network {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
 
   /* 手机竖版：桌面版网络图显示 */
   section#partners.desktop-partners-network,
   section#partners.partners-section.desktop-partners-network {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* 手机竖版：qichu 的合作伙伴网络（不使用 desktop-partners-network）
+     - 只负责“强制显示”，避免出现“整块消失”
+     - 不在这里写 transform（让 qichu/page.tsx 的内联 transform 负责缩放/定位）
+  */
+  section#partners.qichu-partners-network .white-box-container,
+  section#partners.qichu-partners-network .yellow-network-container,
+  section#partners.qichu-partners-network > div[style*="position: absolute"] {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -6307,9 +6403,9 @@ section.desktop-message {
   }
 
   /* 手机竖版：绿框防止溢出 */
-  section#partners.partners-section,
-  section#partners.partners-section.section-padding,
-  section#partners.section-padding {
+  section#partners.partners-section:not(.qichu-partners-network),
+  section#partners.partners-section.section-padding:not(.qichu-partners-network),
+  section#partners.section-padding:not(.qichu-partners-network) {
     overflow: hidden !important;
   }
 

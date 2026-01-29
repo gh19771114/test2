@@ -5,78 +5,13 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import SignaturePad from '@/components/SignaturePad'
+import { looksLikeJapaneseKaiyakuData, convertFromJapaneseToInternal, type KaiyakuInternalForm } from '@/lib/kaiyakuConvertClient'
 
 // 下载用 PDF（需放在 public/ 下才能被网页访问）
 const KAIYAKU_FORM_URL = '/imgs/解約通知書.pdf'
 
-// 这里的字段结构要和我们生成 PDF 时用的一致
-type TerminationForm = {
-  // 物件信息
-  propertyName: string        // 物件名
-  roomNumber: string          // 部屋番号
-  propertyAddress: string     // 物件所在地
-  contractHolder: string      // 契約者名
-
-  // 日付类
-  cancelDate: string          // 解約日
-  moveOutDate: string         // 退去予定日
-  inspectionDateTime: string  // 立会希望日時（datetime-local格式）
-
-  // 使用駐輪場 有・無 (使用内部代码: yes/no)
-  bicycleParking: 'yes' | 'no'
-
-  // メールボックスの開け方 ( 左 / 右 )＿回＿番 ・ ( 左 / 右 )＿回＿番 (使用内部代码: left/right)
-  mailbox1Direction: 'left' | 'right'
-  mailbox1Turns: string
-  mailbox1Number: string
-  mailbox2Direction: 'left' | 'right'
-  mailbox2Turns: string
-  mailbox2Number: string
-
-  // 使用駐車場 有・無 (使用内部代码: yes/no)
-  carParking: 'yes' | 'no'
-
-  // オートロック 有 （ 鍵式 ・ ダイヤル：＿ ） ・ 無 (使用内部代码)
-  autoLock: 'yes' | 'no'
-  autoLockKeyType: '' | 'keyType' | 'dial'
-  autoLockDial: string
-
-  // 使用バイク置場 有 ・ 無 (使用内部代码: yes/no)
-  bikeSpace: 'yes' | 'no'
-
-  // 宅配ボックス 有 （ 鍵式 ・ カード式 ・ 番号： ） ・ 無 (使用内部代码)
-  deliveryBox: 'yes' | 'no'
-  deliveryBoxType: '' | 'keyType' | 'cardType'
-  deliveryBoxNumber: string
-
-  // 返金口座
-  bankName: string            // 銀行
-  bankBranch: string          // 支店
-  accountType: string // 口座種別（可输入或选择）
-  accountNumber: string       // 口座番号
-  accountHolder: string       // 名義人
-
-  // 解約理由（单选）(使用内部代码)
-  reason: '' | 'education' | 'employment' | 'transfer' | 'homePurchase' | 'returnHome' | 'rentAmount' | 'contractExpired' | 'other'
-  reasonOtherText: string     // その他（ ）内容（当reason为その他时必填）
-
-  // 転居先
-  newAddress: string          // 転居先住所
-  newBuildingAndRoom: string  // 建物名・号室
-
-  // 电话
-  phoneCountryCode: string     // 国际电话区号（默认：+81 日本）
-  phoneNumber: string         // 電話番号
-
-  // 邮箱（必填）
-  email: string
-
-  // 手写签名（PNG dataURL）
-  signatureDataUrl: string
-
-  // 署名（PDF右下 氏名）
-  signerName: string
-}
+// 这里的字段结构要和我们生成 PDF 时用的一致（内部值：语言无关）
+type TerminationForm = KaiyakuInternalForm
 
 const initialForm: TerminationForm = {
   propertyName: '',
@@ -129,138 +64,10 @@ const initialForm: TerminationForm = {
   signerName: '',
 }
 
-// 转换函数：将内部代码转换为日文（用于提交到后端）
-const convertToJapanese = (data: TerminationForm) => {
-  const japaneseMap: Record<string, Record<string, string>> = {
-    bicycleParking: { yes: '有', no: '無' },
-    carParking: { yes: '有', no: '無' },
-    autoLock: { yes: '有', no: '無' },
-    bikeSpace: { yes: '有', no: '無' },
-    deliveryBox: { yes: '有', no: '無' },
-    mailbox1Direction: { left: '左', right: '右' },
-    mailbox2Direction: { left: '左', right: '右' },
-    autoLockKeyType: { keyType: '鍵式', dial: 'ダイヤル' },
-    deliveryBoxType: { keyType: '鍵式', cardType: 'カード式' },
-    reason: {
-      education: '進学',
-      employment: '就職',
-      transfer: '転勤',
-      homePurchase: '自宅購入',
-      returnHome: '帰国',
-      rentAmount: '家賃金額',
-      contractExpired: '契約期間満了',
-      other: 'その他',
-    },
-  }
-
-  const converted = { ...data }
-  
-  // 转换各个字段
-  if (japaneseMap.bicycleParking[data.bicycleParking]) {
-    (converted as any).bicycleParking = japaneseMap.bicycleParking[data.bicycleParking]
-  }
-  if (japaneseMap.carParking[data.carParking]) {
-    (converted as any).carParking = japaneseMap.carParking[data.carParking]
-  }
-  if (japaneseMap.autoLock[data.autoLock]) {
-    (converted as any).autoLock = japaneseMap.autoLock[data.autoLock]
-  }
-  if (japaneseMap.bikeSpace[data.bikeSpace]) {
-    (converted as any).bikeSpace = japaneseMap.bikeSpace[data.bikeSpace]
-  }
-  if (japaneseMap.deliveryBox[data.deliveryBox]) {
-    (converted as any).deliveryBox = japaneseMap.deliveryBox[data.deliveryBox]
-  }
-  if (japaneseMap.mailbox1Direction[data.mailbox1Direction]) {
-    (converted as any).mailbox1Direction = japaneseMap.mailbox1Direction[data.mailbox1Direction]
-  }
-  if (japaneseMap.mailbox2Direction[data.mailbox2Direction]) {
-    (converted as any).mailbox2Direction = japaneseMap.mailbox2Direction[data.mailbox2Direction]
-  }
-  if (data.autoLockKeyType && japaneseMap.autoLockKeyType[data.autoLockKeyType]) {
-    (converted as any).autoLockKeyType = japaneseMap.autoLockKeyType[data.autoLockKeyType]
-  }
-  if (data.deliveryBoxType && japaneseMap.deliveryBoxType[data.deliveryBoxType]) {
-    (converted as any).deliveryBoxType = japaneseMap.deliveryBoxType[data.deliveryBoxType]
-  }
-  if (data.reason && japaneseMap.reason[data.reason]) {
-    (converted as any).reason = japaneseMap.reason[data.reason]
-  }
-
-  return converted as any
-}
-
-// 转换函数：将日文值转换为内部代码（用于从sessionStorage恢复数据）
-const convertFromJapanese = (data: any): TerminationForm => {
-  const reverseMap: Record<string, Record<string, string>> = {
-    bicycleParking: { '有': 'yes', '無': 'no' },
-    carParking: { '有': 'yes', '無': 'no' },
-    autoLock: { '有': 'yes', '無': 'no' },
-    bikeSpace: { '有': 'yes', '無': 'no' },
-    deliveryBox: { '有': 'yes', '無': 'no' },
-    mailbox1Direction: { '左': 'left', '右': 'right' },
-    mailbox2Direction: { '左': 'left', '右': 'right' },
-    autoLockKeyType: { '鍵式': 'keyType', 'ダイヤル': 'dial' },
-    deliveryBoxType: { '鍵式': 'keyType', 'カード式': 'cardType' },
-    reason: {
-      '進学': 'education',
-      '就職': 'employment',
-      '転勤': 'transfer',
-      '自宅購入': 'homePurchase',
-      '帰国': 'returnHome',
-      '家賃金額': 'rentAmount',
-      '契約期間満了': 'contractExpired',
-      'その他': 'other',
-    },
-  }
-
-  const converted = { ...data }
-  
-  // 转换各个字段
-  if (data.bicycleParking && reverseMap.bicycleParking[data.bicycleParking]) {
-    converted.bicycleParking = reverseMap.bicycleParking[data.bicycleParking] as 'yes' | 'no'
-  }
-  if (data.carParking && reverseMap.carParking[data.carParking]) {
-    converted.carParking = reverseMap.carParking[data.carParking] as 'yes' | 'no'
-  }
-  if (data.autoLock && reverseMap.autoLock[data.autoLock]) {
-    converted.autoLock = reverseMap.autoLock[data.autoLock] as 'yes' | 'no'
-  }
-  if (data.bikeSpace && reverseMap.bikeSpace[data.bikeSpace]) {
-    converted.bikeSpace = reverseMap.bikeSpace[data.bikeSpace] as 'yes' | 'no'
-  }
-  if (data.deliveryBox && reverseMap.deliveryBox[data.deliveryBox]) {
-    converted.deliveryBox = reverseMap.deliveryBox[data.deliveryBox] as 'yes' | 'no'
-  }
-  if (data.mailbox1Direction && reverseMap.mailbox1Direction[data.mailbox1Direction]) {
-    converted.mailbox1Direction = reverseMap.mailbox1Direction[data.mailbox1Direction] as 'left' | 'right'
-  }
-  if (data.mailbox2Direction && reverseMap.mailbox2Direction[data.mailbox2Direction]) {
-    converted.mailbox2Direction = reverseMap.mailbox2Direction[data.mailbox2Direction] as 'left' | 'right'
-  }
-  if (data.autoLockKeyType && reverseMap.autoLockKeyType[data.autoLockKeyType]) {
-    converted.autoLockKeyType = reverseMap.autoLockKeyType[data.autoLockKeyType] as '' | 'keyType' | 'dial'
-  }
-  if (data.deliveryBoxType && reverseMap.deliveryBoxType[data.deliveryBoxType]) {
-    converted.deliveryBoxType = reverseMap.deliveryBoxType[data.deliveryBoxType] as '' | 'keyType' | 'cardType'
-  }
-  if (data.reason && reverseMap.reason[data.reason]) {
-    converted.reason = reverseMap.reason[data.reason] as TerminationForm['reason']
-  }
-
-  // 新增字段兜底：避免旧缓存缺字段导致受控输入报错
-  if (typeof (converted as any).email !== 'string') {
-    ;(converted as any).email = ''
-  }
-  if (typeof (converted as any).signatureDataUrl !== 'string') {
-    ;(converted as any).signatureDataUrl = ''
-  }
-
-  return converted as TerminationForm
-}
+// NOTE: 已改为“预览页按当前语言显示”，这里只在读取旧缓存（曾保存为日文）时做兼容转换
 
 export default function TenantTerminationPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [formData, setFormData] = useState<TerminationForm>(initialForm)
   const [isMounted, setIsMounted] = useState(false)
   const [signatureMissing, setSignatureMissing] = useState(false)
@@ -293,9 +100,11 @@ export default function TenantTerminationPage() {
     if (storedData) {
       try {
         const parsed = JSON.parse(storedData)
-        // 如果数据是日文格式，转换为内部代码
-        const converted = convertFromJapanese(parsed)
-        setFormData(converted)
+        if (looksLikeJapaneseKaiyakuData(parsed)) {
+          setFormData(convertFromJapaneseToInternal(parsed))
+        } else {
+          setFormData(parsed)
+        }
       } catch (e) {
         console.error('Failed to parse stored form data:', e)
       }
@@ -504,15 +313,14 @@ export default function TenantTerminationPage() {
       }
     }
 
-    // 签名默认使用契約者名（点击发送即视为已签名）
-    // 将内部代码转换为日文格式用于保存和后续PDF生成
-    const dataToSave = convertToJapanese({
-      ...formData,
-      signerName: formData.contractHolder,
-    })
-
-    // 将表单数据保存到 sessionStorage，然后跳转到预览页面
-    sessionStorage.setItem('terminationFormData', JSON.stringify(dataToSave))
+    // 预览页按当前语言展示，因此这里保存“内部值”（语言无关）
+    sessionStorage.setItem(
+      'terminationFormData',
+      JSON.stringify({
+        ...formData,
+        signerName: formData.contractHolder,
+      })
+    )
     window.location.href = '/tenant/kaiyaku/preview'
   }
 
@@ -944,7 +752,7 @@ export default function TenantTerminationPage() {
                 {/* 宅配ボックス */}
                 <div className="mb-2">
                   <p className="text-sm font-medium text-gray-700 mb-2">
-                    宅配ボックス
+                    {t('tenant.kaiyaku.labels.deliveryBox')}
                   </p>
                   <div className="space-y-2 text-sm">
                     <div className="flex gap-4">
@@ -1062,10 +870,17 @@ export default function TenantTerminationPage() {
                       placeholder={t('tenant.kaiyaku.placeholders.accountType')}
                     />
                     <datalist id="accountTypeOptions">
-                      <option value="普通" />
-                      <option value="当座" />
-                      <option value="貯蓄" />
-                      <option value="外貨" />
+                      {/* 避免 hydration mismatch：服务端/客户端首次渲染先保持一致（空列表），挂载后再根据语言填充 */}
+                      {(isMounted
+                        ? language === 'ja'
+                          ? ['普通', '当座', '貯蓄', '外貨']
+                          : language === 'en'
+                          ? ['Savings', 'Checking', 'Deposit', 'Foreign currency']
+                          : ['普通', '当座', '储蓄', '外币']
+                        : []
+                      ).map((v) => (
+                        <option key={v} value={v} />
+                      ))}
                     </datalist>
                   </div>
                   <div>

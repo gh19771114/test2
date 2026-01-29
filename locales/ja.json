@@ -26,7 +26,7 @@
     "company": "会社概要",
     "cases": "成功事例",
     "news": "最新情報",
-    "encyclopedia": "日本不動産投資百科",
+    "encyclopedia": "日本不動産投資しおり",
     "careers": "採用情報",
     "tenant": "入居者専用",
     "contact": "お問い合わせ",
@@ -63,7 +63,7 @@
       "title": "最新情報",
       "subtitle": "日本の不動産動向をリアルタイムで把握",
       "viewAll": "すべて見る",
-      "encyclopediaTitle": "日本不動産投資百科",
+      "encyclopediaTitle": "日本不動産投資しおり",
       "encyclopediaSubtitle": "投資の要点を体系的に解説",
       "encyclopediaViewAll": "すべて見る",
       "noNews": "最新情報はありません"
@@ -2649,7 +2649,7 @@
         "tag": "税務"
       },
       "rental-contract-important-clauses": {
-        "title": "賃貸契約の重要な条項とよくあるリスク",
+        "title": "賃貸借契約の重要な条項とよくあるリスク",
         "tag": "賃貸管理"
       },
       "apartment-management-fee-composition": {
