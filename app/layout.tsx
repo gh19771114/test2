@@ -16,10 +16,20 @@ const notoSansJp = localFont({
   variable: '--font-noto-sans-jp',
 })
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Bourn Mark',
+  alternateName: ['ボーンマーク', '川雨留痕', 'Bournmark'],
+  url: 'https://bournmark.com',
+  description: '日本不动产管理公司',
+  sameAs: ['https://www.facebook.com/bournmarkjapan/', 'https://www.youtube.com/@bournmark'],
+} as const
+
 export const metadata: Metadata = {
-  title: 'Bourn Mark - 日本房产投资与企业落地服务',
+  title: 'Bourn Mark｜日本不动产管理公司｜ボーンマーク 公式サイト',
   description:
-    '提供日本房产买卖中介、物业管理与企业出海助力等一站式解决方案，让您的在日投资更省心、更增值。',
+    '株式会社ボーンマーク（Bourn Mark CO.,LTD）は日本を拠点とする不動産管理会社。川雨留痕股份有限公司为资产型投资家提供专业的不动产管理、租赁运营与资产价值提升服务。',
   keywords: [
     'Bourn Mark',
     'BournMark',
@@ -60,6 +70,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body
         className={`${notoSansJp.variable} antialiased font-sans`}
         suppressHydrationWarning
