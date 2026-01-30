@@ -747,7 +747,7 @@ export default function QiChuPage() {
   const { t, language } = useLanguage()
   const [debug, setDebug] = useState(false)
   // 用于“硬验证是否更新到最新代码”的构建标记（不依赖屏幕尺寸/JS 分支）
-  const buildStamp = '2026-01-29-46'
+  const buildStamp = '2026-01-29-49'
   // 仅用于排查：确认手机是否真的访问到“当前正在运行”的 dev server，而不是旧端口/旧标签页/缓存
   const debugStamp = `qichu-debug-${buildStamp}`
   const [clientHost, setClientHost] = useState('')
@@ -1020,7 +1020,7 @@ export default function QiChuPage() {
   // iOS/iPad 兜底：如果有任何全局 CSS 误伤（display/transform 等），用内联 important 把移动端/Pad 网络图强制拉起来
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (!(showMobilePortrait || showMobileLandscape || showIpadPortrait)) return
+    if (!(showMobilePortrait || showMobileLandscape || showIpadPortrait || showIpadLandscape || showIpadProPortrait)) return
 
     const root = mobileScaledRootRef.current
     if (!root) return
@@ -1070,7 +1070,7 @@ export default function QiChuPage() {
       net.style.setProperty('overflow', 'visible', 'important')
       net.style.setProperty('transform', 'none', 'important')
     }
-  }, [showMobilePortrait, showMobileLandscape, showIpadPortrait, mobileNetworkScale, renderKey])
+  }, [showMobilePortrait, showMobileLandscape, showIpadPortrait, showIpadLandscape, showIpadProPortrait, mobileNetworkScale, renderKey])
 
   // probe=1 时：把“到底渲染没渲染/有没有被 CSS 干掉/图片有没有加载”直接打印出来
   useEffect(() => {
@@ -1837,13 +1837,17 @@ export default function QiChuPage() {
         ua.includes('iphone') ||
         (ua.includes('android') && ua.includes('mobile')) ||
         ua.includes('windows phone')
+      // iPadOS Safari 有时会伪装成 Macintosh（但 maxTouchPoints > 1）
+      const isIpadUA =
+        ua.includes('ipad') ||
+        (ua.includes('macintosh') && (navigator as any)?.maxTouchPoints > 1)
 
       // 手机竖版：宽度 ≤767 且竖屏（与CSS媒体查询匹配）
       const mobilePortrait = (width <= 767 && isPortrait) || (isPhoneLike && isPortrait) || (isPhoneUA && isPortrait)
       setShowMobilePortrait(mobilePortrait)
 
-      // iPad竖版：宽度 768–1023 且竖屏（与CSS媒体查询匹配）
-      const ipadPortrait = width >= 768 && width <= 1023 && isPortrait
+      // iPad竖版：宽度 768–1023 且竖屏（与CSS媒体查询匹配；并用 UA 兜底）
+      const ipadPortrait = ((width >= 768 && width <= 1023) || (isIpadUA && width >= 700 && width <= 1100)) && isPortrait
       setShowIpadPortrait(ipadPortrait)
 
       // 计算iPad竖版的缩放比例，确保网络图完整显示
@@ -1882,12 +1886,16 @@ export default function QiChuPage() {
       }
       // 注意：不在 else 中重置 ipadPortraitScale，保持当前值，避免横竖屏切换时变小
 
-      // iPad Pro竖版：宽度 1024–1279 且竖屏（iPad Pro 12.9"竖版）
-      const ipadProPortrait = width >= 1024 && width <= 1279 && isPortrait
+      // iPad Pro竖版：宽度 1024–1279 且竖屏（iPad Pro 12.9"竖版；并用 UA 兜底）
+      const ipadProPortrait = ((width >= 1024 && width <= 1279) || (isIpadUA && width >= 900 && width <= 1400)) && isPortrait
       setShowIpadProPortrait(ipadProPortrait)
 
-      // iPad横版：width >= 1024 && width <= 1369 && !isPortrait（与CSS媒体查询匹配）
-      const ipadLandscape = width >= 1024 && width <= 1369 && !isPortrait
+      // iPad横版：原先限定到 <=1369，但 iPadOS Safari 有时会报更大（缩放/桌面站点）
+      // 用 UA + 触摸兜底，避免误判为桌面端导致“首屏不绘制/必须滚动才出现”
+      const ipadLandscape = !isPortrait && (
+        (width >= 1024 && width <= 1369) ||
+        (isIpadUA && width >= 900 && width <= 1700)
+      )
       setShowIpadLandscape(ipadLandscape)
 
       // 手机横版：width <= 1023 && !isPortrait（与CSS媒体查询匹配）
@@ -2143,11 +2151,11 @@ export default function QiChuPage() {
                   width: `${mobileNetworkScaledW}px`,
                   height: `${mobileNetworkScaledH}px`,
                   position: 'relative',
-                  // 兜底：给手机端网络图一个“可见底板”，避免看起来像整块消失
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.14)',
-                  borderRadius: '16px',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+                  // 去掉圆角白色底板（用户要求）
+                  background: 'transparent',
+                  border: 'none',
+                  borderRadius: 0,
+                  boxShadow: 'none',
                   overflow: 'visible',
                   zIndex: 50,
                 }}

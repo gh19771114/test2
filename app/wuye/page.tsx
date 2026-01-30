@@ -448,7 +448,7 @@ export default function WuYePage() {
       <section className="section-padding">
         <div className="container-custom text-center">
           <h2 className="text-2xl font-bold text-white mb-4">{t('wuye.cta.title')}</h2>
-          <p className="text-gray-200 max-w-2xl mx-auto mb-6 leading-relaxed">
+          <p className={`text-gray-200 max-w-2xl mx-auto mb-6 leading-relaxed ${language === 'ja' ? 'whitespace-pre-line' : ''}`}>
             {t('wuye.cta.description')}
           </p>
           <a href="/#contact" className="btn-primary inline-flex items-center gap-2">

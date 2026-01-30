@@ -46,7 +46,7 @@ const parsePriceToYen = (price: string): number | null => {
 
 
 export default function MaiMaiPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const [selectedCurrency, setSelectedCurrency] = useState<string>('JPY')
   const [rates, setRates] = useState<Record<string, number>>({ JPY: 1 })
   const [lastUpdated, setLastUpdated] = useState<string>('')
@@ -196,6 +196,16 @@ export default function MaiMaiPage() {
     { step: 7, title: t('maimai.steps.step7.title'), desc: t('maimai.steps.step7.desc'), icon: '🔑' },
     { step: 8, title: t('maimai.steps.step8.title'), desc: t('maimai.steps.step8.desc'), icon: '✅' },
   ], [t])
+
+  const formatTransactionStepTitle = useMemo(() => {
+    if (language !== 'en') return (s: string) => s
+    // 英文桌面端：强制两行显示，避免蓝色箭头内溢出
+    return (s: string) => {
+      const idx = s.indexOf(' ')
+      if (idx < 0) return s
+      return `${s.slice(0, idx)}\n${s.slice(idx + 1)}`
+    }
+  }, [language])
 
   const buyingFees = useMemo(() => [
     { item: t('maimai.fees.buying.fee1.item'), rate: t('maimai.fees.buying.fee1.rate'), note: t('maimai.fees.buying.fee1.note') },
@@ -847,7 +857,13 @@ export default function MaiMaiPage() {
                           {/* 图标 */}
                           <div className="text-4xl mb-2 mt-6">{item.icon}</div>
                           {/* 标题 */}
-                          <h3 className="text-xs md:text-sm font-bold leading-tight px-1 mt-1 whitespace-nowrap">{item.title}</h3>
+                          <h3
+                            className={`text-xs md:text-sm font-bold leading-tight px-1 mt-1 ${
+                              language === 'en' ? 'whitespace-pre-line' : 'whitespace-nowrap'
+                            }`}
+                          >
+                            {language === 'en' ? formatTransactionStepTitle(item.title) : item.title}
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -926,7 +942,7 @@ export default function MaiMaiPage() {
               <div className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-2 md:p-3 border border-blue-100 shadow-md h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-2xl font-bold text-white">{t('maimai.fees.buy')}</span>
+                      <span className="text-2xl font-bold text-white">{language === 'ja' ? '買' : t('maimai.fees.buy')}</span>
                   </div>
                     <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.buyingTitle')}</h3>
                 </div>
@@ -941,7 +957,9 @@ export default function MaiMaiPage() {
                         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors flex-shrink-0">
                           <span className="text-blue-600 text-xs font-bold">{index + 1}</span>
                         </div>
-                        <p className="text-xs md:text-sm font-semibold text-gray-800 group-hover:text-blue-700 transition-colors truncate flex-1 min-w-0">{fee.item}</p>
+                        <p className="text-xs md:text-sm font-semibold text-gray-800 group-hover:text-blue-700 transition-colors flex-1 min-w-0 whitespace-normal break-words leading-snug">
+                          {fee.item}
+                        </p>
                       </div>
                       <div className="text-right mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="text-blue-500 text-xs">{t('maimai.fees.clickToView')} →</span>
@@ -955,7 +973,7 @@ export default function MaiMaiPage() {
               <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-2 md:p-3 border border-green-100 shadow-md h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center">
-                      <span className="text-2xl font-bold text-white">{t('maimai.fees.sell')}</span>
+                      <span className="text-2xl font-bold text-white">{language === 'ja' ? '売' : t('maimai.fees.sell')}</span>
                   </div>
                     <h3 className="text-xl md:text-2xl font-bold text-navy-700">{t('maimai.fees.sellingTitle')}</h3>
                 </div>
@@ -971,7 +989,9 @@ export default function MaiMaiPage() {
                           <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors flex-shrink-0">
                             <span className="text-green-600 text-xs font-bold">{index + 1}</span>
                           </div>
-                          <p className="text-xs md:text-sm font-semibold text-gray-800 group-hover:text-green-700 transition-colors truncate flex-1 min-w-0">{fee.item}</p>
+                          <p className="text-xs md:text-sm font-semibold text-gray-800 group-hover:text-green-700 transition-colors flex-1 min-w-0 whitespace-normal break-words leading-snug">
+                            {fee.item}
+                          </p>
                         </div>
                         <div className="text-right mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <span className="text-green-500 text-xs">{t('maimai.fees.clickToView')} →</span>
@@ -982,7 +1002,7 @@ export default function MaiMaiPage() {
                   <p className="text-sm md:text-base text-gray-600 mt-4 pt-4 border-t border-gray-200 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('maimai.fees.nonResidentNote') }} />
                 </div>
               </div>
-              <p className="text-sm md:text-base text-gray-600 -mt-1 pt-0 border-t border-gray-300 leading-relaxed text-center whitespace-nowrap">
+              <p className="text-sm md:text-base text-gray-600 -mt-1 pt-0 border-t border-gray-300 leading-relaxed text-center whitespace-normal break-words">
                 {t('maimai.fees.disclaimer')}
               </p>
             </div>
@@ -1009,7 +1029,9 @@ export default function MaiMaiPage() {
                   <span className={`text-3xl font-bold ${
                     selectedFee.type === 'buy' ? 'text-blue-600' : 'text-green-600'
                   }`}>
-                    {selectedFee.type === 'buy' ? t('maimai.fees.buy') : t('maimai.fees.sell')}
+                    {selectedFee.type === 'buy'
+                      ? (language === 'ja' ? '買' : t('maimai.fees.buy'))
+                      : (language === 'ja' ? '売' : t('maimai.fees.sell'))}
                   </span>
                 </div>
                 <div>

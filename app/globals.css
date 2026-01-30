@@ -1731,12 +1731,19 @@ section#partners.desktop-partners-network .yellow-network-container {
    - transform/缩放仍由 qichu/page.tsx 的内联样式控制
 */
 section#partners.qichu-partners-network,
-section#partners.qichu-partners-network .white-box-container,
 section#partners.qichu-partners-network .yellow-network-container,
 section#partners.qichu-partners-network > div[style*="position: absolute"] {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+}
+
+/* /qichu：地图恢复灰度（不要过亮） */
+section#partners.qichu-partners-network .white-box-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 0.15 !important;
+  filter: grayscale(100%) brightness(0.8) !important;
 }
 
 /* /qichu：无论任何媒体查询如何命中，都不要把网络图竖向裁掉（“消失”大多来自 overflow/height 的误伤） */
@@ -1749,8 +1756,9 @@ section#partners.qichu-partners-network {
    这里必须用 !important 才能压过全局 .white-box-container 的 !important。 */
 @media (max-width: 1023px) {
   section#partners.qichu-partners-network .white-box-container {
-    opacity: 0.55 !important;
-    filter: none !important;
+    /* 移动端也保持灰度，不要发亮 */
+    opacity: 0.22 !important;
+    filter: grayscale(100%) brightness(0.8) !important;
   }
   section#partners.qichu-partners-network .yellow-network-container {
     opacity: 1 !important;
@@ -6228,12 +6236,19 @@ section.desktop-message {
      - 只负责“强制显示”，避免出现“整块消失”
      - 不在这里写 transform（让 qichu/page.tsx 的内联 transform 负责缩放/定位）
   */
-  section#partners.qichu-partners-network .white-box-container,
   section#partners.qichu-partners-network .yellow-network-container,
   section#partners.qichu-partners-network > div[style*="position: absolute"] {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+
+  /* 手机竖版：/qichu 地图保持灰度（不要被上面的“强制显示”误设为 100% 不透明） */
+  section#partners.qichu-partners-network .white-box-container {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 0.22 !important;
+    filter: grayscale(100%) brightness(0.8) !important;
   }
 
   /* 手机竖版：确保网络图内部元素显示（红框已隐藏） */

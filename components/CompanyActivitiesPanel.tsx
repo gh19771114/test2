@@ -57,7 +57,8 @@ export default function CompanyActivitiesPanel({ limit = 8, className = '' }: Pr
 
   const renderEmptySlot = (_: unknown, idx: number) => {
     return (
-      <div key={`empty-${idx}`} className="flex gap-3 px-6 py-3">
+      // 仅桌面大屏显示“空栏占位”；手机竖版/iPad 只显示有内容的部分
+      <div key={`empty-${idx}`} className="hidden xl:flex gap-3 px-6 py-3">
         <div className="w-20 h-14 flex-shrink-0 rounded-lg bg-gray-100" />
         <div className="min-w-0 flex-1">
           <div className="h-4" />

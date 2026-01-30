@@ -159,6 +159,7 @@ export default function ZengzhiPage() {
   }, [areaFmt, yenFmt])
 
   const casesScrollRef = useRef<HTMLDivElement | null>(null)
+  const casesTrackRef = useRef<HTMLDivElement | null>(null)
 
   const casesBase = useMemo(() => {
     const legacy = legacyCases.map((c) => ({ type: 'legacy' as const, ...c }))
@@ -171,14 +172,15 @@ export default function ZengzhiPage() {
     return [...casesBase, ...casesBase]
   }, [casesBase])
 
-  // 成功案例：全端横向滚动栏（自动循环 + 鼠标拖拽 + 触摸板手势）
+  // 成功案例：横向滚动栏（对齐“企业概要/企业持有资产”的滚动手感）
   useEffect(() => {
     const container = casesScrollRef.current
-    if (!container) return
+    const track = casesTrackRef.current
+    if (!container || !track) return
 
     // 移动端（触摸为主）优先保证“手滑横向滚动”体验：
-    // - 关闭自动循环滚动，避免每帧写 scrollLeft 抵消触摸滚动
-    // - 保留 scroll 归一化逻辑，保证循环列表不会跑出边界
+    // - 桌面端：使用 transform 自动滚动（更丝滑，和企业持有资产一致）
+    // - 触摸设备：保留原生惯性滚动；仍做边界归一化，保证循环列表不会跑出边界
     const isCoarsePointer =
       typeof window !== 'undefined' &&
       typeof window.matchMedia === 'function' &&
@@ -192,86 +194,77 @@ export default function ZengzhiPage() {
       (('ontouchstart' in window) ||
         (typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 0) ||
         isCoarsePointer)
-    // 触摸设备上彻底关闭自动滚动，避免与手滑抢 scrollLeft（iPhone/Safari 尤其明显）
-    const enableAutoScroll = !isTouchDevice && !prefersReducedMotion
 
-    let scrollPosition = container.scrollLeft || 0
-    // 桌面端自动滚动速度：对齐“企业概要/企业持有资产”滚动栏体验
-    // - 企业概要当前实现是 1px/frame（≈ 60px/s @ 60fps）
-    // - 本页内容更重，帧率波动会导致“按帧加 px”变慢，所以这里用“按时间”滚动保证一致速度
-    const scrollPxPerSec = 60
-    let animationFrameId: number | null = null
+    // 桌面端：transform 自动滚动（与企业持有资产一致）
+    const enableAuto = !isTouchDevice && !prefersReducedMotion
+
+    let offsetPx = 0
+    const scrollPxPerSec = 140
+    let rafId: number | null = null
     let isPaused = false
     let isDragging = false
     let startX = 0
-    let startScrollLeft = 0
+    let startOffset = 0
     let resumeTimeout: number | null = null
     let lastTs: number | null = null
 
+    const prevWillChange = track.style.willChange
+    track.style.willChange = 'transform'
+
     const getHalf = () => {
-      const half = container.scrollWidth / 2
+      const half = track.scrollWidth / 2
       return Number.isFinite(half) ? half : 0
     }
 
-    const normalize = () => {
+    const normalizeOffset = () => {
       const half = getHalf()
       if (half <= 0) return
-      if (container.scrollLeft >= half) {
-        container.scrollLeft -= half
-      } else if (container.scrollLeft < 0) {
-        container.scrollLeft += half
-      }
-      scrollPosition = container.scrollLeft
+      offsetPx = ((offsetPx % half) + half) % half
+    }
+
+    const apply = () => {
+      track.style.transform = `translate3d(${-offsetPx}px, 0, 0)`
     }
 
     const tick = (ts: number) => {
-      // 保证暂停/拖拽期间也更新时间戳，避免恢复时 dt 过大导致“瞬移”
       if (lastTs === null) lastTs = ts
       const dt = Math.max(0, ts - lastTs) / 1000
       lastTs = ts
 
-      if (!isPaused && !isDragging) {
-        scrollPosition += scrollPxPerSec * dt
-        const half = getHalf()
-        if (half > 0 && scrollPosition >= half) scrollPosition -= half
-        container.scrollLeft = scrollPosition
+      if (enableAuto && !isPaused && !isDragging) {
+        offsetPx += scrollPxPerSec * dt
+        normalizeOffset()
+        apply()
       }
-      animationFrameId = requestAnimationFrame(tick)
+
+      rafId = requestAnimationFrame(tick)
     }
 
-    const onMouseEnter = () => {
+    const pauseBriefly = (ms: number) => {
       isPaused = true
-    }
-    const onMouseLeave = () => {
-      isPaused = false
+      if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      resumeTimeout = window.setTimeout(() => {
+        isPaused = false
+      }, ms)
     }
 
     const onWheel = (e: WheelEvent) => {
+      if (!enableAuto) return
       const half = getHalf()
       if (half <= 0) return
-      isPaused = true
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
       if (delta === 0) return
       e.preventDefault()
       e.stopPropagation()
-      container.scrollLeft += delta
-      normalize()
-      if (resumeTimeout) window.clearTimeout(resumeTimeout)
-      resumeTimeout = window.setTimeout(() => {
-        isPaused = false
-      }, 600)
+      offsetPx += delta
+      normalizeOffset()
+      apply()
+      pauseBriefly(600)
     }
 
     const onPointerDown = (e: PointerEvent) => {
-      // 鼠标拖拽即可；触摸保持原生惯性更丝滑
-      if (e.pointerType !== 'mouse') {
-        isPaused = true
-        if (resumeTimeout) window.clearTimeout(resumeTimeout)
-        resumeTimeout = window.setTimeout(() => {
-          isPaused = false
-        }, 900)
-        return
-      }
+      // 桌面鼠标拖拽；触摸设备走原生滚动
+      if (!enableAuto || e.pointerType !== 'mouse') return
       if (e.button !== 0) return
 
       // 允许用户选中文本：如果按下发生在“可选择文本区域”，就不进入拖拽滚动模式
@@ -283,60 +276,69 @@ export default function ZengzhiPage() {
       isDragging = true
       isPaused = true
       startX = e.clientX
-      startScrollLeft = container.scrollLeft
+      startOffset = offsetPx
       container.setPointerCapture?.(e.pointerId)
     }
     const onPointerMove = (e: PointerEvent) => {
       if (!isDragging) return
       e.preventDefault()
       const dx = e.clientX - startX
-      container.scrollLeft = startScrollLeft - dx
-      normalize()
+      offsetPx = startOffset - dx
+      normalizeOffset()
+      apply()
     }
     const endDrag = () => {
       if (!isDragging) return
       isDragging = false
-      scrollPosition = container.scrollLeft
       isPaused = false
     }
 
-    const onScroll = () => {
-      normalize()
-      isPaused = true
-      if (resumeTimeout) window.clearTimeout(resumeTimeout)
-      resumeTimeout = window.setTimeout(() => {
-        isPaused = false
-      }, 450)
+    const onScrollTouch = () => {
+      // 触摸设备：保持 scrollLeft 循环归一化
+      if (enableAuto) return
+      const half = container.scrollWidth / 2
+      if (!Number.isFinite(half) || half <= 0) return
+      if (container.scrollLeft >= half) {
+        container.scrollLeft -= half
+      } else if (container.scrollLeft < 0) {
+        container.scrollLeft += half
+      }
     }
 
-    container.addEventListener('mouseenter', onMouseEnter)
-    container.addEventListener('mouseleave', onMouseLeave)
+    // 启用自动滚动时，把外层滚动关掉（避免 scrollLeft 与 transform 互相打架）
+    const prevOverflowX = container.style.overflowX
+    if (enableAuto) {
+      container.style.overflowX = 'hidden'
+      container.scrollLeft = 0
+      offsetPx = 0
+      normalizeOffset()
+      apply()
+    } else {
+      // 触摸模式：确保 track 不带 transform（避免与 scrollLeft 冲突）
+      track.style.transform = ''
+    }
+
     container.addEventListener('pointerdown', onPointerDown, { passive: false })
     container.addEventListener('pointermove', onPointerMove, { passive: false })
     container.addEventListener('pointerup', endDrag, { passive: true })
     container.addEventListener('pointercancel', endDrag, { passive: true })
-    if (enableAutoScroll) {
-      container.addEventListener('wheel', onWheel, { passive: false })
-    }
-    container.addEventListener('scroll', onScroll, { passive: true })
+    container.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('scroll', onScrollTouch, { passive: true })
 
-    if (enableAutoScroll) {
-      animationFrameId = requestAnimationFrame(tick)
-    }
+    rafId = requestAnimationFrame(tick)
 
     return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId)
-      container.removeEventListener('mouseenter', onMouseEnter)
-      container.removeEventListener('mouseleave', onMouseLeave)
-      container.removeEventListener('pointerdown', onPointerDown)
-      container.removeEventListener('pointermove', onPointerMove)
-      container.removeEventListener('pointerup', endDrag)
-      container.removeEventListener('pointercancel', endDrag)
-      if (enableAutoScroll) {
-        container.removeEventListener('wheel', onWheel)
-      }
-      container.removeEventListener('scroll', onScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      container.removeEventListener('pointerdown', onPointerDown as any)
+      container.removeEventListener('pointermove', onPointerMove as any)
+      container.removeEventListener('pointerup', endDrag as any)
+      container.removeEventListener('pointercancel', endDrag as any)
+      container.removeEventListener('wheel', onWheel as any)
+      container.removeEventListener('scroll', onScrollTouch as any)
       if (resumeTimeout) window.clearTimeout(resumeTimeout)
+      track.style.willChange = prevWillChange
+      track.style.transform = ''
+      container.style.overflowX = prevOverflowX
     }
   }, [casesLoop.length])
 
@@ -608,7 +610,7 @@ export default function ZengzhiPage() {
                 overscrollBehavior: 'contain',
               }}
             >
-              <div className="flex gap-6 min-w-max px-1">
+              <div ref={casesTrackRef} className="flex gap-6 min-w-max px-1">
                 {casesLoop.map((item, index) => (
                   <div
                     key={`${item.type}-${index}-${item.type === 'legacy' ? item.title : item.address}`}
