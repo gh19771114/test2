@@ -1588,7 +1588,7 @@
 
   body {
     line-height: 1.6;
-    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-sc), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: transparent;
     min-height: 100vh;
     font-feature-settings: 'kern' 1, 'liga' 1;
@@ -3914,7 +3914,7 @@ section#partners.qichu-partners-network {
 }
 
 .font-display {
-  font-family: var(--font-playfair), var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', var(--font-inter), sans-serif;
+  font-family: var(--font-playfair), var(--font-noto-sans-sc), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', var(--font-inter), sans-serif;
 }
 
 .glass-panel {
@@ -9179,7 +9179,7 @@ header .absolute span,
 header .absolute div a,
 header .absolute div button,
 header .absolute div span {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-sc), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
 }
 
 /* 确保所有文本元素使用正确的中文字体 */
@@ -9206,7 +9206,7 @@ button,
 .font-medium,
 .font-semibold,
 .font-bold {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-sc), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
 /* Header下拉菜单项字体设置 - 特别针对"投资相关"等菜单项 */
@@ -9214,7 +9214,7 @@ header .absolute.mt-3 a,
 header .absolute.mt-3 span,
 header .absolute.left-full a,
 header .absolute.left-full span {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-jp), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'Noto Sans SC', 'SimSun', '宋体', var(--font-noto-sans-sc), 'Noto Sans JP', 'Yu Gothic', '游ゴシック', 'Meiryo', 'メイリオ', 'MS PGothic', 'MS Pゴシック', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', sans-serif !important;
 }
 
 /* 新闻和公司活动详情页面 - 确保返回按钮不被 header 遮挡 */

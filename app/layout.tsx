@@ -4,7 +4,8 @@ import localFont from 'next/font/local'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 
 // 使用本地字体，避免构建阶段依赖 Google Fonts（fonts.gstatic.com）
-const notoSansJp = localFont({
+// 注意：此处实际加载的是 Noto Sans SC（中文简体）字体文件
+const notoSansSc = localFont({
   src: [
     {
       path: '../public/fonts/NotoSansSC-Regular.ttf',
@@ -13,7 +14,7 @@ const notoSansJp = localFont({
     },
   ],
   display: 'swap',
-  variable: '--font-noto-sans-jp',
+  variable: '--font-noto-sans-sc',
 })
 
 const organizationJsonLd = {
@@ -78,7 +79,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${notoSansJp.variable} antialiased font-sans`}
+        className={`${notoSansSc.variable} antialiased font-sans`}
         suppressHydrationWarning
       >
         <LanguageProvider>
