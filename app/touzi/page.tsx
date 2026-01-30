@@ -42,9 +42,6 @@ export default function TouZiPage() {
                 </div>
                 <h2 className="text-3xl font-bold text-white">{t('touzi.realEstateInvestment.title')}</h2>
               </div>
-              <p className="text-lg text-gray-200 mb-8 leading-relaxed">
-                {t('touzi.realEstateInvestment.description')}
-              </p>
 
               <div className="rounded-3xl p-8 md:p-12 border border-blue-100 shadow-lg">
                 <div className="overflow-x-auto">
