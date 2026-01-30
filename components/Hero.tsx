@@ -11,11 +11,22 @@ const VideoPlayer = dynamic(() => import('./VideoPlayer'), {
 const Hero = () => {
   const { t, language } = useLanguage()
 
-  const headlineLines = [
-    t('hero.headlineLine1'),
-    t('hero.headlineLine2'),
-    t('hero.headlineLine3')
-  ]
+  // Support variable headline line count per locale (e.g. JA uses 4 lines)
+  const headlineLines = (() => {
+    const lines: string[] = []
+    for (let i = 1; i <= 6; i++) {
+      const key = `hero.headlineLine${i}`
+      const v = t(key)
+      // t() falls back to returning the key when not found
+      if (typeof v !== 'string' || v === key) break
+      const s = v.trim()
+      if (!s) break
+      lines.push(s)
+    }
+    return lines
+  })()
+  const highlightFromIndex =
+    language === 'ja' ? Math.max(0, headlineLines.length - 2) : Math.max(0, headlineLines.length - 1)
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -33,7 +44,7 @@ const Hero = () => {
                   <span
                     key={index}
                     className={`block ${
-                      index === headlineLines.length - 1
+                      index >= highlightFromIndex
                         ? 'text-blue-200/95 tracking-widest mt-1 md:mt-2'
                         : 'text-white/95'
                     }`}
@@ -50,7 +61,7 @@ const Hero = () => {
                 ))}
               </h1>
 
-              <p className="text-left text-base md:text-xl text-white/85 leading-relaxed md:leading-relaxed">
+              <p className="text-left text-base md:text-xl text-white/85 leading-relaxed md:leading-relaxed whitespace-pre-line">
                 {t('hero.subtext')}
               </p>
             </div>

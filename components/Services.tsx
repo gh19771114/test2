@@ -496,7 +496,7 @@ const Services = () => {
             {t('home.services.title')}
           </h2>
           <p
-            className="text-lg text-gray-200 max-w-2xl mx-auto"
+            className="text-lg text-gray-200 max-w-2xl mx-auto whitespace-pre-line"
             suppressHydrationWarning
           >
             {t('home.services.subtitle')}
