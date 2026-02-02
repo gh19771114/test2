@@ -11,7 +11,8 @@ import { looksLikeJapaneseKaiyakuData, convertFromJapaneseToInternal, type Kaiya
 const KAIYAKU_FORM_URL = '/imgs/解約通知書.pdf'
 
 // 这里的字段结构要和我们生成 PDF 时用的一致（内部值：语言无关）
-type TerminationForm = KaiyakuInternalForm
+// emailConfirm 仅用于前端校验，不提交到 API、不写入 sessionStorage
+type TerminationForm = KaiyakuInternalForm & { emailConfirm?: string }
 
 const initialForm: TerminationForm = {
   propertyName: '',
@@ -59,6 +60,7 @@ const initialForm: TerminationForm = {
   phoneCountryCode: '+81', // 默认日本
   phoneNumber: '',
   email: '',
+  emailConfirm: '',
   signatureDataUrl: '',
 
   signerName: '',
@@ -216,6 +218,14 @@ export default function TenantTerminationPage() {
       }
     }
 
+    // 验证：两次邮箱必须一致
+    const emailConfirmValue = (formData as TerminationForm).emailConfirm ?? ''
+    if (formData.email.trim() !== emailConfirmValue.trim()) {
+      const el = document.getElementById('emailConfirm') as HTMLInputElement | null
+      showInvalid(el, t('tenant.kaiyaku.validation.emailMismatch'))
+      return
+    }
+
     // 验证：如果选择"その他"，必须填写具体理由
     if (formData.reason === 'other' && !formData.reasonOtherText.trim()) {
       const textarea = document.querySelector('textarea[name="reasonOtherText"]') as HTMLTextAreaElement
@@ -313,11 +323,12 @@ export default function TenantTerminationPage() {
       }
     }
 
-    // 预览页按当前语言展示，因此这里保存“内部值”（语言无关）
+    // 预览页按当前语言展示，因此这里保存“内部值”（语言无关）；不保存 emailConfirm（仅前端校验用）
+    const { emailConfirm: _ec, ...toStore } = formData as TerminationForm
     sessionStorage.setItem(
       'terminationFormData',
       JSON.stringify({
-        ...formData,
+        ...toStore,
         signerName: formData.contractHolder,
       })
     )
@@ -1112,6 +1123,25 @@ export default function TenantTerminationPage() {
                     required
                     className="w-full max-w-md px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent"
                     placeholder={t('tenant.kaiyaku.placeholders.email')}
+                  />
+                </div>
+
+                <div className="mb-3 md:mb-4">
+                  <label
+                    className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+                    htmlFor="emailConfirm"
+                  >
+                    {t('tenant.kaiyaku.fields.emailConfirm')}
+                  </label>
+                  <input
+                    id="emailConfirm"
+                    name="emailConfirm"
+                    type="email"
+                    value={(formData as TerminationForm).emailConfirm ?? ''}
+                    onChange={handleChange}
+                    required
+                    className="w-full max-w-md px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent"
+                    placeholder={t('tenant.kaiyaku.placeholders.emailConfirm')}
                   />
                 </div>
 

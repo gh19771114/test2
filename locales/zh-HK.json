@@ -1336,6 +1336,7 @@
           "reason": "解約原因",
           "phoneNumber": "電話",
           "email": "電郵",
+          "emailConfirm": "確認電郵",
           "signature": "簽名"
         },
         "signature": {
@@ -1356,6 +1357,7 @@
           "newBuildingAndRoom": "例：XX公寓 101室",
           "phoneNumber": "請輸入電話號碼（不含區號）",
           "email": "請輸入電郵地址",
+          "emailConfirm": "請再次輸入電郵地址",
           "reasonOther": "請輸入其他具體理由",
           "autoLockDial": "請填寫當前設置的號碼",
           "deliveryBoxNumber": "快遞櫃號碼"
@@ -1411,7 +1413,8 @@
           "pleaseFillOtherReason": "請填寫「其他」的具體理由",
           "cancelDateMustBeFuture": "解約日期必須晚於今天，請選擇未來的日期",
           "moveOutDateMustBeFuture": "退房日期必須晚於今天，請選擇未來的日期",
-          "inspectionDateTimeMustBeFuture": "退房立會希望時間不能選擇今天，請選擇明天及之後的日期和時間"
+          "inspectionDateTimeMustBeFuture": "退房立會希望時間不能選擇今天，請選擇明天及之後的日期和時間",
+          "emailMismatch": "兩次輸入的電郵不一致，請檢查後重新填寫"
         },
         "buttons": {
           "submit": "提交預覽",

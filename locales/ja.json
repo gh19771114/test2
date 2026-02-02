@@ -1313,6 +1313,7 @@
           "reason": "解約理由",
           "phoneNumber": "電話",
           "email": "メールアドレス",
+          "emailConfirm": "メールアドレス（確認）",
           "signature": "署名"
         },
         "signature": {
@@ -1333,6 +1334,7 @@
           "newBuildingAndRoom": "例：〇〇マンション 101号室",
           "phoneNumber": "電話番号を入力してください（国番号を除く）",
           "email": "メールアドレスを入力してください",
+          "emailConfirm": "メールアドレスを再入力してください",
           "reasonOther": "その他の具体的な理由を入力してください",
           "autoLockDial": "現在設定されている番号を入力してください",
           "deliveryBoxNumber": "宅配ボックス番号"
@@ -1388,7 +1390,8 @@
           "pleaseFillOtherReason": "\"その他\"の具体的な理由を記入してください",
           "cancelDateMustBeFuture": "解約日は今日より後である必要があります。将来の日付を選択してください",
           "moveOutDateMustBeFuture": "退去予定日は今日より後である必要があります。将来の日付を選択してください",
-          "inspectionDateTimeMustBeFuture": "立会希望日時は今日を選択できません。明日以降の日付と時間を選択してください"
+          "inspectionDateTimeMustBeFuture": "立会希望日時は今日を選択できません。明日以降の日付と時間を選択してください",
+          "emailMismatch": "入力されたメールアドレスが一致しません。ご確認のうえ、再度入力してください。"
         },
         "buttons": {
           "submit": "プレビュー",

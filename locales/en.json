@@ -1336,6 +1336,7 @@
           "reason": "Termination Reason",
           "phoneNumber": "Phone",
           "email": "Email",
+          "emailConfirm": "Confirm Email",
           "signature": "Signature"
         },
         "signature": {
@@ -1356,6 +1357,7 @@
           "newBuildingAndRoom": "Example: XX Mansion Room 101",
           "phoneNumber": "Please enter phone number (without country code)",
           "email": "Please enter email address",
+          "emailConfirm": "Please enter email address again",
           "reasonOther": "Please enter specific reason",
           "autoLockDial": "Please enter the currently set number",
           "deliveryBoxNumber": "Delivery box number"
@@ -1413,7 +1415,8 @@
           "moveOutDateMustBeFuture": "Expected move-out date must be after today, please select a future date",
           "inspectionDateTimeMustBeFuture": "Preferred inspection date & time cannot be today, please select tomorrow or later",
           "phoneDigits": "Phone number digits are incorrect. {country} phone numbers should be {min}{max} digits.\nExample: {example}",
-          "phoneMinDigits": "Phone number digits are incorrect, please enter at least 8 digits"
+          "phoneMinDigits": "Phone number digits are incorrect, please enter at least 8 digits",
+          "emailMismatch": "The two email addresses do not match. Please check and re-enter."
         },
         "buttons": {
           "submit": "Preview",

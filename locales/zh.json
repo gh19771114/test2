@@ -1312,6 +1312,7 @@
         "reason": "解约原因",
         "phoneNumber": "电话",
         "email": "邮箱",
+        "emailConfirm": "确认邮箱",
         "signature": "签名"
       },
       "signature": {
@@ -1332,6 +1333,7 @@
         "newBuildingAndRoom": "例：XX公寓 101室",
         "phoneNumber": "请输入电话号码（不含区号）",
         "email": "请输入邮箱地址",
+        "emailConfirm": "请再次输入邮箱地址",
         "reasonOther": "请输入其他具体理由",
         "autoLockDial": "请填写当前设置的号码",
         "deliveryBoxNumber": "快递柜号码"
@@ -1389,7 +1391,8 @@
         "moveOutDateMustBeFuture": "退房日期必须晚于今天，请选择未来的日期",
         "inspectionDateTimeMustBeFuture": "退房立会希望时间不能选择今天，请选择明天及之后的日期和时间",
         "phoneDigits": "电话号码位数不正确。{country}电话号码应为{min}{max}位数字。\n示例：{example}",
-        "phoneMinDigits": "电话号码位数不正确，请输入至少8位数字"
+        "phoneMinDigits": "电话号码位数不正确，请输入至少8位数字",
+        "emailMismatch": "两次输入的邮箱不一致，请检查后重新填写"
       },
       "buttons": {
         "submit": "提交预览",

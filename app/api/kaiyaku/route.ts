@@ -132,7 +132,8 @@ export async function POST(req: Request) {
         ? `解約通知書：${data.propertyName} ${data.roomNumber}号室`
         : '解約通知書（オンライン申請）'
 
-    const info = await transporter.sendMail({
+    const applicantEmail = String((data as any).email || '').trim()
+    const mailOptions: nodemailer.SendMailOptions = {
       from: `"解約通知フォーム" <${smtpUser}>`,
       to: mailTo,
       subject: mailSubject,
@@ -143,7 +144,10 @@ export async function POST(req: Request) {
           content: pdfBuffer,
         },
       ],
-    })
+    }
+    if (applicantEmail) mailOptions.cc = applicantEmail
+
+    const info = await transporter.sendMail(mailOptions)
 
     console.log('解約通知書メール送信済み:', info.messageId)
 
