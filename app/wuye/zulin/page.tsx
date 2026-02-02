@@ -32,7 +32,7 @@ const itemVariants = {
 }
 
 export default function ZulinPage() {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -54,40 +54,40 @@ export default function ZulinPage() {
   const services = useMemo(() => {
     const baseServices = [
       {
-        title: t('wuye.zulin.services.service1.title'),
+        title: tTitle('wuye.zulin.services.service1.title'),
         icon: Users,
         image: '/imgs/wuye/real/zulin-service-1.jpg',
         description: t('wuye.zulin.services.service1.description'),
         items: (t('wuye.zulin.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item1.time'),
-          title: t('wuye.zulin.timeline.item1.title'),
+          title: tTitle('wuye.zulin.timeline.item1.title'),
           description: t('wuye.zulin.timeline.item1.description'),
         },
         color: 'from-blue-500 to-blue-600',
       },
       {
-        title: t('wuye.zulin.services.service2.title'),
+        title: tTitle('wuye.zulin.services.service2.title'),
         icon: FileCheck,
         image: '/imgs/wuye/real/zulin-service-2.jpg',
         description: t('wuye.zulin.services.service2.description'),
         items: (t('wuye.zulin.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item2.time'),
-          title: t('wuye.zulin.timeline.item2.title'),
+          title: tTitle('wuye.zulin.timeline.item2.title'),
           description: t('wuye.zulin.timeline.item2.description'),
         },
         color: 'from-green-500 to-green-600',
       },
       {
-        title: t('wuye.zulin.services.service3.title'),
+        title: tTitle('wuye.zulin.services.service3.title'),
         icon: Key,
         image: '/imgs/wuye/real/zulin-service-3.jpg',
         description: t('wuye.zulin.services.service3.description'),
         items: (t('wuye.zulin.services.service3.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item3.time'),
-          title: t('wuye.zulin.timeline.item3.title'),
+          title: tTitle('wuye.zulin.timeline.item3.title'),
           description: t('wuye.zulin.timeline.item3.description'),
         },
         color: 'from-purple-500 to-purple-600',
@@ -99,25 +99,25 @@ export default function ZulinPage() {
   const processSteps = useMemo(() => [
     {
       step: '01',
-      title: t('wuye.zulin.process.step1.title'),
+      title: tTitle('wuye.zulin.process.step1.title'),
       description: t('wuye.zulin.process.step1.description'),
       image: '/imgs/wuye/real/zulin-process-1.jpg',
     },
     {
       step: '02',
-      title: t('wuye.zulin.process.step2.title'),
+      title: tTitle('wuye.zulin.process.step2.title'),
       description: t('wuye.zulin.process.step2.description'),
       image: '/imgs/wuye/real/zulin-process-2.jpg',
     },
     {
       step: '03',
-      title: t('wuye.zulin.process.step3.title'),
+      title: tTitle('wuye.zulin.process.step3.title'),
       description: t('wuye.zulin.process.step3.description'),
       image: '/imgs/wuye/real/zulin-process-3.jpg',
     },
     {
       step: '04',
-      title: t('wuye.zulin.process.step4.title'),
+      title: tTitle('wuye.zulin.process.step4.title'),
       description: t('wuye.zulin.process.step4.description'),
       image: '/imgs/wuye/real/zulin-process-4.jpg',
     },

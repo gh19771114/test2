@@ -5,10 +5,22 @@ import zhTranslations from '@/locales/zh.json'
 
 export type Language = 'zh' | 'zh-TW' | 'zh-HK' | 'ja' | 'en'
 
+/** 卡片标题显示语言：简体/台湾/香港/日本 → 日语，英文 → 英语 */
+function getTitleLocale(lang: Language): Language {
+  if (lang === 'zh' || lang === 'zh-TW' || lang === 'zh-HK' || lang === 'ja') return 'ja'
+  return 'en'
+}
+
+export { getTitleLocale }
+
 interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
   t: (key: string, options?: { returnObjects?: boolean; [key: string]: any }) => string | any
+  /** 卡片标题专用：按 getTitleLocale 取日语/英语/简体，用于所有卡片上的标题名称 */
+  tTitle: (key: string, options?: { returnObjects?: boolean; [key: string]: any }) => string | any
+  /** 当前卡片标题应使用的语言（zh/zh-TW/zh-HK/ja→ja, en→en），用于 getManagedPropertyTitle 等 */
+  titleLocale: Language
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -22,6 +34,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   })
   
   const [translations, setTranslations] = useState<Record<string, any>>(zhTranslations)
+  const [titleTranslations, setTitleTranslations] = useState<Record<string, any>>(zhTranslations)
   const [isMounted, setIsMounted] = useState(false)
 
   // 组件挂载后标记为已挂载
@@ -111,11 +124,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     detectLanguage()
   }, [])
 
-  // 加载翻译文件
+  // 加载翻译文件（主界面 + 卡片标题用语言）
   useEffect(() => {
     const loadTranslations = async () => {
       try {
-        // 将语言代码映射到文件名，使用明确的导入路径
         let translationsModule: any
         switch (language) {
           case 'zh':
@@ -136,19 +148,39 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
           default:
             translationsModule = await import('@/locales/zh.json')
         }
-        const translations = translationsModule.default || translationsModule
-        setTranslations(translations)
-        // 强制触发重新渲染，确保所有使用t()的组件都能更新
+        const loaded = translationsModule.default || translationsModule
+        setTranslations(loaded)
+
+        const titleLang = getTitleLocale(language)
+        if (titleLang === language) {
+          setTitleTranslations(loaded)
+        } else {
+          let titleModule: any
+          switch (titleLang) {
+            case 'zh':
+              titleModule = await import('@/locales/zh.json')
+              break
+            case 'ja':
+              titleModule = await import('@/locales/ja.json')
+              break
+            case 'en':
+              titleModule = await import('@/locales/en.json')
+              break
+            default:
+              titleModule = await import('@/locales/ja.json')
+          }
+          setTitleTranslations(titleModule.default || titleModule)
+        }
+
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new Event('languagechange'))
         }
       } catch (error) {
         console.error(`Failed to load translations for ${language}:`, error)
-        // 如果加载失败，使用中文作为后备
         setTranslations(zhTranslations)
+        setTitleTranslations(zhTranslations)
       }
     }
-    // 总是加载翻译，确保语言切换时能正确更新
     loadTranslations()
   }, [language])
 
@@ -178,51 +210,34 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  // 翻译函数
-  const t = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any => {
-    const resolveFrom = (source: Record<string, any>, fullKey: string) => {
-      const keys = fullKey.split('.')
-      let value: any = source
-      for (const k of keys) {
-        if (value && typeof value === 'object' && k in value) {
-          value = value[k]
-        } else {
-          return { found: false as const, value: undefined, usedKey: fullKey }
-        }
-      }
-      return { found: true as const, value, usedKey: fullKey }
-    }
-
-    // 先尝试原始 key
-    let resolved = resolveFrom(translations, key)
-
-    // 兼容旧的翻译结构：tenant.kaiyaku.* 在部分语言文件里位于 tenant.services.kaiyaku.*
-    if (!resolved.found && key.startsWith('tenant.kaiyaku.')) {
-      resolved = resolveFrom(translations, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
-    }
-
-    // 最终兜底：如果当前语言包里找不到，回退到中文（避免 UI 直接显示 key）
-    if (!resolved.found) {
-      let fallbackResolved = resolveFrom(zhTranslations as any, key)
-      if (!fallbackResolved.found && key.startsWith('tenant.kaiyaku.')) {
-        fallbackResolved = resolveFrom(
-          zhTranslations as any,
-          key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.')
-        )
-      }
-      if (fallbackResolved.found) {
-        resolved = fallbackResolved
+  const resolveFrom = (source: Record<string, any>, fullKey: string) => {
+    const keys = fullKey.split('.')
+    let value: any = source
+    for (const k of keys) {
+      if (value && typeof value === 'object' && k in value) {
+        value = value[k]
       } else {
-        return key
+        return { found: false as const, value: undefined, usedKey: fullKey }
       }
     }
+    return { found: true as const, value, usedKey: fullKey }
+  }
 
-    const value = resolved.value
-    if (options?.returnObjects && (Array.isArray(value) || typeof value === 'object')) {
-      return value
+  const translate = (source: Record<string, any>, key: string, options?: { returnObjects?: boolean; [key: string]: any }) => {
+    let resolved = resolveFrom(source, key)
+    if (!resolved.found && key.startsWith('tenant.kaiyaku.')) {
+      resolved = resolveFrom(source, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
     }
+    if (!resolved.found) {
+      const fb = resolveFrom(zhTranslations as any, key)
+      if (!fb.found && key.startsWith('tenant.kaiyaku.')) {
+        const fb2 = resolveFrom(zhTranslations as any, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
+        if (fb2.found) resolved = fb2
+      } else if (fb.found) resolved = fb
+    }
+    const value = resolved.found ? resolved.value : undefined
+    if (options?.returnObjects && (Array.isArray(value) || typeof value === 'object')) return value
     let result = typeof value === 'string' ? value : key
-    // 支持插值：替换 {key} 格式的占位符
     if (options && typeof result === 'string') {
       Object.keys(options).forEach(optKey => {
         if (optKey !== 'returnObjects' && options[optKey] !== undefined) {
@@ -233,8 +248,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return result
   }
 
+  const t = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any =>
+    translate(translations, key, options)
+
+  const tTitle = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any =>
+    translate(titleTranslations, key, options)
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tTitle, titleLocale: getTitleLocale(language) }}>
       {children}
     </LanguageContext.Provider>
   )

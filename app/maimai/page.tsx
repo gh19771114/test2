@@ -46,7 +46,7 @@ const parsePriceToYen = (price: string): number | null => {
 
 
 export default function MaiMaiPage() {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language } = useLanguage()
   const [selectedCurrency, setSelectedCurrency] = useState<string>('JPY')
   const [rates, setRates] = useState<Record<string, number>>({ JPY: 1 })
   const [lastUpdated, setLastUpdated] = useState<string>('')
@@ -149,35 +149,35 @@ export default function MaiMaiPage() {
   }
 
   const propertiesNoFee = useMemo(
-    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey) })),
-    [t]
+    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey) })),
+    [t, tTitle]
   )
 
   const propertiesWithFee = useMemo(
-    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey) })),
-    [t]
+    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey) })),
+    [t, tTitle]
   )
 
   const recentDeals = useMemo(() => [
   {
-      title: t('maimai.deals.deal1.title'),
+      title: tTitle('maimai.deals.deal1.title'),
       price: t('maimai.deals.deal1.price'),
       highlight: t('maimai.deals.deal1.highlight'),
       detail: t('maimai.deals.deal1.detail'),
   },
   {
-      title: t('maimai.deals.deal2.title'),
+      title: tTitle('maimai.deals.deal2.title'),
       price: t('maimai.deals.deal2.price'),
       highlight: t('maimai.deals.deal2.highlight'),
       detail: t('maimai.deals.deal2.detail'),
   },
   {
-      title: t('maimai.deals.deal3.title'),
+      title: tTitle('maimai.deals.deal3.title'),
       price: t('maimai.deals.deal3.price'),
       highlight: t('maimai.deals.deal3.highlight'),
       detail: t('maimai.deals.deal3.detail'),
   },
-  ], [t])
+  ], [t, tTitle])
 
   const stats = useMemo(() => [
     { label: t('maimai.stats.transactionAmount'), value: t('maimai.stats.transactionAmountValue') },
@@ -187,15 +187,15 @@ export default function MaiMaiPage() {
   ], [t])
 
   const transactionSteps = useMemo(() => [
-    { step: 1, title: t('maimai.steps.step1.title'), desc: t('maimai.steps.step1.desc'), icon: '📞' },
-    { step: 2, title: t('maimai.steps.step2.title'), desc: t('maimai.steps.step2.desc'), icon: '🔍' },
-    { step: 3, title: t('maimai.steps.step3.title'), desc: t('maimai.steps.step3.desc'), icon: '🏠' },
-    { step: 4, title: t('maimai.steps.step4.title'), desc: t('maimai.steps.step4.desc'), icon: '💼' },
-    { step: 5, title: t('maimai.steps.step5.title'), desc: t('maimai.steps.step5.desc'), icon: '📝' },
-    { step: 6, title: t('maimai.steps.step6.title'), desc: t('maimai.steps.step6.desc'), icon: '💰' },
-    { step: 7, title: t('maimai.steps.step7.title'), desc: t('maimai.steps.step7.desc'), icon: '🔑' },
-    { step: 8, title: t('maimai.steps.step8.title'), desc: t('maimai.steps.step8.desc'), icon: '✅' },
-  ], [t])
+    { step: 1, title: tTitle('maimai.steps.step1.title'), desc: t('maimai.steps.step1.desc'), icon: '📞' },
+    { step: 2, title: tTitle('maimai.steps.step2.title'), desc: t('maimai.steps.step2.desc'), icon: '🔍' },
+    { step: 3, title: tTitle('maimai.steps.step3.title'), desc: t('maimai.steps.step3.desc'), icon: '🏠' },
+    { step: 4, title: tTitle('maimai.steps.step4.title'), desc: t('maimai.steps.step4.desc'), icon: '💼' },
+    { step: 5, title: tTitle('maimai.steps.step5.title'), desc: t('maimai.steps.step5.desc'), icon: '📝' },
+    { step: 6, title: tTitle('maimai.steps.step6.title'), desc: t('maimai.steps.step6.desc'), icon: '💰' },
+    { step: 7, title: tTitle('maimai.steps.step7.title'), desc: t('maimai.steps.step7.desc'), icon: '🔑' },
+    { step: 8, title: tTitle('maimai.steps.step8.title'), desc: t('maimai.steps.step8.desc'), icon: '✅' },
+  ], [t, tTitle])
 
   const formatTransactionStepTitle = useMemo(() => {
     if (language !== 'en') return (s: string) => s
@@ -607,7 +607,7 @@ export default function MaiMaiPage() {
                         <div className="relative h-48 bg-gray-200 overflow-hidden">
                           <Image
                             src={property.image}
-                            alt={property.title}
+                            alt={property.displayTitle}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                             sizes="320px"
@@ -618,7 +618,7 @@ export default function MaiMaiPage() {
                           </div>
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
-                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.title}</h4>
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
                             <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
@@ -643,7 +643,7 @@ export default function MaiMaiPage() {
                         <div className="relative h-48 bg-gray-200 overflow-hidden">
                           <Image
                             src={property.image}
-                            alt={property.title}
+                            alt={property.displayTitle}
                             fill
                             className="object-cover"
                             sizes="320px"
@@ -654,7 +654,7 @@ export default function MaiMaiPage() {
                           </div>
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
-                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
                             <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
@@ -756,7 +756,7 @@ export default function MaiMaiPage() {
                         <div className="relative h-48 bg-gray-200">
                           <Image
                             src={property.image}
-                            alt={property.title}
+                            alt={property.displayTitle}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                             sizes="320px"
@@ -766,7 +766,7 @@ export default function MaiMaiPage() {
                           </div>
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1">
-                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.title}</h4>
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
                             <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
@@ -791,7 +791,7 @@ export default function MaiMaiPage() {
                         <div className="relative h-48 bg-gray-200">
                           <Image
                             src={property.image}
-                            alt={property.title}
+                            alt={property.displayTitle}
                             fill
                             className="object-cover"
                             sizes="320px"
@@ -801,7 +801,7 @@ export default function MaiMaiPage() {
                           </div>
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1">
-                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.title}</h4>
+                          <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
                             <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>

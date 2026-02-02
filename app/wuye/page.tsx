@@ -10,7 +10,7 @@ import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/manag
 import RentNegotiationRing from '@/components/RentNegotiationRing'
 
 export default function WuYePage() {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language, titleLocale } = useLanguage()
   const propertiesScrollRef = useRef<HTMLDivElement | null>(null)
   const propertiesTrackRef = useRef<HTMLDivElement | null>(null)
   const [ringSize, setRingSize] = useState<number>(260)
@@ -26,31 +26,31 @@ export default function WuYePage() {
 
   const regularServices = useMemo(() => [
     {
-      title: t('wuye.services.regular.zulin'),
+      title: tTitle('wuye.services.regular.zulin'),
       link: '/wuye/zulin',
       icon: ClipboardCheck,
     },
     {
-      title: t('wuye.services.regular.shouzhi'),
+      title: tTitle('wuye.services.regular.shouzhi'),
       link: '/wuye/shouzhi',
       icon: DollarSign,
     },
     {
-      title: t('wuye.services.regular.xiushan'),
+      title: tTitle('wuye.services.regular.xiushan'),
       link: '/wuye/xiushan',
       icon: Wrench,
     },
     {
-      title: t('wuye.services.regular.ruzhu'),
+      title: tTitle('wuye.services.regular.ruzhu'),
       link: '/wuye/ruzhu',
       icon: Users,
     },
     {
-      title: t('wuye.services.regular.baoxian'),
+      title: tTitle('wuye.services.regular.baoxian'),
       link: '/wuye/baoxian',
       icon: Shield,
     },
-  ], [t])
+  ], [tTitle])
 
   // 资产维护&增值服务动态图：根据视口自适应尺寸（避免移动端撑爆/桌面端过小）
   useEffect(() => {
@@ -68,11 +68,11 @@ export default function WuYePage() {
   const managedProperties = useMemo(() => {
     return activeManagedPropertyCards.map((card) => ({
       id: card.id,
-      type: t('wuye.properties.type'),
-      title: getManagedPropertyTitle(card, language),
+      type: tTitle('wuye.properties.type'),
+      title: getManagedPropertyTitle(card, titleLocale),
       image: card.image,
     }))
-  }, [t, language])
+  }, [tTitle, titleLocale])
 
   // 管理房产：用于无缝自动滚动（渲染两份，滚动到一半回绕）
   const managedPropertiesLoop = useMemo(() => {

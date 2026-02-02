@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default function CompanyActivitiesPanel({ limit = 8, className = '' }: Props) {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
 
   const activities = useMemo(() => {
     const sorted = [...latestNews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -21,7 +21,7 @@ export default function CompanyActivitiesPanel({ limit = 8, className = '' }: Pr
   }, [limit])
 
   const getNewsTitle = (slug: string) => {
-    const translated = t(`news.items.${slug}.title`)
+    const translated = tTitle(`news.items.${slug}.title`)
     if (!translated || translated === `news.items.${slug}.title`) return slug
     return translated
   }

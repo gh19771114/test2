@@ -33,7 +33,7 @@ const itemVariants = {
 }
 
 export default function ShouzhiPage() {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -56,40 +56,40 @@ export default function ShouzhiPage() {
   const services = useMemo(() => {
     const baseServices = [
       {
-        title: t('wuye.shouzhi.services.service1.title'),
+        title: tTitle('wuye.shouzhi.services.service1.title'),
         icon: DollarSign,
         image: '/imgs/wuye/real/shouzhi-service-1.jpg',
         description: t('wuye.shouzhi.services.service1.description'),
         items: (t('wuye.shouzhi.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.shouzhi.timeline.item1.time'),
-          title: t('wuye.shouzhi.timeline.item1.title'),
+          title: tTitle('wuye.shouzhi.timeline.item1.title'),
           description: t('wuye.shouzhi.timeline.item1.description'),
         },
         color: 'from-green-500 to-green-600',
       },
       {
-        title: t('wuye.shouzhi.services.service2.title'),
+        title: tTitle('wuye.shouzhi.services.service2.title'),
         icon: FileText,
         image: '/imgs/wuye/real/shouzhi-service-2.jpg',
         description: t('wuye.shouzhi.services.service2.description'),
         items: (t('wuye.shouzhi.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.shouzhi.timeline.item2.time'),
-          title: t('wuye.shouzhi.timeline.item2.title'),
+          title: tTitle('wuye.shouzhi.timeline.item2.title'),
           description: t('wuye.shouzhi.timeline.item2.description'),
         },
         color: 'from-blue-500 to-blue-600',
       },
       {
-        title: t('wuye.shouzhi.services.service3.title'),
+        title: tTitle('wuye.shouzhi.services.service3.title'),
         icon: Calculator,
         image: '/imgs/wuye/real/shouzhi-service-3.jpg',
         description: t('wuye.shouzhi.services.service3.description'),
         items: (t('wuye.shouzhi.services.service3.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.shouzhi.timeline.item3.time'),
-          title: t('wuye.shouzhi.timeline.item3.title'),
+          title: tTitle('wuye.shouzhi.timeline.item3.title'),
           description: t('wuye.shouzhi.timeline.item3.description'),
         },
         color: 'from-purple-500 to-purple-600',
@@ -101,19 +101,19 @@ export default function ShouzhiPage() {
   const processSteps = useMemo(() => [
     {
       step: '01',
-      title: t('wuye.shouzhi.process.step1.title'),
+      title: tTitle('wuye.shouzhi.process.step1.title'),
       description: t('wuye.shouzhi.process.step1.description'),
       image: '/imgs/wuye/real/shouzhi-process-1.jpg',
     },
     {
       step: '02',
-      title: t('wuye.shouzhi.process.step2.title'),
+      title: tTitle('wuye.shouzhi.process.step2.title'),
       description: t('wuye.shouzhi.process.step2.description'),
       image: '/imgs/wuye/real/shouzhi-process-2.jpg',
     },
     {
       step: '03',
-      title: t('wuye.shouzhi.process.step3.title'),
+      title: tTitle('wuye.shouzhi.process.step3.title'),
       description: t('wuye.shouzhi.process.step3.description'),
       image: '/imgs/wuye/real/shouzhi-process-3.jpg',
     },

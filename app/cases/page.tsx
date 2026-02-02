@@ -38,7 +38,7 @@ const itemVariants = {
 }
 
 export default function CasesPage() {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language, titleLocale } = useLanguage()
   const inViewRef = useRef<HTMLDivElement | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
@@ -55,25 +55,23 @@ export default function CasesPage() {
       return {
         id,
         date: caseDates[id],
-        type: detail?.type || '',
+        type: tTitle(`cases.details.${id}.type`) || detail?.type || '',
         categoryGroup: caseCategoryGroups[id],
-        title: detail?.title || '',
+        title: tTitle(`cases.details.${id}.title`) || detail?.title || '',
         location: detail?.location || '',
         category: detail?.category || '',
         image: caseImages[id],
         description: detail?.description || '',
-        // WPS：删除子页面，卡片不再跳转
         href: id === 'kingsoft-wps-japan' ? undefined : `/cases/${id}`,
       }
     })
 
-    // 物业管理：与 /wuye “管理房产”卡片同步（数量与图片一致）
     const wuyeManaged = activeManagedPropertyCards.map((card) => ({
       id: card.id,
       date: '',
-      type: t('wuye.properties.type'),
+      type: tTitle('wuye.properties.type'),
       categoryGroup: 'wuye',
-      title: getManagedPropertyTitle(card, language),
+      title: getManagedPropertyTitle(card, titleLocale),
       location: '',
       category: '',
       image: card.image,
@@ -81,13 +79,12 @@ export default function CasesPage() {
       href: '/wuye',
     }))
 
-    // 资产投资：与 /touzi 的投资卡片同步（数量与图文一致）
     const touziAssets = investmentProperties.map((p, idx) => ({
       id: `touzi-asset-${idx + 1}`,
       date: '',
-      type: t('touzi.title'),
+      type: tTitle('touzi.title'),
       categoryGroup: 'touzi',
-      title: t(p.titleKey),
+      title: tTitle(p.titleKey),
       location: t(p.locationKey),
       category: '',
       image: p.image || '/imgs/honsha.png',
@@ -95,11 +92,10 @@ export default function CasesPage() {
       href: '/touzi',
     }))
 
-    // 买卖中介：与 /maimai “销售中房产”卡片同步（数量与图文一致）
     const maimaiCards = maimaiAllPropertyCards.map((p) => ({
       id: p.href,
       date: '',
-      type: t('maimai.properties.title'),
+      type: tTitle('maimai.properties.title'),
       categoryGroup: 'maimai',
       title: p.title,
       location: p.location,
@@ -110,7 +106,7 @@ export default function CasesPage() {
     }))
 
     return [...base, ...wuyeManaged, ...touziAssets, ...maimaiCards]
-  }, [t, language])
+  }, [t, tTitle, language, titleLocale])
 
   // 筛选案例
   const filteredCases = useMemo(() => {

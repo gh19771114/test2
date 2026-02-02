@@ -209,7 +209,7 @@ const caseDetails: Record<string, CaseDetail> = {
 }
 
 export default function CaseDetailPage() {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language } = useLanguage()
   const params = useParams()
   const slug = params?.slug as string | undefined
   
@@ -228,8 +228,8 @@ export default function CaseDetailPage() {
     try {
       const translatedCase = {
         ...baseCase,
-        type: t(`cases.details.${slug}.type`, { returnObjects: false }) || baseCase.type,
-        title: t(`cases.details.${slug}.title`, { returnObjects: false }) || baseCase.title,
+        type: tTitle(`cases.details.${slug}.type`, { returnObjects: false }) || baseCase.type,
+        title: tTitle(`cases.details.${slug}.title`, { returnObjects: false }) || baseCase.title,
         location: t(`cases.details.${slug}.location`, { returnObjects: false }) || baseCase.location,
         category: t(`cases.details.${slug}.category`, { returnObjects: false }) || baseCase.category,
         description: t(`cases.details.${slug}.description`, { returnObjects: false }) || baseCase.description,

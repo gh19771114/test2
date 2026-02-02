@@ -342,11 +342,11 @@
       "team": {
         "team1": {
           "title": "Japan Real Estate Transaction Agent",
-          "count": "7 persons"
+          "count": "7 people"
         },
         "team2": {
           "title": "Rental Real Estate Management Agent",
-          "count": "4 persons"
+          "count": "4 people"
         },
         "team3": {
           "title": "Apartment Building Manager",
@@ -354,7 +354,7 @@
         },
         "team4": {
           "title": "Financial Planner Level 3",
-          "count": "2 persons"
+          "count": "2 people"
         },
         "team5": {
           "title": "Financial Planner Level 2",
@@ -1585,7 +1585,20 @@
       "comingSoon": "Coming Soon",
       "preparing": "New property in preparation",
       "inPreparation": "In preparation",
-      "newPropertyInfo": "New Property Info"
+      "newPropertyInfo": "New Property Info",
+      "buildings": {
+        "lionsHigashiginza2f": "Lions Mansion Higashi-Ginza 2F",
+        "shinNakano305": "Shin-Nakano Ekijou Plaza 305",
+        "shinNakano304": "Shin-Nakano Ekijou Plaza 304",
+        "patioSuginami2f": "Patio Suginami 2F",
+        "centHillsShiinamachi4f": "Saint Hills Shiinamachi 4F",
+        "paleDorSagamihara8f": "Palais d'Or Sagamihara 8F",
+        "nichishinPalaceTakenotsuka5f": "Nisshin Palace Takenotsuka 5F",
+        "cesarTakashimadaira2f": "Cesar Nishi-Takashimadaira 2F",
+        "miwaPlazaTakaido1f": "Miwa Plaza Takaido 1F",
+        "lmNishihachioji3_707": "LM Nishi-Hachioji No.3 7F",
+        "skyCourtIkuta2f": "Sky Court Ikuta 2F"
+      }
     },
     "deals": {
       "deal1": {

@@ -744,7 +744,7 @@ function PartnersNetworkContent({
 // projects 和 comingSoonProjects 将在组件内从多语言文件读取
 
 export default function QiChuPage() {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language } = useLanguage()
   const [debug, setDebug] = useState(false)
   // 用于“硬验证是否更新到最新代码”的构建标记（不依赖屏幕尺寸/JS 分支）
   const buildStamp = '2026-01-29-49'
@@ -906,12 +906,12 @@ export default function QiChuPage() {
     const list: Project[] = [
       {
         id: 'kingsoft-wps-japan',
-        title: t('qichu.cases.project1.title'),
+        title: tTitle('qichu.cases.project1.title'),
         result: t('qichu.cases.project1.result'),
       },
       {
         id: 'suzhou-industrial-park',
-        title: t('qichu.cases.project2.title'),
+        title: tTitle('qichu.cases.project2.title'),
         result: t('qichu.cases.project2.result'),
         // 该卡片暂不跳转案例详情页（未提供对应 cases 页面）
       },
@@ -919,7 +919,7 @@ export default function QiChuPage() {
     // 日语版不展示 WPS 案例卡片
     if (language === 'ja') return list.filter((p) => p.id !== 'kingsoft-wps-japan')
     return list
-  }, [t, language])
+  }, [t, tTitle, language])
 
   // 相关服务（多语言）
   const relatedServices = useMemo(() => {

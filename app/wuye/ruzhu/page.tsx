@@ -33,7 +33,7 @@ const itemVariants = {
 }
 
 export default function RuzhuPage() {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -54,7 +54,7 @@ export default function RuzhuPage() {
   
   const services = useMemo(() => [
     {
-      title: t('wuye.ruzhu.services.service1.title'),
+      title: tTitle('wuye.ruzhu.services.service1.title'),
       icon: Gift,
       image: '/imgs/wuye/real/ruzhu-service-1.jpg',
       description: t('wuye.ruzhu.services.service1.description'),
@@ -62,7 +62,7 @@ export default function RuzhuPage() {
       color: 'from-teal-500 to-teal-600',
     },
     {
-      title: t('wuye.ruzhu.services.service2.title'),
+      title: tTitle('wuye.ruzhu.services.service2.title'),
       icon: MessageCircle,
       image: '/imgs/wuye/real/ruzhu-service-2.jpg',
       description: t('wuye.ruzhu.services.service2.description'),
@@ -74,19 +74,19 @@ export default function RuzhuPage() {
   const processSteps = useMemo(() => [
     {
       step: '01',
-      title: t('wuye.ruzhu.process.step1.title'),
+      title: tTitle('wuye.ruzhu.process.step1.title'),
       description: t('wuye.ruzhu.process.step1.description'),
       image: '/imgs/wuye/real/ruzhu-process-1.jpg',
     },
     {
       step: '02',
-      title: t('wuye.ruzhu.process.step2.title'),
+      title: tTitle('wuye.ruzhu.process.step2.title'),
       description: t('wuye.ruzhu.process.step2.description'),
       image: '/imgs/wuye/real/ruzhu-process-2.jpg',
     },
     {
       step: '03',
-      title: t('wuye.ruzhu.process.step3.title'),
+      title: tTitle('wuye.ruzhu.process.step3.title'),
       description: t('wuye.ruzhu.process.step3.description'),
       image: '/imgs/wuye/real/ruzhu-process-3.jpg',
     },

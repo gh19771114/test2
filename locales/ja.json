@@ -315,7 +315,7 @@
         "bank7": { "name": "東京信用金庫", "branch": "日本橋支店" },
         "bank8": { "name": "巣鴨信用金庫", "branch": "西日暮里支店" }
       },
-      "teamTitle": "専門チーム",
+      "teamTitle": "専門資格",
       "team": {
         "team1": {
           "title": "日本不動産取引士",
@@ -338,7 +338,7 @@
           "count": "1名"
         }
       },
-      "partnersTitle": "パートナー",
+      "partnersTitle": "協力関係",
       "partners": {
         "partner1": {
           "title": "外部顧問",
@@ -369,7 +369,7 @@
           "count": "4所"
         }
       },
-      "financialPartnersTitle": "主要協力金融機関",
+      "financialPartnersTitle": "取引先金融機関",
       "assetsTitle": "企業保有資産",
       "assets": {
         "noImage": "画像なし",
@@ -1562,7 +1562,20 @@
       "comingSoon": "近日公開",
       "preparing": "新規物件準備中",
       "inPreparation": "準備中",
-      "newPropertyInfo": "新物件情報"
+      "newPropertyInfo": "新物件情報",
+      "buildings": {
+        "lionsHigashiginza2f": "ライオンズマンション東銀座2F",
+        "shinNakano305": "新中野駅上プラザ305号室",
+        "shinNakano304": "新中野駅上プラザ304号室",
+        "patioSuginami2f": "パティオ杉並 2F",
+        "centHillsShiinamachi4f": "セントヒルズ椎名町 4F",
+        "paleDorSagamihara8f": "パレ・ドール相模原 8F",
+        "nichishinPalaceTakenotsuka5f": "日神パレス竹ノ塚 5F",
+        "cesarTakashimadaira2f": "セザール西高島平 2F",
+        "miwaPlazaTakaido1f": "美和プラザ高井戸 1F",
+        "lmNishihachioji3_707": "LM西八王子第3 7F",
+        "skyCourtIkuta2f": "スカイコート生田 2F"
+      }
     },
     "deals": {
       "deal1": {

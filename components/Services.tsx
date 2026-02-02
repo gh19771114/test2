@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const Services = () => {
-  const { t, language } = useLanguage()
+  const { t, tTitle, language } = useLanguage()
   const ref = useRef(null)
   const pieChartRef = useRef(null)
   const mobilePieChartRef = useRef<HTMLDivElement>(null)
@@ -304,7 +304,7 @@ const Services = () => {
   const services = useMemo(() => [
     {
       icon: ClipboardCheck,
-      title: t('home.services.wuye.title'),
+      title: tTitle('home.services.wuye.title'),
       percentage: 60,
       color: '#3b82f6', // blue
       description: t('home.services.wuye.description'),
@@ -313,7 +313,7 @@ const Services = () => {
     },
     {
       icon: Building2,
-      title: t('home.services.maimai.title'),
+      title: tTitle('home.services.maimai.title'),
       percentage: 20,
       color: '#10b981', // green
       description: t('home.services.maimai.description'),
@@ -322,7 +322,7 @@ const Services = () => {
     },
     {
       icon: Globe2,
-      title: t('home.services.qichu.title'),
+      title: tTitle('home.services.qichu.title'),
       percentage: 12.5,
       color: '#f59e0b', // amber
       description: t('home.services.qichu.description'),
@@ -331,14 +331,14 @@ const Services = () => {
     },
     {
       icon: TrendingUp,
-      title: t('home.services.touzi.title'),
+      title: tTitle('home.services.touzi.title'),
       percentage: 7.5,
       color: '#8b5cf6', // purple
       description: t('home.services.touzi.description'),
       features: t('home.services.touzi.features', { returnObjects: true }) as string[],
       link: '/touzi'
     },
-  ], [t])
+  ], [t, tTitle])
 
   // 饼图文字：SVG <text> 不支持自动换行；英文标题较长时容易溢出扇区
   // 这里做两件事：

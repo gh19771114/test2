@@ -1,5 +1,6 @@
 export type MaimaiPropertyCard = {
   title: string
+  titleKey: string
   price: string
   area: string
   type: string
@@ -12,6 +13,7 @@ export type MaimaiPropertyCard = {
 export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
   {
     title: 'ライオンズマンション東銀座2F',
+    titleKey: 'maimai.properties.buildings.lionsHigashiginza2f',
     price: '42,680万日元',
     area: '127.6㎡',
     type: '店舗・事務所',
@@ -22,6 +24,7 @@ export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
   },
   {
     title: '新中野駅上プラザ305号室',
+    titleKey: 'maimai.properties.buildings.shinNakano305',
     price: '2,100万日元',
     area: '23.92㎡',
     type: '1R',
@@ -32,6 +35,7 @@ export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
   },
   {
     title: '新中野駅上プラザ304号室',
+    titleKey: 'maimai.properties.buildings.shinNakano304',
     price: '5,600万日元',
     area: '71.73㎡',
     type: '2LDK',
@@ -45,6 +49,7 @@ export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
 export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   {
     title: 'パティオ杉並 2F',
+    titleKey: 'maimai.properties.buildings.patioSuginami2f',
     price: '1,050万日元',
     area: '19.2㎡',
     type: '1R',
@@ -55,6 +60,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: 'セントヒルズ椎名町 4F',
+    titleKey: 'maimai.properties.buildings.centHillsShiinamachi4f',
     price: '1,050万日元',
     area: '13.84㎡',
     type: '1R',
@@ -65,6 +71,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: "パレ・ドール相模原 8F",
+    titleKey: 'maimai.properties.buildings.paleDorSagamihara8f',
     price: '420万日元',
     area: '16.29㎡',
     type: '1K',
@@ -75,6 +82,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: '日神パレス竹ノ塚 5F',
+    titleKey: 'maimai.properties.buildings.nichishinPalaceTakenotsuka5f',
     price: '700万日元',
     area: '18.09㎡',
     type: '1R',
@@ -85,6 +93,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: 'セザール西高島平 2F',
+    titleKey: 'maimai.properties.buildings.cesarTakashimadaira2f',
     price: '1,200万日元',
     area: '27.13㎡',
     type: '2〜3LDK',
@@ -95,6 +104,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: '美和プラザ高井戸 1F',
+    titleKey: 'maimai.properties.buildings.miwaPlazaTakaido1f',
     price: '990万日元',
     area: '—',
     type: '1K×3戸',
@@ -105,6 +115,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: 'LM西八王子第3 7F',
+    titleKey: 'maimai.properties.buildings.lmNishihachioji3_707',
     price: '480万日元',
     area: '18.2㎡',
     type: '1K',
@@ -115,6 +126,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   },
   {
     title: 'スカイコート生田 2F',
+    titleKey: 'maimai.properties.buildings.skyCourtIkuta2f',
     price: '430万日元',
     area: '约17㎡',
     type: '1K',

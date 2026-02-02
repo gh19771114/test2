@@ -15,7 +15,7 @@ const managedPropertyCaseIds = new Set([
 ])
 
 const Works = () => {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
   const [visibleCount, setVisibleCount] = useState(6) // 首页默认展示6个案例
 
   // 首页“成功案例”与 /cases 页共享同一套多语言数据源与图片映射
@@ -25,18 +25,16 @@ const Works = () => {
       return {
         id,
         date: caseDates[id],
-        type: detail?.type || '',
+        type: tTitle(`cases.details.${id}.type`) || detail?.type || '',
         category: detail?.category || '',
-        title: detail?.title || '',
+        title: tTitle(`cases.details.${id}.title`) || detail?.title || '',
         image: caseImages[id],
-        // 首页需求：管理房产卡片下方不显示“管理房产展示（来源：管理房产图片库）。”这类说明文字
         description: managedPropertyCaseIds.has(id) ? '' : (detail?.description || ''),
     }
     })
 
-    // 首页需求：去掉“パークタワー西新宿施設棟1F”
     return baseWorks.filter((w) => w.id !== 'park-tower-nishishinjuku-101-201')
-  }, [t])
+  }, [t, tTitle])
 
   // 首页只显示6个案例，不再滚动加载更多
 

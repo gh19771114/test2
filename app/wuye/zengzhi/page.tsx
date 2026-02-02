@@ -9,7 +9,7 @@ import { TrendingUp, Search, Briefcase, Hand, Hammer, Coins, BarChart3, Building
 import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function ZengzhiPage() {
-  const { t } = useLanguage()
+  const { t, tTitle } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -74,7 +74,7 @@ export default function ZengzhiPage() {
 
   const services = useMemo(() => [
     {
-      title: t('wuye.zengzhi.services.service1.title'),
+      title: tTitle('wuye.zengzhi.services.service1.title'),
       icon: Search,
       image: '/imgs/wuye/real/zengzhi-service-1.jpg',
       description: t('wuye.zengzhi.services.service1.description'),
@@ -82,7 +82,7 @@ export default function ZengzhiPage() {
       color: 'from-blue-500 to-blue-600',
     },
     {
-      title: t('wuye.zengzhi.services.service2.title'),
+      title: tTitle('wuye.zengzhi.services.service2.title'),
       icon: Hand,
       image: '/imgs/wuye/real/zengzhi-service-2.jpg',
       description: t('wuye.zengzhi.services.service2.description'),
@@ -90,7 +90,7 @@ export default function ZengzhiPage() {
       color: 'from-green-500 to-green-600',
     },
     {
-      title: t('wuye.zengzhi.services.service3.title'),
+      title: tTitle('wuye.zengzhi.services.service3.title'),
       icon: Hammer,
       image: '/imgs/wuye/real/zengzhi-service-3.jpg',
       description: t('wuye.zengzhi.services.service3.description'),
@@ -98,19 +98,19 @@ export default function ZengzhiPage() {
       color: 'from-orange-500 to-orange-600',
     },
     {
-      title: t('wuye.zengzhi.services.service4.title'),
+      title: tTitle('wuye.zengzhi.services.service4.title'),
       icon: Coins,
       image: '/imgs/wuye/real/zengzhi-service-4.jpg',
       description: t('wuye.zengzhi.services.service4.description'),
       items: (t('wuye.zengzhi.services.service4.items', { returnObjects: true }) as string[]) || [],
       color: 'from-amber-500 to-amber-600',
     },
-  ], [t])
+  ], [t, tTitle])
 
   // 旧版 3 张图文案例（需要保留）
   const legacyCases = useMemo(() => [
     {
-      title: t('wuye.zengzhi.cases.case1.title'),
+      title: tTitle('wuye.zengzhi.cases.case1.title'),
       location: t('wuye.zengzhi.cases.case1.location'),
       result: t('wuye.zengzhi.cases.case1.result'),
       description: t('wuye.zengzhi.cases.case1.description'),
@@ -118,7 +118,7 @@ export default function ZengzhiPage() {
       category: t('wuye.zengzhi.cases.case1.category'),
     },
     {
-      title: t('wuye.zengzhi.cases.case2.title'),
+      title: tTitle('wuye.zengzhi.cases.case2.title'),
       location: t('wuye.zengzhi.cases.case2.location'),
       result: t('wuye.zengzhi.cases.case2.result'),
       description: t('wuye.zengzhi.cases.case2.description'),
@@ -126,14 +126,14 @@ export default function ZengzhiPage() {
       category: t('wuye.zengzhi.cases.case2.category'),
     },
     {
-      title: t('wuye.zengzhi.cases.case3.title'),
+      title: tTitle('wuye.zengzhi.cases.case3.title'),
       location: t('wuye.zengzhi.cases.case3.location'),
       result: t('wuye.zengzhi.cases.case3.result'),
       description: t('wuye.zengzhi.cases.case3.description'),
       image: '/imgs/wuye/real/zengzhi-cases/JPC%20Koishikawa.jpeg',
       category: t('wuye.zengzhi.cases.case3.category'),
     },
-  ], [t])
+  ], [t, tTitle])
 
   const yenFmt = useMemo(() => new Intl.NumberFormat('ja-JP'), [])
   const areaFmt = useMemo(() => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }), [])
