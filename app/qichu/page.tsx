@@ -908,7 +908,6 @@ export default function QiChuPage() {
         id: 'kingsoft-wps-japan',
         title: t('qichu.cases.project1.title'),
         result: t('qichu.cases.project1.result'),
-        href: '/cases/kingsoft-wps-japan',
       },
       {
         id: 'suzhou-industrial-park',
@@ -3767,7 +3766,7 @@ export default function QiChuPage() {
                           </div>
                           <div className="absolute top-2 right-2 md:top-4 md:right-4">
                             <span className="bg-green-600 text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-medium">
-                              企业服务
+                              {t('qichu.cases.cardType')}
                             </span>
                           </div>
                         </div>
@@ -3780,7 +3779,7 @@ export default function QiChuPage() {
                           <h3 className="text-base md:text-lg lg:text-xl font-semibold text-navy-900 mb-1 md:mb-2 group-hover:text-navy-600 transition-colors duration-200">
                             {project.title}
                           </h3>
-                          <p className="text-gray-700 text-xs md:text-sm leading-relaxed line-clamp-2">
+                          <p className="text-gray-700 text-xs md:text-sm leading-relaxed whitespace-pre-line line-clamp-2">
                             {project.result}
                           </p>
                         </div>

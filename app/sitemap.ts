@@ -117,6 +117,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic: Success cases
   for (const id of caseIds) {
+    // WPS：删除子页面，不输出到 sitemap
+    if (id === 'kingsoft-wps-japan') continue
     addUrl(`/cases/${id}`, {
       lastModified: parseLooseDate(caseDates[id]) || now,
       changeFrequency: 'yearly',

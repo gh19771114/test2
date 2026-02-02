@@ -894,7 +894,7 @@
           "items": [
             "Market rent analysis",
             "Rent adjustment strategy",
-            "Tenant negotiation",
+            "Rent negotiation agency",
             "Contract terms optimization"
           ]
         },
@@ -2379,9 +2379,10 @@
     },
     "cases": {
       "title": "Success Cases",
+      "cardType": "Enterprise Service",
       "project1": {
         "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-        "result": "Signed with a major Japanese real estate company to establish an office and provided recruitment support."
+        "result": "Assisted in securing a lease in a premium office building\nHandled procurement and setup of professional office equipment."
       },
       "project2": {
         "title": "Suzhou Industrial Park (Strategic Partner)",
@@ -2411,7 +2412,7 @@
     "subtitle": "Below are real cases we have successfully completed, covering enterprise landing, business expansion, and other areas.",
     "project1": {
       "title": "Kingsoft WPS Japan Subsidiary Setup Service",
-      "result": "Signed with a major Japanese real estate company to establish an office and provided recruitment support."
+      "result": "Assisted in securing a lease in a premium office building\nHandled procurement and setup of professional office equipment."
     },
     "comingSoon1": {
       "title": "Case Coming Soon",

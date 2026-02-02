@@ -62,7 +62,8 @@ export default function CasesPage() {
         category: detail?.category || '',
         image: caseImages[id],
         description: detail?.description || '',
-        href: `/cases/${id}`,
+        // WPS：删除子页面，卡片不再跳转
+        href: id === 'kingsoft-wps-japan' ? undefined : `/cases/${id}`,
       }
     })
 
@@ -432,7 +433,7 @@ export default function CasesPage() {
                         ) : null}
 
                         {caseItem.categoryGroup !== 'wuye' && caseItem.description ? (
-                          <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 cases-card-desc">
+                          <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line line-clamp-2 cases-card-desc">
                             {caseItem.description}
                           </p>
                         ) : null}

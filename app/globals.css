@@ -1790,6 +1790,37 @@ section#partners.qichu-partners-network {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+/* /qichu：Related Services（iPad 横屏 & 桌面端）
+   目标：5 个卡片排成 3 + 2，第二排居中对齐
+   方案：在对应断点把容器从 grid 切到 flex-wrap + justify-center
+*/
+@media (min-width: 768px) and (max-width: 1279px) and (orientation: landscape) {
+  #services .qichu-related-services-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important;
+  }
+  #services .qichu-related-service-card {
+    flex: 0 1 320px !important;
+    padding: 1.25rem !important;
+  }
+}
+@media (min-width: 1280px) {
+  #services .qichu-related-services-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important;
+  }
+  #services .qichu-related-service-card {
+    flex: 0 1 340px !important;
+    padding: 1.5rem !important;
+  }
+}
 @media (max-width: 1023px) {
   #services .qichu-related-service-card {
     padding: 0.65rem !important; /* 更贴边，利用空间 */

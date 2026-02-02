@@ -828,9 +828,14 @@ const Services = () => {
                     ? pieCenterY + verticalOffset + 500 + 300 + 350  // 物业管理：向下移动500px + 300px + 350px = 1300px左右
                     : pieCenterY + verticalOffset + 500 + 200 + 300 + 100  // 其他三个：向下移动500px + 200px + 300px + 100px = 1250px左右
 
-                  // 仅英文版：英文内容更容易撑高弹窗，避免底部被裁切 → 整体上移并限制在容器高度内
+                  // 仅英文版：英文内容更容易撑高弹窗 → 适当上移避免底部被裁切
+                  // 但部分扇区（/qichu, /touzi）上移过多会导致顶部越界，所以对这两项减少上移量（等价于向下移动）
                   const isEnglish = language === 'en'
-                  const popupCenterY = isEnglish ? popupCenterYRaw - 220 : popupCenterYRaw
+                  const englishNeedsLessUpShift =
+                    isEnglish && (service.link === '/qichu' || service.link === '/touzi')
+                  const popupCenterY = isEnglish
+                    ? popupCenterYRaw - (englishNeedsLessUpShift ? 120 : 220)
+                    : popupCenterYRaw
                   
                   // 边界检查：确保弹窗完全在父容器内（1800x1550）
                   // 弹窗宽度280px，高度约320px

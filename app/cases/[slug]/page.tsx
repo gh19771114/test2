@@ -141,16 +141,16 @@ const caseDetails: Record<string, CaseDetail> = {
     location: '东京都',
     category: '企业出海',
     image: '/imgs/WPS.jpeg',
-    description: '签约日本大型不动产公司设立办公室，并提供招聘协助。',
+    description: '协助签约入住高端办公大楼 代办专业办公设备的采购及设置工作。',
     details: [
       '成功完成金山 WPS 日本子公司的设立服务',
-      '签约日本大型不动产公司，成功设立办公室',
-      '招聘协助，协助组建本地团队',
+      '协助签约入住高端办公大楼',
+      '代办专业办公设备的采购及设置工作',
       '提供持续的企业出海支持服务',
     ],
     highlights: [
       { label: '服务类型', value: '企业设立' },
-      { label: '服务内容', value: '办公室设立、招聘协助' },
+      { label: '服务内容', value: '办公楼签约、办公设备采购及设置' },
       { label: '服务周期', value: '持续支持' },
       { label: '服务团队', value: '专业团队' },
     ],
@@ -218,7 +218,7 @@ export default function CaseDetailPage() {
     if (!slug) return undefined
     const baseCase = caseDetails[slug]
     if (!baseCase) return undefined
-
+    
     // WPS 案例：日语模式下不切换为日语内容（保持中文不变）
     if (slug === 'kingsoft-wps-japan' && language === 'ja') {
       return baseCase
