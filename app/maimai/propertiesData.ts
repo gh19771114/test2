@@ -115,7 +115,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
     title: '美和プラザ高井戸 1F',
     titleKey: 'maimai.properties.buildings.miwaPlazaTakaido1f',
     locationKey: 'maimai.properties.locations.miwaPlazaTakaido1f',
-    price: '990万日元',
+    price: '1,000万日元',
     area: '—',
     type: '1K×3戸',
     location: '東京都杉並区上高井戸',
