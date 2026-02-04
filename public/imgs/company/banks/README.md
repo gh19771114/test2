@@ -10,7 +10,7 @@
 | higashi.svg | 东日本银行（東日本銀行） | Wikimedia Commons |
 | kiraboshi.png | 绮罗星银行（きらぼし銀行） | https://www.kiraboshibank.co.jp/common/img/com_logo01.png |
 | kansaimirai.svg | 关西未来银行（関西みらい銀行） | https://www.kansaimiraibank.co.jp/common/images/logo_kansaimirai.svg |
-| tokyo_shinkin.gif | 东京信用金库 | https://www.tokyo-shinkin.co.jp/images/top_honten.gif |
+| （远程） | 东京信用金库 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Tokyo_Shinkin_Bank_Logo.svg/3840px-Tokyo_Shinkin_Bank_Logo.svg.png |
 | sugamo_shinkin.png | 巢鸭信用金库 | https://www.sugamo.co.jp/common_img/com_logo02.png |
 
 若某文件加载失败，页面会显示该机构的缩写（SMBC / MUFG 等）作为回退。

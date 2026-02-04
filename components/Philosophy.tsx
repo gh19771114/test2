@@ -5,7 +5,7 @@ import { Heart, Target, Users, Award } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const Philosophy = () => {
-  const { t, tTitle } = useLanguage()
+  const { t } = useLanguage()
 
   const missionParagraphs = useMemo(() => {
     const raw = String(t('company.philosophy.mission.description') || '')
@@ -18,25 +18,25 @@ const Philosophy = () => {
   const values = useMemo(() => [
     {
       icon: Users,
-      title: tTitle('company.philosophy.values.value1.title'),
+      title: t('company.philosophy.values.value1.title'),
       description: t('company.philosophy.values.value1.description'),
     },
     {
       icon: Target,
-      title: tTitle('company.philosophy.values.value2.title'),
+      title: t('company.philosophy.values.value2.title'),
       description: t('company.philosophy.values.value2.description'),
     },
     {
       icon: Heart,
-      title: tTitle('company.philosophy.values.value3.title'),
+      title: t('company.philosophy.values.value3.title'),
       description: t('company.philosophy.values.value3.description'),
     },
     {
       icon: Award,
-      title: tTitle('company.philosophy.values.value4.title'),
+      title: t('company.philosophy.values.value4.title'),
       description: t('company.philosophy.values.value4.description'),
       },
-  ], [t, tTitle])
+  ], [t])
 
   return (
     <section id="philosophy" className="relative section-padding scroll-mt-32">

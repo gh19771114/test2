@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'facebook.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+      },
     ],
   },
   // 开启 gzip 压缩

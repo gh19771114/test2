@@ -429,7 +429,7 @@
     "philosophy": {
       "title": "Corporate Philosophy",
       "subtitle": "Corporate Philosophy",
-      "description": "Bourn Mark is rooted in Japan and serves China-Japan relations. We seek long-term balance among real estate, corporate services, and capital operations, with integrity, professionalism, and cross-cultural understanding at the core, continuously promoting win-win outcomes in urban renewal, asset operations, and business cooperation. We accompany our clients through every stage with sincerity, enabling assets, enterprises, and teams to grow continuously in Japan, and continuously inject vitality into regional development.",
+      "description": "Bourn Mark is rooted in Japan and serves global Chinese-language investors. We seek long-term balance among real estate, corporate services, and capital operations, with integrity, professionalism, and cross-cultural understanding at the core, continuously promoting win-win outcomes in urban renewal, asset operations, and business cooperation. We accompany our clients through every stage with sincerity, enabling assets, enterprises, and teams to grow continuously in Japan, and continuously inject vitality into regional development.",
       "ourPhilosophy": {
         "title": "Our Philosophy",
         "description": "We are deeply rooted in the Japanese market and committed to building bridges for China-Japan cooperation through professionalism and integrity. From real estate to corporate investment, we adhere to long-term value as our guide, closely integrating urban renewal, asset operations, and business integration to create sustainable growth space for clients and partners."
@@ -545,7 +545,7 @@
         "milestone11": {
           "year": "2021.06",
           "title": "Brand Renewal",
-          "description": "The company was officially renamed to Bourn Mark CO.,LTD, establishing the corporate positioning of \"Rooted in Japan, Connecting China and Japan\".",
+          "description": "The company was officially renamed to Bourn Mark CO., LTD., establishing the corporate positioning of \"Rooted in Japan, Connecting the World\".",
           "imageAlt": "Brand launch event"
         }
       }
@@ -792,6 +792,10 @@
         "quickMoveIn": {
           "value": "2 weeks",
           "label": "Fastest Move-in Time"
+        },
+        "guarantee": {
+          "value": "100%",
+          "label": "Join guarantee company"
         },
         "managedProperties": {
           "value": "1300+",

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useMemo } from 'react'
-import { ClipboardCheck, Users, FileCheck, Key, TrendingUp, CheckCircle2, Clock, Building2, Sparkles, ArrowRight } from 'lucide-react'
+import { ClipboardCheck, Users, FileCheck, Key, TrendingUp, CheckCircle2, Clock, Building2, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 // 这些数据将在组件内从多语言文件读取
@@ -32,7 +32,7 @@ const itemVariants = {
 }
 
 export default function ZulinPage() {
-  const { t, tTitle } = useLanguage()
+  const { t } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -48,46 +48,47 @@ export default function ZulinPage() {
   const stats = useMemo(() => [
     { value: t('wuye.zulin.stats.occupancyRate.value'), label: t('wuye.zulin.stats.occupancyRate.label'), icon: TrendingUp },
     { value: t('wuye.zulin.stats.quickMoveIn.value'), label: t('wuye.zulin.stats.quickMoveIn.label'), icon: CheckCircle2 },
+    { value: t('wuye.zulin.stats.guarantee.value'), label: t('wuye.zulin.stats.guarantee.label'), icon: ShieldCheck },
     { value: t('wuye.zulin.stats.managedProperties.value'), label: t('wuye.zulin.stats.managedProperties.label'), icon: Building2 },
   ], [t])
   
   const services = useMemo(() => {
     const baseServices = [
       {
-        title: tTitle('wuye.zulin.services.service1.title'),
+        title: t('wuye.zulin.services.service1.title'),
         icon: Users,
         image: '/imgs/wuye/real/zulin-service-1.jpg',
         description: t('wuye.zulin.services.service1.description'),
         items: (t('wuye.zulin.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item1.time'),
-          title: tTitle('wuye.zulin.timeline.item1.title'),
+          title: t('wuye.zulin.timeline.item1.title'),
           description: t('wuye.zulin.timeline.item1.description'),
         },
         color: 'from-blue-500 to-blue-600',
       },
       {
-        title: tTitle('wuye.zulin.services.service2.title'),
+        title: t('wuye.zulin.services.service2.title'),
         icon: FileCheck,
         image: '/imgs/wuye/real/zulin-service-2.jpg',
         description: t('wuye.zulin.services.service2.description'),
         items: (t('wuye.zulin.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item2.time'),
-          title: tTitle('wuye.zulin.timeline.item2.title'),
+          title: t('wuye.zulin.timeline.item2.title'),
           description: t('wuye.zulin.timeline.item2.description'),
         },
         color: 'from-green-500 to-green-600',
       },
       {
-        title: tTitle('wuye.zulin.services.service3.title'),
+        title: t('wuye.zulin.services.service3.title'),
         icon: Key,
         image: '/imgs/wuye/real/zulin-service-3.jpg',
         description: t('wuye.zulin.services.service3.description'),
         items: (t('wuye.zulin.services.service3.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.zulin.timeline.item3.time'),
-          title: tTitle('wuye.zulin.timeline.item3.title'),
+          title: t('wuye.zulin.timeline.item3.title'),
           description: t('wuye.zulin.timeline.item3.description'),
         },
         color: 'from-purple-500 to-purple-600',
@@ -99,25 +100,25 @@ export default function ZulinPage() {
   const processSteps = useMemo(() => [
     {
       step: '01',
-      title: tTitle('wuye.zulin.process.step1.title'),
+      title: t('wuye.zulin.process.step1.title'),
       description: t('wuye.zulin.process.step1.description'),
       image: '/imgs/wuye/real/zulin-process-1.jpg',
     },
     {
       step: '02',
-      title: tTitle('wuye.zulin.process.step2.title'),
+      title: t('wuye.zulin.process.step2.title'),
       description: t('wuye.zulin.process.step2.description'),
       image: '/imgs/wuye/real/zulin-process-2.jpg',
     },
     {
       step: '03',
-      title: tTitle('wuye.zulin.process.step3.title'),
+      title: t('wuye.zulin.process.step3.title'),
       description: t('wuye.zulin.process.step3.description'),
       image: '/imgs/wuye/real/zulin-process-3.jpg',
     },
     {
       step: '04',
-      title: tTitle('wuye.zulin.process.step4.title'),
+      title: t('wuye.zulin.process.step4.title'),
       description: t('wuye.zulin.process.step4.description'),
       image: '/imgs/wuye/real/zulin-process-4.jpg',
     },
@@ -186,23 +187,23 @@ export default function ZulinPage() {
               variants={containerVariants}
               initial="hidden"
               animate={isStatsInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-3 gap-1 sm:flex sm:flex-wrap sm:justify-center sm:gap-6 md:gap-8"
+              className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-6 md:gap-8"
             >
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-2 sm:p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group w-full sm:w-auto sm:min-w-[200px] min-w-0 flex flex-col items-center justify-center text-center"
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-2 sm:p-6 md:p-8 border border-white/10 hover:border-blue-500/50 transition-all duration-300 group w-full sm:w-auto sm:min-w-[200px] min-w-0 flex flex-col items-center justify-center md:justify-start text-center"
                 >
-                  <div className="flex justify-center mb-1 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <stat.icon className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
+                  <div className="flex justify-center items-center mb-1 sm:mb-4 w-full shrink-0 h-10 sm:h-16">
+                    <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shrink-0 overflow-hidden [&>svg]:shrink-0">
+                      <stat.icon className="text-white !w-5 !h-5 sm:!w-8 sm:!h-8 !min-w-[1.25rem] !min-h-[1.25rem] sm:!min-w-[2rem] sm:!min-h-[2rem]" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="text-xl sm:text-3xl md:text-4xl font-bold text-white mb-0.5 sm:mb-2 group-hover:text-blue-300 transition-colors whitespace-nowrap leading-tight">
                     {stat.value}
                   </div>
-                  <div className="text-[12px] sm:text-sm md:text-base text-gray-300 whitespace-nowrap leading-tight tracking-tight">
+                  <div className="text-[12px] sm:text-sm md:text-base text-gray-300 leading-tight tracking-tight text-center whitespace-pre-line">
                     {stat.label}
                   </div>
                 </motion.div>

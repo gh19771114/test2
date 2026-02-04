@@ -27,10 +27,17 @@ const organizationJsonLd = {
   sameAs: ['https://www.facebook.com/bournmarkjapan/', 'https://www.youtube.com/@bournmark'],
 } as const
 
+// 用于 Google 等搜索引擎的标题与描述（可在此修改搜索结果显示文案）
+const SITE_TITLE = 'Bourn Mark川雨流痕-专业的公司'
+const SITE_DESCRIPTION =
+  '提供专业的日本房地产买卖咨询中介服务，以及投资型房地产的物业管理服务。让您在日本的投资更省心、更增值。'
+
 export const metadata: Metadata = {
-  title: 'Bourn Mark｜日本不动产管理公司｜ボーンマーク 公式サイト',
-  description:
-    '株式会社ボーンマーク（Bourn Mark CO.,LTD）は日本を拠点とする不動産管理会社。川雨留痕股份有限公司为资产型投资家提供专业的不动产管理、租赁运营与资产价值提升服务。',
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_TITLE}`,
+  },
+  description: SITE_DESCRIPTION,
   keywords: [
     'Bourn Mark',
     'BournMark',
@@ -49,9 +56,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Bourn Mark' }],
   icons: {
-    icon: '/imgs/logo-icon.png',        // 请把文件改名成无空格英文名
+    icon: '/imgs/logo-icon.png',
     shortcut: '/imgs/logo-icon.png',
     apple: '/imgs/logo-icon.png',
+  },
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    type: 'website',
   },
 }
 

@@ -33,7 +33,7 @@ const itemVariants = {
 }
 
 export default function XiushanPage() {
-  const { t, tTitle } = useLanguage()
+  const { t } = useLanguage()
   const heroRef = useRef(null)
   const statsRef = useRef(null)
   const servicesRef = useRef(null)
@@ -56,33 +56,33 @@ export default function XiushanPage() {
   const services = useMemo(() => {
     const baseServices = [
       {
-        title: tTitle('wuye.xiushan.services.service1.title'),
+        title: t('wuye.xiushan.services.service1.title'),
         icon: AlertCircle,
         image: '/imgs/wuye/real/xiushan-service-1.jpg',
         description: t('wuye.xiushan.services.service1.description'),
         items: (t('wuye.xiushan.services.service1.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.xiushan.timeline.item1.time'),
-          title: tTitle('wuye.xiushan.timeline.item1.title'),
+          title: t('wuye.xiushan.timeline.item1.title'),
           description: t('wuye.xiushan.timeline.item1.description'),
         },
         color: 'from-orange-500 to-orange-600',
       },
       {
-        title: tTitle('wuye.xiushan.services.service2.title'),
+        title: t('wuye.xiushan.services.service2.title'),
         icon: Settings,
         image: '/imgs/wuye/real/xiushan-service-2.jpg',
         description: t('wuye.xiushan.services.service2.description'),
         items: (t('wuye.xiushan.services.service2.items', { returnObjects: true }) as string[]) || [],
         timeline: {
           time: t('wuye.xiushan.timeline.item2.time'),
-          title: tTitle('wuye.xiushan.timeline.item2.title'),
+          title: t('wuye.xiushan.timeline.item2.title'),
           description: t('wuye.xiushan.timeline.item2.description'),
         },
         color: 'from-blue-500 to-blue-600',
       },
       {
-        title: tTitle('wuye.xiushan.services.service3.title'),
+        title: t('wuye.xiushan.services.service3.title'),
         icon: Hammer,
         image: '/imgs/wuye/real/xiushan-service-3.jpg',
         description: t('wuye.xiushan.services.service3.description'),
@@ -96,19 +96,19 @@ export default function XiushanPage() {
   const processSteps = useMemo(() => [
     {
       step: '01',
-      title: tTitle('wuye.xiushan.process.step1.title'),
+      title: t('wuye.xiushan.process.step1.title'),
       description: t('wuye.xiushan.process.step1.description'),
       image: '/imgs/wuye/real/xiushan-process-1.jpg',
     },
     {
       step: '02',
-      title: tTitle('wuye.xiushan.process.step2.title'),
+      title: t('wuye.xiushan.process.step2.title'),
       description: t('wuye.xiushan.process.step2.description'),
       image: '/imgs/wuye/real/xiushan-process-2.jpg',
     },
     {
       step: '03',
-      title: tTitle('wuye.xiushan.process.step3.title'),
+      title: t('wuye.xiushan.process.step3.title'),
       description: t('wuye.xiushan.process.step3.description'),
       image: '/imgs/wuye/real/xiushan-process-3.jpg',
     },

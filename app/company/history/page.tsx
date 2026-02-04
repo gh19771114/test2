@@ -44,7 +44,7 @@ function MilestoneImage({
 }
 
 export default function CompanyHistoryPage() {
-  const { t, tTitle } = useLanguage()
+  const { t } = useLanguage()
   const timelineRef = useRef<HTMLDivElement | null>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -56,88 +56,88 @@ export default function CompanyHistoryPage() {
   const milestones = useMemo(() => [
   {
     year: t('company.history.milestones.milestone1.year'),
-    title: tTitle('company.history.milestones.milestone1.title'),
+    title: t('company.history.milestones.milestone1.title'),
     description: t('company.history.milestones.milestone1.description'),
     image: '/imgs/warmlight.jpg',
     imageAlt: t('company.history.milestones.milestone1.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone2.year'),
-    title: tTitle('company.history.milestones.milestone2.title'),
+    title: t('company.history.milestones.milestone2.title'),
     description: t('company.history.milestones.milestone2.description'),
   },
   {
     year: t('company.history.milestones.milestone13.year'),
-    title: tTitle('company.history.milestones.milestone13.title'),
+    title: t('company.history.milestones.milestone13.title'),
     description: t('company.history.milestones.milestone13.description'),
     image: '/imgs/lou.jpg',
     imageAlt: t('company.history.milestones.milestone13.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone3.year'),
-    title: tTitle('company.history.milestones.milestone3.title'),
+    title: t('company.history.milestones.milestone3.title'),
     description: t('company.history.milestones.milestone3.description'),
   },
   {
     year: t('company.history.milestones.milestone4.year'),
-    title: tTitle('company.history.milestones.milestone4.title'),
+    title: t('company.history.milestones.milestone4.title'),
     description: t('company.history.milestones.milestone4.description'),
     image: '/imgs/kaiye2.jpg',
     imageAlt: t('company.history.milestones.milestone4.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone5.year'),
-    title: tTitle('company.history.milestones.milestone5.title'),
+    title: t('company.history.milestones.milestone5.title'),
     description: t('company.history.milestones.milestone5.description'),
   },
   {
     year: t('company.history.milestones.milestone6.year'),
-    title: tTitle('company.history.milestones.milestone6.title'),
+    title: t('company.history.milestones.milestone6.title'),
     description: t('company.history.milestones.milestone6.description'),
     image: '/imgs/honnsya2.jpeg',
     imageAlt: t('company.history.milestones.milestone6.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone7.year'),
-    title: tTitle('company.history.milestones.milestone7.title'),
+    title: t('company.history.milestones.milestone7.title'),
     description: t('company.history.milestones.milestone7.description'),
   },
   {
     year: t('company.history.milestones.milestone8.year'),
-    title: tTitle('company.history.milestones.milestone8.title'),
+    title: t('company.history.milestones.milestone8.title'),
     description: t('company.history.milestones.milestone8.description'),
     image: '/imgs/Warm Light Residence.jpeg',
     imageAlt: t('company.history.milestones.milestone8.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone9.year'),
-    title: tTitle('company.history.milestones.milestone9.title'),
+    title: t('company.history.milestones.milestone9.title'),
     description: t('company.history.milestones.milestone9.description'),
     image: '/imgs/Karasuma Rokujo Hotel.jpeg',
     imageAlt: t('company.history.milestones.milestone9.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone12.year'),
-    title: tTitle('company.history.milestones.milestone12.title'),
+    title: t('company.history.milestones.milestone12.title'),
     description: t('company.history.milestones.milestone12.description'),
     image: '/imgs/lingshiguan.jpg',
     imageAlt: t('company.history.milestones.milestone12.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone10.year'),
-    title: tTitle('company.history.milestones.milestone10.title'),
+    title: t('company.history.milestones.milestone10.title'),
     description: t('company.history.milestones.milestone10.description'),
     image: '/imgs/helte LOGO.png',
     imageAlt: t('company.history.milestones.milestone10.imageAlt'),
   },
   {
     year: t('company.history.milestones.milestone11.year'),
-    title: tTitle('company.history.milestones.milestone11.title'),
+    title: t('company.history.milestones.milestone11.title'),
     description: t('company.history.milestones.milestone11.description'),
     image: '/imgs/logo2.jpg',
     imageAlt: t('company.history.milestones.milestone11.imageAlt'),
   },
-  ], [t, tTitle])
+  ], [t])
 
   // 时间线：拖拽/滚轮逻辑（对齐 /company/overview 的“企业持有资产”滚动栏）
   useEffect(() => {

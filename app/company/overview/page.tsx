@@ -11,7 +11,7 @@ function BankLogo({ bank }: { bank: { name: string; logo: string; abbr: string; 
   const [error, setError] = useState(false)
   if (error) {
     return (
-      <div className={`w-full h-full rounded-lg flex items-center justify-center text-white text-[10px] md:text-xs font-semibold ${bank.color}`}>
+      <div className={`w-full h-full rounded-lg flex items-center justify-center text-white text-xs md:text-sm font-semibold ${bank.color}`}>
         {bank.abbr}
       </div>
     )
@@ -20,10 +20,10 @@ function BankLogo({ bank }: { bank: { name: string; logo: string; abbr: string; 
     <Image
       src={bank.logo}
       alt={bank.name}
-      width={48}
-      height={48}
+      width={96}
+      height={64}
       className="w-full h-full object-contain p-0.5 md:p-1"
-      sizes="48px"
+      sizes="96px"
       unoptimized
       onError={() => setError(true)}
     />
@@ -34,22 +34,22 @@ export default function CompanyOverviewPage() {
   const { t, tTitle } = useLanguage()
 
   const professionalTeam = useMemo(() => [
-    { title: tTitle('company.overview.team.team1.title'), count: t('company.overview.team.team1.count') },
-    { title: tTitle('company.overview.team.team2.title'), count: t('company.overview.team.team2.count') },
-    { title: tTitle('company.overview.team.team3.title'), count: t('company.overview.team.team3.count') },
-    { title: tTitle('company.overview.team.team4.title'), count: t('company.overview.team.team4.count') },
-    { title: tTitle('company.overview.team.team5.title'), count: t('company.overview.team.team5.count') },
-  ], [t, tTitle])
+    { title: t('company.overview.team.team1.title'), count: t('company.overview.team.team1.count') },
+    { title: t('company.overview.team.team2.title'), count: t('company.overview.team.team2.count') },
+    { title: t('company.overview.team.team3.title'), count: t('company.overview.team.team3.count') },
+    { title: t('company.overview.team.team4.title'), count: t('company.overview.team.team4.count') },
+    { title: t('company.overview.team.team5.title'), count: t('company.overview.team.team5.count') },
+  ], [t])
 
   const partnerNetwork = useMemo(() => [
-    { title: tTitle('company.overview.partners.partner1.title'), count: t('company.overview.partners.partner1.count') },
-    { title: tTitle('company.overview.partners.partner2.title'), count: t('company.overview.partners.partner2.count') },
-    { title: tTitle('company.overview.partners.partner3.title'), count: t('company.overview.partners.partner3.count') },
-    { title: tTitle('company.overview.partners.partner4.title'), count: t('company.overview.partners.partner4.count') },
-    { title: tTitle('company.overview.partners.partner5.title'), count: t('company.overview.partners.partner5.count') },
-    { title: tTitle('company.overview.partners.partner6.title'), count: t('company.overview.partners.partner6.count') },
-    { title: tTitle('company.overview.partners.partner7.title'), count: t('company.overview.partners.partner7.count') },
-  ], [t, tTitle])
+    { title: t('company.overview.partners.partner1.title'), count: t('company.overview.partners.partner1.count') },
+    { title: t('company.overview.partners.partner2.title'), count: t('company.overview.partners.partner2.count') },
+    { title: t('company.overview.partners.partner3.title'), count: t('company.overview.partners.partner3.count') },
+    { title: t('company.overview.partners.partner4.title'), count: t('company.overview.partners.partner4.count') },
+    { title: t('company.overview.partners.partner5.title'), count: t('company.overview.partners.partner5.count') },
+    { title: t('company.overview.partners.partner6.title'), count: t('company.overview.partners.partner6.count') },
+    { title: t('company.overview.partners.partner7.title'), count: t('company.overview.partners.partner7.count') },
+  ], [t])
 
   const corporateProfile = useMemo(() => [
     { 
@@ -83,7 +83,7 @@ export default function CompanyOverviewPage() {
     { name: t('company.overview.financialPartners.bank4.name'), branch: t('company.overview.financialPartners.bank4.branch'), logo: '/imgs/company/banks/kiraboshi.png', abbr: 'KIRA', color: 'bg-purple-500' },
     { name: t('company.overview.financialPartners.bank5.name'), branch: t('company.overview.financialPartners.bank5.branch'), logo: '/imgs/company/banks/higashi.svg', abbr: 'HIGASHI', color: 'bg-cyan-600' },
     { name: t('company.overview.financialPartners.bank6.name'), branch: t('company.overview.financialPartners.bank6.branch'), logo: '/imgs/company/banks/kansaimirai.svg', abbr: 'KMB', color: 'bg-emerald-600' },
-    { name: t('company.overview.financialPartners.bank7.name'), branch: t('company.overview.financialPartners.bank7.branch'), logo: '/imgs/company/banks/tokyo_shinkin.gif', abbr: 'TOSHI', color: 'bg-orange-500' },
+    { name: t('company.overview.financialPartners.bank7.name'), branch: t('company.overview.financialPartners.bank7.branch'), logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Tokyo_Shinkin_Bank_Logo.svg/3840px-Tokyo_Shinkin_Bank_Logo.svg.png', abbr: 'TOSHI', color: 'bg-orange-500' },
     { name: t('company.overview.financialPartners.bank8.name'), branch: t('company.overview.financialPartners.bank8.branch'), logo: '/imgs/company/banks/sugamo_shinkin.png', abbr: 'SUGAMO', color: 'bg-amber-600' },
   ], [t])
 
@@ -285,7 +285,7 @@ export default function CompanyOverviewPage() {
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-0.5 md:gap-3">
                 {financialPartners.map((bank) => (
                   <div key={bank.name} className="flex items-center gap-0.5 md:gap-3 bg-white rounded-xl px-1 py-0.5 md:px-4 md:py-3 border border-gray-100 shadow-sm">
-                    <div className="w-6 h-6 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-white border border-gray-100 overflow-hidden">
+                    <div className="w-14 h-10 md:w-24 md:h-16 rounded-lg flex items-center justify-center flex-shrink-0 bg-white border border-gray-100 overflow-hidden">
                       <BankLogo bank={bank} />
                     </div>
                     <div className="flex-1 min-w-0">

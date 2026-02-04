@@ -55,9 +55,9 @@ export default function CasesPage() {
       return {
         id,
         date: caseDates[id],
-        type: tTitle(`cases.details.${id}.type`) || detail?.type || '',
+        type: t(`cases.details.${id}.type`) || detail?.type || '',
         categoryGroup: caseCategoryGroups[id],
-        title: tTitle(`cases.details.${id}.title`) || detail?.title || '',
+        title: t(`cases.details.${id}.title`) || detail?.title || '',
         location: detail?.location || '',
         category: detail?.category || '',
         image: caseImages[id],
@@ -292,18 +292,8 @@ export default function CasesPage() {
           </div>
           <div className="relative z-10 container-custom">
             <p className="text-sm text-cyan-300 font-semibold mb-4 drop-shadow-md">Case Studies</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-lg">{t('cases.page.title')}</h1>
-            <p className="text-lg text-gray-200 max-w-3xl leading-relaxed drop-shadow-md">
-              {t('cases.page.subtitle')}
-            </p>
-          </div>
-        </section>
-
-        {/* Filter Menu */}
-        <section className="relative section-padding border-b border-gray-200">
-          
-          <div className="container-custom relative z-10">
-            <div className="flex flex-wrap items-center gap-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 md:mb-10 drop-shadow-lg">{t('cases.page.title')}</h1>
+            <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-2 md:mt-6">
               {[
                 { id: 'all', key: 'all' },
                 { id: 'maimai', key: 'maimai' },
@@ -314,10 +304,10 @@ export default function CasesPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                  className={`px-5 py-2.5 md:px-7 md:py-3.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 drop-shadow-md ${
                     selectedCategory === category.id
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-white text-navy-800 shadow-lg'
+                      : 'bg-white/10 text-white border border-white/40 hover:bg-white/20'
                   }`}
                 >
                   {t(`cases.page.filters.${category.key}`)}

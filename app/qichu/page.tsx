@@ -744,7 +744,7 @@ function PartnersNetworkContent({
 // projects 和 comingSoonProjects 将在组件内从多语言文件读取
 
 export default function QiChuPage() {
-  const { t, tTitle, language } = useLanguage()
+  const { t, language } = useLanguage()
   const [debug, setDebug] = useState(false)
   // 用于“硬验证是否更新到最新代码”的构建标记（不依赖屏幕尺寸/JS 分支）
   const buildStamp = '2026-01-29-49'
@@ -787,7 +787,7 @@ export default function QiChuPage() {
   const layoutPanelDragRef = useRef<null | { pointerId: number; startClientX: number; startClientY: number; startX: number; startY: number }>(null)
   const [layoutJsonModalOpen, setLayoutJsonModalOpen] = useState(false)
   const layoutJsonTextareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const [ipadPortraitScale, setIpadPortraitScale] = useState(0.75) // iPad竖版缩放比例（固定值，不随横竖屏切换改变）
+  const [ipadPortraitScale, setIpadPortraitScale] = useState(0.63) // iPad竖版缩放比例（0.75×0.84 再小一点，横版也用此值）
   const [yellowBoxScale, setYellowBoxScale] = useState(0.78) // 黄框内容缩放比例（固定值，不随横竖屏切换改变）
   const [renderKey, setRenderKey] = useState(0) // 强制重新渲染的key
   const ipadPortraitScaleInitializedRef = useRef(false) // 标记 iPad 竖版缩放比例是否已初始化
@@ -906,12 +906,12 @@ export default function QiChuPage() {
     const list: Project[] = [
       {
         id: 'kingsoft-wps-japan',
-        title: tTitle('qichu.cases.project1.title'),
+        title: t('qichu.cases.project1.title'),
         result: t('qichu.cases.project1.result'),
       },
       {
         id: 'suzhou-industrial-park',
-        title: tTitle('qichu.cases.project2.title'),
+        title: t('qichu.cases.project2.title'),
         result: t('qichu.cases.project2.result'),
         // 该卡片暂不跳转案例详情页（未提供对应 cases 页面）
       },
@@ -919,7 +919,7 @@ export default function QiChuPage() {
     // 日语版不展示 WPS 案例卡片
     if (language === 'ja') return list.filter((p) => p.id !== 'kingsoft-wps-japan')
     return list
-  }, [t, tTitle, language])
+  }, [t, language])
 
   // 相关服务（多语言）
   const relatedServices = useMemo(() => {
@@ -983,8 +983,12 @@ export default function QiChuPage() {
   // NOTE: transform 缩放不会改变布局占位；手机端必须手动用“缩放后的尺寸”占位，
   // 否则网络图可能跑到上一段被盖住，看起来像“消失”。
   const mobileNetworkScale = mobileFitScale || 0.55
-  const mobileNetworkScaledW = Math.round(1800 * mobileNetworkScale)
-  const mobileNetworkScaledH = Math.round(1026 * mobileNetworkScale)
+  // 只改横版：仅 iPad 横版用 ipadPortraitScale；竖版用 mobileNetworkScale 按视口适配，不溢出
+  const effectiveMobileNetworkScale = showIpadLandscape
+    ? ipadPortraitScale
+    : mobileNetworkScale
+  const mobileNetworkScaledW = Math.round(1800 * effectiveMobileNetworkScale)
+  const mobileNetworkScaledH = Math.round(1026 * effectiveMobileNetworkScale)
   const layoutEditStorageKey = useMemo(() => `qichu:partnersLayout:${language}:mobilePortrait:v1`, [language])
 
   // 手机竖版：白框高度跟随缩放后的网络图高度，减少上下“黑空白”
@@ -1033,7 +1037,7 @@ export default function QiChuPage() {
     root.style.setProperty('left', '50%', 'important')
     root.style.setProperty('top', '50%', 'important')
     root.style.setProperty('transform-origin', 'center', 'important')
-    root.style.setProperty('transform', `translate(-50%, -50%) scale(${mobileNetworkScale})`, 'important')
+    root.style.setProperty('transform', `translate(-50%, -50%) scale(${effectiveMobileNetworkScale})`, 'important')
     root.style.setProperty('display', 'block', 'important')
     root.style.setProperty('visibility', 'visible', 'important')
     root.style.setProperty('opacity', '1', 'important')
@@ -1069,7 +1073,7 @@ export default function QiChuPage() {
       net.style.setProperty('overflow', 'visible', 'important')
       net.style.setProperty('transform', 'none', 'important')
     }
-  }, [showMobilePortrait, showMobileLandscape, showIpadPortrait, showIpadLandscape, showIpadProPortrait, mobileNetworkScale, renderKey])
+  }, [showMobilePortrait, showMobileLandscape, showIpadPortrait, showIpadLandscape, showIpadProPortrait, effectiveMobileNetworkScale, renderKey])
 
   // probe=1 时：把“到底渲染没渲染/有没有被 CSS 干掉/图片有没有加载”直接打印出来
   useEffect(() => {
@@ -1525,14 +1529,18 @@ export default function QiChuPage() {
   }, [mobileNetworkScale])
 
   const phoneLayoutRects = useMemo(() => {
-    // 横版：恢复为原来的自动环绕布局（不要被竖版 preset / 编辑状态影响）
+    // 手机横版：恢复为原来的自动环绕布局（不要被竖版 preset / 编辑状态影响）
     if (showMobileLandscape && isPhoneNetwork) return partnerRingLayout as QichuLayoutRect[]
 
-    // iPad：默认使用内置 iPad 预设（正常访问也生效）
+    // iPad（竖版 + 横版）：统一用同一套 iPad 预设，横竖版排版一致；数量不匹配时 slice/补全，绝不回退到环形
     if (isIpadNetwork) {
       const preset = QICHU_IPAD_LAYOUT_PRESET[language] ?? QICHU_IPAD_LAYOUT_PRESET.default
-      if (Array.isArray(preset) && preset.length === partners.length) return preset as QichuLayoutRect[]
-      return partnerRingLayout as QichuLayoutRect[]
+      if (!Array.isArray(preset) || preset.length === 0) return partnerRingLayout as QichuLayoutRect[]
+      const n = partners.length
+      if (preset.length >= n) return (preset.slice(0, n) as QichuLayoutRect[])
+      const last = preset[preset.length - 1] as QichuLayoutRect
+      const padded = [...preset, ...Array.from({ length: n - preset.length }, () => ({ ...last }))]
+      return padded as QichuLayoutRect[]
     }
 
     // 竖版：可用 preset / 编辑布局
@@ -1547,7 +1555,7 @@ export default function QiChuPage() {
 
     // 兜底：自动布局
     return partnerRingLayout as QichuLayoutRect[]
-  }, [layoutEdit, layoutUseSaved, layoutEditRects, partners.length, showMobilePortrait, showMobileLandscape, isPhoneNetwork, partnerRingLayout, language])
+  }, [layoutEdit, layoutUseSaved, layoutEditRects, partners.length, showMobilePortrait, showMobileLandscape, showIpadPortrait, showIpadLandscape, showIpadProPortrait, isPhoneNetwork, partnerRingLayout, language])
 
   // 桌面端角度分布（所有语言复用）；用 useMemo 放在前面，避免后续 useMemo “先用后声明” 的 TS 报错
   const angleOffsets: number[] = useMemo(() => {
@@ -1797,6 +1805,8 @@ export default function QiChuPage() {
     const el = partnersStageRef.current
     if (!el || typeof window === 'undefined') return
 
+    let rafId: number | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
     const compute = () => {
       const w = el.getBoundingClientRect().width
       const usableW = Math.max(320, w - 24) // 左右留点空隙
@@ -1804,12 +1814,27 @@ export default function QiChuPage() {
       // 不超过 1（设计稿尺寸），也不让它变成 0
       setPartnersScale(Math.min(1, Math.max(0.18, s)))
     }
+    const scheduleCompute = () => {
+      if (timeoutId) clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        if (rafId != null) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(() => {
+          compute()
+          rafId = null
+        })
+        timeoutId = null
+      }, 150)
+    }
 
     compute()
-    const ro = new ResizeObserver(() => compute())
+    const ro = new ResizeObserver(scheduleCompute)
     ro.observe(el)
 
-    return () => ro.disconnect()
+    return () => {
+      ro.disconnect()
+      if (timeoutId) clearTimeout(timeoutId)
+      if (rafId != null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const partnersScaledW = PARTNERS_BASE_W * partnersScale
@@ -1819,11 +1844,12 @@ export default function QiChuPage() {
     // 确保只在客户端执行
     if (typeof window === 'undefined') return
 
-    const checkViewport = () => {
+    const checkViewport = (allowIpadLandscapeScaleUpdate: boolean, skipStateUpdate?: boolean) => {
       const width = window.innerWidth
       const height = window.innerHeight
-      // 同步 viewport（用于手机端等比缩放占位）
-      setClientViewport({ w: width, h: height, dpr: window.devicePixelRatio || 1 })
+      if (!skipStateUpdate) {
+        setClientViewport({ w: width, h: height, dpr: window.devicePixelRatio || 1 })
+      }
       const isPortrait = height > width
       // 兜底：部分手机（尤其内置/微信浏览器）会把 innerWidth 算得很大，导致 width<=767 判断失效
       // 用“触摸设备 + 短边阈值”补一层 phoneLike 判断，确保手机端一定走手机分支（避免整块网络图被裁掉）
@@ -1843,34 +1869,26 @@ export default function QiChuPage() {
 
       // 手机竖版：宽度 ≤767 且竖屏（与CSS媒体查询匹配）
       const mobilePortrait = (width <= 767 && isPortrait) || (isPhoneLike && isPortrait) || (isPhoneUA && isPortrait)
-      setShowMobilePortrait(mobilePortrait)
+      if (!skipStateUpdate) setShowMobilePortrait(mobilePortrait)
 
       // iPad竖版：宽度 768–1023 且竖屏（与CSS媒体查询匹配；并用 UA 兜底）
       const ipadPortrait = ((width >= 768 && width <= 1023) || (isIpadUA && width >= 700 && width <= 1100)) && isPortrait
-      setShowIpadPortrait(ipadPortrait)
+      if (!skipStateUpdate) setShowIpadPortrait(ipadPortrait)
 
-      // 计算iPad竖版的缩放比例，确保网络图完整显示
-      // 如果当前是 iPad 竖版，且 ipadPortraitScale 还没有根据竖版视口计算过，则计算
-      if (ipadPortrait) {
+      // 计算iPad竖版的缩放比例，确保网络图完整显示；整体再小一点（×0.84）
+      if (ipadPortrait && !skipStateUpdate) {
         if (!ipadPortraitScaleInitializedRef.current) {
-          // 网络图原始尺寸
           const networkOriginalWidth = 1800
           const networkOriginalHeight = 1026
-          // 可用宽度（减去padding，约40px）
           const availableWidth = width - 40
-          // 可用高度（容器高度1000px，减去标题等，约200px）
           const availableHeight = 800
-          // 计算缩放比例，取较小值确保完整显示
           const scaleX = availableWidth / networkOriginalWidth
           const scaleY = availableHeight / networkOriginalHeight
-          const scale = Math.min(scaleX, scaleY, 0.8) // 最大不超过0.8，避免过大
-          // 只在首次计算时设置，之后保持不变
-          setIpadPortraitScale(Math.max(scale, 0.75))
+          const scale = Math.min(scaleX, scaleY, 0.8)
+          setIpadPortraitScale(Math.max(scale, 0.75) * 0.84)
           ipadPortraitScaleInitializedRef.current = true
-          ipadPortraitScaleCalculatedInPortraitRef.current = true // 标记已在竖版时计算过
+          ipadPortraitScaleCalculatedInPortraitRef.current = true
         }
-        // 如果已经初始化过（在横屏时），但还没有在竖版时计算过，则重新计算
-        // 确保竖版时使用正确的缩放值，而不是横屏时的默认值
         else if (!ipadPortraitScaleCalculatedInPortraitRef.current) {
           const networkOriginalWidth = 1800
           const networkOriginalHeight = 1026
@@ -1879,81 +1897,70 @@ export default function QiChuPage() {
           const scaleX = availableWidth / networkOriginalWidth
           const scaleY = availableHeight / networkOriginalHeight
           const scale = Math.min(scaleX, scaleY, 0.8)
-          setIpadPortraitScale(Math.max(scale, 0.75))
-          ipadPortraitScaleCalculatedInPortraitRef.current = true // 标记已在竖版时计算过
+          setIpadPortraitScale(Math.max(scale, 0.75) * 0.84)
+          ipadPortraitScaleCalculatedInPortraitRef.current = true
         }
       }
       // 注意：不在 else 中重置 ipadPortraitScale，保持当前值，避免横竖屏切换时变小
 
       // iPad Pro竖版：宽度 1024–1279 且竖屏（iPad Pro 12.9"竖版；并用 UA 兜底）
       const ipadProPortrait = ((width >= 1024 && width <= 1279) || (isIpadUA && width >= 900 && width <= 1400)) && isPortrait
-      setShowIpadProPortrait(ipadProPortrait)
+      if (!skipStateUpdate) setShowIpadProPortrait(ipadProPortrait)
 
       // iPad横版：原先限定到 <=1369，但 iPadOS Safari 有时会报更大（缩放/桌面站点）
-      // 用 UA + 触摸兜底，避免误判为桌面端导致“首屏不绘制/必须滚动才出现”
       const ipadLandscape = !isPortrait && (
         (width >= 1024 && width <= 1369) ||
         (isIpadUA && width >= 900 && width <= 1700)
       )
-      setShowIpadLandscape(ipadLandscape)
+      if (!skipStateUpdate) setShowIpadLandscape(ipadLandscape)
+      // iPad 横版网络图已改为使用竖版 scale（ipadPortraitScale），此处不再单独计算
 
       // 手机横版：width <= 1023 && !isPortrait（与CSS媒体查询匹配）
       const mobileLandscape = (width <= 1023 && !isPortrait) || (isPhoneLike && !isPortrait) || (isPhoneUA && !isPortrait)
-      setShowMobileLandscape(mobileLandscape)
+      if (!skipStateUpdate) setShowMobileLandscape(mobileLandscape)
 
       // 桌面版：仅宽度 > 1369（排除所有iPad横版）
       const desktop = width > 1369 && !ipadLandscape
-      setIsDesktop(desktop)
+      if (!skipStateUpdate) setIsDesktop(desktop)
       
-      // 只在首次初始化时计算黄框缩放比例，之后保持不变，避免横竖屏切换时大小变化
-      if (!yellowBoxScaleInitializedRef.current) {
+      // 只在首次初始化时计算黄框缩放比例，之后保持不变
+      if (!yellowBoxScaleInitializedRef.current && !skipStateUpdate) {
         const containerWidth = 1800
         const containerHeight = 1026
-        const yellowBoxWidth = containerWidth - 400 // 1400px
-        const yellowBoxHeight = containerHeight - 200 // 1000px
+        const yellowBoxWidth = containerWidth - 400
+        const yellowBoxHeight = containerHeight - 200
         const newYellowBoxScale = Math.min(yellowBoxWidth / containerWidth, yellowBoxHeight / containerHeight)
         setYellowBoxScale(newYellowBoxScale)
         yellowBoxScaleInitializedRef.current = true
       }
-      
-      // 如果 ipadPortraitScale 还没有初始化，且当前不是 iPad 竖版，也初始化一个默认值
-      // 这样横竖屏切换时可以使用相同的缩放值，避免变小
-      if (!ipadPortraitScaleInitializedRef.current && !ipadPortrait) {
-        // 使用一个合理的默认值，确保横竖屏切换时大小一致
-        // 这个值应该与首次在 iPad 竖版时计算出的值接近
-        setIpadPortraitScale(0.75) // 使用初始值
+      if (!ipadPortraitScaleInitializedRef.current && !ipadPortrait && !skipStateUpdate) {
+        setIpadPortraitScale(0.63) // 与竖版计算后的“再小一点”一致
         ipadPortraitScaleInitializedRef.current = true
       }
     }
 
-    // 立即执行一次
-    checkViewport()
-    // iOS/iPadOS：首屏经常在地址栏/工具栏收起前后 innerHeight 会变化
-    // 这里做两次延迟重算，避免“必须滑一下才显示”
-    const t1 = window.setTimeout(() => checkViewport(), 50)
-    const t2 = window.setTimeout(() => checkViewport(), 300)
+    // 立即执行一次（允许更新 iPad 横版 scale）
+    checkViewport(true)
+    // iOS/iPadOS：首屏经常在地址栏/工具栏收起前后 innerHeight 会变化；不更新 iPad 横版 scale，避免 50/300ms 时 scale 变化导致跳动
+    const t1 = window.setTimeout(() => checkViewport(false), 50)
+    const t2 = window.setTimeout(() => checkViewport(false), 300)
 
+    // resize 时（含 iPad 滚动触发的 resize）不更新任何 state，避免重渲染导致网络图变大变小
     const handleResize = () => {
-      checkViewport()
+      checkViewport(false, true)
     }
-    
+    // 仅横竖屏切换时更新 iPad 横版 scale
     const handleOrientationChange = () => {
-      checkViewport()
+      checkViewport(true)
     }
     
     window.addEventListener('resize', handleResize)
     window.addEventListener('orientationchange', handleOrientationChange)
-    // iPad Safari：visualViewport 变化（地址栏收起/弹出）不会总是触发 window.resize
-    const vv = (window as any).visualViewport as VisualViewport | undefined
-    const handleVV = () => checkViewport()
-    vv?.addEventListener?.('resize', handleVV)
-    vv?.addEventListener?.('scroll', handleVV)
+    // 不监听 visualViewport（resize/scroll），避免 iPad 横版滚动或地址栏动画时反复更新 viewport 导致网络图缩放跳动
 
     return () => {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('orientationchange', handleOrientationChange)
-      vv?.removeEventListener?.('resize', handleVV)
-      vv?.removeEventListener?.('scroll', handleVV)
       window.clearTimeout(t1)
       window.clearTimeout(t2)
     }
@@ -2747,12 +2754,14 @@ export default function QiChuPage() {
                     width: `${containerWidth}px`,
                     height: `${containerHeight}px`,
                     // 手机端：用“中心点 + translate(-50%, -50%)”确保整体在容器中居中（避免看起来偏左/偏右）
-                    transform: `translate(-50%, -50%) scale(${mobileNetworkScale})`,
+                    transform: `translate(-50%, -50%) scale(${effectiveMobileNetworkScale}) translateZ(0)`,
                     transformOrigin: 'center',
                     position: 'absolute',
                     left: '50%',
                     top: '50%',
                     zIndex: 1,
+                    willChange: showIpadLandscape ? 'transform' : undefined,
+                    contain: showIpadLandscape ? 'layout paint' : undefined,
                   }}
                 >
                 <div
@@ -3444,7 +3453,7 @@ export default function QiChuPage() {
             </div>
           </div>
 
-          <div className={cn("hidden lg:block", (isIpadNetwork || layoutEdit) ? "!hidden" : "")}>
+          <div className={cn("hidden lg:block", (isIpadNetwork || layoutEdit) ? "!hidden" : "")} style={isIpadNetwork ? { display: 'none' } : undefined}>
             <>
               {/* 黑白世界地图背景 - 白框，相对于绿框居中 */}
               <div

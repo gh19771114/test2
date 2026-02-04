@@ -26,31 +26,31 @@ export default function WuYePage() {
 
   const regularServices = useMemo(() => [
     {
-      title: tTitle('wuye.services.regular.zulin'),
+      title: t('wuye.services.regular.zulin'),
       link: '/wuye/zulin',
       icon: ClipboardCheck,
     },
     {
-      title: tTitle('wuye.services.regular.shouzhi'),
+      title: t('wuye.services.regular.shouzhi'),
       link: '/wuye/shouzhi',
       icon: DollarSign,
     },
     {
-      title: tTitle('wuye.services.regular.xiushan'),
+      title: t('wuye.services.regular.xiushan'),
       link: '/wuye/xiushan',
       icon: Wrench,
     },
     {
-      title: tTitle('wuye.services.regular.ruzhu'),
+      title: t('wuye.services.regular.ruzhu'),
       link: '/wuye/ruzhu',
       icon: Users,
     },
     {
-      title: tTitle('wuye.services.regular.baoxian'),
+      title: t('wuye.services.regular.baoxian'),
       link: '/wuye/baoxian',
       icon: Shield,
     },
-  ], [tTitle])
+  ], [t])
 
   // 资产维护&增值服务动态图：根据视口自适应尺寸（避免移动端撑爆/桌面端过小）
   useEffect(() => {
