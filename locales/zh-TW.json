@@ -1587,38 +1587,41 @@
     "imageAlt": "隱私政策"
   },
   "maimai": {
-    "title": "日本房产买卖中介服务",
+    "title": "日本房產買賣仲介服務",
     "subtitle": "Buying & Selling",
-    "description": "为个人及机构投资者提供从项目筛选、尽职调查、融资方案到交割与交付的全流程服务，结合本地资源网络和法律团队，为您争取更优价格与更低风险。",
+    "description": "為個人及機構投資者提供從項目篩選、盡職調查、融資方案到交割與交付的全流程服務，結合本地資源網絡和法律團隊，為您爭取更優價格與更低風險。",
     "currency": {
-      "JPY": "日元",
+      "JPY": "日圓",
       "USD": "美元",
-      "CNY": "人民币",
-      "TWD": "新台币",
-      "HKD": "港币",
-      "MOP": "澳门元",
-      "EUR": "欧元",
-      "GBP": "英镑",
+      "CNY": "人民幣",
+      "TWD": "新台幣",
+      "HKD": "港幣",
+      "MOP": "澳門元",
+      "EUR": "歐元",
+      "GBP": "英鎊",
       "AUD": "澳元",
-      "KRW": "韩元",
+      "KRW": "韓元",
       "CAD": "加拿大元",
-      "NZD": "新西兰元",
-      "man": "万",
-      "approx": "约",
+      "NZD": "紐西蘭元",
+      "man": "萬",
+      "approx": "約",
       "other": "其他",
-      "select": "请选择",
-      "updating": "汇率更新中…",
-      "updateTime": "汇率更新时间：",
-      "baseNote": "汇率以日元为基准实时换算"
+      "select": "請選擇",
+      "updating": "匯率更新中…",
+      "updateTime": "匯率更新時間：",
+      "updateTimeLabel": "更新時間：",
+      "baseNote": "匯率以日圓為基準即時換算",
+      "rateServiceUnavailable": "匯率服務暫時不可用",
+      "rateUpdateFailed": "匯率更新失敗，請稍後重試。價格以日圓為準。"
     },
     "properties": {
-      "title": "销售中房产",
-      "noFee": "免中介费",
-      "withFee": "需中介费",
-      "noFeeTitle": "免中介费房源",
-      "withFeeTitle": "需中介费房源",
-      "viewDetails": "查看详情",
-      "jpyPrice": "日元价格",
+      "title": "銷售中房產",
+      "noFee": "免仲介費",
+      "withFee": "需仲介費",
+      "noFeeTitle": "免仲介費房源",
+      "withFeeTitle": "需仲介費房源",
+      "viewDetails": "查看詳情",
+      "jpyPrice": "日圓價格",
       "comingSoon": "敬請期待",
       "preparing": "新物件準備中",
       "inPreparation": "準備中",
@@ -1626,171 +1629,174 @@
     },
     "deals": {
       "deal1": {
-        "title": "东京港区·高层海景公寓",
-        "price": "成交价：1.28 亿日元",
-        "highlight": "年租金回报 5.6%",
-        "detail": "全程代办贷款审批与税务规划，4 周内完成交割。"
+        "title": "東京港區·高層海景公寓",
+        "price": "成交價：1.28 億日圓",
+        "highlight": "年租金回報 5.6%",
+        "detail": "全程代辦貸款審批與稅務規劃，4 週內完成交割。"
       },
       "deal2": {
-        "title": "大阪梅田·精品商铺",
-        "price": "成交价：2.36 亿日元",
-        "highlight": "租期 8 年稳定租约",
-        "detail": "协助客户重谈租赁条件，新增 12% 营业提成。"
+        "title": "大阪梅田·精品商鋪",
+        "price": "成交價：2.36 億日圓",
+        "highlight": "租期 8 年穩定租約",
+        "detail": "協助客戶重談租賃條件，新增 12% 營業提成。"
       },
       "deal3": {
-        "title": "京都祇园·町屋民宿",
-        "price": "成交价：7,150 万日元",
-        "highlight": "民宿许可与运营方案同步交付",
-        "detail": "提供装修设计与合规咨询，预计年收益 8.2%。"
+        "title": "京都祇園·町屋民宿",
+        "price": "成交價：7,150 萬日圓",
+        "highlight": "民宿許可與營運方案同步交付",
+        "detail": "提供裝修設計與合規諮詢，預計年收益 8.2%。"
       }
     },
     "stats": {
-      "transactionAmount": "2023 年度交易额",
-      "transactionAmountValue": "86.4 亿日元",
-      "customers": "服务客户",
-      "customersValue": "312 组",
-      "avgCycle": "平均交割周期",
+      "transactionAmount": "2023 年度交易額",
+      "transactionAmountValue": "86.4 億日圓",
+      "customers": "服務客戶",
+      "customersValue": "312 組",
+      "avgCycle": "平均交割週期",
       "avgCycleValue": "28 天",
-      "approvalRate": "贷款获批率",
+      "approvalRate": "貸款獲批率",
       "approvalRateValue": "92%"
     },
     "process": {
-      "title": "日本房产买卖交易流程"
+      "title": "日本房產買賣交易流程"
     },
     "steps": {
       "step1": {
-        "title": "需求咨询",
-        "desc": "了解您的投资目标、预算与偏好"
+        "title": "需求諮詢",
+        "desc": "了解您的投資目標、預算與偏好"
       },
       "step2": {
-        "title": "房源筛选",
-        "desc": "根据条件匹配优质项目，提供详细资料"
+        "title": "房源篩選",
+        "desc": "根據條件匹配優質項目，提供詳細資料"
       },
       "step3": {
-        "title": "实地看房",
-        "desc": "安排看房，陪同讲解周边环境与投资价值"
+        "title": "實地看房",
+        "desc": "安排看房，陪同講解周邊環境與投資價值"
       },
       "step4": {
-        "title": "价格谈判",
-        "desc": "协助价格交涉，争取最优交易条件"
+        "title": "價格談判",
+        "desc": "協助價格交涉，爭取最優交易條件"
       },
       "step5": {
-        "title": "签约准备",
-        "desc": "准备合同文件，进行法律审查与风险评估"
+        "title": "簽約準備",
+        "desc": "準備合同文件，進行法律審查與風險評估"
       },
       "step6": {
-        "title": "贷款申请",
-        "desc": "协助申请房贷，协调银行审批流程"
+        "title": "貸款申請",
+        "desc": "協助申請房貸，協調銀行審批流程"
       },
       "step7": {
-        "title": "交割手续",
-        "desc": "办理产权登记、税费缴纳与钥匙交接"
+        "title": "交割手續",
+        "desc": "辦理產權登記、稅費繳納與鑰匙交接"
       },
       "step8": {
-        "title": "后续服务",
-        "desc": "提供物业管理、税务规划等持续支持"
+        "title": "後續服務",
+        "desc": "提供物業管理、稅務規劃等持續支援"
       }
     },
     "fees": {
-      "title": "交易费用一览",
-      "description": "※买卖费用根据房屋年限、现状、政府政策等各种因素，计算的具体金额会有不同。<br />一般情况约为房产交易金额的<span className=\"font-bold text-white\">10%</span>左右。下述具体金额仅供参考。",
-      "buyingTitle": "买房费用",
-      "sellingTitle": "卖房费用",
-      "buy": "买",
-      "sell": "卖",
-      "clickToView": "点击查看",
-      "referenceAmount": "参考金额",
-      "capitalGainsTax": "根据买卖时获取的收入的10%~30%收取",
+      "title": "交易費用一覽",
+      "description": "※買賣費用根據房屋年限、現狀、政府政策等各種因素，計算的具體金額會有不同。<br />一般情況約為房產交易金額的<span className=\"font-bold text-white\">10%</span>左右。下述具體金額僅供參考。",
+      "backgroundImageAlt": "房產背景",
+      "buyingTitle": "買房費用",
+      "sellingTitle": "賣房費用",
+      "buy": "買",
+      "sell": "賣",
+      "clickToView": "點擊查看",
+      "referenceAmount": "參考金額",
+      "capitalGainsTax": "根據買賣時獲取的收入的10%~30%收取",
       "back": "返回",
-      "nonResidentNote": "※除上述费用之外，持有人为非居住者的情况下，买主需要将买卖金额的<span className=\"font-semibold text-green-700\">10.21%</span>缴纳给税务局充当源泉征收税。卖主可以在第二年申请退税。",
-      "disclaimer": "※不同的交易情况，具体金额有所不同。详情请联系我们获取详细信息。",
+      "nonResidentNote": "※除上述費用之外，持有人為非居住者的情況下，買主需要將買賣金額的<span className=\"font-semibold text-green-700\">10.21%</span>繳納給稅務局充當源泉徵收稅。賣主可以在第二年申請退稅。",
+      "disclaimer": "※不同的交易情況，具體金額有所不同。詳情請聯繫我們獲取詳細資訊。",
       "buying": {
         "fee1": {
-          "item": "中介手续费",
-          "rate": "（另需交纳消费税）",
-          "note": "成交价 × 3% + 6万日元"
+          "item": "仲介手續費",
+          "rate": "（另需交納消費稅）",
+          "note": "成交價 × 3% + 6萬日圓"
         },
         "fee2": {
-          "item": "不动产取得税",
-          "rate": "（住宅用地为1.5%）",
-          "note": "固定资产税评价额 × 3%"
+          "item": "不動產取得稅",
+          "rate": "（住宅用地為1.5%）",
+          "note": "固定資產稅評價額 × 3%"
         },
         "fee3": {
-          "item": "登记费用",
-          "rate": "（根据房产价格）",
-          "note": "约 10-20万日元"
+          "item": "登記費用",
+          "rate": "（根據房產價格）",
+          "note": "約 10-20萬日圓"
         },
         "fee4": {
-          "item": "司法书士费",
-          "rate": "（登记手续代办费）",
-          "note": "约 5-15万日元"
+          "item": "司法書士費",
+          "rate": "（登記手續代辦費）",
+          "note": "約 5-15萬日圓"
         },
         "fee5": {
-          "item": "印花税",
-          "rate": "根据合同金额",
-          "note": "一般为1万日元-48万日元之间"
+          "item": "印花稅",
+          "rate": "根據合同金額",
+          "note": "一般為1萬日圓-48萬日圓之間"
         },
         "fee6": {
-          "item": "贷款相关费用",
-          "rate": "（银行、贷款的种类以及交易额的不同，相关费用会有变化。）",
-          "note": "约 20-50万日元"
+          "item": "貸款相關費用",
+          "rate": "（銀行、貸款的種類以及交易額的不同，相關費用會有變化。）",
+          "note": "約 20-50萬日圓"
         },
         "fee7": {
-          "item": "火灾地震保险",
-          "rate": "（根据房屋类型、规模、建筑时长等要素，保险费会有所变动。）",
-          "note": "约 5-15万日元/年"
+          "item": "火災地震保險",
+          "rate": "（根據房屋類型、規模、建築時長等要素，保險費會有所變動。）",
+          "note": "約 5-15萬日圓/年"
         }
       },
       "selling": {
         "fee1": {
-          "item": "中介手续费",
-          "rate": "成交价 × 3% + 6万日元",
-          "note": "（另需交纳消费税）"
+          "item": "仲介手續費",
+          "rate": "成交價 × 3% + 6萬日圓",
+          "note": "（另需交納消費稅）"
         },
         "fee2": {
-          "item": "固定资产税",
-          "rate": "按持有期间比例",
-          "note": "（年度税额按比例计算）"
+          "item": "固定資產稅",
+          "rate": "按持有期間比例",
+          "note": "（年度稅額按比例計算）"
         },
         "fee3": {
-          "item": "让渡所得税",
+          "item": "讓渡所得稅",
           "rate": "",
           "note": ""
         },
         "fee4": {
-          "item": "登记费用",
-          "rate": "约 10-20万日元",
-          "note": "（注销登记等）"
+          "item": "登記費用",
+          "rate": "約 10-20萬日圓",
+          "note": "（註銷登記等）"
         }
       }
     },
     "tools": {
-      "title": "房产实用工具",
-      "subtitle": "快速计算房贷月供与租金收益",
-      "openMenu": "打开工具菜单",
-      "closeMenu": "关闭菜单",
+      "title": "房產實用工具",
+      "subtitle": "快速計算房貸月供與租金收益",
+      "openMenu": "打開工具選單",
+      "closeMenu": "關閉選單",
       "loan": {
-        "title": "房贷月供计算",
-        "amount": "贷款金额（日元）",
+        "title": "房貸月供計算",
+        "amount": "貸款金額（日圓）",
         "interestRate": "年利率（%）",
-        "years": "贷款年限（年）",
-        "monthlyPayment": "月供金额",
-        "inputPrompt": "请输入贷款信息进行计算"
+        "years": "貸款年限（年）",
+        "monthlyPayment": "月供金額",
+        "inputPrompt": "請輸入貸款資訊進行計算",
+        "placeholder": "例如：50000000"
       },
       "rental": {
-        "title": "租金收益计算",
-        "price": "房产价格（日元）",
+        "title": "租金收益計算",
+        "price": "房產價格（日圓）",
         "yieldRate": "年化收益率（%）",
         "annualIncome": "年租金收入",
         "monthlyIncome": "月租金收入",
-        "inputPrompt": "请输入房产信息进行计算"
+        "inputPrompt": "請輸入房產資訊進行計算",
+        "placeholder": "例如：50000000"
       },
       "currency": {
-        "title": "汇率转换",
-        "inputAmount": "输入金额",
-        "result": "转换结果",
-        "swap": "交换货币",
-        "currentRate": "当前汇率"
+        "title": "匯率轉換",
+        "inputAmount": "輸入金額",
+        "result": "轉換結果",
+        "swap": "交換貨幣",
+        "currentRate": "當前匯率"
       }
     },
     "propertyDetail": {

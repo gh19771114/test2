@@ -187,15 +187,15 @@ export default function MaiMaiPage() {
   ], [t])
 
   const transactionSteps = useMemo(() => [
-    { step: 1, title: tTitle('maimai.steps.step1.title'), desc: t('maimai.steps.step1.desc'), icon: '📞' },
-    { step: 2, title: tTitle('maimai.steps.step2.title'), desc: t('maimai.steps.step2.desc'), icon: '🔍' },
-    { step: 3, title: tTitle('maimai.steps.step3.title'), desc: t('maimai.steps.step3.desc'), icon: '🏠' },
-    { step: 4, title: tTitle('maimai.steps.step4.title'), desc: t('maimai.steps.step4.desc'), icon: '💼' },
-    { step: 5, title: tTitle('maimai.steps.step5.title'), desc: t('maimai.steps.step5.desc'), icon: '📝' },
-    { step: 6, title: tTitle('maimai.steps.step6.title'), desc: t('maimai.steps.step6.desc'), icon: '💰' },
-    { step: 7, title: tTitle('maimai.steps.step7.title'), desc: t('maimai.steps.step7.desc'), icon: '🔑' },
-    { step: 8, title: tTitle('maimai.steps.step8.title'), desc: t('maimai.steps.step8.desc'), icon: '✅' },
-  ], [t, tTitle])
+    { step: 1, title: t('maimai.steps.step1.title'), desc: t('maimai.steps.step1.desc'), icon: '📞' },
+    { step: 2, title: t('maimai.steps.step2.title'), desc: t('maimai.steps.step2.desc'), icon: '🔍' },
+    { step: 3, title: t('maimai.steps.step3.title'), desc: t('maimai.steps.step3.desc'), icon: '🏠' },
+    { step: 4, title: t('maimai.steps.step4.title'), desc: t('maimai.steps.step4.desc'), icon: '💼' },
+    { step: 5, title: t('maimai.steps.step5.title'), desc: t('maimai.steps.step5.desc'), icon: '📝' },
+    { step: 6, title: t('maimai.steps.step6.title'), desc: t('maimai.steps.step6.desc'), icon: '💰' },
+    { step: 7, title: t('maimai.steps.step7.title'), desc: t('maimai.steps.step7.desc'), icon: '🔑' },
+    { step: 8, title: t('maimai.steps.step8.title'), desc: t('maimai.steps.step8.desc'), icon: '✅' },
+  ], [t])
 
   const formatTransactionStepTitle = useMemo(() => {
     if (language !== 'en') return (s: string) => s

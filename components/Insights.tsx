@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const Insights = () => {
-  const { t, tTitle } = useLanguage()
+  const { t } = useLanguage()
   const [isMounted, setIsMounted] = useState(false)
   const pinnedBarRef = useRef<HTMLDivElement>(null)
   const [pinnedBarHeight, setPinnedBarHeight] = useState(0)
@@ -86,13 +86,13 @@ const Insights = () => {
   const encyclopediaLoopList = useMemo(() => [...encyclopedia, ...encyclopedia], [encyclopedia])
 
   const getNewsTitle = (slug: string) => {
-    const translated = tTitle(`news.items.${slug}.title`)
+    const translated = t(`news.items.${slug}.title`)
     if (!translated || translated === `news.items.${slug}.title`) return slug
     return translated
   }
 
   const getEncyclopediaTitle = (slug: string, fallback?: string) => {
-    const translated = tTitle(`encyclopedia.items.${slug}.title`)
+    const translated = t(`encyclopedia.items.${slug}.title`)
     if (!translated || translated === `encyclopedia.items.${slug}.title`) return fallback || slug
     return translated
   }
