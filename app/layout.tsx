@@ -28,7 +28,7 @@ const organizationJsonLd = {
 } as const
 
 // 用于 Google 等搜索引擎的标题与描述（可在此修改搜索结果显示文案）
-const SITE_TITLE = 'Bourn Mark川雨流痕-专业的公司'
+const SITE_TITLE = 'Bourn Mark 川雨流痕-专业的日本房地产买卖和投资物业管理公司'
 const SITE_DESCRIPTION =
   '提供专业的日本房地产买卖咨询中介服务，以及投资型房地产的物业管理服务。让您在日本的投资更省心、更增值。'
 
