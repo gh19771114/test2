@@ -1603,6 +1603,16 @@
         "lmNishihachioji3_707": "Hachioji Yagicho, Tokyo",
         "skyCourtIkuta2f": "Kawasaki Tama-ku, Kanagawa"
       },
+      "types": {
+        "shopOffice": "Shop / Office",
+        "1r": "1R",
+        "2ldk": "2LDK",
+        "1k": "1K",
+        "2to3ldk": "2–3LDK",
+        "1k3units": "1K × 3 units"
+      },
+      "areaApprox17": "Approx. 17㎡",
+      "areaNa": "—",
       "buildings": {
         "lionsHigashiginza2f": "Lions Mansion Higashi-Ginza 2F",
         "shinNakano305": "Shin-Nakano Ekijou Plaza 305",

@@ -1537,7 +1537,17 @@
         "miwaPlazaTakaido1f": "东京都杉并区上高井户",
         "lmNishihachioji3_707": "东京都八王子市八木町",
         "skyCourtIkuta2f": "神奈川县川崎市多摩区"
-      }
+      },
+      "types": {
+        "shopOffice": "店铺·事务所",
+        "1r": "1R",
+        "2ldk": "2LDK",
+        "1k": "1K",
+        "2to3ldk": "2〜3LDK",
+        "1k3units": "1K×3户"
+      },
+      "areaApprox17": "约17㎡",
+      "areaNa": "—"
     },
     "deals": {
       "deal1": {

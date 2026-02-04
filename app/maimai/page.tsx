@@ -124,16 +124,21 @@ export default function MaiMaiPage() {
     NZD: t('maimai.currency.NZD'),
   }), [t])
 
+  // 数字格式按页面语言：英文版用 en-US（千位逗号），非英文用货币对应 locale
+  // 英文版 JPY 直接显示完整日元数（如 10,000,000），避免「1,000」+「10,000」拼接成 1,00010,000 或误读为 10 亿
   const formatCurrencyValue = (amount: number, currency: string) => {
-    const locale = currencyLocales[currency] ?? 'zh-CN'
-    const formatter = new Intl.NumberFormat(locale, {
+    const numberLocale = language === 'en' ? 'en-US' : (currencyLocales[currency] ?? 'zh-CN')
+    const formatter = new Intl.NumberFormat(numberLocale, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     })
     const rounded = Math.round(amount)
     const label = currencyLabels[currency] ?? currency
-    
+
     if (currency === 'JPY') {
+      if (language === 'en') {
+        return `${formatter.format(rounded)} ${label}`
+      }
       const man = rounded / 10_000
       if (man >= 1) {
         const formattedMan = formatter.format(man)
@@ -143,18 +148,32 @@ export default function MaiMaiPage() {
         return `${formattedNumber}${label}`
       }
     }
-    
+
     const formattedNumber = formatter.format(rounded)
     return `${t('maimai.currency.approx')}${formattedNumber}${label}`
   }
 
   const propertiesNoFee = useMemo(
-    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey), displayLocation: t(p.locationKey) })),
+    () => maimaiPropertiesNoFee.map((p) => ({
+      ...p,
+      feature: t(p.featureKey),
+      displayTitle: tTitle(p.titleKey),
+      displayLocation: t(p.locationKey),
+      displayType: t(p.typeKey),
+      displayArea: p.area === '约17㎡' ? t('maimai.properties.areaApprox17') : p.area === '—' ? t('maimai.properties.areaNa') : p.area,
+    })),
     [t, tTitle]
   )
 
   const propertiesWithFee = useMemo(
-    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey), displayLocation: t(p.locationKey) })),
+    () => maimaiPropertiesWithFee.map((p) => ({
+      ...p,
+      feature: t(p.featureKey),
+      displayTitle: tTitle(p.titleKey),
+      displayLocation: t(p.locationKey),
+      displayType: t(p.typeKey),
+      displayArea: p.area === '约17㎡' ? t('maimai.properties.areaApprox17') : p.area === '—' ? t('maimai.properties.areaNa') : p.area,
+    })),
     [t, tTitle]
   )
 
@@ -503,6 +522,13 @@ export default function MaiMaiPage() {
     return formatCurrencyValue(converted, selectedCurrency)
   }
 
+  /** 下方「日元价格」行：按当前语言格式化为日元显示（如英文 42,680,000 JPY） */
+  const formatJpyPrice = (price: string) => {
+    const yen = parsePriceToYen(price)
+    if (yen === null) return price
+    return formatCurrencyValue(yen, 'JPY')
+  }
+
   return (
     <PageLayout>
       <section className="relative pt-28 pb-16 bg-gradient-to-br from-emerald-800 via-emerald-700 to-navy-800 overflow-hidden">
@@ -621,14 +647,14 @@ export default function MaiMaiPage() {
                           <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
                               <Building2 className="w-4 h-4" />
-                              {property.area}
+                              {property.displayArea}
                             </span>
-                            <span>{property.type}</span>
+                            <span>{property.displayType}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
                             {property.displayLocation}
@@ -657,14 +683,14 @@ export default function MaiMaiPage() {
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
                               <Building2 className="w-4 h-4" />
-                              {property.area}
+                              {property.displayArea}
                             </span>
-                            <span>{property.type}</span>
+                            <span>{property.displayType}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
                             {property.displayLocation}
@@ -769,14 +795,14 @@ export default function MaiMaiPage() {
                           <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
                               <Building2 className="w-4 h-4" />
-                              {property.area}
+                              {property.displayArea}
                             </span>
-                            <span>{property.type}</span>
+                            <span>{property.displayType}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
                             {property.displayLocation}
@@ -804,14 +830,14 @@ export default function MaiMaiPage() {
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
                           <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{property.price}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
                               <Building2 className="w-4 h-4" />
-                              {property.area}
+                              {property.displayArea}
                             </span>
-                            <span>{property.type}</span>
+                            <span>{property.displayType}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
                             {property.displayLocation}
