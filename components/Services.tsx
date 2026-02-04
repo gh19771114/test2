@@ -675,6 +675,7 @@ const Services = () => {
                                 key={`${service.link}-m-${i}`}
                                 x={pieData.textX}
                                 dy={i === 0 ? startDy : `${lineHeightEm}em`}
+                                suppressHydrationWarning
                               >
                                 {line}
                               </tspan>
@@ -1058,6 +1059,7 @@ const Services = () => {
                             key={`${service.link}-d-${i}`}
                             x={pieData.textX}
                             dy={i === 0 ? startDy : `${lineHeightEm}em`}
+                            suppressHydrationWarning
                           >
                             {line}
                           </tspan>

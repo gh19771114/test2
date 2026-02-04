@@ -42,86 +42,63 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setIsMounted(true)
   }, [])
 
-  // 根据浏览器语言自动设置语言
+  // 根据浏览器语言自动设置语言（延迟到 hydration 之后执行，避免服务端 zh 与客户端恢复的 ja 等不一致导致 hydration 报错）
   useEffect(() => {
     if (typeof window === 'undefined') return
-    
-    // 检查是否已经设置过语言（用户手动选择过）
-    const savedLanguage = localStorage.getItem('language')
-    if (savedLanguage) {
-      // 如果用户已经手动选择过语言，就不自动设置
-      return
-    }
+    const timer = setTimeout(() => {
+      // 检查是否已经设置过语言（用户手动选择过）
+      const savedLanguage = localStorage.getItem('language')
+      if (savedLanguage) {
+        return
+      }
+      const userSelected = localStorage.getItem('languageUserSelected')
+      if (userSelected === 'true') return
+      const autoSet = localStorage.getItem('languageAutoSet')
+      if (autoSet === 'true') return
 
-    // 更强的保护：如果用户曾经手动选择过语言（我们记录一个标记），就永远不再用设备语言覆盖
-    const userSelected = localStorage.getItem('languageUserSelected')
-    if (userSelected === 'true') {
-      return
-    }
-    
-    // 检查是否已经自动设置过
-    const autoSet = localStorage.getItem('languageAutoSet')
-    if (autoSet === 'true') {
-      return
-    }
-    
-    // 检测浏览器语言
-    const detectLanguage = () => {
-      try {
-        // 获取浏览器语言设置（优先使用 navigator.languages，如果没有则使用 navigator.language）
-        const browserLanguages = navigator.languages || [navigator.language]
-        let detectedLanguage: Language = 'zh-TW' // 默认繁体中文台湾
-        
-        // 遍历浏览器语言列表，找到第一个匹配的语言
-        for (const lang of browserLanguages) {
-          const langLower = lang.toLowerCase()
-          const langCode = langLower.split('-')[0] // 获取主语言代码（如 'zh', 'ja', 'en'）
-          const fullLang = langLower.split('-').slice(0, 2).join('-') // 获取完整语言代码（如 'zh-tw', 'zh-cn'）
-          
-          // 精确匹配（优先级更高）
-          if (fullLang === 'zh-cn' || langLower === 'zh-hans' || langLower === 'zh-hans-cn') {
-            detectedLanguage = 'zh'
-            break
-          } else if (fullLang === 'zh-tw' || langLower === 'zh-hant-tw') {
-            detectedLanguage = 'zh-TW'
-            break
-          } else if (fullLang === 'zh-hk' || langLower === 'zh-hant-hk' || fullLang === 'zh-mo') {
-            detectedLanguage = 'zh-HK'
-            break
-          } else if (fullLang === 'ja-jp' || langCode === 'ja') {
-            detectedLanguage = 'ja'
-            break
-          } else if (langCode === 'en') {
-            detectedLanguage = 'en'
-            break
-          }
-          
-          // 如果精确匹配未找到，尝试主语言代码匹配
-          if (detectedLanguage === 'zh-TW') {
-            if (langCode === 'zh') {
-              // 如果只有 'zh' 而没有地区代码，默认为繁体中文台湾
+      const detectLanguage = () => {
+        try {
+          const browserLanguages = navigator.languages || [navigator.language]
+          let detectedLanguage: Language = 'zh-TW'
+          for (const lang of browserLanguages) {
+            const langLower = lang.toLowerCase()
+            const langCode = langLower.split('-')[0]
+            const fullLang = langLower.split('-').slice(0, 2).join('-')
+            if (fullLang === 'zh-cn' || langLower === 'zh-hans' || langLower === 'zh-hans-cn') {
+              detectedLanguage = 'zh'
+              break
+            } else if (fullLang === 'zh-tw' || langLower === 'zh-hant-tw') {
               detectedLanguage = 'zh-TW'
-            } else if (langCode === 'ja') {
+              break
+            } else if (fullLang === 'zh-hk' || langLower === 'zh-hant-hk' || fullLang === 'zh-mo') {
+              detectedLanguage = 'zh-HK'
+              break
+            } else if (fullLang === 'ja-jp' || langCode === 'ja') {
               detectedLanguage = 'ja'
+              break
             } else if (langCode === 'en') {
               detectedLanguage = 'en'
+              break
+            }
+            if (detectedLanguage === 'zh-TW') {
+              if (langCode === 'zh') detectedLanguage = 'zh-TW'
+              else if (langCode === 'ja') detectedLanguage = 'ja'
+              else if (langCode === 'en') detectedLanguage = 'en'
             }
           }
+          setLanguageState(detectedLanguage)
+          localStorage.setItem('language', detectedLanguage)
+          localStorage.setItem('languageAutoSet', 'true')
+        } catch (error) {
+          console.error('Failed to detect language from browser:', error)
+          setLanguageState('zh-TW')
+          localStorage.setItem('language', 'zh-TW')
+          localStorage.setItem('languageAutoSet', 'true')
         }
-        
-        setLanguageState(detectedLanguage)
-        localStorage.setItem('language', detectedLanguage)
-        localStorage.setItem('languageAutoSet', 'true')
-      } catch (error) {
-        console.error('Failed to detect language from browser:', error)
-        // 出错时使用默认值
-        setLanguageState('zh-TW')
-        localStorage.setItem('language', 'zh-TW')
-        localStorage.setItem('languageAutoSet', 'true')
       }
-    }
-    
-    detectLanguage()
+      detectLanguage()
+    }, 0)
+    return () => clearTimeout(timer)
   }, [])
 
   // 加载翻译文件（主界面 + 卡片标题用语言）
@@ -184,9 +161,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     loadTranslations()
   }, [language])
 
-  // 客户端挂载后，如果语言与初始状态不同，重新加载翻译
+  // 客户端挂载后，若 localStorage 中语言与当前不同则恢复（延迟到 hydration 之后执行，避免与服务端 zh 不一致导致 hydration 报错）
   useEffect(() => {
-    if (isMounted && typeof window !== 'undefined') {
+    if (!isMounted || typeof window === 'undefined') return
+    const timer = setTimeout(() => {
       const savedLanguageRaw = localStorage.getItem('language')
       const normalized =
         savedLanguageRaw === 'zh-CN' ? 'zh' :
@@ -196,7 +174,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       if (savedLanguage && savedLanguage !== language && (savedLanguage === 'zh' || savedLanguage === 'zh-TW' || savedLanguage === 'zh-HK' || savedLanguage === 'ja' || savedLanguage === 'en')) {
         setLanguageState(savedLanguage)
       }
-    }
+    }, 0)
+    return () => clearTimeout(timer)
   }, [isMounted, language])
 
   const setLanguage = (lang: Language) => {

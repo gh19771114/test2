@@ -82,12 +82,12 @@ const Works = () => {
                     />
                   </div>
                   <div className="absolute top-4 left-4">
-                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium" suppressHydrationWarning>
                       {work.category}
                     </span>
                   </div>
                   <div className="absolute top-4 right-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium" suppressHydrationWarning>
                       {work.type}
                     </span>
                   </div>
@@ -99,11 +99,11 @@ const Works = () => {
                       <span>{work.date}</span>
                     </div>
                   ) : null}
-                <h3 className="text-xl font-semibold text-navy-700 mb-2">
+                <h3 className="text-xl font-semibold text-navy-700 mb-2" suppressHydrationWarning>
                     {work.title}
                   </h3>
                   {work.description ? (
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className="text-gray-600 text-sm leading-relaxed" suppressHydrationWarning>
                       {work.description}
                     </p>
                   ) : null}
@@ -140,12 +140,12 @@ const Works = () => {
                         />
                       </div>
                       <div className="absolute top-4 left-4">
-                        <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <span className="bg-navy-700 text-white px-3 py-1 rounded-full text-sm font-medium" suppressHydrationWarning>
                           {work.category}
                         </span>
                       </div>
                       <div className="absolute top-4 right-4">
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium" suppressHydrationWarning>
                           {work.type}
                         </span>
                       </div>
@@ -154,14 +154,14 @@ const Works = () => {
                   <div className="md:p-6" style={{ padding: '0.125rem' }}>
                       {work.date ? (
                         <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                          <span>{work.date}</span>
+                          <span suppressHydrationWarning>{work.date}</span>
                         </div>
                       ) : null}
-                    <h3 className="text-xl font-semibold text-navy-700 mb-2 line-clamp-2">
+                    <h3 className="text-xl font-semibold text-navy-700 mb-2 line-clamp-2" suppressHydrationWarning>
                         {work.title}
                       </h3>
                       {work.description ? (
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3" suppressHydrationWarning>
                           {work.description}
                         </p>
                       ) : null}
