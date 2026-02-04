@@ -1625,7 +1625,20 @@
       "comingSoon": "敬請期待",
       "preparing": "新物件準備中",
       "inPreparation": "準備中",
-      "newPropertyInfo": "新物件資訊"
+      "newPropertyInfo": "新物件資訊",
+      "locations": {
+        "lionsHigashiginza2f": "東京都中央區築地",
+        "shinNakano305": "東京都中野區本町",
+        "shinNakano304": "東京都中野區本町",
+        "patioSuginami2f": "東京都杉並區堀之內",
+        "centHillsShiinamachi4f": "東京都豐島區長崎",
+        "paleDorSagamihara8f": "神奈川縣相模原市",
+        "nichishinPalaceTakenotsuka5f": "東京都足立區伊興",
+        "cesarTakashimadaira2f": "東京都板橋區德丸",
+        "miwaPlazaTakaido1f": "東京都杉並區上高井戶",
+        "lmNishihachioji3_707": "東京都八王子市八木町",
+        "skyCourtIkuta2f": "神奈川縣川崎市多摩區"
+      }
     },
     "deals": {
       "deal1": {

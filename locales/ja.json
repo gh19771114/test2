@@ -1567,6 +1567,19 @@
       "preparing": "新規物件準備中",
       "inPreparation": "準備中",
       "newPropertyInfo": "新物件情報",
+      "locations": {
+        "lionsHigashiginza2f": "東京都中央区築地",
+        "shinNakano305": "東京都中野区本町",
+        "shinNakano304": "東京都中野区本町",
+        "patioSuginami2f": "東京都杉並区堀ノ内",
+        "centHillsShiinamachi4f": "東京都豊島区長崎",
+        "paleDorSagamihara8f": "神奈川県相模原市",
+        "nichishinPalaceTakenotsuka5f": "東京都足立区伊興",
+        "cesarTakashimadaira2f": "東京都板橋区徳丸",
+        "miwaPlazaTakaido1f": "東京都杉並区上高井戸",
+        "lmNishihachioji3_707": "東京都八王子市八木町",
+        "skyCourtIkuta2f": "神奈川県川崎市多摩区"
+      },
       "buildings": {
         "lionsHigashiginza2f": "ライオンズマンション東銀座2F",
         "shinNakano305": "新中野駅上プラザ305号室",

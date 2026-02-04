@@ -149,12 +149,12 @@ export default function MaiMaiPage() {
   }
 
   const propertiesNoFee = useMemo(
-    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey) })),
+    () => maimaiPropertiesNoFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey), displayLocation: t(p.locationKey) })),
     [t, tTitle]
   )
 
   const propertiesWithFee = useMemo(
-    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey) })),
+    () => maimaiPropertiesWithFee.map((p) => ({ ...p, feature: t(p.featureKey), displayTitle: tTitle(p.titleKey), displayLocation: t(p.locationKey) })),
     [t, tTitle]
   )
 
@@ -631,7 +631,7 @@ export default function MaiMaiPage() {
                             <span>{property.type}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
-                            {property.location}
+                            {property.displayLocation}
                           </div>
                           <div className="w-full mt-4 bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium text-center">
                             {t('maimai.properties.viewDetails')}
@@ -667,7 +667,7 @@ export default function MaiMaiPage() {
                             <span>{property.type}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
-                            {property.location}
+                            {property.displayLocation}
                           </div>
                           <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
                             {t('maimai.properties.viewDetails')}
@@ -779,7 +779,7 @@ export default function MaiMaiPage() {
                             <span>{property.type}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
-                            {property.location}
+                            {property.displayLocation}
                           </div>
                           <div className="w-full mt-4 bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium text-center">
                             {t('maimai.properties.viewDetails')}
@@ -814,7 +814,7 @@ export default function MaiMaiPage() {
                             <span>{property.type}</span>
                           </div>
                           <div className="text-sm text-gray-700 mb-auto">
-                            {property.location}
+                            {property.displayLocation}
                           </div>
                           <button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium">
                             {t('maimai.properties.viewDetails')}

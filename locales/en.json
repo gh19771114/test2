@@ -1590,6 +1590,19 @@
       "preparing": "New property in preparation",
       "inPreparation": "In preparation",
       "newPropertyInfo": "New Property Info",
+      "locations": {
+        "lionsHigashiginza2f": "Chuo-ku Tsukiji, Tokyo",
+        "shinNakano305": "Nakano-ku Honcho, Tokyo",
+        "shinNakano304": "Nakano-ku Honcho, Tokyo",
+        "patioSuginami2f": "Suginami-ku Horinouchi, Tokyo",
+        "centHillsShiinamachi4f": "Toshima-ku Nagasaki, Tokyo",
+        "paleDorSagamihara8f": "Sagamihara, Kanagawa",
+        "nichishinPalaceTakenotsuka5f": "Adachi-ku Iko, Tokyo",
+        "cesarTakashimadaira2f": "Itabashi-ku Tokumaru, Tokyo",
+        "miwaPlazaTakaido1f": "Suginami-ku Kamitakaido, Tokyo",
+        "lmNishihachioji3_707": "Hachioji Yagicho, Tokyo",
+        "skyCourtIkuta2f": "Kawasaki Tama-ku, Kanagawa"
+      },
       "buildings": {
         "lionsHigashiginza2f": "Lions Mansion Higashi-Ginza 2F",
         "shinNakano305": "Shin-Nakano Ekijou Plaza 305",
