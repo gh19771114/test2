@@ -21,7 +21,7 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Bourn Mark',
-  alternateName: ['ボーンマーク', '川雨留痕', 'Bournmark'],
+  alternateName: ['ボーンマーク', '川雨流痕', 'Bournmark'],
   url: 'https://bournmark.com',
   description: '日本不动产管理公司',
   sameAs: ['https://www.facebook.com/bournmarkjapan/', 'https://www.youtube.com/@bournmark'],
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   keywords: [
     'Bourn Mark',
     'BournMark',
-    '川雨留痕',
+    '川雨流痕',
     'ボーンマーク',
     '日本不动产管理公司',
     '官网',
