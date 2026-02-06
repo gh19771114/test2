@@ -1028,7 +1028,7 @@ export default function MaiMaiPage() {
                   <p className="text-sm md:text-base text-gray-600 mt-4 pt-4 border-t border-gray-200 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('maimai.fees.nonResidentNote') }} />
                 </div>
               </div>
-              <p className="text-sm md:text-base text-gray-600 -mt-1 pt-0 border-t border-gray-300 leading-relaxed text-center whitespace-normal break-words">
+              <p className="col-span-1 lg:col-span-2 text-sm md:text-base text-gray-600 -mt-1 pt-0 border-t border-gray-300 leading-relaxed text-center">
                 {t('maimai.fees.disclaimer')}
               </p>
             </div>
