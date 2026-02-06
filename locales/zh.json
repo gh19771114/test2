@@ -1618,7 +1618,7 @@
     },
     "fees": {
       "title": "交易费用一览",
-      "description": "※买卖费用根据房屋年限、现状、政府政策等各种因素，计算的具体金额会有不同。<br />一般情况约为房产交易金额的<span className=\"font-bold text-white\">10%</span>左右。下述具体金额仅供参考。",
+      "description": "※买卖费用根据房屋年限、现状、政府政策等各种因素，计算的具体金额会有不同。<br />一般情况约为房产交易金额的<span className=\"font-bold text-white\">7%到10%</span>左右。下述具体金额仅供参考。",
       "backgroundImageAlt": "房产背景",
       "buyingTitle": "买房费用",
       "sellingTitle": "卖房费用",
