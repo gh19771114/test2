@@ -1343,6 +1343,13 @@
           "emailConfirm": "Confirm Email",
           "signature": "Signature"
         },
+        "help": {
+          "ariaLabel": "View explanation",
+          "close": "Close",
+          "cancelDate": "Termination date: The date of full move-out (last day rent is charged).",
+          "moveOutDate": "Move-out date: The day you move your belongings out / moving day.",
+          "inspectionDateTime": "Inspection date: The day for final room condition check with no belongings left and return of all keys (no later than the termination date)."
+        },
         "signature": {
           "hint": "Please sign in the box above (supports mouse, trackpad, and touch).",
           "clear": "Clear signature"
@@ -1456,7 +1463,7 @@
           "networkError": "Network error or server unresponsive",
           "submitting": "Submitting...",
           "confirmSubmit": "Confirm Submission",
-          "note": "After submission, the system will generate a Japanese PDF termination notice based on the above content and send it to the management company's designated email. We recommend saving a screenshot or printout for your records."
+          "note": "The termination notice date is the date the termination notice is received. (For FAX/email: our company's receipt date; for mail: postmark date.)\nAfter submission, a Japanese termination notice PDF will be generated from the above content and forwarded to the email address you provided. We recommend saving a copy for your records."
         },
         "notes": {
           "inspectionDateTime": "※Until termination date",

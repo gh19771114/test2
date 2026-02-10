@@ -397,9 +397,6 @@ export default function TerminationPreviewPage() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
               {t('tenant.kaiyaku.preview.title')}
             </h1>
-            <p className="text-lg text-gray-100 max-w-3xl leading-relaxed">
-              {t('tenant.kaiyaku.preview.description')}
-            </p>
           </div>
         </section>
 
@@ -744,7 +741,7 @@ export default function TerminationPreviewPage() {
                 </div>
               )}
               {!submitResult && (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 whitespace-pre-line">
                   {t('tenant.kaiyaku.preview.note')}
                 </p>
               )}

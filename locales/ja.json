@@ -1320,6 +1320,13 @@
           "emailConfirm": "メールアドレス（確認）",
           "signature": "署名"
         },
+        "help": {
+          "ariaLabel": "説明を見る",
+          "close": "閉じる",
+          "cancelDate": "解約日：完全に退去となる日（賃料が発生する最終日）",
+          "moveOutDate": "退去日：部屋の荷物を搬出する日、引越し日",
+          "inspectionDateTime": "立会日：部屋に荷物がない状態で部屋状態を最終チェックする日、すべての鍵を回収する日（最長：解約日）"
+        },
         "signature": {
           "hint": "上の署名欄に手書きで署名してください（マウス／トラックパッド／スマホのタッチに対応）。",
           "clear": "署名をクリア"
@@ -1409,10 +1416,10 @@
           "notProvided": "（未記入）",
           "notSelected": "（未選択）",
           "undecided": "未定",
-          "backEdit": "修正する",
+          "backEdit": "修正",
           "serverResponseError": "サーバー応答エラー（{status}）",
           "turnstileLoading": "ロボット認証を読み込み中…",
-          "turnstileInvisibleHint": "現在は不可視認証です。「送信を確認」を押すと自動で認証します。",
+          "turnstileInvisibleHint": "現在は不可視認証です。「送信」を押すと自動で認証します。",
           "turnstileLoadFailed": "ロボット認証の読み込みに失敗しました。更新するか、広告ブロックを無効にして再試行してください。",
           "turnstileRetry": "認証を再読み込み",
           "turnstilePoweredBy": "Cloudflare Turnstile",
@@ -1430,8 +1437,8 @@
           "submitFailedRetry": "送信に失敗しました：{error}。ネットワーク接続を確認して再試行するか、カスタマーサービスにお問い合わせください。",
           "networkError": "ネットワークエラーまたはサーバーが応答しません",
           "submitting": "送信中...",
-          "confirmSubmit": "送信を確認",
-          "note": "送信後、システムは上記の内容に基づいて日本語解約通知書PDFを生成し、管理会社の指定メールアドレスに送信します。スクリーンショットまたは印刷物を別途保存しておくことをお勧めします。"
+          "confirmSubmit": "送信",
+          "note": "解約通知日は解約通知書の到着日となります。（FAX/メールの場合は弊社受信日・郵送の場合は消印日）\n送信後、上記の内容に基づいて日本語解約通知書PDFを生成し、ご記入したメールアドレスに転送します。別途保存することをお勧めします。"
         },
         "notes": {
           "inspectionDateTime": "※解約日まで",

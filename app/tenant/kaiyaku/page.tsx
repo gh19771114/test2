@@ -5,6 +5,7 @@ import PageLayout from '@/components/PageLayout'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import SignaturePad from '@/components/SignaturePad'
+import { HelpCircle } from 'lucide-react'
 import { looksLikeJapaneseKaiyakuData, convertFromJapaneseToInternal, type KaiyakuInternalForm } from '@/lib/kaiyakuConvertClient'
 
 // 下载用 PDF（需放在 public/ 下才能被网页访问）
@@ -73,6 +74,7 @@ export default function TenantTerminationPage() {
   const [formData, setFormData] = useState<TerminationForm>(initialForm)
   const [isMounted, setIsMounted] = useState(false)
   const [signatureMissing, setSignatureMissing] = useState(false)
+  const [helpKey, setHelpKey] = useState<null | 'cancelDate' | 'moveOutDate' | 'inspectionDateTime'>(null)
 
   useEffect(() => {
     setIsMounted(true)
@@ -341,6 +343,29 @@ export default function TenantTerminationPage() {
 
   return (
     <PageLayout>
+      {/* 解约/退房/立会 说明弹窗 */}
+      {helpKey && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50"
+          onClick={() => setHelpKey(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-xl max-w-md w-full p-5 md:p-6 text-left"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm md:text-base text-gray-800 whitespace-pre-line leading-relaxed">
+              {t(`tenant.kaiyaku.help.${helpKey}`)}
+            </p>
+            <button
+              type="button"
+              onClick={() => setHelpKey(null)}
+              className="mt-4 w-full py-2.5 rounded-lg bg-navy-600 text-white font-medium hover:bg-navy-700 focus:outline-none focus:ring-2 focus:ring-navy-400"
+            >
+              {t('tenant.kaiyaku.help.close')}
+            </button>
+          </div>
+        </div>
+      )}
       <div className="bg-gray-50 min-h-screen">
         <section className="relative pt-20 md:pt-28 pb-8 md:pb-16 bg-gradient-to-br from-red-700 via-orange-600 to-yellow-500 overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -461,10 +486,18 @@ export default function TenantTerminationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
                   <div>
                     <label
-                      className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+                      className="block text-sm font-medium text-gray-700 mb-1 md:mb-2 flex items-center gap-1"
                       htmlFor="cancelDate"
                     >
                       {t('tenant.kaiyaku.fields.cancelDate')}
+                      <button
+                        type="button"
+                        onClick={() => setHelpKey('cancelDate')}
+                        className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-navy-400"
+                        aria-label={t('tenant.kaiyaku.help.ariaLabel')}
+                      >
+                        <HelpCircle className="w-3.5 h-3.5" />
+                      </button>
                     </label>
                     <input
                       id="cancelDate"
@@ -479,10 +512,18 @@ export default function TenantTerminationPage() {
                   </div>
                   <div>
                     <label
-                      className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
+                      className="block text-sm font-medium text-gray-700 mb-1 md:mb-2 flex items-center gap-1"
                       htmlFor="moveOutDate"
                     >
                       {t('tenant.kaiyaku.fields.moveOutDate')}
+                      <button
+                        type="button"
+                        onClick={() => setHelpKey('moveOutDate')}
+                        className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-navy-400"
+                        aria-label={t('tenant.kaiyaku.help.ariaLabel')}
+                      >
+                        <HelpCircle className="w-3.5 h-3.5" />
+                      </button>
                     </label>
                     <input
                       id="moveOutDate"
@@ -501,7 +542,17 @@ export default function TenantTerminationPage() {
                     className="block text-sm font-medium text-gray-700 mb-1 md:mb-2"
                     htmlFor="inspectionDateTime"
                   >
-                    {t('tenant.kaiyaku.fields.inspectionDateTime')}
+                    <span className="inline-flex items-center gap-1">
+                      {t('tenant.kaiyaku.fields.inspectionDateTime')}
+                      <button
+                        type="button"
+                        onClick={() => setHelpKey('inspectionDateTime')}
+                        className="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-400 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-navy-400"
+                        aria-label={t('tenant.kaiyaku.help.ariaLabel')}
+                      >
+                        <HelpCircle className="w-3.5 h-3.5" />
+                      </button>
+                    </span>
                     <br />
                     <span className="text-xs font-normal">{t('tenant.kaiyaku.notes.inspectionDateTime')}</span>
                   </label>
@@ -514,9 +565,6 @@ export default function TenantTerminationPage() {
                     min={getTodayMinDateTime()}
                     className="w-full max-w-md px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-navy-500 focus:border-transparent"
                   />
-                  <p className="text-xs text-gray-500 mt-0.5 md:mt-1" suppressHydrationWarning>
-                    {t('tenant.kaiyaku.notes.inspectionNote')}
-                  </p>
                 </div>
               </div>
 
@@ -1206,8 +1254,8 @@ export default function TenantTerminationPage() {
                 </button>
               </div>
 
-              <p className="text-sm text-gray-500">
-                {t('tenant.kaiyaku.notes.submitNote')}
+              <p className="text-sm text-gray-500 whitespace-pre-line">
+                {t('tenant.kaiyaku.preview.note')}
               </p>
             </form>
 
