@@ -1287,6 +1287,7 @@ export default function TenantTerminationPage() {
                   <li>{t('tenant.kaiyaku.sidebar.notice4')}</li>
                   <li>{t('tenant.kaiyaku.sidebar.notice5')}</li>
                   <li>{t('tenant.kaiyaku.sidebar.notice6')}</li>
+                  <li className="whitespace-pre-line">{t('tenant.kaiyaku.sidebar.notice7')}</li>
                 </ul>
               </div>
             </aside>

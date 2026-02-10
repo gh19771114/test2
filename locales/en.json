@@ -1480,7 +1480,8 @@
           "notice3": "3. If insurance, utilities, etc. need to continue, please contact the insurance company listed on the policy to change the address. If cancellation is needed, please call to complete the procedures yourself.",
           "notice4": "4. If you cannot complete the move-out or on-site confirmation before the termination date due to personal reasons, extension fees may be charged. Please pay attention to the schedule.",
           "notice5": "5. The date for the move-out on-site confirmation will be contacted by a specialist later. If you need to change it, please communicate directly with them. Please be on time on the confirmation day.",
-          "notice6": "6. For damage and wear caused by intentional, negligent, or improper use at move-out, the restoration costs must be borne by the tenant."
+          "notice6": "6. For damage and wear caused by intentional, negligent, or improper use at move-out, the restoration costs must be borne by the tenant.",
+          "notice7": "7. Regarding the final month's rent, if a pro-rated rent refund applies, please pay the full amount first; it will be settled at the termination settlement.\nTenants with a guarantee company may have the following month's amount debited after termination. Please be aware in advance."
         },
         "phoneFormat": {
           "+81": "Japanese phone number format: 10-11 digits (e.g., 09012345678)",
