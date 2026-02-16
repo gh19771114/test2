@@ -11,7 +11,7 @@ const SITE_TITLE_BY_LOCALE: Record<SiteLocale, string> = {
   zh: 'Bourn Mark 川雨流痕-专业的日本房地产买卖和投资物业管理公司',
   'zh-TW': 'Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
   'zh-HK': 'Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
-  ja: 'Bourn Mark 川雨流痕-日本の不動産売買・投資用物件の管理',
+  ja: '株式会社ボーンマーク（Bourn Mark）川雨流痕-日本の不動産売買・投資用物件の管理',
   en: 'Bourn Mark - Japan Real Estate Sales, Investment & Property Management',
 }
 
@@ -19,7 +19,7 @@ const SITE_DESCRIPTION_BY_LOCALE: Record<SiteLocale, string> = {
   zh: '提供专业的日本房地产买卖咨询中介服务，以及投资型房地产的物业管理服务。让您在日本的投资更省心、更增值。',
   'zh-TW': '提供專業的日本房地產買賣諮詢中介服務，以及投資型房地產的物業管理服務。讓您在日本投資更省心、更增值。',
   'zh-HK': '提供專業的日本房地產買賣諮詢中介服務，以及投資型房地產的物業管理服務。讓您在日本投資更省心、更增值。',
-  ja: '不動産売買仲介・不動産管理する専門会社。日本不動産投資をより安心・有利に。',
+  ja: '株式会社ボーンマーク（ボーンマーク）。不動産売買仲介・不動産管理する専門会社。日本不動産投資をより安心・有利に。',
   en: 'Professional Japan real estate sales, investment property management, and advisory. Your trusted partner for investing in Japan.',
 }
 
@@ -98,16 +98,24 @@ const KEYWORDS_BY_LOCALE: Record<SiteLocale, string[]> = {
     '東京房產',
   ],
   ja: [
-    'Bourn Mark',
     'ボーンマーク',
-    '川雨流痕',
     '株式会社ボーンマーク',
+    'Bourn Mark',
+    '川雨流痕',
     '公式サイト',
     '日本不動産',
     '不動産売買',
     '不動産管理',
+    '不動産仲介',
+    '賃貸管理',
+    'マンション管理',
     '投資用不動産',
     '東京不動産',
+    '不動産会社',
+    '管理会社',
+    '東京都不動産',
+    '新宿不動産',
+    '渋谷不動産',
   ],
   en: [
     'Bourn Mark',
