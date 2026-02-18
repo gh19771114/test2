@@ -1964,36 +1964,32 @@ section#partners.qichu-partners-network {
   align-items: start;
 }
 
-/* 董事长寄语（/company/ceo）：仅“手机”生效的兜底
-   - 不依赖 viewport 宽度（避免切换到PC版 width=1280 后 max-width 失效）
-   - 用高度阈值排除 iPad：iPhone 15 Pro Max 竖屏高度约 932px；iPad 竖屏常见 1024px+ */
+/* 董事长寄语（/company/ceo）：仅“手机”生效的兜底（排除手持竖版“文字环绕”布局）
+   - .company-ceo-message-handheld-portrait 时为“文字环绕人物图”，不应用下列覆盖 */
 @media (orientation: portrait) and (pointer: coarse) and (max-height: 950px) {
-  .company-ceo-message-section .company-ceo-message-stage {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-stage {
     min-height: auto !important;
   }
 
-  .company-ceo-message-section .company-ceo-message-text {
-    /* 手机竖版：改为稳定版排版（不再用右侧预留 + 贴底绝对定位），避免大块空白/遮挡 */
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-text {
     padding-right: 0 !important;
-    /* 让中文段落更“整齐” */
     text-align: justify;
     text-justify: inter-ideograph;
   }
 
-  .company-ceo-message-section .company-ceo-message-float {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-float {
     display: none !important;
   }
 
-  .company-ceo-message-section .company-ceo-message-paragraphs > * {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-paragraphs > * {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-  .company-ceo-message-section .company-ceo-message-paragraphs > *:not(:first-child) {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-paragraphs > *:not(:first-child) {
     margin-top: 0.95em !important;
   }
 
-  /* 明确层级：人物图永远在文案下方 */
-  .company-ceo-message-section .company-ceo-message-portrait {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-portrait {
     z-index: 0 !important;
     position: static !important;
     right: auto !important;
@@ -2004,7 +2000,7 @@ section#partners.qichu-partners-network {
     margin-left: auto;
     margin-top: 12px;
   }
-  .company-ceo-message-section .company-ceo-message-text {
+  .company-ceo-message-section:not(.company-ceo-message-handheld-portrait) .company-ceo-message-text {
     z-index: 10 !important;
   }
 }
@@ -2042,6 +2038,82 @@ section#partners.qichu-partners-network {
   .company-ceo-message-section .company-ceo-message-portrait img {
     object-fit: contain !important;
     object-position: bottom right !important;
+  }
+}
+
+/* 董事长寄语页：正文全部向左对齐（全端统一） */
+.company-ceo-message-section .company-ceo-message-text,
+.company-ceo-message-section .company-ceo-message-text p,
+.company-ceo-message-section .company-ceo-message-paragraphs,
+.company-ceo-message-section .company-ceo-message-paragraphs p,
+.company-ceo-message-section .company-ceo-message-signature p {
+  text-align: left !important;
+  text-justify: auto !important;
+}
+
+/* 手机竖版寄语：全文环绕包围人物图（图在正文中段，上/左/下均有文字） */
+.company-ceo-message-handheld-portrait .company-ceo-message-stage-handheld-portrait {
+  min-height: auto !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-text-wrap {
+  display: block !important;
+  overflow: visible !important;
+  text-align: left !important;
+  text-justify: auto !important;
+}
+/* 正文所有文字向左对齐，避免 justify 导致单词间空隙 */
+.company-ceo-message-handheld-portrait .company-ceo-message-text-wrap *,
+.company-ceo-message-handheld-portrait .company-ceo-message-text-wrap *::before,
+.company-ceo-message-handheld-portrait .company-ceo-message-text-wrap *::after {
+  text-align: left !important;
+  text-justify: auto !important;
+}
+/* 第一、二段满宽，与每行长度一致（人物图在第二段之后，故不参与环绕） */
+.company-ceo-message-handheld-portrait .company-ceo-message-full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-portrait-float {
+  float: right !important;
+  position: relative !important;
+  z-index: 0 !important;
+  flex-shrink: 0 !important;
+}
+/* 图片右侧和下方的环绕文字：保证在图片下方的第三段等不被图片遮挡 */
+.company-ceo-message-handheld-portrait .company-ceo-message-wrap-after-float {
+  position: relative !important;
+  z-index: 1 !important;
+  padding-right: 30px !important;
+  text-align: left !important;
+  text-justify: auto !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-wrap-after-float p {
+  text-align: left !important;
+  text-justify: auto !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-text p {
+  line-height: 1.5 !important;
+  text-wrap: normal !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-paragraphs,
+.company-ceo-message-handheld-portrait .company-ceo-message-text [class*="space-y"] {
+  line-height: 1.5 !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-paragraphs > *:not(:first-child),
+.company-ceo-message-handheld-portrait .company-ceo-message-text .space-y-3 > *:not(:first-child) {
+  margin-top: 0.6em !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-text .mt-3 {
+  margin-top: 0.6em !important;
+}
+.company-ceo-message-handheld-portrait .company-ceo-message-text .mt-4 {
+  margin-top: 0.9em !important;
+}
+
+/* 桌面版：正文列已用 max-width 约束，与人物图同宽一致；无需再 padding-right */
+@media (min-width: 1024px) and (any-pointer: fine) {
+  .company-ceo-message-section .company-ceo-message-text-column {
+    box-sizing: border-box;
   }
 }
 

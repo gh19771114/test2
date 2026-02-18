@@ -166,7 +166,7 @@ export default function CompanyCeoPage() {
           </section>
         ) : (
           <>
-            <section className="relative bg-[#f3eadf] company-ceo-message-section">
+            <section className={`relative bg-[#f3eadf] company-ceo-message-section${handheldMode === 'portrait' ? ' company-ceo-message-handheld-portrait' : ''}`}>
               {(() => {
                 /**
                  * 杂志式排版（文字环绕人物图）
@@ -181,38 +181,133 @@ export default function CompanyCeoPage() {
                 const portraitH = 'clamp(320px, 60vh, 620px)'
                 const gap = 2
 
-                // 手机端（竖/横）寄语：使用“稳定布局”（正文全宽 + 人物图在正文后，不重叠）
+                // 手机端（竖/横）寄语
                 if (handheldMode) {
+                  const portraitWidth =
+                    handheldMode === 'landscape' ? 'min(23vw, 160px)' : 'min(42vw, 240px)'
+
+                  // 手机竖版：第一、二段满宽；第三段前约 3 行单独满宽，再人物图，第三段其余及以后环绕
+                  if (handheldMode === 'portrait') {
+                    const [p0, p1, p2, ...restParagraphs] = messageParagraphsOriginal
+                    const portraitWidthPortrait = 'min(32vw, 160px)'
+                    // 第三段按“约 9 行”拆成两段：前 9 行（含第 6、7、8、9 行）满宽与第 1 行一致，后段环绕图
+                    const charsPerLine = 32
+                    const splitAt = charsPerLine * 9
+                    const splitParagraph = (text: string) => {
+                      if (!text || text.length <= splitAt) return { head: text, tail: '' }
+                      let i = splitAt
+                      const breakChars = ' .。，、'
+                      while (i < text.length && !breakChars.includes(text[i])) i++
+                      if (i >= text.length) i = splitAt
+                      else i++
+                      return { head: text.slice(0, i).trim(), tail: text.slice(i).trim() }
+                    }
+                    const p2Split = p2 ? splitParagraph(p2) : { head: '', tail: '' }
+
+                    return (
+                      <div className="container-custom pt-2 pb-0 company-ceo-message-container">
+                        <div className="mx-auto max-w-5xl relative company-ceo-message-stage company-ceo-message-stage-handheld-portrait">
+                          <div
+                            className="text-slate-900 company-ceo-message-text company-ceo-message-text-wrap"
+                            style={{
+                              paddingInline: '1.2em',
+                              paddingTop: '1.2em',
+                              paddingBottom: '1.2em',
+                              textAlign: 'left',
+                              textJustify: 'auto',
+                            } as React.CSSProperties}
+                          >
+                            <div className="mb-2">
+                              <div className="space-y-1">
+                                <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
+                                  {t('company.ceo.message.title')}
+                                </p>
+                                <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-slate-500 leading-snug">
+                                  {t('company.ceo.message.subtitle')}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* 第一段：满宽，左对齐 */}
+                            {p0 ? (
+                              <div className="company-ceo-message-full-width space-y-3 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs mb-3" style={{ textAlign: 'left' }}>
+                                <p style={{ textAlign: 'left' }}>{p0}</p>
+                              </div>
+                            ) : null}
+
+                            {/* 第二段：满宽，左对齐 */}
+                            {p1 ? (
+                              <div className="company-ceo-message-full-width space-y-3 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs mb-3" style={{ textAlign: 'left' }}>
+                                <p style={{ textAlign: 'left' }}>{p1}</p>
+                              </div>
+                            ) : null}
+
+                            {/* 第三段前约 9 行：满宽与第 1 行一致，左对齐 */}
+                            {p2Split.head ? (
+                              <div className="company-ceo-message-full-width space-y-3 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs mb-3" style={{ textAlign: 'left' }}>
+                                <p style={{ textAlign: 'left' }}>{p2Split.head}</p>
+                              </div>
+                            ) : null}
+
+                            {/* 人物图：float 右侧，第三段其余及以后在左侧和下方环绕 */}
+                            <div
+                              className="float-right company-ceo-message-portrait company-ceo-message-portrait-float"
+                              style={{
+                                width: portraitWidthPortrait,
+                                aspectRatio: '3 / 4',
+                                marginLeft: '0.6em',
+                                marginBottom: '0.6em',
+                                marginTop: '0.25em',
+                              }}
+                              aria-hidden="true"
+                            >
+                              <Image
+                                src={ceoPortrait1}
+                                alt="桂小川人物照片"
+                                fill
+                                className="object-contain object-bottom"
+                                priority={false}
+                                sizes="36vw"
+                              />
+                            </div>
+
+                            {/* 第三段其余 + 更多段落：在图片左侧和下方环绕，强制左对齐 */}
+                            <div
+                              className="company-ceo-message-wrap-after-float space-y-3 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs"
+                              style={{ textAlign: 'left', textJustify: 'auto' } as React.CSSProperties}
+                            >
+                              {p2Split.tail ? <p style={{ textAlign: 'left', textJustify: 'auto' } as React.CSSProperties}>{p2Split.tail}</p> : null}
+                              {restParagraphs.map((paragraph, index) => (
+                                <p key={index} style={{ textAlign: 'left', textJustify: 'auto' } as React.CSSProperties}>
+                                  {paragraph}
+                                </p>
+                              ))}
+                            </div>
+
+                            <div className="clear-both" aria-hidden="true" />
+                            <div className="pt-6 sm:pt-7 company-ceo-message-signature">
+                              <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                              <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
+                                {t('company.ceo.message.presidentName')}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  // 手机横屏：保持原布局（正文 + 右侧人物图 flex）
                   const p0 = messageParagraphsOriginal[0]
                   const p1 = messageParagraphsOriginal[1]
                   const p2 = messageParagraphsOriginal[2]
                   const rest = messageParagraphsOriginal.slice(3)
-                  const narrowTextWidth = handheldMode === 'portrait' ? '40vw' : '70vw'
-                  // 手机竖版：正文左右留出约“一列文字”的空间
-                  const portraitTextPaddingInline = handheldMode === 'portrait' ? '1.4em' : undefined
-                  // 手机竖版：正文顶部/底部各留出约“一行文字高度”的空间
-                  const portraitTextPaddingBlock = handheldMode === 'portrait' ? '1.6em' : undefined
-                  // “撒花姑娘”上下各留一行正文高度的空间（手机竖版）
-                  const portraitExtraSpace = handheldMode === 'portrait' ? '1.6em' : undefined
-                  // 横屏：人物图缩小到“当前的 50%”（原 min(46vw,320px) -> min(23vw,160px)）
-                  const portraitWidth =
-                    handheldMode === 'landscape' ? 'min(23vw, 160px)' : 'min(42vw, 240px)'
+                  const narrowTextWidth = '70vw'
 
                   return (
                     <div className="container-custom pt-2 pb-0 company-ceo-message-container">
                       <div className="mx-auto max-w-5xl company-ceo-message-stage">
-                        <div
-                          className="text-slate-900 company-ceo-message-text"
-                          style={
-                            portraitTextPaddingInline || portraitTextPaddingBlock
-                              ? ({
-                                  paddingInline: portraitTextPaddingInline,
-                                  paddingTop: portraitTextPaddingBlock,
-                                  paddingBottom: portraitTextPaddingBlock,
-                                } as any)
-                              : undefined
-                          }
-                        >
+                        <div className="text-slate-900 company-ceo-message-text">
                           <div className="mb-2">
                             <div className="space-y-1">
                               <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
@@ -224,45 +319,20 @@ export default function CompanyCeoPage() {
                             </div>
                           </div>
 
-                          {/* 第 1 段：全宽 */}
                           {p0 ? (
-                            <div
-                              className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs"
-                              // 手机竖版：第 1 段右侧再多留“一字宽”
-                              style={handheldMode === 'portrait' ? ({ paddingRight: '1em' } as any) : undefined}
-                            >
+                            <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
                               <p className="text-balance">{p0}</p>
                             </div>
                           ) : null}
 
-                          {/* 手机竖版：第 2 段也保持全宽（避免比第 1 段更窄） */}
-                          {handheldMode === 'portrait' && p1 ? (
-                            <div
-                              className="mt-3 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs"
-                              // 手机竖版：第 2 段右侧再多留“一字宽”
-                              style={{ paddingRight: '1em' }}
-                            >
-                              <p className="text-balance">{p1}</p>
-                            </div>
-                          ) : null}
-
-                          {/* 人物图：移动到第 1 段下方；第 2/3 段按指定比例收窄 */}
                           <div className="mt-3 flex items-start justify-between gap-3">
                             <div style={{ width: narrowTextWidth }} className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed">
-                              {handheldMode !== 'portrait' && p1 ? <p className="text-balance">{p1}</p> : null}
+                              {p1 ? <p className="text-balance">{p1}</p> : null}
                               {p2 ? <p className="text-balance">{p2}</p> : null}
                             </div>
-
                             <div
                               className="relative company-ceo-message-portrait flex-shrink-0"
-                              style={{
-                                width: portraitWidth,
-                                aspectRatio: '3 / 4',
-                                // 人物图下移约“两行正文高度”
-                                // 再下移约“一行正文高度”（合计约 3 行）
-                                marginTop: portraitExtraSpace ? `calc(4.85em + ${portraitExtraSpace})` : '4.85em',
-                                marginBottom: portraitExtraSpace || undefined,
-                              }}
+                              style={{ width: portraitWidth, aspectRatio: '3 / 4', marginTop: '4.85em' }}
                               aria-hidden="true"
                             >
                               <Image
@@ -276,7 +346,6 @@ export default function CompanyCeoPage() {
                             </div>
                           </div>
 
-                          {/* 余下段落：保持全宽（避免内容被过度压缩） */}
                           {rest.length ? (
                             <div className="mt-4 space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
                               {rest.map((paragraph, index) => (
@@ -334,32 +403,35 @@ export default function CompanyCeoPage() {
                           aria-hidden="true"
                         />
 
-                        {/* 标题区：收紧两行之间与上下间距，避免出现“巨大空白” */}
-                        <div className="mb-2">
-                          <div className="space-y-1">
-                            <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
-                            {t('company.ceo.message.title')}
-                          </p>
-                            <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-slate-500 leading-snug">
-                            {t('company.ceo.message.subtitle')}
-                          </p>
+                        {/* 桌面版：正文列固定最大宽度，使第一段与下两段每行长度一致 */}
+                        <div className="company-ceo-message-text-column" style={{ maxWidth: 'calc(100% - var(--ceoPortraitW) - var(--ceoPortraitGap))' } as any}>
+                          {/* 标题区：收紧两行之间与上下间距，避免出现“巨大空白” */}
+                          <div className="mb-2">
+                            <div className="space-y-1">
+                              <p className="text-lg sm:text-xl tracking-[0.28em] text-slate-700 leading-snug">
+                                {t('company.ceo.message.title')}
+                              </p>
+                              <p className="text-xs sm:text-sm uppercase tracking-[0.32em] text-slate-500 leading-snug">
+                                {t('company.ceo.message.subtitle')}
+                              </p>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
-                          {messageParagraphsOriginal.map((paragraph, index) => (
-                            <p key={index} className="text-balance">
-                              {paragraph}
+                          <div className="space-y-3 sm:space-y-4 text-sm sm:text-[1.05rem] leading-relaxed company-ceo-message-paragraphs">
+                            {messageParagraphsOriginal.map((paragraph, index) => (
+                              <p key={index} className="text-balance">
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+
+                          {/* 署名区：尽量向下“顶”到人物图底部附近，减少空白 */}
+                          <div className="pt-6 sm:pt-7 company-ceo-message-signature">
+                            <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
+                            <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
+                              {t('company.ceo.message.presidentName')}
                             </p>
-                          ))}
-                        </div>
-
-                        {/* 署名区：尽量向下“顶”到人物图底部附近，减少空白 */}
-                        <div className="pt-6 sm:pt-7 company-ceo-message-signature">
-                          <p className="text-sm sm:text-base text-slate-600">{t('company.ceo.message.presidentTitle')}</p>
-                          <p className="text-xl sm:text-2xl font-semibold text-navy-800 mt-2 tracking-wide">
-                            {t('company.ceo.message.presidentName')}
-                          </p>
+                          </div>
                         </div>
 
                         {/* 清理浮动，确保容器高度计算正确 */}
