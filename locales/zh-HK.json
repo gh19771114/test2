@@ -1617,10 +1617,12 @@
       "types": {
         "shopOffice": "店鋪·事務所",
         "1r": "1R",
+        "1dk": "1DK",
         "2ldk": "2LDK",
         "1k": "1K",
-        "2to3ldk": "2〜3LDK",
-        "1k3units": "1K×3戶"
+        "2to3ldk": "2LDK〜3LDK 預期",
+        "1k3units": "1K×3戶",
+        "1r9units": "1R×9戶"
       },
       "areaApprox17": "約17㎡",
       "areaNa": "—"
@@ -1805,7 +1807,17 @@
       "videoNotSupported": "您的瀏覽器不支援影片播放。",
       "overview": "物業概要",
       "investmentPoints": "投資・營運要點",
+      "investmentPortfolio": "投資組合概要",
       "surroundings": "周邊設施・環境",
+      "floor1": "1層",
+      "floor2": "2層",
+      "floor3": "3層",
+      "tableHeaders": {
+        "roomNumber": "室號",
+        "floor": "所在層",
+        "expectedRent": "預期租金",
+        "notes": "現況"
+      },
       "location": "位置",
       "targetClients": "目標客戶",
       "notes": "注意事項",
@@ -2027,10 +2039,10 @@
         },
         "cesar-takashimadaira-206": {
           "title": "セザール西高島平 2F",
-          "description": "都营三田线「高岛平」站步行范围内位置的家庭类型分售公寓。2F是约50m²台的2〜3LDK预期住戸，自用・租赁运用的两方面都容易考虑的一室。",
+          "description": "都营三田线「高岛平」站步行范围内位置的家庭类型分售公寓。2F是约50m²台的1DK住戸，自用・租赁运用的两方面都容易考虑的一室。",
           "area": "27.13㎡",
           "areaNote": "※登记簿・图纸需确认准确数值",
-          "type": "2LDK〜3LDK 预期",
+          "type": "1DK",
           "typeNote": "※基于过往募集例的预期／请输入实际户型",
           "station": "高岛平站 步行13〜14分",
           "stationNote": "西台・东武练马也可利用",
@@ -2044,7 +2056,7 @@
           "structure": "钢筋混凝土结构4层建／1994年竣工",
           "equipmentInfo": "家庭类型中心／系统厨房／洗发梳妆台 等",
           "point1Title": "家庭租赁需求的吸收",
-          "point1Desc": "约50m²级别的2〜3LDK，家庭・DINKS层向的稳定租赁需求可以期待的户型。",
+          "point1Desc": "约50m²级别的1DK，家庭・DINKS层向的稳定租赁需求可以期待的户型。",
           "point2Title": "生活便利设施齐全的住宅区域",
           "point2Desc": "近邻有超市和家电量贩店、公园等齐全，对家庭层来说容易居住的住环境齐全。",
           "life1": "超市",
@@ -2142,9 +2154,10 @@
           "imageAlt": "日神パレス竹ノ塚外观"
         },
         "miwa-plaza-takaido-101": {
-          "title": "美和プラザ高井戸 1F",
-          "description": "位于京王线「八幡山」「上北沢」站步行范围内的美和プラザ高井戸。1F的3户统一取得运营，预期用于投资的组合。",
-          "type": "1K×3户",
+          "title": "美和プラザ高井戸 9部屋バルク",
+          "description": "位于京王线「八幡山」「上北沢」站步行范围内的美和プラザ高井戸。9户统一取得运营，预期用于投资的组合。",
+          "area": "16.47㎡",
+          "type": "1R×9戶",
           "typeNote": "面向单身者",
           "station": "八幡山站 步行8〜11分",
           "stationNote": "上北沢站也步行9分",
@@ -2171,7 +2184,7 @@
           "room106RentNote": "预期租金",
           "room106Note": "已有出租案例（1K）",
           "point1Title": "1栋内的分散投资可能",
-          "point1Desc": "在同一公寓内持有1K户型3户，可以平摊空置风险，同时减少管理成本，实现高效运营。",
+          "point1Desc": "在同一公寓内持有1R户型9户，可以平摊空置风险，同时减少管理成本，实现高效运营。",
           "point2Title": "京王线沿线的稳定单身需求",
           "point2Desc": "京王线沿线前往新宿方向交通便利，社会人和学生等单身者需求旺盛，是适合长期持有1K户型的区域。",
           "life1": "便利店",
@@ -2189,7 +2202,32 @@
           "target2": "重视稳定租赁收益的长期持有型",
           "target3": "京王线沿线通勤的单身者",
           "notesText": "1F各自的面积、租金、管理费等，请务必根据最新租金表、租赁合同输入。",
-          "imageAlt": "美和プラザ高井戸外观"
+          "imageAlt": "美和プラザ高井戸外观",
+          "portfolioSummary": {
+            "priceLabel": "銷售價格",
+            "price": "9,200萬日元（含稅）",
+            "totalRent": "54.6萬日元/月",
+            "totalRentNote": "9戶合計",
+            "mgmtFee": "6,200日元",
+            "mgmtFeeNote": "每戶",
+            "repairFund": "4,610日元",
+            "repairFundNote": "每戶",
+            "tax": "213,800日元/年",
+            "taxNote": "9戶合計（2025年度）",
+            "yield": "7.12%",
+            "yieldNote": "表面收益率"
+          },
+          "portfolioRooms": [
+            { "num": "101", "floorKey": "floor1", "area": "16.47", "rent": "6", "status": "租賃中" },
+            { "num": "104", "floorKey": "floor1", "area": "16.47", "rent": "6.1", "status": "募集中" },
+            { "num": "106", "floorKey": "floor1", "area": "16.47", "rent": "6", "status": "租賃中" },
+            { "num": "107", "floorKey": "floor1", "area": "16.47", "rent": "6.1", "status": "租賃中" },
+            { "num": "202", "floorKey": "floor2", "area": "16.47", "rent": "5.9", "status": "租賃中" },
+            { "num": "208", "floorKey": "floor2", "area": "16.47", "rent": "6.2", "status": "租賃中" },
+            { "num": "210", "floorKey": "floor2", "area": "16.47", "rent": "6.1", "status": "租賃中" },
+            { "num": "307", "floorKey": "floor3", "area": "16.47", "rent": "6.2", "status": "租賃中" },
+            { "num": "311", "floorKey": "floor3", "area": "16.47", "rent": "6", "status": "租賃中" }
+          ]
         },
         "lm-nishihachioji-3-707": {
           "title": "ライオンズマンション西八王子第3 7F",

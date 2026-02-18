@@ -8,10 +8,13 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
 
 export default function MiwaPlazaTakaido1FPortfolioPage() {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const p = t('maimai.propertyDetail.properties.miwa-plaza-takaido-101', { returnObjects: true }) as any
   const labels = t('maimai.propertyDetail.labels', { returnObjects: true }) as any
   const categories = t('maimai.propertyDetail.categories', { returnObjects: true }) as any
+  const tableHeaders = t('maimai.propertyDetail.tableHeaders', { returnObjects: true }) as any
+  const summary = p?.portfolioSummary
+  const rooms = (p?.portfolioRooms || []) as Array<{ num: string; floorKey: string; area: string; rent: string; status: string }>
   
   return (
     <PageLayout>
@@ -95,11 +98,11 @@ export default function MiwaPlazaTakaido1FPortfolioPage() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: '/imgs/maimai/Miwa Plaza Takaido 1.jpeg',
-              alt: labels.exterior || labels.appearance || p.title,
+              src: '/imgs/maimai/Miwa Plaza Takaido 2.jpeg',
+              alt: labels.surroundings || labels.appearance || p.title,
             },
             {
-              src: '/imgs/maimai/Miwa Plaza Takaido 2.jpeg',
+              src: '/imgs/maimai/20260218101533_426_6.jpg',
               alt: labels.surroundings || labels.appearance || p.title,
             },
           ]}
@@ -154,73 +157,59 @@ export default function MiwaPlazaTakaido1FPortfolioPage() {
               <h2 className="mt-8 text-lg font-semibold text-slate-900">
                 {t('maimai.propertyDetail.investmentPortfolio')}
               </h2>
+              {summary && (
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="rounded-xl bg-amber-50 p-4 text-xs">
+                    <p className="text-slate-500">{summary.priceLabel}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.price}</p>
+                  </div>
+                  <div className="rounded-xl bg-sky-50 p-4 text-xs">
+                    <p className="text-slate-500">{summary.totalRentNote}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.totalRent}</p>
+                  </div>
+                  <div className="rounded-xl bg-emerald-50 p-4 text-xs">
+                    <p className="text-slate-500">{summary.yieldNote}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.yield}</p>
+                  </div>
+                  <div className="rounded-xl bg-white p-4 text-xs shadow-sm">
+                    <p className="text-slate-500">{summary.mgmtFeeNote}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.mgmtFee}</p>
+                  </div>
+                  <div className="rounded-xl bg-white p-4 text-xs shadow-sm">
+                    <p className="text-slate-500">{summary.repairFundNote}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.repairFund}</p>
+                  </div>
+                  <div className="rounded-xl bg-white p-4 text-xs shadow-sm">
+                    <p className="text-slate-500">{summary.taxNote}</p>
+                    <p className="mt-1 font-semibold text-slate-900">{summary.tax}</p>
+                  </div>
+                </div>
+              )}
               <div className="mt-4 overflow-hidden rounded-2xl bg-white shadow-sm">
                 <table className="w-full border-separate border-spacing-0">
                   <thead>
                     <tr className="bg-slate-50 text-[11px] text-slate-500">
-                      <th className="px-4 py-2 text-left">{t('maimai.propertyDetail.tableHeaders.roomNumber')}</th>
-                      <th className="px-4 py-2 text-left">{t('maimai.propertyDetail.tableHeaders.floor')}</th>
+                      <th className="px-4 py-2 text-left">{tableHeaders?.roomNumber}</th>
+                      <th className="px-4 py-2 text-left">{tableHeaders?.floor}</th>
                       <th className="px-4 py-2 text-left">{labels.type}</th>
                       <th className="px-4 py-2 text-left">{labels.area}</th>
-                      <th className="px-4 py-2 text-left">{t('maimai.propertyDetail.tableHeaders.expectedRent')}</th>
-                      <th className="px-4 py-2 text-left">{t('maimai.propertyDetail.tableHeaders.notes')}</th>
+                      <th className="px-4 py-2 text-left">{tableHeaders?.expectedRent}</th>
+                      <th className="px-4 py-2 text-left">{tableHeaders?.notes}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-t border-slate-100">
-                      <td className="px-4 py-2 font-semibold text-slate-900">101</td>
-                      <td className="px-4 py-2">{t('maimai.propertyDetail.floor1')}</td>
-                      <td className="px-4 py-2">1K</td>
-                      <td className="px-4 py-2">
-                        {p.room101Area}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room101AreaNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        {p.room101Rent}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room101RentNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">{p.room101Note}</td>
-                    </tr>
-                    <tr className="border-t border-slate-100">
-                      <td className="px-4 py-2 font-semibold text-slate-900">104</td>
-                      <td className="px-4 py-2">{t('maimai.propertyDetail.floor1')}</td>
-                      <td className="px-4 py-2">1K</td>
-                      <td className="px-4 py-2">
-                        {p.room104Area}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room104AreaNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        {p.room104Rent}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room104RentNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">{p.room104Note}</td>
-                    </tr>
-                    <tr className="border-t border-slate-100">
-                      <td className="px-4 py-2 font-semibold text-slate-900">106</td>
-                      <td className="px-4 py-2">{t('maimai.propertyDetail.floor1')}</td>
-                      <td className="px-4 py-2">1K</td>
-                      <td className="px-4 py-2">
-                        {p.room106Area}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room106AreaNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">
-                        {p.room106Rent}
-                        <span className="ml-1 text-[11px] text-amber-600">
-                          {p.room106RentNote}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2">{p.room106Note}</td>
-                    </tr>
+                    {rooms.map((room) => (
+                      <tr key={room.num} className="border-t border-slate-100">
+                        <td className="px-4 py-2 font-semibold text-slate-900">{room.num}</td>
+                        <td className="px-4 py-2">{t(`maimai.propertyDetail.${room.floorKey}`)}</td>
+                        <td className="px-4 py-2">1R</td>
+                        <td className="px-4 py-2">{room.area}㎡</td>
+                        <td className="px-4 py-2">
+                          {language === 'en' ? `${(Number(room.rent) * 10000).toLocaleString()} JPY/month` : `${room.rent}万${language === 'ja' ? '円' : ''}/月`}
+                        </td>
+                        <td className="px-4 py-2">{room.status}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

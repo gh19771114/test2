@@ -6,7 +6,7 @@ import { useRef, useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import PageLayout from '@/components/PageLayout'
-import { Calendar, MapPin, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Calendar, MapPin, Tag, ChevronLeft, ChevronRight, Building2 } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { caseIds, caseDates, caseImages, caseCategoryGroups } from '@/lib/casesData'
 import { activeManagedPropertyCards, getManagedPropertyTitle } from '@/lib/managedProperties'
@@ -15,6 +15,31 @@ import { maimaiAllPropertyCards } from '@/app/maimai/propertiesData'
 
 // 仅对“Logo 类图片”使用 contain + 留白；本社大楼为照片类，需贴边显示
 const shouldContainImage = (src: string) => /(^|\/)(helte|logo)\b/i.test(src) || /logo/i.test(src)
+
+/** 解析价格字符串为日元数值（支持 万、億） */
+function parsePriceToYen(price: string): number | null {
+  if (!price) return null
+  const normalized = price.replace(/[,\s]/g, '')
+  let yen = 0
+  const okuMatch = normalized.match(/([0-9]+(?:\.[0-9]+)?)億/)
+  if (okuMatch) yen += parseFloat(okuMatch[1]) * 100_000_000
+  const manMatch = normalized.match(/([0-9]+(?:\.[0-9]+)?)万/)
+  if (manMatch) yen += parseFloat(manMatch[1]) * 10_000
+  if (yen === 0) {
+    const digitMatch = normalized.match(/([0-9]+(?:\.[0-9]+)?)/)
+    if (digitMatch) yen = parseFloat(digitMatch[1])
+  }
+  return Number.isFinite(yen) ? yen : null
+}
+
+/** 按语言格式化金额：英文用 "X million JPY"，其他语言保持原文 */
+function formatPriceForLocale(price: string, lang: string): string {
+  if (lang !== 'en') return price
+  const yen = parsePriceToYen(price)
+  if (yen === null) return price
+  if (yen >= 1_000_000) return `${(yen / 1_000_000).toFixed(yen % 1_000_000 === 0 ? 0 : 1)} million JPY`
+  return `¥${yen.toLocaleString('en-US')}`
+}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -92,26 +117,43 @@ export default function CasesPage() {
       href: '/touzi',
     }))
 
-    const maimaiCards = maimaiAllPropertyCards.map((p) => ({
-      id: p.href,
-      date: '',
-      type: tTitle('maimai.properties.title'),
-      categoryGroup: 'maimai',
-      title: p.title,
-      location: p.location,
-      category: '',
-      image: p.image,
-      description: '',
-      href: p.href,
-    }))
+    const maimaiCards = maimaiAllPropertyCards.map((p) => {
+      const displayTitle = tTitle(p.titleKey)
+      const displayLocation = t(p.locationKey)
+      const displayType = t(p.typeKey)
+      const displayArea = p.area === '约17㎡' ? t('maimai.properties.areaApprox17') : p.area === '—' ? t('maimai.properties.areaNa') : p.area
+      const feature = t(p.featureKey)
+      const isNoFee = p.featureKey === 'maimai.properties.noFee'
+      return {
+        id: p.href,
+        date: '',
+        type: tTitle('maimai.properties.title'),
+        categoryGroup: 'maimai',
+        title: displayTitle,
+        location: displayLocation,
+        category: '',
+        image: p.image,
+        description: '',
+        href: p.href,
+        isMaimaiProperty: true,
+        price: formatPriceForLocale(p.price, language),
+        displayArea,
+        displayType,
+        feature,
+        featureBadgeClass: isNoFee ? 'bg-green-500' : 'bg-orange-500',
+      }
+    })
 
     return [...base, ...wuyeManaged, ...touziAssets, ...maimaiCards]
   }, [t, tTitle, language, titleLocale])
 
-  // 筛选案例
+  // 筛选案例（买卖中介仅显示 maimai 房源卡片，不含成约案例）
   const filteredCases = useMemo(() => {
     if (selectedCategory === 'all') {
       return cases
+    }
+    if (selectedCategory === 'maimai') {
+      return cases.filter((c) => (c as any).isMaimaiProperty === true)
     }
     return cases.filter((caseItem) => caseItem.categoryGroup === selectedCategory)
   }, [cases, selectedCategory])
@@ -189,6 +231,9 @@ export default function CasesPage() {
       // 桌面鼠标拖拽；触摸设备保留原生滚动
       if (!enableTransform || e.pointerType !== 'mouse') return
       if (e.button !== 0) return
+      // 若点中链接，不捕获，允许正常跳转
+      const target = e.target as HTMLElement
+      if (target.closest?.('a[href]')) return
       isDragging = true
       isPaused = true
       startX = e.clientX
@@ -363,6 +408,51 @@ export default function CasesPage() {
                   style={{ width: 'max-content' }}
                 >
                   {filteredCases.map((caseItem) => {
+                    const isMaimai = (caseItem as any).isMaimaiProperty === true
+                    if (isMaimai && caseItem.href) {
+                      return (
+                        <motion.div
+                          key={caseItem.id}
+                          variants={itemVariants}
+                          className="flex-shrink-0 w-80"
+                        >
+                          <Link
+                            href={caseItem.href}
+                            className="block h-full bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group flex flex-col maimai-property-card"
+                          >
+                            <div className="relative h-48 bg-gray-200 overflow-hidden">
+                              <Image
+                                src={caseItem.image}
+                                alt={caseItem.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                sizes="320px"
+                                unoptimized={caseItem.image.startsWith('/imgs/')}
+                              />
+                              <div className={`absolute top-3 right-3 ${(caseItem as any).featureBadgeClass || 'bg-green-500'} text-navy-900 px-3 py-1 rounded-full text-xs font-semibold`}>
+                                {(caseItem as any).feature}
+                              </div>
+                            </div>
+                            <div className="p-4 flex flex-col flex-1">
+                              <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{caseItem.title}</h4>
+                              <p className="text-2xl font-bold text-navy-700 mb-2">{(caseItem as any).price}</p>
+                              <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
+                                <span className="flex items-center gap-1">
+                                  <Building2 className="w-4 h-4" />
+                                  {(caseItem as any).displayArea}
+                                </span>
+                                <span>{(caseItem as any).displayType}</span>
+                              </div>
+                              <div className="text-sm text-gray-700 mb-auto">{caseItem.location}</div>
+                              <div className="w-full mt-4 bg-blue-600 group-hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium text-center">
+                                {t('maimai.properties.viewDetails')}
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      )
+                    }
+
                     const contain = shouldContainImage(caseItem.image)
                     return (
                       <motion.div

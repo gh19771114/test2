@@ -1591,10 +1591,12 @@
       "types": {
         "shopOffice": "店舗・事務所",
         "1r": "1R",
+        "1dk": "1DK",
         "2ldk": "2LDK",
         "1k": "1K",
-        "2to3ldk": "2〜3LDK",
-        "1k3units": "1K×3戸"
+        "2to3ldk": "2LDK〜3LDK 想定",
+        "1k3units": "1K×3戸",
+        "1r9units": "1R×9戸"
       },
       "areaApprox17": "約17㎡",
       "areaNa": "—",
@@ -1607,7 +1609,7 @@
         "paleDorSagamihara8f": "パレ・ドール相模原 8F",
         "nichishinPalaceTakenotsuka5f": "日神パレス竹ノ塚 5F",
         "cesarTakashimadaira2f": "セザール西高島平 2F",
-        "miwaPlazaTakaido1f": "美和プラザ高井戸 1F",
+        "miwaPlazaTakaido1f": "美和プラザ高井戸 9部屋バルク",
         "lmNishihachioji3_707": "LM西八王子第3 7F",
         "skyCourtIkuta2f": "スカイコート生田 2F"
       }
@@ -1789,7 +1791,17 @@
       "videoNotSupported": "お使いのブラウザは動画再生に対応していません。",
       "overview": "物件概要",
       "investmentPoints": "投資・運営のポイント",
+      "investmentPortfolio": "投資ポートフォリオ概要",
       "surroundings": "周辺施設・環境",
+      "floor1": "1階",
+      "floor2": "2階",
+      "floor3": "3階",
+      "tableHeaders": {
+        "roomNumber": "号室",
+        "floor": "所在階",
+        "expectedRent": "賃料",
+        "notes": "現況"
+      },
       "location": "位置",
       "targetClients": "ターゲット顧客",
       "notes": "注意事項",
@@ -2011,10 +2023,10 @@
         },
         "cesar-takashimadaira-206": {
           "title": "セザール西高島平 2F",
-          "description": "都営三田線「高島平」駅徒歩圏内に位置するファミリー向け分譲マンション。2Fは約50m²台の2〜3LDK想定住戸で、自用・賃貸運用の両面で検討しやすい一室です。",
+          "description": "都営三田線「高島平」駅徒歩圏内に位置するファミリー向け分譲マンション。2Fは約50m²台の1DK住戸で、自用・賃貸運用の両面で検討しやすい一室です。",
           "area": "27.13㎡",
           "areaNote": "※登記簿・図面で正確な数値を確認が必要",
-          "type": "2LDK〜3LDK 想定",
+          "type": "1DK",
           "typeNote": "※過去の募集例に基づく想定／実際の間取りを入力してください",
           "station": "高島平駅 徒歩13〜14分",
           "stationNote": "西台・東武練馬も利用可",
@@ -2028,7 +2040,7 @@
           "structure": "鉄筋コンクリート造4階建／1994年竣工",
           "equipmentInfo": "ファミリー向け中心／システムキッチン／洗面化粧台 等",
           "point1Title": "ファミリー賃貸需要の吸収",
-          "point1Desc": "約50m²クラスの2〜3LDKで、ファミリー・DINKS層向けの安定した賃貸需要を期待できる間取りです。",
+          "point1Desc": "約50m²クラスの1DKで、ファミリー・DINKS層向けの安定した賃貸需要を期待できる間取りです。",
           "point2Title": "生活利便施設が揃った住宅エリア",
           "point2Desc": "近隣にスーパーや家電量販店、公園などが揃い、ファミリー層にとって住みやすい住環境が整っています。",
           "life1": "スーパー",
@@ -2126,9 +2138,10 @@
           "imageAlt": "日神パレス竹ノ塚外観"
         },
         "miwa-plaza-takaido-101": {
-          "title": "美和プラザ高井戸 1F",
-          "description": "京王線「八幡山」「上北沢」駅徒歩圏内に位置する美和プラザ高井戸。1Fの3戸を一括取得運営し、投資用として想定されるポートフォリオです。",
-          "type": "1K×3戸",
+          "title": "美和プラザ高井戸 9部屋バルク",
+          "description": "京王線「八幡山」「上北沢」駅徒歩圏内に位置する美和プラザ高井戸。9戸を一括取得運営し、投資用として想定されるポートフォリオです。",
+          "area": "16.47㎡",
+          "type": "1R×9戸",
           "typeNote": "独身者向け",
           "station": "八幡山駅 徒歩8〜11分",
           "stationNote": "上北沢駅も徒歩9分",
@@ -2155,7 +2168,7 @@
           "room106RentNote": "想定賃料",
           "room106Note": "既に賃貸実績あり（1K）",
           "point1Title": "1棟内での分散投資が可能",
-          "point1Desc": "同一マンション内に1K間取り3戸を保有することで、空室リスクを分散させ、管理コストの削減と効率的な運営が可能です。",
+          "point1Desc": "同一マンション内に1R間取り9戸を保有することで、空室リスクを分散させ、管理コストの削減と効率的な運営が可能です。",
           "point2Title": "京王線沿線の安定した独身需要",
           "point2Desc": "京王線沿線で新宿方面へのアクセスが便利で、社会人や学生など独身者需要が旺盛で、長期保有に適した1K間取りのエリアです。",
           "life1": "コンビニ",
@@ -2173,7 +2186,32 @@
           "target2": "安定した賃貸収益を重視する長期保有型",
           "target3": "京王線沿線に通勤する独身者",
           "notesText": "1Fそれぞれの面積、家賃、管理费等については、必ず最新の家賃表、賃貸契約に基づき入力してください。",
-          "imageAlt": "美和プラザ高井戸外観"
+          "imageAlt": "美和プラザ高井戸外観",
+          "portfolioSummary": {
+            "priceLabel": "販売価格",
+            "price": "9,200万円（税込）",
+            "totalRent": "54.6万円/月",
+            "totalRentNote": "9部屋合計",
+            "mgmtFee": "6,200円",
+            "mgmtFeeNote": "一部屋あたり",
+            "repairFund": "4,610円",
+            "repairFundNote": "一部屋あたり",
+            "tax": "213,800円/年",
+            "taxNote": "9部屋合計（2025年度）",
+            "yield": "7.12%",
+            "yieldNote": "表面利回り"
+          },
+          "portfolioRooms": [
+            { "num": "101", "floorKey": "floor1", "area": "16.47", "rent": "6", "status": "賃貸中" },
+            { "num": "104", "floorKey": "floor1", "area": "16.47", "rent": "6.1", "status": "募集中" },
+            { "num": "106", "floorKey": "floor1", "area": "16.47", "rent": "6", "status": "賃貸中" },
+            { "num": "107", "floorKey": "floor1", "area": "16.47", "rent": "6.1", "status": "賃貸中" },
+            { "num": "202", "floorKey": "floor2", "area": "16.47", "rent": "5.9", "status": "賃貸中" },
+            { "num": "208", "floorKey": "floor2", "area": "16.47", "rent": "6.2", "status": "賃貸中" },
+            { "num": "210", "floorKey": "floor2", "area": "16.47", "rent": "6.1", "status": "賃貸中" },
+            { "num": "307", "floorKey": "floor3", "area": "16.47", "rent": "6.2", "status": "賃貸中" },
+            { "num": "311", "floorKey": "floor3", "area": "16.47", "rent": "6", "status": "賃貸中" }
+          ]
         },
         "lm-nishihachioji-3-707": {
           "title": "ライオンズマンション西八王子第3 7F",

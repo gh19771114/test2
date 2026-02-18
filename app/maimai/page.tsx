@@ -137,6 +137,11 @@ export default function MaiMaiPage() {
 
     if (currency === 'JPY') {
       if (language === 'en') {
+        if (rounded >= 1_000_000) {
+          const millions = rounded / 1_000_000
+          const millionsStr = millions % 1 === 0 ? String(Math.round(millions)) : millions.toFixed(1)
+          return `${millionsStr} million JPY`
+        }
         return `${formatter.format(rounded)} ${label}`
       }
       const man = rounded / 10_000
