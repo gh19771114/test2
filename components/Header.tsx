@@ -216,7 +216,14 @@ const Header = () => {
       ],
     },
     { key: 'careers', name: t('navigation.careers'), href: '/careers' },
-    { key: 'tenant', name: t('navigation.tenant'), href: '/tenant' },
+    {
+      key: 'customerService',
+      name: t('navigation.customerService'),
+      children: [
+        { name: t('navigation.customerServiceSub.owner'), href: 'https://owners.c-estate.com/service/login/login.asp', external: true },
+        { name: t('navigation.customerServiceSub.tenant'), href: '/tenant' },
+      ],
+    },
     { key: 'contact', name: t('navigation.contact'), href: '/#contact' },
   ], [t])
 
@@ -338,12 +345,16 @@ const Header = () => {
                                 } ${
                                   childIndex === (item.children?.length ?? 0) - 1 ? 'rounded-b-xl' : ''
                                 }`}
+                                {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                                 onClick={(e) => {
+                                  if (child.external) {
+                                    setOpenDropdown(null)
+                                    return
+                                  }
                                   if (!child.subChildren) {
                                     handleNavClick(e, child.href)
                                     setOpenDropdown(null)
                                   }
-                                  // 如果有子菜单，允许点击主链接，但不会阻止默认行为
                                 }}
                               >
                                 <span>{child.name}</span>
@@ -526,7 +537,14 @@ const Header = () => {
                                       key={child.name}
                                       href={child.href}
                                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                      {...(child.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                                       onClick={(e) => {
+                                        if (child.external) {
+                                          setIsMenuOpen(false)
+                                          setExpandedMobile(null)
+                                          setExpandedMobileChild(null)
+                                          return
+                                        }
                                         handleNavClick(e, child.href)
                                         setIsMenuOpen(false)
                                         setExpandedMobile(null)

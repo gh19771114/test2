@@ -29,7 +29,11 @@
     "news": "最新情報",
     "encyclopedia": "日本不動産投資しおり",
     "careers": "採用情報",
-    "tenant": "入居者専用",
+    "customerService": "お客様サービス",
+    "customerServiceSub": {
+      "owner": "オーナー専用",
+      "tenant": "入居者専用"
+    },
     "contact": "お問い合わせ",
     "maimaiSub": {
       "sales": "販売中物件",

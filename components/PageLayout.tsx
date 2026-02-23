@@ -6,9 +6,15 @@ import FloatingActions from './FloatingActions'
 import Image from 'next/image'
 import backgroundImage from '@/imgs/background.png'
 
-export default function PageLayout({ children }: { children: React.ReactNode }) {
+type PageLayoutProps = { children: React.ReactNode; compact?: boolean }
+
+export default function PageLayout({ children, compact = false }: PageLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <div
+      className={`flex flex-col relative ${compact ? 'min-h-0' : 'min-h-screen'}`}
+      style={compact ? { minHeight: 0 } : undefined}
+      data-compact={compact ? 'true' : undefined}
+    >
       {/* 背景图容器 - 使用 absolute 定位，随页面滚动 */}
       <div className="absolute inset-0 z-0 w-full page-background">
         <Image
@@ -25,9 +31,14 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </div>
-      <div className="relative z-10 min-h-screen">
+      <div
+        className={`relative z-10 page-layout-inner ${compact ? 'min-h-0' : 'min-h-screen'}`}
+        data-page-layout-inner
+        style={compact ? { minHeight: 0, height: 'auto' } : undefined}
+        data-compact={compact ? 'true' : undefined}
+      >
         <Header />
-        <main className="flex-1">
+        <main className={compact ? '' : 'flex-1'} style={compact ? { flex: '0 1 auto', minHeight: 0 } : undefined}>
           {children}
         </main>
         <Footer />

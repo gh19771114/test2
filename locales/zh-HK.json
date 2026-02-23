@@ -28,7 +28,11 @@
     "news": "最新資訊",
     "encyclopedia": "日本房產投資百科",
     "careers": "人才招聘",
-    "tenant": "租客專用",
+    "customerService": "客戶服務",
+    "customerServiceSub": {
+      "owner": "業主專用",
+      "tenant": "租客專用"
+    },
     "contact": "聯絡我們",
     "maimaiSub": {
       "sales": "銷售中房產",

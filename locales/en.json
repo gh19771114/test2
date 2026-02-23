@@ -28,7 +28,11 @@
     "news": "Latest News",
     "encyclopedia": "Japan Real Estate Investment Guide",
     "careers": "Careers",
-    "tenant": "For Tenants",
+    "customerService": "Customer Service",
+    "customerServiceSub": {
+      "owner": "For Owners",
+      "tenant": "For Tenants"
+    },
     "contact": "Contact Us",
     "maimaiSub": {
       "sales": "Properties for Sale",

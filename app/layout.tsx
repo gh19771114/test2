@@ -8,11 +8,11 @@ type SiteLocale = 'zh' | 'zh-TW' | 'zh-HK' | 'ja' | 'en'
 
 // 多语言站点标题与描述（用于 SEO / 搜索结果显示）
 const SITE_TITLE_BY_LOCALE: Record<SiteLocale, string> = {
-  zh: 'Bourn Mark 川雨流痕-专业的日本房地产买卖和投资物业管理公司',
-  'zh-TW': 'Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
-  'zh-HK': 'Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
+  zh: '株式会社ボーンマーク Bourn Mark 川雨流痕-专业的日本房地产买卖和投资物业管理公司',
+  'zh-TW': '株式会社ボーンマーク Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
+  'zh-HK': '株式会社ボーンマーク Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
   ja: '株式会社ボーンマーク（Bourn Mark）川雨流痕-日本の不動産売買・投資用物件の管理',
-  en: 'Bourn Mark - Japan Real Estate Sales, Investment & Property Management',
+  en: '株式会社ボーンマーク Bourn Mark - Japan Real Estate Sales, Investment & Property Management',
 }
 
 const SITE_DESCRIPTION_BY_LOCALE: Record<SiteLocale, string> = {

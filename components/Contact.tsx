@@ -318,6 +318,7 @@ const Contact = () => {
                       autoComplete="off"
                       value={honeypot}
                       onChange={(e) => setHoneypot(e.target.value)}
+                      suppressHydrationWarning
                     />
                   </div>
                   <div className={isMobilePortrait ? 'flex flex-col items-center' : ''}>
