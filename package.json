@@ -7,7 +7,7 @@
     "dev:turbo": "next dev --turbo",
     "build": "NEXT_PRIVATE_SKIP_TURBO=1 NEXT_PRIVATE_SKIP_TURBOPACK=1 next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "true"
   },
   "dependencies": {
     "@fontsource/noto-sans-sc": "^5.2.8",

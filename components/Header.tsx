@@ -21,6 +21,7 @@ type NavChild = {
   name: string
   href: string
   subChildren?: NavChild[]
+  external?: boolean
 }
 
 type NavItem = {

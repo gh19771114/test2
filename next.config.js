@@ -38,8 +38,8 @@ const nextConfig = {
   poweredByHeader: false,
   // React 严格模式
   reactStrictMode: true,
-  // Turbopack 配置（空配置以消除警告）
-  turbopack: {},
+  // Turbopack 配置：明确项目根目录，避免多 lockfile 时误判
+  turbopack: { root: __dirname },
   // Webpack 配置
   webpack: (config, { isServer }) => {
     return config
