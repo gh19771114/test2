@@ -249,18 +249,71 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                 
                 
                 // 没有正文图片，直接显示完整内容
+                const isCompanyNameChangeNotice = news.slug === '2021-06-01-company-name-change-notice'
+                // 仅对“旧社名/新社名/代表”三行段落显示 logo，排除“银行账户名称”段落，避免出现两个 logo
+                const COMPANY_NAME_BLOCK_MARKERS = [
+                  '株式会社ウォームライト',
+                  '株式会社暖灯',
+                  '株式會社暖燈',
+                  'Warm Light',
+                  '株式会社ボーンマーク',
+                  '株式會社ボーンマーク',
+                  'Bourn Mark',
+                  '代表取締役',
+                  '代表董事',
+                  'Representative Director',
+                ]
+                const isBankAccountBlock = (p: string) =>
+                  p.includes('口座名義') ||
+                  p.includes('口座名義が') ||
+                  p.includes('账户名称') ||
+                  p.includes('帳戶名義') ||
+                  (p.includes('Account name') && p.includes('株式会社'))
+                const isCompanyNameBlock = (p: string) =>
+                  isCompanyNameChangeNotice &&
+                  !isBankAccountBlock(p) &&
+                  COMPANY_NAME_BLOCK_MARKERS.filter((m) => p.includes(m)).length >= 3
+
                 return (
                   <div className="text-gray-200 leading-relaxed text-lg md:text-xl">
-                    {content.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                        {paragraph.split('\n').map((line, lineIndex) => (
-                          <span key={lineIndex}>
-                            {lineIndex > 0 && <br />}
-                            {line}
-                          </span>
-                        ))}
-                      </p>
-                    ))}
+                    {content.split('\n\n').map((paragraph, index) => {
+                      if (isCompanyNameBlock(paragraph)) {
+                        return (
+                          <p key={index} className={index > 0 ? 'mt-6' : ''}>
+                            {paragraph.split('\n').map((line, lineIndex) => (
+                              <span key={lineIndex}>
+                                {lineIndex > 0 && <br />}
+                                {line}
+                              </span>
+                            ))}
+                          </p>
+                        )
+                      }
+                      return (
+                        <p key={index} className={index > 0 ? 'mt-6' : ''}>
+                          {paragraph.split('\n').map((line, lineIndex) => (
+                            <span key={lineIndex}>
+                              {lineIndex > 0 && <br />}
+                              {line}
+                            </span>
+                          ))}
+                        </p>
+                      )
+                    })}
+                    {isCompanyNameChangeNotice && (
+                      <div className="mt-8 flex justify-start">
+                        <div className="rounded-lg overflow-hidden shadow-md bg-white/10 w-80 sm:w-[26rem] md:w-[32rem] max-w-full">
+                          <Image
+                            src="/imgs/logo2.jpg"
+                            alt={t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
+                            width={512}
+                            height={768}
+                            className="w-full h-auto object-contain"
+                            sizes="(min-width: 768px) 512px, (min-width: 640px) 416px, 320px"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )
               })()}

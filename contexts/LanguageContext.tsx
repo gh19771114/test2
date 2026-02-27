@@ -2,8 +2,20 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import zhTranslations from '@/locales/zh.json'
+import zhTWTranslations from '@/locales/zh-TW.json'
+import zhHKTranslations from '@/locales/zh-HK.json'
+import jaTranslations from '@/locales/ja.json'
+import enTranslations from '@/locales/en.json'
 
 export type Language = 'zh' | 'zh-TW' | 'zh-HK' | 'ja' | 'en'
+
+const LOCALE_TRANSLATIONS: Record<Language, Record<string, any>> = {
+  zh: zhTranslations,
+  'zh-TW': zhTWTranslations,
+  'zh-HK': zhHKTranslations,
+  ja: jaTranslations,
+  en: enTranslations,
+}
 
 /** 卡片标题显示语言：简体/台湾/香港/日本 → 日语，英文 → 英语 */
 function getTitleLocale(lang: Language): Language {
@@ -25,22 +37,38 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  // 使用函数初始化，确保服务器端和客户端都使用相同的初始值
-  const [language, setLanguageState] = useState<Language>(() => {
-    // 关键：为了避免 Hydration mismatch（SSR 固定用 zh），客户端首次渲染也必须用 zh。
-    // 挂载后再从 localStorage/浏览器语言切换到用户语言（见下方 useEffect）。
-    return 'zh'
-  })
-  
-  const [translations, setTranslations] = useState<Record<string, any>>(zhTranslations)
-  const [titleTranslations, setTitleTranslations] = useState<Record<string, any>>(zhTranslations)
+export function LanguageProvider({
+  children,
+  initialLocale,
+}: {
+  children: ReactNode
+  /** 服务端传入的初始语言（cookie 或 Accept-Language），首屏即用该语言，避免先闪中文再切语种 */
+  initialLocale?: Language
+}) {
+  const initialLang = initialLocale ?? 'zh'
+  const initialTitleLang = getTitleLocale(initialLang)
+  const [language, setLanguageState] = useState<Language>(() => initialLang)
+  const [translations, setTranslations] = useState<Record<string, any>>(
+    () => LOCALE_TRANSLATIONS[initialLang] ?? zhTranslations
+  )
+  const [titleTranslations, setTitleTranslations] = useState<Record<string, any>>(
+    () => LOCALE_TRANSLATIONS[initialTitleLang] ?? zhTranslations
+  )
   const [isMounted, setIsMounted] = useState(false)
 
-  // 组件挂载后标记为已挂载
+  // 组件挂载后：标记已挂载；若有服务端 initialLocale 且本地未存过语言则持久化并写 cookie，避免下方「自动检测」再次覆盖导致闪烁
   useEffect(() => {
     setIsMounted(true)
-  }, [])
+    if (typeof window === 'undefined') return
+    const saved = localStorage.getItem('language') as Language | null
+    if (saved && (saved === 'zh' || saved === 'zh-TW' || saved === 'zh-HK' || saved === 'ja' || saved === 'en')) {
+      document.cookie = `NEXT_LOCALE=${saved}; path=/; max-age=31536000; SameSite=Lax`
+    } else if (initialLocale && !saved) {
+      localStorage.setItem('language', initialLocale)
+      localStorage.setItem('languageAutoSet', 'true')
+      document.cookie = `NEXT_LOCALE=${initialLocale}; path=/; max-age=31536000; SameSite=Lax`
+    }
+  }, [initialLocale])
 
   // 根据浏览器语言自动设置语言（延迟到 hydration 之后执行，避免服务端 zh 与客户端恢复的 ja 等不一致导致 hydration 报错）
   useEffect(() => {
@@ -186,6 +214,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('languageUserSelected', 'true')
       // 同时标记已自动/已设置过，避免设备语言逻辑再次触发
       localStorage.setItem('languageAutoSet', 'true')
+      // 写入 cookie 供服务端下次请求用，首屏直接返回对应语言，避免闪中文
+      document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000; SameSite=Lax`
     }
   }
 

@@ -25,12 +25,13 @@ const Insights = () => {
   // 统一的滚动速度：30px/秒
   const SCROLL_SPEED_PX_PER_SEC = 30
 
-  // 分离置顶和非置顶资讯
+  // 分离置顶和非置顶资讯（含置顶通知，按 pinnedOrder 优先再按日期排序）
   const pinnedNewsList = useMemo(() => {
-    // 首页“置顶栏”不展示“通知”类型（但不影响 /news/[slug] 子页面）
-    const pinnedNews = latestNews.filter((news) => news.isPinned && !news.isNotice && news.category !== '通知')
-    // 按日期排序（最新的在前）
+    const pinnedNews = latestNews.filter((news) => news.isPinned)
     return [...pinnedNews].sort((a, b) => {
+      const orderA = a.pinnedOrder ?? 999
+      const orderB = b.pinnedOrder ?? 999
+      if (orderA !== orderB) return orderA - orderB
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
   }, [])
