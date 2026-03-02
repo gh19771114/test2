@@ -43,7 +43,7 @@ function getSegmentName(segment: string): string {
 export function BreadcrumbStructuredData() {
   const pathname = usePathname()
   const jsonLd = useMemo(() => {
-    const segments = pathname.split('/').filter(Boolean)
+    const segments = (pathname ?? '/').split('/').filter(Boolean)
     const itemListElement = [
       {
         '@type': 'ListItem',
