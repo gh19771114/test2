@@ -31,8 +31,8 @@
     "careers": "採用情報",
     "customerService": "お客様サービス",
     "customerServiceSub": {
-      "owner": "オーナー専用",
-      "tenant": "入居者専用"
+      "owner": "オーナー様専用",
+      "tenant": "入居者様専用"
     },
     "contact": "お問い合わせ",
     "maimaiSub": {

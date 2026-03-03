@@ -86,7 +86,7 @@ export default function TenantPage() {
                 <p className="text-sm md:text-base text-gray-700 leading-relaxed">{t('tenant.services.termination.description')}</p>
                 <Link
                   href="/tenant/kaiyaku"
-                  className="inline-flex items-center gap-2 text-navy-700 hover:text-blue-700 mt-2 md:mt-3 font-medium text-sm md:text-base"
+                  className="inline-flex items-center gap-2 mt-2 md:mt-3 font-semibold text-base md:text-lg rounded-lg px-5 py-3 bg-navy-600 text-white border border-navy-700 shadow-md hover:bg-blue-600 hover:border-blue-500 hover:shadow-lg active:bg-blue-700 transition-all duration-200"
                 >
                   {t('tenant.services.termination.link')}
                   <span aria-hidden>→</span>
