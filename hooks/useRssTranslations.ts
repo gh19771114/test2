@@ -17,7 +17,7 @@ export function useRssTranslations() {
   useEffect(() => {
     let cancelled = false
     fetch('/api/news/rss-translations')
-      .then((r) => r.ok ? r.json() : {})
+      .then((r) => r.ok ? r.json() as Promise<Record<string, RssTranslationItem>> : Promise.resolve({}))
       .then((data) => {
         if (!cancelled) {
           setMap(typeof data === 'object' && data !== null ? data : {})
