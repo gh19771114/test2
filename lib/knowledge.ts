@@ -92,6 +92,8 @@ export type NewsItem = {
   image?: string
   headerImage?: string
   contentImage?: string
+  /** 房地产新闻条目：有此项时详情页从 japanRealEstateNews 按 id 取正文 */
+  realEstateId?: string
 }
 
 // 最新资讯数据
@@ -129,6 +131,14 @@ export const latestNews: NewsItem[] = [
     isPinned: false,
     isNotice: true,
     category: '通知',
+  },
+  {
+    date: '2025-11-25',
+    slug: 'nikkei-tokyo-23-wards-overseas-mansion-35-2025',
+  },
+  {
+    date: '2026-01-08',
+    slug: 'asahi-tokyo-mansion-taiwan-overtakes-2026',
   },
   {
     date: '2025-11-05',
@@ -1782,9 +1792,14 @@ Practical tips: choose properties that meet energy-efficiency standards, conside
   },
 ]
 
-// 根据 slug 获取资讯详情
-export function getNewsBySlug(slug: string) {
-  return latestNews.find(news => news.slug === slug)
+// 最新资讯列表：仅保留静态条目，不包含房地产单条与 RSS（已按需求删除）
+export function getLatestNews(): NewsItem[] {
+  return [...latestNews]
+}
+
+// 根据 slug 获取资讯详情（房地产单条已从最新资讯移除，不再提供详情页）
+export function getNewsBySlug(slug: string): NewsItem | undefined {
+  return latestNews.find((news) => news.slug === slug)
 }
 
 // 根据 slug 获取百科详情
@@ -1796,9 +1811,9 @@ export function getEncyclopediaBySlug(slug: string) {
   } : undefined
 }
 
-// 获取所有资讯 slug
+// 获取所有资讯 slug（含房地产单条）
 export function getAllNewsSlugs() {
-  return latestNews.map(news => news.slug)
+  return getLatestNews().map((news) => news.slug)
 }
 
 // 获取所有百科 slug

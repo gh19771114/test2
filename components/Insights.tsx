@@ -1,15 +1,24 @@
 'use client'
 
 import { useMemo, useState, useEffect, useRef } from 'react'
-import { encyclopediaEntries, latestNews } from '@/lib/knowledge'
+import { encyclopediaEntries, getLatestNews } from '@/lib/knowledge'
+import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useRssTranslations } from '@/hooks/useRssTranslations'
+
+type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number } | { slug: string; date: string; title: string; source: string; link: string }
 
 const Insights = () => {
   const { t } = useLanguage()
+  const { getTitle: getRssTitle } = useRssTranslations()
   const [isMounted, setIsMounted] = useState(false)
+  const [latestItems, setLatestItems] = useState<LatestItem[]>(() => getLatestNews())
   const pinnedBarRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    fetch('/api/news/latest').then((r) => r.ok ? r.json() : { items: [] }).then((d: { items: LatestItem[] }) => { if (d.items?.length) setLatestItems(d.items) }).catch(() => {})
+  }, [])
   const [pinnedBarHeight, setPinnedBarHeight] = useState(0)
   const newsScrollContainerRef = useRef<HTMLDivElement>(null)
   const encyclopediaScrollContainerRef = useRef<HTMLDivElement>(null)
@@ -27,14 +36,14 @@ const Insights = () => {
 
   // 分离置顶和非置顶资讯（含置顶通知，按 pinnedOrder 优先再按日期排序）
   const pinnedNewsList = useMemo(() => {
-    const pinnedNews = latestNews.filter((news) => news.isPinned)
+    const pinnedNews = latestItems.filter((n): n is LatestItem & { isPinned: true } => 'isPinned' in n && n.isPinned === true)
     return [...pinnedNews].sort((a, b) => {
-      const orderA = a.pinnedOrder ?? 999
-      const orderB = b.pinnedOrder ?? 999
+      const orderA = 'pinnedOrder' in a ? (a.pinnedOrder ?? 999) : 999
+      const orderB = 'pinnedOrder' in b ? (b.pinnedOrder ?? 999) : 999
       if (orderA !== orderB) return orderA - orderB
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
-  }, [])
+  }, [latestItems])
 
   // 获取分类标识
   const getCategoryLabel = (news: any) => {
@@ -56,30 +65,18 @@ const Insights = () => {
 
   // 按时间排序，显示最新20条普通资讯（不包含置顶），只保留3个月以内的新闻
   const filteredAndSortedNews = useMemo(() => {
-    const normalNews = latestNews.filter(news => !news.isPinned)
-    
-    // 计算3个月前的日期
+    const normalNews = latestItems.filter(n => !('isPinned' in n && n.isPinned))
     const threeMonthsAgo = new Date()
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
-    
-    // 过滤掉3个月以前的新闻（但保留通知和公司活动）
     const recentNews = normalNews.filter(news => {
       const newsDate = new Date(news.date)
-      // 如果是通知或公司活动，不进行时间过滤
-      if (news.isNotice || news.category === '通知' || news.category === '公司活动') {
-        return true
-      }
-      // 其他新闻只保留3个月以内的
+      if ('isNotice' in news && news.isNotice) return true
+      if ('category' in news && (news.category === '通知' || news.category === '公司活动')) return true
       return newsDate >= threeMonthsAgo
     })
-    
-    // 按日期排序（最新的在前）
-    const sortedNormal = [...recentNews].sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime()
-    })
-    // 返回最新的20条普通资讯
+    const sortedNormal = [...recentNews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     return sortedNormal.slice(0, 20)
-  }, [])
+  }, [latestItems])
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
   const newsLoopList = useMemo(() => [...newsList, ...newsList], [newsList])
@@ -87,10 +84,25 @@ const Insights = () => {
   const encyclopediaLoopList = useMemo(() => [...encyclopedia, ...encyclopedia], [encyclopedia])
 
   const getNewsTitle = (slug: string) => {
+    if (slug.startsWith('real-estate-')) {
+      const id = slug.slice('real-estate-'.length)
+      const item = getJapanRealEstateNewsById(id)
+      const localized = t(`news.realEstate.${id}.title`, { defaultValue: '' })
+      if (localized) return localized
+      return item?.title ?? slug
+    }
     const translated = t(`news.items.${slug}.title`)
     if (!translated || translated === `news.items.${slug}.title`) return slug
     return translated
   }
+  const getItemTitle = (item: LatestItem) => {
+    if ('title' in item && item.slug.startsWith('rss-')) {
+      const id = item.slug.slice(4)
+      return getRssTitle(id, 'title' in item ? item.title : '')
+    }
+    return 'title' in item ? item.title : getNewsTitle(item.slug)
+  }
+  const getItemHref = (item: LatestItem) => (item.slug.startsWith('rss-') ? `/news/rss/${item.slug.slice(4)}` : `/news/${item.slug}`)
 
   const getEncyclopediaTitle = (slug: string, fallback?: string) => {
     const translated = t(`encyclopedia.items.${slug}.title`)
@@ -283,19 +295,19 @@ const Insights = () => {
                 {pinnedNewsList.map((item, index) => (
                   <Link
                     key={`pinned-${item.slug}-${index}`}
-                    href={`/news/${item.slug}`}
+                    href={getItemHref(item)}
                     className={`flex items-start gap-3 px-4 py-3 hover:bg-red-100/50 transition-colors cursor-pointer insights-pinned-item ${index < pinnedNewsList.length - 1 ? 'border-b-2 border-red-300' : ''}`}
                   >
                     <div className="flex-1">
                       <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
                         <span className={`font-semibold mr-2 ${
-                          item.category === '公司活动' ? 'text-green-600' :
-                          item.isNotice || item.category === '通知' ? 'text-red-600' :
+                          'category' in item && item.category === '公司活动' ? 'text-green-600' :
+                          'isNotice' in item && item.isNotice || ('category' in item && item.category === '通知') ? 'text-red-600' :
                           'text-blue-600'
                         }`}>
                           {getCategoryLabel(item)}
                         </span>
-                        <span suppressHydrationWarning>{isMounted ? getNewsTitle(item.slug) : ''}</span>
+                        <span suppressHydrationWarning>{isMounted ? getItemTitle(item) : ''}</span>
                       </p>
                       <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                     </div>
@@ -326,19 +338,19 @@ const Insights = () => {
                   {newsLoopList.map((item, index) => (
                     <Link
                       key={`${item.slug}-${index}`}
-                      href={`/news/${item.slug}`}
+                      href={getItemHref(item)}
                       className="flex items-start gap-3 px-6 py-4 border-b-2 border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer insights-news-item"
                     >
                       <div className="flex-1">
                         <p className="text-gray-800 font-medium hover:text-navy-700 transition-colors">
                           <span className={`font-semibold mr-2 ${
-                            item.category === '公司活动' ? 'text-green-600' :
-                            item.isNotice || item.category === '通知' ? 'text-red-600' :
+                            'category' in item && item.category === '公司活动' ? 'text-green-600' :
+                            'isNotice' in item && item.isNotice || ('category' in item && item.category === '通知') ? 'text-red-600' :
                             'text-blue-600'
                           }`}>
                             {getCategoryLabel(item)}
                           </span>
-                          <span suppressHydrationWarning>{isMounted ? getNewsTitle(item.slug) : ''}</span>
+                          <span suppressHydrationWarning>{isMounted ? getItemTitle(item) : ''}</span>
                         </p>
                         <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                       </div>

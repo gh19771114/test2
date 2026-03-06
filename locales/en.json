@@ -31,7 +31,8 @@
     "customerService": "Customer Service",
     "customerServiceSub": {
       "owner": "For Owners",
-      "tenant": "For Tenants"
+      "tenant": "For Tenants",
+      "agency": "For Agents"
     },
     "contact": "Contact Us",
     "maimaiSub": {
@@ -191,7 +192,64 @@
   "news": {
     "title": "Latest News",
     "subtitle": "Stay updated with Japan real estate market trends, get the latest investment information and policy insights",
+    "backToNews": "Back to Latest News",
     "backToHome": "Back to Home",
+    "outlookEntry": "Japan Real Estate Market · Recent Trends & Outlook",
+    "screenedEntry": "Real Estate News (Curated)",
+    "screenedPage": {
+      "title": "Real Estate News (Last 3 Months, Curated)",
+      "subtitle": "Paywalled sources and personnel briefs excluded; only readable, market-relevant articles.",
+      "backToNews": "Back to Latest News",
+      "read": "Read",
+      "loading": "Loading…",
+      "empty": "No curated items.",
+      "tableTitle": "Title",
+      "tableDate": "Date",
+      "tableSource": "Source",
+      "tableLink": "Link"
+    },
+    "readOriginal": "Read original",
+    "rss": {
+      "externalHint": "This article is published by an external source. Please follow the link below to read the full text."
+    },
+    "realEstateMarket": {
+      "pageDesc": "Only news from the last three months; short articles, personnel announcements excluded; RSS list excludes links that require login or payment (checked by visiting the link). Click a row to expand title, date, source, link, and body with images.",
+      "rssHeading": "From Google News RSS (Japan real estate, last 3 months, screened)",
+      "rssLoading": "Fetching RSS…",
+      "rssEmpty": "No RSS items or fetch failed.",
+      "colTitle": "Title",
+      "colDate": "Date",
+      "colSource": "Source",
+      "colLink": "Link",
+      "readLink": "Read",
+      "outlookLink": "View recent trends and outlook",
+      "noCurated": "No curated real estate news in the last three months. Check back later or add data.",
+      "bodyLabel": "Body",
+      "bodyImages": "Article images",
+      "imageAlt": "Article image"
+    },
+    "realEstate": {
+      "reuters-mansion-dec2025": {
+        "title": "Greater Tokyo new condo supply falls in December while prices keep climbing",
+        "summary": "Reuters reports that in December 2025, the number of newly launched condominiums in the greater Tokyo area fell 6% year-on-year, marking the third consecutive monthly decline, while the average price per unit rose 15.5% and has increased for eight straight months. For full-year 2025, supply dropped to the lowest level since 1973, but average prices hit a record high—an典ical \"shrinking volume, rising prices\" pattern that creates a harsh environment for both owner-occupiers and investors."
+      }
+    },
+    "realEstate": {
+      "reuters-mansion-dec2025": {
+        "title": "New condo supply in Greater Tokyo falls in December while prices keep rising",
+        "summary": "According to the Real Estate Economic Institute, the number of newly launched condominiums in Greater Tokyo in December 2025 fell 6% year-on-year, marking the third straight monthly decline, while the average price per unit rose 15.5% and has now increased for eight consecutive months. For the full year, new condo supply dropped to the lowest level since 1973, yet average prices hit a record high—an典ical \"volume down, price up\" pattern that puts considerable pressure on both end-users and investors."
+      }
+    },
+    "realEstate": {
+      "reuters-mansion-dec2025": {
+        "title": "Greater Tokyo new condo supply falls in December while prices keep climbing",
+        "summary": "Reuters reports that in December 2025, the number of newly launched condominiums in the greater Tokyo area fell 6% year-on-year, marking the third consecutive monthly decline, while the average price per unit rose 15.5% and has increased for eight straight months. For full-year 2025, supply dropped to the lowest level since 1973, but average prices hit a record high—an典ical \"shrinking volume, rising prices\" pattern that creates a harsh environment for both owner-occupiers and investors."
+      },
+      "mainichi-condo-jan2026": {
+        "title": "Central Tokyo average condo price up 15.8% in January",
+        "summary": "According to the Real Estate Economic Institute, the average price of newly built condominiums in Tokyo’s 23 wards reached around 121 million yen in January, up 15.8% year-on-year, while the greater Tokyo metropolitan area average rose for the ninth consecutive month. Prices in some outer suburbs softened, but Kanagawa and Chiba saw gains of roughly 20% or more, showing that high prices are spreading from the city center to surrounding areas. Supply has inched up but remains limited, and rising construction and labor costs combined with solid demand continue to push new condo prices higher."
+      }
+    },
     "category": {
       "notice": "Notice",
       "news": "News！",
@@ -206,6 +264,9 @@
         "title": "President Gui Xiaochuan Attends Reiwa 7th Annual Saikai Awards Ceremony",
         "content": "On January 7, 2026, the prestigious Japanese business magazine \"Saikai\" hosted the Reiwa 7th Annual \"Saikai Award\" and \"Business Leader Award\" ceremony at the Palace Hotel Tokyo. Our President Gui Xiaochuan was invited to attend the ceremony, joining Japan's business elites to witness the outstanding achievements of the award-winning business leaders and engage in in-depth discussions on new trends in Japanese industry development.\n\nAbout Saikai Magazine\nAs one of Japan's most influential comprehensive business magazines, \"Saikai\" has adhered to the core perspective that \"business management is about people\" since its founding in 1953 by Mikio Mitsuki. Through professional and in-depth business analysis and commentary, it has documented and promoted Japan's economic development. After more than 70 years of accumulation, it has become a recognized authoritative media benchmark in Japan's business community. The annual \"Saikai Award\" and \"Business Leader Award\" focus on economic figures who have made outstanding contributions to society and led Japan's economic growth globally, as well as business leaders with exceptional annual performance and innovative practices in areas such as talent development. The selection results are hailed as the \"annual barometer\" of Japan's economic field. President Gui Xiaochuan, who was invited to attend the ceremony, is a Chinese entrepreneur that \"Saikai\" has long followed and reported on. He has previously been featured in multiple special reports."
       },
+      "real-estate-market": {
+        "title": "Japan Real Estate News (Last 3 Months · Land & Property Prices)"
+      },
       "president-lecture-meikai-university": {
         "title": "President Gui Xiaochuan Lectures at Meikai University",
         "content": "On December 16, 2025, Gui Xiaochuan, Representative Director and President of Bourn Mark CO., LTD., was invited to give a lecture at Meikai University.\n\nThis lecture focused on Japanese real estate investment practices, corporate overseas landing services, and other topics, sharing rich industry experience and practical cases with students.\n\nPresident Gui Xiaochuan introduced in detail the current situation and trends of the Japanese real estate market, as well as key considerations for companies conducting business in Japan. Through the explanation of actual cases, he helped students better understand the Japanese business environment and real estate investment practices.\n\nThe students at Meikai University responded enthusiastically to this lecture, expressing that they benefited greatly. Bourn Mark will continue to work with educational institutions to contribute to cultivating the next generation of business talents."
@@ -213,6 +274,17 @@
       "2025-year-end-holiday-notice": {
         "title": "2025 Year-End Holiday Notice",
         "content": "Dear customers and partners:\n\nThank you for your continued support and trust in Bourn Mark.\n\nAccording to company arrangements, the 2025 year-end holiday schedule is as follows:\n\n【Holiday Period】\nWednesday, December 24, 2025 to Monday, January 6, 2026\n\n【Business Resumption】\nNormal business will resume from Tuesday, January 7, 2026\n\nDuring the holiday period, for urgent matters, please contact:\nEmergency hotline: 0120-559-989 (24 hours)\n\nWe apologize for any inconvenience caused. We wish you a Happy New Year and all the best!\n\nBourn Mark CO., LTD.\nDecember 20, 2025"
+      },
+      "real-estate-market": {
+        "title": "Japan Real Estate News (Last 3 Months · Land & Price Impact)"
+      },
+      "nikkei-tokyo-23-wards-overseas-mansion-35-2025": {
+        "title": "Tokyo 23 Wards New-Build Condos: Overseas Acquisition 3.5%, Ministry to Monitor Price Impact",
+        "content": "Japan's Ministry of Land, Infrastructure, Transport and Tourism released its first survey based on real estate registration: in Jan–Jun 2025, the share of new condos in Tokyo's 23 wards acquired by persons with an address abroad was 3.5%, and 4.3% in Osaka City. In the six central wards (Chiyoda, Chuo, Minato, Shinjuku, Bunkyo, Shibuya) the share was 7.5%, with a tendency for higher ratios in the center. The ministry does not consider overseas acquisition a main driver of price surges but will continue to monitor trends.\n\nBy country/region in the 23 wards, Taiwan had the most acquisitions (192), followed by China (30) and Singapore (21). Minister Kaneko said the ministry would \"continue to monitor trends as a notable increase has been observed recently.\"\n\nSource: The Nikkei https://www.nikkei.com/article/DGXZQOUA219CJ0R21C25A1000000/"
+      },
+      "asahi-tokyo-mansion-taiwan-overtakes-2026": {
+        "title": "Tokyo New-Build Condo Buyers: Taiwan Overtakes China; Why Overseas Buyers Choose Japan",
+        "content": "The ministry's survey showed that among registrations of \"persons with an address abroad\" acquiring new condos in Tokyo's 23 wards, Taiwan was the largest in 2024 and accounted for about 60% in the first half of 2025, with Taiwan overtaking previously active Chinese and Hong Kong buyers. The industry reports strong Taiwanese interest in second-hand condos as well.\n\nThe article profiles a couple in Hsinchu City planning to relocate to Japan (purchasing second-hand condos in Okayama and Tokyo Nihonbashi) and cites the vice chairman of the Japan–Taiwan Real Estate Association: Chinese investment has declined due to domestic slowdown and capital controls, while Taiwanese demand remains strong due to high local prices, emigration, and asset diversification.\n\nSource: The Asahi Shimbun https://www.asahi.com/articles/ASV151TY3V15UEFT001M.html"
       },
       "japan-government-strengthens-foreign-buyer-regulation": {
         "title": "Japan Government Strengthens Foreign Buyer Regulation, Multiple New Measures to Be Implemented",
@@ -282,6 +354,87 @@
         "title": "Chinese Wealthy Enter Japan Real Estate Industry, Market Reaction Mixed",
         "content": "China's wealthy class has shown increasing interest in Japanese real estate, with some even organizing groups to purchase properties in Japan. This trend has brought mixed feelings to Japan's real estate market, bringing capital inflows while also raising concerns about price increases and market stability.\n\nChinese investors mainly focus on quality properties in core cities such as Tokyo and Osaka, particularly new apartment and commercial real estate projects.\n\nYen depreciation makes Japanese real estate more attractive to Chinese investors, while Japan's relatively stable investment environment and higher rental yields are also important factors.\n\nThis trend has driven activity in Japan's real estate market, but has also raised concerns among local residents about price increases. The government is closely monitoring market dynamics and considering whether regulatory measures are needed.\n\nData source: juwai.com"
       }
+    }
+  },
+  "outlook": {
+    "hero": {
+      "backToNews": "Back to Latest News",
+      "badge": "Market Insight",
+      "title": "Japan Real Estate Market",
+      "subtitle": "Recent Trends & Outlook",
+      "disclaimer": "Compiled and analyzed based on relevant news and market data from the past three months",
+      "heroImageAlt": "Tokyo cityscape"
+    },
+    "kpi": {
+      "landTrend": "Land Prices",
+      "landTrendSuffix": "",
+      "landTrendValue": "consecutive gains",
+      "landTrendDesc": "Nationwide land prices up; condos & retail demand firm",
+      "bankFinance": "Bank Lending",
+      "bankFinanceSuffix": "-year ",
+      "bankFinanceValue": "high",
+      "bankFinanceDesc": "Real estate lending at high level; regional banks’ cross-border risk in focus",
+      "redev": "Redevelopment",
+      "redevValue": "Cancellations & delays",
+      "redevDesc": "Rising construction costs & labor shortage; Nagoya, Hakata, Tsudanuma, etc."
+    },
+    "landChart": {
+      "title": "Land & Condo Prices",
+      "desc": "Nationwide land prices up for multiple periods; central and surrounding areas rising",
+      "yAxisNote": "Cumulative change vs 2024 H1 (%) · 0–30%",
+      "footer": "Nationwide land prices up 8 periods in a row · ~28% over ~2 years vs 2024 H1",
+      "labels": ["2024 H1", "2024 H2", "2025 H1", "2025 H2", "2026 early"]
+    },
+    "marketHeat": {
+      "title": "Market Heat & Risk",
+      "desc": "Main opportunities and main risks",
+      "opportunitiesTitle": "Main opportunities",
+      "risksTitle": "Main risks"
+    },
+    "opportunities": [
+      { "name": "Core-area demand for quality assets" },
+      { "name": "Foreign capital inflow appetite" }
+    ],
+    "risks": [
+      { "name": "Construction cost pressure" },
+      { "name": "Redevelopment delays/cancellations" },
+      { "name": "Tower/speculation overheating concerns" }
+    ],
+    "funding": {
+      "title": "Funding & Investor Mix",
+      "desc": "Foreign capital inflow continues; bank real estate lending at high level"
+    },
+    "fundingSources": [
+      { "name": "Bank real estate lending", "desc": "9-year high" },
+      { "name": "Foreign capital / funds", "desc": "Japan buying continues" },
+      { "name": "J-REITs & institutions", "desc": "Stable allocation" },
+      { "name": "Individuals / other", "desc": "NISA, etc." }
+    ],
+    "future": {
+      "title": "1–3 year outlook",
+      "trendUp": "High or modest rise",
+      "trendDown": "Correction risk",
+      "trendNeutral": "Divergence"
+    },
+    "futurePoints": [
+      { "title": "Core-area prices", "desc": "Tokyo and major cities’ quality assets stay high or rise modestly" },
+      { "title": "Supply pace", "desc": "New large redevelopment slows; renovation & existing stock utilization increase" },
+      { "title": "Secondary & older", "desc": "Some towers and older units face price correction and clearance risk" },
+      { "title": "Policy & regulation", "desc": "Full foreign-buyer crackdown unlikely; tighter oversight in sensitive areas possible" }
+    ],
+    "insights": {
+      "priceTitle": "Trade · Price",
+      "priceBody": "Core cities (especially high-income areas in greater Tokyo) remain at high price levels. Reports cite both “land prices up 8 periods” and “central-area price rises” and warnings such as “vacancy risk in Minato Shirokane” and “tower condo bubble signs.” High-end assets (Minato towers, Niseko villas, Hakone, Izu, Atami, etc.) see billion-yen deals as routine, linked to foreign and high-net-worth cash buyers.",
+      "buildTitle": "Construction costs & redevelopment",
+      "buildBody": "“Reiwa-era cost surge” and “severe labor shortage” have led to redevelopment cancellations or delays in Nagoya, Hakata, Tsudanuma, Nakano, Shinjuku, and elsewhere. Major developers are shifting to renovation and existing-asset use to balance cost and returns (e.g. Mitsui Fudosan’s “three birds, one stone”). ESG / Green Building and energy-efficiency coverage is increasing; green and existing-building upgrades will be a main theme.",
+      "foreignTitle": "Foreign buyers & regulation",
+      "foreignBody": "Wealthy Chinese and others are buying Japanese towers, condos, hot-spring hotels and resorts in volume, raising security and local-dependency debate. Japan’s rules remain looser than Canada and others; domestic opinion calls for tighter oversight of foreign purchases in sensitive areas, but a full crackdown is unlikely soon; policy focus stays on attracting investment and keeping liquidity.",
+      "regionTitle": "Regional divergence",
+      "regionBody": "Outside the five central wards, areas with good transport and redevelopment are forming new high-price rings (“new central zone”). Regional and station-front redevelopment has bright spots but also “blank-slate” projects due to cost and labor; regional returns depend on population and tourism, with higher volatility than Tokyo core."
+    },
+    "nav": {
+      "toNewsList": "View real estate news list",
+      "backToNews": "Back to latest news"
     }
   },
   "company": {
@@ -1568,6 +1721,18 @@
     "companyName": "Bourn Mark Co., Ltd.",
     "ceoName": "President Gui Xiaochuan",
     "imageAlt": "Privacy Policy"
+  },
+  "agency": {
+    "title": "For Brokers",
+    "description": "Thank you for choosing Bourn Mark.\nBusiness application forms required for your application are available for download.\nPlease download the appropriate form below, complete it, and send it to the email address below. We will contact you upon receipt.\nFor residential application forms and vacancy confirmation, please use [ITANDI BB].",
+    "emailLabel": "Email",
+    "email": "leasing@bournmark.jp",
+    "downloadTitle": "Business Application Forms",
+    "btnCorporate": "Corporate",
+    "btnIndividual": "Individual",
+    "residentialAndVacancyTitle": "Residential Application Form & Vacancy Check",
+    "itandiBbLabel": "ITANDI BB",
+    "itandiBbUrl": "https://itandibb.com/top"
   },
   "maimai": {
     "title": "Japan Real Estate Sales & Purchase Services",

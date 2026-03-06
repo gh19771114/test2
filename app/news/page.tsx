@@ -1,36 +1,52 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import PageLayout from '@/components/PageLayout'
-import { Calendar, ArrowLeft, Newspaper } from 'lucide-react'
+import { Calendar, ArrowLeft, Newspaper, BarChart3, Filter } from 'lucide-react'
 import Link from 'next/link'
-import { latestNews } from '@/lib/knowledge'
+import { getLatestNews } from '@/lib/knowledge'
+import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useRssTranslations } from '@/hooks/useRssTranslations'
+
+type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean } | { slug: string; date: string; title: string; source: string; link: string }
 
 export default function NewsListPage() {
   const { t } = useLanguage()
+  const { getTitle: getRssTitle } = useRssTranslations()
+  const [items, setItems] = useState<LatestItem[]>(() => getLatestNews())
+  useEffect(() => {
+    fetch('/api/news/latest').then((r) => r.ok ? r.json() : { items: [] }).then((d: { items: LatestItem[] }) => { if (d.items?.length) setItems(d.items) }).catch(() => {})
+  }, [])
+  const getNewsTitle = (slug: string) => {
+    if (slug.startsWith('real-estate-')) {
+      const id = slug.slice('real-estate-'.length)
+      const item = getJapanRealEstateNewsById(id)
+      const localized = t(`news.realEstate.${id}.title`, { defaultValue: '' })
+      if (localized) return localized
+      return item?.title ?? slug
+    }
+    return t(`news.items.${slug}.title`, { defaultValue: slug })
+  }
+  const getItemTitle = (news: LatestItem) => {
+    if ('title' in news && news.slug.startsWith('rss-')) {
+      return getRssTitle(news.slug.slice(4), news.title)
+    }
+    return 'title' in news ? news.title : getNewsTitle(news.slug)
+  }
+  const getItemHref = (news: LatestItem) => (news.slug.startsWith('rss-') ? `/news/rss/${news.slug.slice(4)}` : `/news/${news.slug}`)
 
-// 获取分类标识
-  const getCategoryLabel = (news: { category?: string; isNotice?: boolean }) => {
-  if (news.category) {
-      // 如果category是"公司活动"，需要翻译
-      if (news.category === '公司活动') {
-        return t('news.category.companyActivity')
-      }
-      if (news.category === '通知') {
-        return t('news.category.notice')
-      }
-    return news.category
-  }
-  if (news.isNotice) {
-      return t('news.category.notice')
-  }
+  const getCategoryLabel = (news: LatestItem) => {
+    if ('category' in news && news.category) {
+      if (news.category === '公司活动') return t('news.category.companyActivity')
+      if (news.category === '通知') return t('news.category.notice')
+      return news.category
+    }
+    if ('isNotice' in news && news.isNotice) return t('news.category.notice')
     return t('news.category.news')
-}
+  }
 
-  // 按时间排序，最新的在前
-  const sortedNews = [...latestNews].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
-  })
+  const sortedNews = [...items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   return (
     <PageLayout>
@@ -56,6 +72,24 @@ export default function NewsListPage() {
             <p className="text-lg text-gray-600 max-w-3xl">
               {t('news.subtitle')}
             </p>
+
+            {/* 不动产动向解读入口 + 精选房地产新闻入口 */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/news/real-estate-outlook"
+                className="inline-flex items-center gap-3 rounded-xl bg-navy-800 text-white px-5 py-3 hover:bg-navy-700 transition-colors shadow-md"
+              >
+                <BarChart3 className="w-6 h-6" />
+                <span className="font-semibold">{t('news.outlookEntry')}</span>
+              </Link>
+              <Link
+                href="/news/real-estate-screened"
+                className="inline-flex items-center gap-3 rounded-xl border-2 border-navy-600 text-navy-800 px-5 py-3 hover:bg-navy-50 transition-colors shadow-sm"
+              >
+                <Filter className="w-6 h-6" />
+                <span className="font-semibold">{t('news.screenedEntry')}</span>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -66,7 +100,7 @@ export default function NewsListPage() {
               {sortedNews.map((news) => (
                 <Link
                   key={news.slug}
-                  href={`/news/${news.slug}`}
+                  href={getItemHref(news)}
                   className="block rounded-xl bg-white/80 backdrop-blur-sm border border-gray-200 md:p-6 hover:shadow-lg hover:border-navy-300 transition-all duration-200 group"
                   style={{ padding: '0.25rem' }}
                 >
@@ -75,13 +109,13 @@ export default function NewsListPage() {
                     <div className="flex-1">
                       <h2 className="text-xl font-bold text-navy-900 md:mb-2 group-hover:text-navy-700 transition-colors" style={{ marginBottom: '0.0625rem' }}>
                         <span className={`font-semibold mr-2 ${
-                          news.category === '公司活动' ? 'text-green-600' :
-                          news.isNotice || news.category === '通知' ? 'text-red-600' :
+                          'category' in news && news.category === '公司活动' ? 'text-green-600' :
+                          'isNotice' in news && news.isNotice || ('category' in news && news.category === '通知') ? 'text-red-600' :
                           'text-blue-600'
                         }`}>
                           {getCategoryLabel(news)}
                         </span>
-                        {t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
+                        {getItemTitle(news)}
                       </h2>
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <Calendar className="w-4 h-4" />

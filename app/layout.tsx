@@ -4,6 +4,7 @@ import './globals.css'
 import localFont from 'next/font/local'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { BreadcrumbStructuredData } from '@/components/BreadcrumbStructuredData'
+import { PerformanceMeasureGuard } from '@/components/PerformanceMeasureGuard'
 
 type SiteLocale = 'zh' | 'zh-TW' | 'zh-HK' | 'ja' | 'en'
 
@@ -84,9 +85,12 @@ const OPENING_HOURS_SPEC = {
   closes: '18:00',
 } as const
 
+const ORGANIZATION_ID = 'https://bournmark.com/#organization'
+
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': ORGANIZATION_ID,
   name: 'Bourn Mark',
   legalName: '株式会社ボーンマーク',
   alternateName: ['株式会社ボーンマーク', '川雨流痕', 'Bournmrak', 'Bourn mark'],
@@ -214,12 +218,17 @@ const KEYWORDS_BY_LOCALE: Record<SiteLocale, string[]> = {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') || '/'
+  const canonical = pathname === '/' ? `${SITE_URL}/` : `${SITE_URL}${pathname.startsWith('/') ? pathname : `/${pathname}`}`
+
   const locale = await getInitialLocale()
   const title = SITE_TITLE_BY_LOCALE[locale]
   const description = SITE_DESCRIPTION_BY_LOCALE[locale]
   const keywords = KEYWORDS_BY_LOCALE[locale]
   return {
     metadataBase: new URL(SITE_URL),
+    alternates: { canonical },
     title: {
       default: title,
       template: `%s | 株式会社ボーンマーク Bourn Mark`,
@@ -293,6 +302,7 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <LanguageProvider initialLocale={locale}>
+          <PerformanceMeasureGuard />
           <BreadcrumbStructuredData />
           {children}
         </LanguageProvider>

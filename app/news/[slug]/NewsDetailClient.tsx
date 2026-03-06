@@ -1,14 +1,75 @@
 'use client'
 
 import PageLayout from '@/components/PageLayout'
-import { Calendar, ArrowLeft } from 'lucide-react'
+import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { NewsItem } from '@/lib/knowledge'
+import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 
 export default function NewsDetailClient({ news }: { news: NewsItem }) {
   const { t } = useLanguage()
+
+  // 房地产单条：从数据渲染标题、正文、出处、原文链接（标题支持多语言）
+  if (news.realEstateId) {
+    const item = getJapanRealEstateNewsById(news.realEstateId)
+    if (!item) return null
+    const localizedTitle = t(`news.realEstate.${item.id}.title`, { defaultValue: item.title })
+    const localizedSummary = t(`news.realEstate.${item.id}.summary`, { defaultValue: '' })
+    return (
+      <PageLayout>
+        <article className="min-h-screen">
+          <section className="relative md:pt-28 md:pb-16 bg-gradient-to-br from-blue-50 to-white" style={{ paddingTop: '5rem', paddingBottom: '1rem' }}>
+            <div className="container-custom" style={{ paddingTop: '1rem' }}>
+              <Link href="/news" className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 md:mb-6 transition-colors" style={{ marginBottom: '0.75rem' }}>
+                <ArrowLeft className="w-4 h-4" />
+                <span>{t('news.backToHome')}</span>
+              </Link>
+              <div className="flex items-center gap-3 text-sm text-gray-600 md:mb-3" style={{ marginBottom: '0.5rem' }}>
+                <Calendar className="w-4 h-4" />
+                <time dateTime={item.date}>{item.date}</time>
+                <span>{item.source}</span>
+              </div>
+              <h1 className="text-3xl font-bold text-navy-900 md:mb-6 news-title" style={{ marginBottom: '0.75rem' }}>
+                {localizedTitle}
+              </h1>
+            </div>
+          </section>
+          <section className="section-padding bg-white" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+            <div className="container-custom max-w-4xl">
+              <div className="prose prose-lg max-w-none text-gray-800">
+                {localizedSummary && (
+                  <p className="mb-4 leading-relaxed">{localizedSummary}</p>
+                )}
+                <div className="whitespace-pre-line leading-relaxed">{item.body}</div>
+                {item.images && item.images.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {item.images.map((src, idx) => (
+                      <a key={idx} href={src} target="_blank" rel="noopener noreferrer" className="block relative w-48 h-32 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={src} alt="" className="w-full h-full object-cover" />
+                      </a>
+                    ))}
+                  </div>
+                )}
+                <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 font-medium">
+                  <ExternalLink className="w-4 h-4" />
+                  {t('news.readOriginal', { defaultValue: '阅读原文' })}
+                </a>
+              </div>
+              <div className="md:mt-12 md:pt-8 border-t border-gray-200" style={{ marginTop: '1rem', paddingTop: '1rem' }}>
+                <Link href="/news" className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 transition-colors">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>{t('news.backToHome')}</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+        </article>
+      </PageLayout>
+    )
+  }
 
   // 获取分类标识
   const getCategoryLabel = (news: NewsItem) => {
@@ -37,7 +98,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
         <section className="relative md:pt-28 md:pb-16 bg-gradient-to-br from-blue-50 to-white" style={{ paddingTop: '5rem', paddingBottom: '1rem' }}>
           <div className="container-custom" style={{ paddingTop: '1rem' }}>
             <Link
-              href="/"
+              href="/news"
               className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 md:mb-6 transition-colors"
               style={{ marginBottom: '0.75rem' }}
             >
@@ -84,9 +145,9 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
         </section>
 
         {/* 内容 */}
-        <section className="section-padding" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+        <section className="section-padding bg-white" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
           <div className="container-custom max-w-4xl">
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-lg max-w-none text-gray-800 prose-p:text-gray-800 prose-headings:text-navy-900">
               {(() => {
                 const content: string = String(
                   t(`news.items.${news.slug}.content`, { defaultValue: '' })
@@ -154,7 +215,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                           )}
                           
                           {/* 第一段文字 - 手机版在右侧，其他版本隐藏（使用桌面版布局） */}
-                          <div className="flex-1 text-gray-200 leading-relaxed text-lg md:text-xl news-content-first-paragraph">
+                          <div className="flex-1 text-gray-800 leading-relaxed text-lg md:text-xl news-content-first-paragraph">
                             <p>
                               {firstParagraph.split('\n').map((line, lineIndex) => (
                                 <span key={lineIndex}>
@@ -168,7 +229,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                         
                         {/* 第二段及以后 - 手机版全宽显示在下边 */}
                         {remainingParagraphs.length > 0 && (
-                          <div className="mt-6 text-gray-200 leading-relaxed text-lg md:text-xl news-content-remaining-paragraphs">
+                          <div className="mt-6 text-gray-800 leading-relaxed text-lg md:text-xl news-content-remaining-paragraphs">
                             {remainingParagraphs.map((paragraph, index) => (
                               <p key={index} className={index > 0 ? 'mt-6' : ''}>
                                 {paragraph.split('\n').map((line, lineIndex) => (
@@ -230,7 +291,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                         )}
                         
                         {/* 所有文字内容 */}
-                        <div className="flex-1 text-gray-200 leading-relaxed text-lg md:text-xl">
+                        <div className="flex-1 text-gray-800 leading-relaxed text-lg md:text-xl">
                           {allContent.split('\n\n').map((paragraph, index) => (
                             <p key={index} className={index > 0 ? 'mt-6' : ''}>
                               {paragraph.split('\n').map((line, lineIndex) => (
@@ -275,7 +336,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                   COMPANY_NAME_BLOCK_MARKERS.filter((m) => p.includes(m)).length >= 3
 
                 return (
-                  <div className="text-gray-200 leading-relaxed text-lg md:text-xl">
+                  <div className="text-gray-800 leading-relaxed text-lg md:text-xl">
                     {content.split('\n\n').map((paragraph, index) => {
                       if (isCompanyNameBlock(paragraph)) {
                         return (
@@ -322,7 +383,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
             {/* 返回按钮 */}
             <div className="md:mt-12 md:pt-8 border-t border-gray-400" style={{ marginTop: '1rem', paddingTop: '1rem' }}>
               <Link
-                href="/"
+                href="/news"
                 className="inline-flex items-center gap-2 text-gray-200 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />

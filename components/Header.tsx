@@ -223,6 +223,7 @@ const Header = () => {
       children: [
         { name: t('navigation.customerServiceSub.owner'), href: 'https://owners.c-estate.com/service/login/login.asp', external: true },
         { name: t('navigation.customerServiceSub.tenant'), href: '/tenant' },
+        { name: t('navigation.customerServiceSub.agency'), href: '/broker' },
       ],
     },
     { key: 'contact', name: t('navigation.contact'), href: '/#contact' },
@@ -230,6 +231,15 @@ const Header = () => {
 
   return (
     <motion.header className="fixed top-0 left-0 right-0 z-[10000] bg-white shadow-sm">
+      {/* 联系电话条：利于搜索引擎将 03-6661-7745 与公司官网关联，每页首屏可见 */}
+      <div className="bg-navy-800 text-white">
+        <div className="container-custom flex items-center justify-end gap-6 py-1.5 text-sm">
+          <span className="text-white/90" aria-hidden>株式会社ボーンマーク Bourn Mark</span>
+          <a href="tel:+81366617745" className="font-semibold text-white hover:text-blue-300 transition-colors whitespace-nowrap" title="03-6661-7745">
+            TEL: 03-6661-7745
+          </a>
+        </div>
+      </div>
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
           {/* Logo */}
