@@ -31,7 +31,7 @@ type NavItem = {
   children?: NavChild[]
 }
 
-const Header = () => {
+const Header = ({ topOffset }: { topOffset?: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLanguageOpen, setIsLanguageOpen] = useState(false)
   const { language, setLanguage, t } = useLanguage()
@@ -230,7 +230,10 @@ const Header = () => {
   ], [t])
 
   return (
-    <motion.header className="fixed top-0 left-0 right-0 z-[10000] bg-white shadow-sm">
+    <motion.header
+      className="fixed left-0 right-0 z-[10000] bg-white shadow-sm"
+      style={{ top: topOffset ?? 0 }}
+    >
       {/* 公司名与电话：仅供搜索引擎抓取，页面上不显示 */}
       <div className="sr-only" aria-hidden="false">
         <span>株式会社ボーンマーク Bourn Mark</span>

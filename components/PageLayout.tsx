@@ -3,12 +3,13 @@
 import Header from './Header'
 import Footer from './Footer'
 import FloatingActions from './FloatingActions'
+import { TITLE_BAR_HEIGHT } from './SiteTitleBar'
 import Image from 'next/image'
 import backgroundImage from '@/imgs/background.png'
 
-type PageLayoutProps = { children: React.ReactNode; compact?: boolean }
+type PageLayoutProps = { children: React.ReactNode; compact?: boolean; topBanner?: React.ReactNode }
 
-export default function PageLayout({ children, compact = false }: PageLayoutProps) {
+export default function PageLayout({ children, compact = false, topBanner }: PageLayoutProps) {
   return (
     <div
       className={`flex flex-col relative ${compact ? 'min-h-0' : 'min-h-screen'}`}
@@ -37,7 +38,8 @@ export default function PageLayout({ children, compact = false }: PageLayoutProp
         style={compact ? { minHeight: 0, height: 'auto' } : undefined}
         data-compact={compact ? 'true' : undefined}
       >
-        <Header />
+        {topBanner}
+        <Header topOffset={topBanner ? TITLE_BAR_HEIGHT : undefined} />
         <main className={compact ? '' : 'flex-1'} style={compact ? { flex: '0 1 auto', minHeight: 0 } : undefined}>
           {children}
         </main>
