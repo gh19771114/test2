@@ -1,7 +1,9 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 import { LOCALE_TRANSLATIONS } from '@/lib/locale-translations'
+import { getHomeLanguageFromPathname } from '@/lib/pathname-home-language'
 import type { AppLanguage } from '@/lib/locale-translations'
 import { getTitleLocale } from '@/lib/get-title-locale'
 import { translateKey } from '@/lib/translate-key'
@@ -40,6 +42,7 @@ export function LanguageProvider({
     () => LOCALE_TRANSLATIONS[initialTitleLang] ?? zhTranslations
   )
   const [isMounted, setIsMounted] = useState(false)
+  const pathname = usePathname()
 
   // 组件挂载后：标记已挂载；若有服务端 initialLocale 且本地未存过语言则持久化并写 cookie，避免下方「自动检测」再次覆盖导致闪烁
   useEffect(() => {
@@ -174,22 +177,35 @@ export function LanguageProvider({
     loadTranslations()
   }, [language])
 
-  // 客户端挂载后，若 localStorage 中语言与当前不同则恢复（延迟到 hydration 之后执行，避免与服务端 zh 不一致导致 hydration 报错）
+  // 客户端挂载后：五语言首页必须以 URL 为准同步 language（并写回 localStorage/cookie），否则会出现 /jp 页面是日文但右上角仍显示「繁體中文」等
+  // 内页仍可从 localStorage 恢复偏好（与 initialLocale 可能不一致时）
   useEffect(() => {
     if (!isMounted || typeof window === 'undefined') return
+    const isValidLang = (x: string): x is Language =>
+      x === 'zh' || x === 'zh-TW' || x === 'zh-HK' || x === 'ja' || x === 'en'
+
     const timer = setTimeout(() => {
+      const path = pathname || window.location.pathname
+      const pathLangRaw = getHomeLanguageFromPathname(path)
+      if (pathLangRaw && isValidLang(pathLangRaw)) {
+        setLanguageState(pathLangRaw)
+        localStorage.setItem('language', pathLangRaw)
+        document.cookie = `NEXT_LOCALE=${pathLangRaw}; path=/; max-age=31536000; SameSite=Lax`
+        return
+      }
+
       const savedLanguageRaw = localStorage.getItem('language')
       const normalized =
         savedLanguageRaw === 'zh-CN' ? 'zh' :
         savedLanguageRaw === 'ja-JP' ? 'ja' :
         savedLanguageRaw
       const savedLanguage = normalized as Language
-      if (savedLanguage && savedLanguage !== language && (savedLanguage === 'zh' || savedLanguage === 'zh-TW' || savedLanguage === 'zh-HK' || savedLanguage === 'ja' || savedLanguage === 'en')) {
-        setLanguageState(savedLanguage)
+      if (savedLanguage && isValidLang(savedLanguage)) {
+        setLanguageState((prev) => (prev === savedLanguage ? prev : savedLanguage))
       }
     }, 0)
     return () => clearTimeout(timer)
-  }, [isMounted, language])
+  }, [isMounted, pathname])
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
