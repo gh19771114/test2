@@ -102,10 +102,9 @@ export const latestNews: NewsItem[] = [
   {
     date: '2026-03-30',
     slug: '2026-03-30-communication-equipment-failure-notice',
-    isPinned: true,
+    isPinned: false,
     isNotice: true,
     category: '通知',
-    pinnedOrder: 0,
   },
   {
     date: '2021-06-01',
@@ -113,7 +112,7 @@ export const latestNews: NewsItem[] = [
     isPinned: true,
     isNotice: true,
     category: '通知',
-    pinnedOrder: 1,
+    pinnedOrder: 0,
   },
   {
     date: '2026-01-07',
