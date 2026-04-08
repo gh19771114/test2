@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useLanguage, type Language } from '@/contexts/LanguageContext'
 import { useTContent } from '@/hooks/useTContent'
 import { languageToHomePath, isLocaleHomePath } from '@/lib/home-root-redirect'
-import { normalizePathname } from '@/lib/home-path-locale'
+import { normalizePathname, getHomePathLocale } from '@/lib/home-path-locale'
 
 // 使用 Unicode 转义序列确保在所有系统上都能正确显示
 const languages = [
@@ -151,9 +151,17 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
     else if (lang.code === 'zh-HK') langCode = 'zh-HK'
     else if (lang.code === 'ja-JP') langCode = 'ja'
     else if (lang.code === 'en') langCode = 'en'
-    
+
     setLanguage(langCode)
     setIsLanguageOpen(false)
+
+    // 在五语言首页上：文案与 SEO 绑定 URL，仅 setLanguage 不会刷新界面 → 跳到对应语种首页
+    if (pathname && isLocaleHomePath(pathname)) {
+      const currentHome = getHomePathLocale(pathname)
+      if (currentHome && currentHome.language !== langCode) {
+        router.push(languageToHomePath(langCode))
+      }
+    }
   }
 
   const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
