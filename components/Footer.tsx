@@ -3,10 +3,16 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect, useMemo } from 'react'
 import { Mail, Phone, MapPin, Printer, Smartphone } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
+import { languageToHomePath, isLocaleHomePath } from '@/lib/home-root-redirect'
+import { normalizePathname } from '@/lib/home-path-locale'
 
 const Footer = () => {
-  const { t } = useLanguage()
+  const { language } = useLanguage()
+  const { t } = useTContent()
+  const pathname = usePathname()
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
@@ -151,13 +157,18 @@ const Footer = () => {
     }
   }
 
+  const homePath = useMemo(() => {
+    if (pathname && isLocaleHomePath(pathname)) return normalizePathname(pathname)
+    return languageToHomePath(language)
+  }, [pathname, language])
+
   const quickLinks = useMemo(() => [
-    { name: t('navigation.business'), href: '/#services' },
-    { name: t('navigation.cases'), href: '/#works' },
+    { name: t('navigation.business'), href: `${homePath}#services` },
+    { name: t('navigation.cases'), href: `${homePath}#works` },
     { name: t('navigation.company'), href: '/company/overview' },
     { name: t('navigation.tenant'), href: '/tenant' },
-    { name: t('navigation.contact'), href: '/#contact' }
-  ], [t])
+    { name: t('navigation.contact'), href: `${homePath}#contact` },
+  ], [t, homePath])
 
   const services = useMemo(() => [
     { name: t('navigation.maimai'), href: '/maimai' },

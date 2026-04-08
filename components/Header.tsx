@@ -7,6 +7,9 @@ import Image from 'next/image'
 import logo from '@/imgs/横向logo1-无背景-preview.png'
 import { usePathname, useRouter } from 'next/navigation'
 import { useLanguage, type Language } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
+import { languageToHomePath, isLocaleHomePath } from '@/lib/home-root-redirect'
+import { normalizePathname } from '@/lib/home-path-locale'
 
 // 使用 Unicode 转义序列确保在所有系统上都能正确显示
 const languages = [
@@ -34,7 +37,8 @@ type NavItem = {
 const Header = ({ topOffset }: { topOffset?: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLanguageOpen, setIsLanguageOpen] = useState(false)
-  const { language, setLanguage, t } = useLanguage()
+  const { language, setLanguage } = useLanguage()
+  const { t } = useTContent()
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null)
   const [expandedMobileChild, setExpandedMobileChild] = useState<string | null>(null)
@@ -66,6 +70,11 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const router = useRouter()
   const pathname = usePathname()
+  /** 在五语言首页上锚点与 Logo 指向当前 URL，与页内 SEO 语种一致；内页仍按用户所选语言回对应首页 */
+  const homePath = useMemo(() => {
+    if (pathname && isLocaleHomePath(pathname)) return normalizePathname(pathname)
+    return languageToHomePath(language)
+  }, [pathname, language])
 
   const scrollToHash = (hash: string, behavior: ScrollBehavior = 'smooth') => {
     if (!hash) return
@@ -99,17 +108,15 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (pathname === '/') {
-      const pendingHash = sessionStorage.getItem('pendingHash')
-      const currentHash = window.location.hash ? window.location.hash.substring(1) : ''
-      const hashToScroll = pendingHash || currentHash
-      if (hashToScroll) {
-        setTimeout(() => {
-          // 从其他页面跳回首页：取消中间“下拉/滚动动画”，直接定位到锚点
-          scrollToHash(hashToScroll, 'auto')
-          if (pendingHash) sessionStorage.removeItem('pendingHash')
-        }, 100)
-      }
+    if (!isLocaleHomePath(pathname)) return
+    const pendingHash = sessionStorage.getItem('pendingHash')
+    const currentHash = window.location.hash ? window.location.hash.substring(1) : ''
+    const hashToScroll = pendingHash || currentHash
+    if (hashToScroll) {
+      setTimeout(() => {
+        scrollToHash(hashToScroll, 'auto')
+        if (pendingHash) sessionStorage.removeItem('pendingHash')
+      }, 100)
     }
   }, [pathname])
 
@@ -150,17 +157,17 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
   }
 
   const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('/#')) {
-      event.preventDefault()
-      const hash = href.split('#')[1]
-      if (pathname === '/') {
-        // 首页内点击：保持原有 smooth（仅“从其他页面跳回首页”取消动画）
-        scrollToHash(hash, 'smooth')
-      } else {
-        sessionStorage.setItem('pendingHash', hash)
-        router.push(href)
-      }
-      return
+    const hashIdx = href.indexOf('#')
+    if (hashIdx === -1) return
+    const pathPart = href.slice(0, hashIdx)
+    const hash = href.slice(hashIdx + 1)
+    if (!hash || pathPart !== homePath) return
+    event.preventDefault()
+    if (pathname === homePath) {
+      scrollToHash(hash, 'smooth')
+    } else {
+      sessionStorage.setItem('pendingHash', hash)
+      router.push(`${homePath}#${hash}`)
     }
   }
 
@@ -226,8 +233,8 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
         { name: t('navigation.customerServiceSub.agency'), href: '/broker' },
       ],
     },
-    { key: 'contact', name: t('navigation.contact'), href: '/#contact' },
-  ], [t])
+    { key: 'contact', name: t('navigation.contact'), href: `${homePath}#contact` },
+  ], [t, homePath])
 
   return (
     <motion.header
@@ -243,7 +250,7 @@ const Header = ({ topOffset }: { topOffset?: string }) => {
         <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
           {/* Logo */}
           <motion.div className="flex-shrink-0 flex items-center">
-            <a href="/" aria-label="Bourn Mark" className="flex items-center h-full">
+            <a href={homePath} aria-label="Bourn Mark" className="flex items-center h-full">
               <Image
                 src={logo}
                 alt="Bourn Mark"

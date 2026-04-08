@@ -1,10 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Home, ArrowUp, Mail } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { languageToHomePath, isLocaleHomePath } from '@/lib/home-root-redirect'
+import { normalizePathname } from '@/lib/home-path-locale'
 
 const FloatingActions = () => {
+  const { language } = useLanguage()
+  const pathname = usePathname()
+  const homePath = useMemo(() => {
+    if (pathname && isLocaleHomePath(pathname)) return normalizePathname(pathname)
+    return languageToHomePath(language)
+  }, [pathname, language])
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -40,7 +50,9 @@ const FloatingActions = () => {
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = '/'}
+            onClick={() => {
+              window.location.href = homePath
+            }}
             className="w-14 h-14 bg-navy-700 hover:bg-navy-800 text-white rounded-full shadow-lg flex items-center justify-center transition-colors duration-200"
             aria-label="回到主页"
             title="回到主页"

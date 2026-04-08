@@ -5,13 +5,13 @@ import { encyclopediaEntries, getLatestNews } from '@/lib/knowledge'
 import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
 type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number } | { slug: string; date: string; title: string; source: string; link: string }
 
 const Insights = () => {
-  const { t } = useLanguage()
+  const { t } = useTContent()
   const { getTitle: getRssTitle } = useRssTranslations()
   const [isMounted, setIsMounted] = useState(false)
   const [latestItems, setLatestItems] = useState<LatestItem[]>(() => getLatestNews())

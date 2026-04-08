@@ -1,28 +1,13 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { LOCALE_TRANSLATIONS } from '@/lib/locale-translations'
+import type { AppLanguage } from '@/lib/locale-translations'
+import { getTitleLocale } from '@/lib/get-title-locale'
+import { translateKey } from '@/lib/translate-key'
 import zhTranslations from '@/locales/zh.json'
-import zhTWTranslations from '@/locales/zh-TW.json'
-import zhHKTranslations from '@/locales/zh-HK.json'
-import jaTranslations from '@/locales/ja.json'
-import enTranslations from '@/locales/en.json'
 
-export type Language = 'zh' | 'zh-TW' | 'zh-HK' | 'ja' | 'en'
-
-const LOCALE_TRANSLATIONS: Record<Language, Record<string, any>> = {
-  zh: zhTranslations,
-  'zh-TW': zhTWTranslations,
-  'zh-HK': zhHKTranslations,
-  ja: jaTranslations,
-  en: enTranslations,
-}
-
-/** 卡片标题显示语言：简体/台湾/香港/日本 → 日语，英文 → 英语 */
-function getTitleLocale(lang: Language): Language {
-  if (lang === 'zh' || lang === 'zh-TW' || lang === 'zh-HK' || lang === 'ja') return 'ja'
-  return 'en'
-}
-
+export type Language = AppLanguage
 export { getTitleLocale }
 
 interface LanguageContextType {
@@ -219,49 +204,11 @@ export function LanguageProvider({
     }
   }
 
-  const resolveFrom = (source: Record<string, any>, fullKey: string) => {
-    const keys = fullKey.split('.')
-    let value: any = source
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k]
-      } else {
-        return { found: false as const, value: undefined, usedKey: fullKey }
-      }
-    }
-    return { found: true as const, value, usedKey: fullKey }
-  }
-
-  const translate = (source: Record<string, any>, key: string, options?: { returnObjects?: boolean; [key: string]: any }) => {
-    let resolved = resolveFrom(source, key)
-    if (!resolved.found && key.startsWith('tenant.kaiyaku.')) {
-      resolved = resolveFrom(source, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
-    }
-    if (!resolved.found) {
-      const fb = resolveFrom(zhTranslations as any, key)
-      if (!fb.found && key.startsWith('tenant.kaiyaku.')) {
-        const fb2 = resolveFrom(zhTranslations as any, key.replace(/^tenant\.kaiyaku\./, 'tenant.services.kaiyaku.'))
-        if (fb2.found) resolved = fb2
-      } else if (fb.found) resolved = fb
-    }
-    const value = resolved.found ? resolved.value : undefined
-    if (options?.returnObjects && (Array.isArray(value) || typeof value === 'object')) return value
-    let result = typeof value === 'string' ? value : key
-    if (options && typeof result === 'string') {
-      Object.keys(options).forEach(optKey => {
-        if (optKey !== 'returnObjects' && options[optKey] !== undefined) {
-          result = result.replace(new RegExp(`\\{${optKey}\\}`, 'g'), String(options[optKey]))
-        }
-      })
-    }
-    return result
-  }
-
   const t = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any =>
-    translate(translations, key, options)
+    translateKey(translations as Record<string, unknown>, key, options) as any
 
   const tTitle = (key: string, options?: { returnObjects?: boolean; [key: string]: any }): any =>
-    translate(titleTranslations, key, options)
+    translateKey(titleTranslations as Record<string, unknown>, key, options) as any
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, tTitle, titleLocale: getTitleLocale(language) }}>

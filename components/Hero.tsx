@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
 
 // 背景视频只在客户端加载
 const VideoPlayer = dynamic(() => import('./VideoPlayer'), {
@@ -9,7 +9,7 @@ const VideoPlayer = dynamic(() => import('./VideoPlayer'), {
 })
 
 const Hero = () => {
-  const { t, language } = useLanguage()
+  const { t, contentLanguage: language } = useTContent()
 
   // Support variable headline line count per locale (e.g. JA uses 4 lines)
   const headlineLines = (() => {

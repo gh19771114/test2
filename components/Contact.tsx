@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { Mail, Phone, MapPin, Printer, Send, Copy, Check, Edit, CheckCircle } from 'lucide-react'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
 
 declare global {
   interface Window {
@@ -16,7 +16,7 @@ declare global {
 }
 
 const Contact = () => {
-  const { t } = useLanguage()
+  const { t } = useTContent()
   const [formData, setFormData] = useState({
     company: '',
     name: '',

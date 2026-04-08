@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ExternalLink, Play } from 'lucide-react'
 import Image from 'next/image'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
 import { caseIds, caseDates, caseImages } from '@/lib/casesData'
 
 const managedPropertyCaseIds = new Set([
@@ -15,7 +15,7 @@ const managedPropertyCaseIds = new Set([
 ])
 
 const Works = () => {
-  const { t, tTitle } = useLanguage()
+  const { t, tTitle } = useTContent()
   const [visibleCount, setVisibleCount] = useState(6) // 首页默认展示6个案例
 
   // 首页“成功案例”与 /cases 页共享同一套多语言数据源与图片映射

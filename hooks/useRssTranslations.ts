@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import type { Language } from '@/contexts/LanguageContext'
+import { useHomePageContentLanguage } from '@/contexts/HomePageContentContext'
 
 type RssTranslationItem = {
   title: Record<string, string>
@@ -11,6 +12,8 @@ type RssTranslationItem = {
 
 export function useRssTranslations() {
   const { language } = useLanguage()
+  const homeContentLang = useHomePageContentLanguage()
+  const effectiveLanguage: Language = homeContentLang ?? language
   const [map, setMap] = useState<Record<string, RssTranslationItem>>({})
   const [ready, setReady] = useState(false)
 
@@ -41,20 +44,20 @@ export function useRssTranslations() {
     (id: string, fallback: string): string => {
       const t = map[id]
       if (!t?.title) return fallback
-      const lang = language as string
+      const lang = effectiveLanguage as string
       return t.title[lang] ?? t.title['ja'] ?? t.title['en'] ?? fallback
     },
-    [map, language]
+    [map, effectiveLanguage]
   )
 
   const getSummary = useCallback(
     (id: string, fallback: string): string => {
       const t = map[id]
       if (!t?.summary) return fallback
-      const lang = language as string
+      const lang = effectiveLanguage as string
       return t.summary[lang] ?? t.summary['ja'] ?? t.summary['en'] ?? fallback
     },
-    [map, language]
+    [map, effectiveLanguage]
   )
 
   return { getTitle, getSummary, ready }

@@ -70,8 +70,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
+  // 首页：五语言固定 URL（可索引）；根 `/` 为分流入口，一并列出便于 x-default
+  addUrl('/', { changeFrequency: 'weekly', priority: 0.9 })
+  addUrl('/jp', { changeFrequency: 'weekly', priority: 1 })
+  addUrl('/en', { changeFrequency: 'weekly', priority: 1 })
+  addUrl('/zh-cn', { changeFrequency: 'weekly', priority: 1 })
+  addUrl('/zh-tw', { changeFrequency: 'weekly', priority: 1 })
+  addUrl('/zh-hk', { changeFrequency: 'weekly', priority: 1 })
+
   // Core pages
-  addUrl('/', { changeFrequency: 'weekly', priority: 1 })
   addUrl('/cases', { changeFrequency: 'weekly', priority: 0.8 })
   addUrl('/news', { changeFrequency: 'daily', priority: 0.8 })
   addUrl('/encyclopedia', { changeFrequency: 'weekly', priority: 0.8 })

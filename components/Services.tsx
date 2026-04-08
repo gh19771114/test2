@@ -5,10 +5,10 @@ import { useInView } from 'framer-motion'
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { Building2, ClipboardCheck, Globe2, TrendingUp, Rocket } from 'lucide-react'
 import Link from 'next/link'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTContent } from '@/hooks/useTContent'
 
 const Services = () => {
-  const { t, tTitle, language } = useLanguage()
+  const { t, tTitle, contentLanguage: language } = useTContent()
   const ref = useRef(null)
   const pieChartRef = useRef(null)
   const mobilePieChartRef = useRef<HTMLDivElement>(null)
@@ -38,6 +38,10 @@ const Services = () => {
   const [isMobileLandscape, setIsMobileLandscape] = useState(false)
   // 手机横版：点击后将饼图精准移动到页面左侧（用像素计算，避免写死的 vw 位移在不同机型失效）
   const [mobileLandscapeShiftX, setMobileLandscapeShiftX] = useState(0)
+  /** 移动端饼图标签字号倍率：首帧恒为 1，与 SSR 一致；仅在 checkIPad effect 里按视口更新，避免 SVG tspan hydration 不匹配 */
+  const [pieMobileLabelScale, setPieMobileLabelScale] = useState(1)
+  /** 饼图 SVG 文字延后到挂载后再渲染，避免服务端与客户端在 language/翻译折行上不一致导致 <text>/<tspan> hydration 失败 */
+  const [pieSvgLabelsReady, setPieSvgLabelsReady] = useState(false)
   
   // 强制同步：确保 ref 始终是最新的，state 只是用于触发重新渲染
   useEffect(() => {
@@ -62,6 +66,7 @@ const Services = () => {
   // 检测是否为iPad - 只在客户端执行，避免hydration错误
   useEffect(() => {
     setIsMounted(true)
+    setPieSvgLabelsReady(true)
     const checkIPad = () => {
       if (typeof window === 'undefined') return
       const width = window.innerWidth
@@ -124,6 +129,14 @@ const Services = () => {
           desktopContainer.style.removeProperty('display')
           desktopContainer.style.removeProperty('visibility')
         }
+      }
+
+      // 不在 render 中读取 window：首帧 pieMobileLabelScale===1 与 SSR 一致，挂载后再放大移动端标签
+      if (width < 1024) {
+        const scale = isIPadDeviceRef.current ? 1.3 : 1.4
+        setPieMobileLabelScale(scale)
+      } else {
+        setPieMobileLabelScale(1)
       }
     }
     
@@ -638,6 +651,7 @@ const Services = () => {
                             }
                           }}
                         />
+                        {pieSvgLabelsReady ? (
                         <text
                           x={pieData.textX}
                           y={pieData.textY}
@@ -650,21 +664,11 @@ const Services = () => {
                             style={{
                             fontSize: `${(() => {
                               const baseSize = pieData.percentage >= 50 ? 32 : pieData.percentage >= 20 ? 24 : pieData.percentage >= 10 ? 18 : 14
-                              // 移动设备（包括手机和iPad）放大文字
-                              if (isMounted && typeof window !== 'undefined') {
-                                const isMobile = window.innerWidth < 1024
-                                if (isMobile) {
-                                  // iPad放大1.3倍，手机放大1.4倍
-                                  const scale = (isIPad || isIPadDeviceRef.current) ? 1.3 : 1.4
-                                  return computePieLabelFontSizePx(Math.round(baseSize * scale), service.title)
-                                }
-                              }
-                              return computePieLabelFontSizePx(baseSize, service.title)
+                              return computePieLabelFontSizePx(Math.round(baseSize * pieMobileLabelScale), service.title)
                             })()}px`,
                             fontWeight: '600',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                           }}
-                          suppressHydrationWarning
                         >
                           {(() => {
                             const lines = getPieLabelLines(service.title)
@@ -675,13 +679,13 @@ const Services = () => {
                                 key={`${service.link}-m-${i}`}
                                 x={pieData.textX}
                                 dy={i === 0 ? startDy : `${lineHeightEm}em`}
-                                suppressHydrationWarning
                               >
                                 {line}
                               </tspan>
                             ))
                           })()}
                         </text>
+                        ) : null}
                       </g>
                     )
                   })}
@@ -1032,6 +1036,7 @@ const Services = () => {
                         />
                       </a>
                     ) : null}
+                    {pieSvgLabelsReady ? (
                     <text
                       x={pieData.textX}
                       y={pieData.textY}
@@ -1048,7 +1053,6 @@ const Services = () => {
                         transformOrigin: `${pieData.textX}px ${pieData.textY}px`,
                         transform: `scale(${scale})`,
                       }}
-                      suppressHydrationWarning
                     >
                       {(() => {
                         const lines = getPieLabelLines(service.title)
@@ -1059,13 +1063,13 @@ const Services = () => {
                             key={`${service.link}-d-${i}`}
                             x={pieData.textX}
                             dy={i === 0 ? startDy : `${lineHeightEm}em`}
-                            suppressHydrationWarning
                           >
                             {line}
                           </tspan>
                         ))
                       })()}
                     </text>
+                    ) : null}
                   </g>
                 )
               })}

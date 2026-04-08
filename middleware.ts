@@ -1,22 +1,23 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-/**
- * 将当前请求路径写入 request header，供 layout 的 generateMetadata 生成每页的 canonical URL。
- */
+/** 旧日语首页路径永久迁移到 /jp */
+const LEGACY_JA_PATH = /^\/ja\/?$/
+
+/** 供根布局读取真实路径，使 /jp、/en 等与 LanguageProvider initialLocale 一致（避免仅依赖 cookie 与 URL 不符） */
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  if (LEGACY_JA_PATH.test(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/jp'
+    return NextResponse.redirect(url, 308)
+  }
+
   const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-pathname', request.nextUrl.pathname)
-  return NextResponse.next({
-    request: { headers: requestHeaders },
-  })
+  requestHeaders.set('x-pathname', pathname)
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
-  matcher: [
-    /*
-     * 匹配所有路径，除了静态资源和 API
-     */
-    '/((?!_next/static|_next/image|imgs|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)'],
 }
