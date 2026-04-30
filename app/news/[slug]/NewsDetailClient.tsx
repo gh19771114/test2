@@ -24,7 +24,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
             <div className="container-custom" style={{ paddingTop: '1rem' }}>
               <Link href="/news" className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 md:mb-6 transition-colors" style={{ marginBottom: '0.75rem' }}>
                 <ArrowLeft className="w-4 h-4" />
-                <span>{t('news.backToHome')}</span>
+                <span>{t('news.backToNews')}</span>
               </Link>
               <div className="flex items-center gap-3 text-sm text-gray-600 md:mb-3" style={{ marginBottom: '0.5rem' }}>
                 <Calendar className="w-4 h-4" />
@@ -61,7 +61,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
               <div className="md:mt-12 md:pt-8 border-t border-gray-200" style={{ marginTop: '1rem', paddingTop: '1rem' }}>
                 <Link href="/news" className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 transition-colors">
                   <ArrowLeft className="w-4 h-4" />
-                  <span>{t('news.backToHome')}</span>
+                  <span>{t('news.backToNews')}</span>
                 </Link>
               </div>
             </div>
@@ -103,7 +103,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
               style={{ marginBottom: '0.75rem' }}
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('news.backToHome')}</span>
+              <span>{t('news.backToNews')}</span>
             </Link>
             
             <div className="flex items-center gap-3 text-sm text-gray-600 md:mb-3" style={{ marginBottom: '0.5rem' }}>
@@ -387,7 +387,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                 className="inline-flex items-center gap-2 text-gray-200 hover:text-white transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>{t('news.backToHome')}</span>
+                <span>{t('news.backToNews')}</span>
               </Link>
             </div>
           </div>

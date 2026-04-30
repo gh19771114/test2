@@ -79,9 +79,9 @@ const Insights = () => {
   }, [latestItems])
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
-  const newsLoopList = useMemo(() => [...newsList, ...newsList], [newsList])
+  const newsLoopList = useMemo(() => isMounted ? [...newsList, ...newsList] : newsList, [isMounted, newsList])
   const encyclopedia = useMemo(() => encyclopediaEntries, [])
-  const encyclopediaLoopList = useMemo(() => [...encyclopedia, ...encyclopedia], [encyclopedia])
+  const encyclopediaLoopList = useMemo(() => isMounted ? [...encyclopedia, ...encyclopedia] : encyclopedia, [isMounted, encyclopedia])
 
   const getNewsTitle = (slug: string) => {
     if (slug.startsWith('real-estate-')) {

@@ -100,6 +100,14 @@ export type NewsItem = {
 // 注意：title 和 content 现在通过翻译文件提供，使用翻译键：news.items.{slug}.title 和 news.items.{slug}.content
 export const latestNews: NewsItem[] = [
   {
+    date: '2026-04-30',
+    slug: '2026-golden-week-holiday-notice',
+    isPinned: true,
+    isNotice: true,
+    category: '通知',
+    pinnedOrder: 0,
+  },
+  {
     date: '2026-03-30',
     slug: '2026-03-30-communication-equipment-failure-notice',
     isPinned: false,
@@ -112,7 +120,7 @@ export const latestNews: NewsItem[] = [
     isPinned: true,
     isNotice: true,
     category: '通知',
-    pinnedOrder: 0,
+    pinnedOrder: 1,
   },
   {
     date: '2026-01-07',

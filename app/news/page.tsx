@@ -9,7 +9,7 @@ import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
-type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean } | { slug: string; date: string; title: string; source: string; link: string }
+type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; pinnedOrder?: number; category?: string; isNotice?: boolean } | { slug: string; date: string; title: string; source: string; link: string }
 
 export default function NewsListPage() {
   const { t } = useLanguage()
@@ -46,7 +46,18 @@ export default function NewsListPage() {
     return t('news.category.news')
   }
 
-  const sortedNews = [...items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  const isPinnedItem = (news: LatestItem) => 'isPinned' in news && news.isPinned === true
+  const getPinnedOrder = (news: LatestItem) => ('pinnedOrder' in news && typeof news.pinnedOrder === 'number' ? news.pinnedOrder : 999)
+  const sortedNews = [...items].sort((a, b) => {
+    const aPinned = isPinnedItem(a)
+    const bPinned = isPinnedItem(b)
+    if (aPinned !== bPinned) return aPinned ? -1 : 1
+    if (aPinned && bPinned) {
+      const orderDiff = getPinnedOrder(a) - getPinnedOrder(b)
+      if (orderDiff !== 0) return orderDiff
+    }
+    return new Date(b.date).getTime() - new Date(a.date).getTime()
+  })
 
   return (
     <PageLayout>
@@ -97,15 +108,21 @@ export default function NewsListPage() {
         <section className="section-padding" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
           <div className="container-custom max-w-5xl">
             <div className="md:space-y-4" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-              {sortedNews.map((news) => (
+              {sortedNews.map((news) => {
+                const pinned = isPinnedItem(news)
+                return (
                 <Link
                   key={news.slug}
                   href={getItemHref(news)}
-                  className="block rounded-xl bg-white/80 backdrop-blur-sm border border-gray-200 md:p-6 hover:shadow-lg hover:border-navy-300 transition-all duration-200 group"
+                  className={`block rounded-xl backdrop-blur-sm border md:p-6 hover:shadow-lg transition-all duration-200 group ${
+                    pinned
+                      ? 'bg-red-50 border-2 border-red-200 hover:bg-red-100 hover:border-red-300'
+                      : 'bg-white/80 border-gray-200 hover:border-navy-300'
+                  }`}
                   style={{ padding: '0.25rem' }}
                 >
                   <div className="flex items-start md:gap-4" style={{ gap: '0.25rem' }}>
-                    <div className="flex-shrink-0 w-3 h-3 rounded-full bg-navy-500 group-hover:bg-navy-700 transition-colors" style={{ marginTop: '0.0625rem' }}></div>
+                    <div className={`flex-shrink-0 w-3 h-3 rounded-full transition-colors ${pinned ? 'bg-red-500 group-hover:bg-red-600' : 'bg-navy-500 group-hover:bg-navy-700'}`} style={{ marginTop: '0.0625rem' }}></div>
                     <div className="flex-1">
                       <h2 className="text-xl font-bold text-navy-900 md:mb-2 group-hover:text-navy-700 transition-colors" style={{ marginBottom: '0.0625rem' }}>
                         <span className={`font-semibold mr-2 ${
@@ -124,7 +141,8 @@ export default function NewsListPage() {
                     </div>
                   </div>
                 </Link>
-              ))}
+                )
+              })}
             </div>
 
             {/* 返回按钮 */}

@@ -166,7 +166,7 @@ const Footer = () => {
     { name: t('navigation.business'), href: `${homePath}#services` },
     { name: t('navigation.cases'), href: `${homePath}#works` },
     { name: t('navigation.company'), href: '/company/overview' },
-    { name: t('navigation.tenant'), href: '/tenant' },
+    { name: t('navigation.customerServiceSub.tenant'), href: '/tenant' },
     { name: t('navigation.contact'), href: `${homePath}#contact` },
   ], [t, homePath])
 

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_PRIVATE_SKIP_TURBO=1 NEXT_PRIVATE_SKIP_TURBOPACK=1 next dev",
+    "dev": "next dev",
     "dev:turbo": "next dev --turbo",
-    "build": "NEXT_PRIVATE_SKIP_TURBO=1 NEXT_PRIVATE_SKIP_TURBOPACK=1 next build",
+    "build": "next build",
     "start": "next start",
     "lint": "true",
     "crawl-news": "node scripts/crawl-news.mjs",
