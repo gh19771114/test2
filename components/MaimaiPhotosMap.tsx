@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 export type MaimaiPhoto = {
   src: string
   alt: string
+  type?: 'image' | 'pdf'
 }
 
 type Props = {
@@ -67,7 +68,11 @@ export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' ? open(0) : null)}
                 aria-label={`Open photo: ${images[0].alt}`}
               >
-                <Image src={images[0].src} alt={images[0].alt} fill className="object-cover" />
+                {images[0].type === 'pdf' ? (
+                  <iframe title={images[0].alt} src={images[0].src} className="absolute inset-0 h-full w-full" />
+                ) : (
+                  <Image src={images[0].src} alt={images[0].alt} fill className="object-cover" />
+                )}
               </div>
               <div
                 className="relative h-56 overflow-hidden rounded-2xl bg-slate-900/5 sm:h-64 cursor-zoom-in"
@@ -77,7 +82,11 @@ export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' ? open(1) : null)}
                 aria-label={`Open photo: ${images[1].alt}`}
               >
-                <Image src={images[1].src} alt={images[1].alt} fill className="object-cover" />
+                {images[1].type === 'pdf' ? (
+                  <iframe title={images[1].alt} src={images[1].src} className="absolute inset-0 h-full w-full" />
+                ) : (
+                  <Image src={images[1].src} alt={images[1].alt} fill className="object-cover" />
+                )}
               </div>
             </div>
 
@@ -138,14 +147,22 @@ export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address
             </button>
 
             <div className="absolute inset-0">
-              <Image
-                src={images[activeIndex].src}
-                alt={images[activeIndex].alt}
-                fill
-                className="object-contain"
-                sizes="(min-width: 1024px) 1024px, 100vw"
-                priority
-              />
+              {images[activeIndex].type === 'pdf' ? (
+                <iframe
+                  title={images[activeIndex].alt}
+                  src={images[activeIndex].src}
+                  className="h-full w-full bg-white"
+                />
+              ) : (
+                <Image
+                  src={images[activeIndex].src}
+                  alt={images[activeIndex].alt}
+                  fill
+                  className="object-contain"
+                  sizes="(min-width: 1024px) 1024px, 100vw"
+                  priority
+                />
+              )}
             </div>
 
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">

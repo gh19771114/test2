@@ -1,17 +1,14 @@
 'use client'
 
 import PageLayout from '@/components/PageLayout'
-import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Building2, Train, Home, Shield, Clock, Users, ArrowLeft } from 'lucide-react'
+import { MapPin, Train, Home, Users, ArrowLeft } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
 
-export default function ShinNakanoPlaza304Page() {
+export default function ShinNakanoPlaza310Page() {
   const { t } = useLanguage()
-  const base = t('maimai.propertyDetail.properties.shin-nakano-ekijou-plaza-310', { returnObjects: true }) as any
-  const overrides = t('maimai.propertyDetail.properties.shin-nakano-ekijou-plaza-304', { returnObjects: true }) as any
-  const p = { ...base, ...overrides } as any
+  const p = t('maimai.propertyDetail.properties.shin-nakano-ekijou-plaza-310', { returnObjects: true }) as any
   const labels = t('maimai.propertyDetail.labels', { returnObjects: true }) as any
   return (
     <PageLayout>
@@ -109,8 +106,8 @@ export default function ShinNakanoPlaza304Page() {
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
-              src: '/imgs/maimai/shin-nakano-ekijou-plaza-304.png',
-              alt: labels.surroundings || labels.appearance || p.title,
+              src: '/imgs/maimai/shin-nakano-ekijou-plaza-310.png',
+              alt: labels.interior || labels.appearance || p.title,
             },
           ]}
         />
@@ -232,64 +229,15 @@ export default function ShinNakanoPlaza304Page() {
                   </p>
                 </div>
               </div>
-
-              {/* 周边设施 */}
-              <h2 className="mt-10 text-lg font-semibold text-slate-900">{t('maimai.propertyDetail.surroundings')}</h2>
-              <div className="mt-4 grid gap-4 text-xs md:grid-cols-3">
-                <div className="rounded-xl bg-gradient-to-br from-sky-50 to-white p-4 shadow-sm">
-                  <h3 className="mb-2 text-sm font-semibold text-slate-900">{t('maimai.propertyDetail.categories.life')}</h3>
-                  <ul className="space-y-1 text-slate-700">
-                    <li>・{p.life1}</li>
-                    <li>・{p.life2}</li>
-                    <li>・{p.life3}</li>
-                    <li>・{p.life4}</li>
-                  </ul>
-                </div>
-                <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-white p-4 shadow-sm">
-                  <h3 className="mb-2 text-sm font-semibold text-slate-900">{t('maimai.propertyDetail.categories.education')}</h3>
-                  <ul className="space-y-1 text-slate-700">
-                    <li>・{p.education1}</li>
-                    <li>・{p.education2}</li>
-                    <li>・{p.education3}</li>
-                  </ul>
-                </div>
-                <div className="rounded-xl bg-gradient-to-br from-purple-50 to-white p-4 shadow-sm">
-                  <h3 className="mb-2 text-sm font-semibold text-slate-900">{t('maimai.propertyDetail.categories.transport')}</h3>
-                  <ul className="space-y-1 text-slate-700">
-                    <li>・{p.transport1}</li>
-                    <li>・{p.transport2}</li>
-                    <li>・{p.transport3}</li>
-                  </ul>
-                </div>
-              </div>
             </div>
 
             {/* 右侧：注意事项 */}
-            <aside className="space-y-6">
-              <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100 p-5 text-xs text-amber-900">
-                <div className="mb-3 flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-amber-700" />
-                  <h3 className="text-sm font-semibold">{labels.notes}</h3>
-                </div>
-                <p className="mt-2 leading-relaxed">
-                  {p.notesText}
-                </p>
-              </div>
+            <aside className="rounded-2xl bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">{t('maimai.propertyDetail.notes')}</h2>
+              <p className="mt-3 text-xs leading-relaxed text-slate-700">
+                {p.notesText}
+              </p>
             </aside>
-          </div>
-        </section>
-
-        <section className="bg-white py-12">
-          <div className="container-custom">
-            <div className="mx-auto max-w-6xl flex justify-center">
-              <Link
-                href="/maimai"
-                className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-6 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 hover:text-slate-900 shadow-sm"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                {t('maimai.propertyDetail.backToPrevious')}
-              </Link>
-            </div>
           </div>
         </section>
       </main>
