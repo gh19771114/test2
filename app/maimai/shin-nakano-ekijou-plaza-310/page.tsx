@@ -1,8 +1,9 @@
 'use client'
 
 import PageLayout from '@/components/PageLayout'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Train, Home, Users, ArrowLeft } from 'lucide-react'
+import { MapPin, Train, Home, Users, ArrowLeft, X } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
 
@@ -10,6 +11,25 @@ export default function ShinNakanoPlaza310Page() {
   const { t } = useLanguage()
   const p = t('maimai.propertyDetail.properties.shin-nakano-ekijou-plaza-310', { returnObjects: true }) as any
   const labels = t('maimai.propertyDetail.labels', { returnObjects: true }) as any
+  const previewVideoRef = useRef<HTMLVideoElement>(null)
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
+  useEffect(() => {
+    const video = previewVideoRef.current
+    if (!video) return
+
+    video.muted = true
+    video.playsInline = true
+    video.setAttribute('playsinline', 'true')
+    video.play().catch(() => undefined)
+  }, [])
+
+  useEffect(() => {
+    if (!isVideoModalOpen) return
+    modalVideoRef.current?.play().catch(() => undefined)
+  }, [isVideoModalOpen])
+
   return (
     <PageLayout>
       <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -72,22 +92,24 @@ export default function ShinNakanoPlaza310Page() {
 
               {/* 右侧视频 */}
               <div className="mt-8 flex-1 justify-center lg:flex">
-                <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
+                <div
+                  className="relative h-64 w-full max-w-sm cursor-pointer overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg"
+                  onClick={() => setIsVideoModalOpen(true)}
+                >
                   <video
+                    ref={previewVideoRef}
                     className="w-full h-full object-cover"
-                    autoPlay
                     loop
                     muted
                     playsInline
-                    controls
-                    preload="metadata"
+                    preload="auto"
                     poster="/imgs/maimai/shinnakanoekiue.jpeg"
                   >
                     <source src="/movie/shinnagano.mp4" type="video/mp4" />
                     {t('maimai.propertyDetail.videoNotSupported')}
                   </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent" />
-                  <div className="absolute bottom-3 left-4 text-xs text-slate-50 drop-shadow">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent" />
+                  <div className="pointer-events-none absolute bottom-3 left-4 text-xs text-slate-50 drop-shadow">
                     <p className="font-semibold">{labels.appearance}</p>
                   </div>
                 </div>
@@ -240,6 +262,37 @@ export default function ShinNakanoPlaza310Page() {
             </aside>
           </div>
         </section>
+
+        {isVideoModalOpen && (
+          <div
+            className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+            onClick={() => setIsVideoModalOpen(false)}
+          >
+            <div
+              className="relative aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-black shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setIsVideoModalOpen(false)}
+                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70"
+                aria-label="Close"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              <video
+                ref={modalVideoRef}
+                className="h-full w-full object-contain"
+                controls
+                playsInline
+                preload="auto"
+              >
+                <source src="/movie/shinnagano.mp4" type="video/mp4" />
+                {t('maimai.propertyDetail.videoNotSupported')}
+              </video>
+            </div>
+          </div>
+        )}
       </main>
     </PageLayout>
   )
