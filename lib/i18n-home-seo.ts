@@ -79,9 +79,9 @@ const KEYWORDS_ZH_HK = [
 
 export const HOME_SEO: Record<HomeLocale, HomeSeoConfig> = {
   ja: {
-    title: '株式会社ボーンマーク Bourn Mark - 日本の不動産売買・投資物件管理',
+    title: '株式会社ボーンマーク（Bourn Mark）川雨流痕-日本の不動産売買・投資用物件の管理',
     description:
-      '株式会社ボーンマークは、日本の不動産売買仲介、投資用不動産管理、関連コンサルティングを提供します。',
+      '株式会社ボーンマーク（Bourn Mark）川雨流痕は、日本の不動産売買、投資用物件の管理、関連コンサルティングを提供します。',
     keywords: KEYWORDS_JA,
     htmlLang: 'ja',
     canonicalPath: '/jp',
@@ -91,7 +91,7 @@ export const HOME_SEO: Record<HomeLocale, HomeSeoConfig> = {
   en: {
     title: '株式会社ボーンマーク Bourn Mark - Japan Real Estate Sales, Investment & Property Management',
     description:
-      'Professional Japan real estate sales, investment property management, and advisory services.',
+      'Professional Japan real estate sales, investment property management, and advisory services by Bourn Mark.',
     keywords: KEYWORDS_EN,
     htmlLang: 'en',
     canonicalPath: '/en',
@@ -99,8 +99,8 @@ export const HOME_SEO: Record<HomeLocale, HomeSeoConfig> = {
     webPageInLanguage: 'en',
   },
   'zh-cn': {
-    title: '株式会社ボーンマーク Bourn Mark - 日本房地产买卖与投资物业管理',
-    description: '提供专业的日本房地产买卖中介、投资物业管理及相关咨询服务。',
+    title: '株式会社ボーンマーク Bourn Mark 川雨流痕-专业的日本房地产买卖和投资物业管理公司',
+    description: '川雨流痕（Bourn Mark）提供专业的日本房地产买卖中介、投资物业管理及相关咨询服务。',
     keywords: KEYWORDS_ZH_CN,
     htmlLang: 'zh-CN',
     canonicalPath: '/zh-cn',
@@ -108,8 +108,8 @@ export const HOME_SEO: Record<HomeLocale, HomeSeoConfig> = {
     webPageInLanguage: 'zh-CN',
   },
   'zh-tw': {
-    title: '株式会社ボーンマーク Bourn Mark - 日本房地產買賣與投資物業管理',
-    description: '提供專業的日本房地產買賣中介、投資物業管理及相關諮詢服務。',
+    title: '株式会社ボーンマーク Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
+    description: '川雨流痕（Bourn Mark）提供專業的日本房地產買賣中介、投資物業管理及相關諮詢服務。',
     keywords: KEYWORDS_ZH_TW,
     htmlLang: 'zh-TW',
     canonicalPath: '/zh-tw',
@@ -117,8 +117,8 @@ export const HOME_SEO: Record<HomeLocale, HomeSeoConfig> = {
     webPageInLanguage: 'zh-TW',
   },
   'zh-hk': {
-    title: '株式会社ボーンマーク Bourn Mark - 日本房地產買賣與投資物業管理',
-    description: '提供專業的日本房地產買賣中介、投資物業管理及相關諮詢服務。',
+    title: '株式会社ボーンマーク Bourn Mark 川雨流痕-專業的日本房地產買賣與投資物業管理公司',
+    description: '川雨流痕（Bourn Mark）提供專業的日本房地產買賣中介、投資物業管理及相關諮詢服務。',
     keywords: KEYWORDS_ZH_HK,
     htmlLang: 'zh-HK',
     canonicalPath: '/zh-hk',
@@ -153,7 +153,7 @@ export function buildHomeMetadata(locale: HomeLocale): Metadata {
       title: c.title,
       description: c.description,
       type: 'website',
-      siteName: '株式会社ボーンマーク Bourn Mark',
+      siteName: '株式会社ボーンマーク Bourn Mark 川雨流痕',
       url: canonical,
       locale: c.ogLocale,
       images: [
@@ -161,7 +161,7 @@ export function buildHomeMetadata(locale: HomeLocale): Metadata {
           url: '/imgs/og-share.png',
           width: 1200,
           height: 630,
-          alt: '株式会社ボーンマーク Bourn Mark',
+          alt: '株式会社ボーンマーク Bourn Mark 川雨流痕',
         },
       ],
     },
@@ -172,7 +172,7 @@ export function buildHomeMetadata(locale: HomeLocale): Metadata {
       images: ['/imgs/og-share.png'],
     },
     robots: { index: true, follow: true },
-    authors: [{ name: '株式会社ボーンマーク Bourn Mark' }],
+    authors: [{ name: '株式会社ボーンマーク Bourn Mark 川雨流痕' }],
   }
 }
 
