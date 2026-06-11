@@ -9,6 +9,8 @@ import { useTContent } from '@/hooks/useTContent'
 import { languageToHomePath, isLocaleHomePath } from '@/lib/home-root-redirect'
 import { normalizePathname } from '@/lib/home-path-locale'
 
+const OFFICE_MAP_QUERY = '株式会社ボーンマーク 東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F'
+
 const Footer = () => {
   const { language } = useLanguage()
   const { t } = useTContent()
@@ -35,7 +37,7 @@ const Footer = () => {
   }
 
   const handleAddressClick = () => {
-    const address = encodeURIComponent(t('footer.address.mapQuery'))
+    const address = encodeURIComponent(OFFICE_MAP_QUERY)
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     if (isMobile) {
       window.location.href = `https://maps.google.com/maps?q=${address}`

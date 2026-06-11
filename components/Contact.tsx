@@ -15,6 +15,9 @@ declare global {
   }
 }
 
+const OFFICE_MAP_QUERY = '株式会社ボーンマーク 東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F'
+const OFFICE_MAP_CENTER = '35.68615,139.78285'
+
 const Contact = () => {
   const { t } = useTContent()
   const [formData, setFormData] = useState({
@@ -234,7 +237,7 @@ const Contact = () => {
   }
 
   const handleAddressClick = () => {
-    const address = encodeURIComponent(t('footer.address.mapQuery'))
+    const address = encodeURIComponent(OFFICE_MAP_QUERY)
     // 检测移动设备 - 使用 typeof window 检查确保在客户端执行
     if (typeof window !== 'undefined') {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -686,7 +689,7 @@ const Contact = () => {
         <div className="mt-12">
           <div className="relative w-full overflow-hidden rounded-3xl border border-white/30 shadow-2xl">
             <iframe
-              src={`https://www.google.com/maps?q=${encodeURIComponent(t('footer.address.mapQuery'))}&output=embed&hl=ja&z=17`}
+              src={`https://www.google.com/maps?ll=${OFFICE_MAP_CENTER}&z=17&output=embed&hl=ja`}
               width="100%"
               height="400"
               style={{ border: 0 }}
@@ -697,6 +700,9 @@ const Contact = () => {
               title={t('home.contact.mapTitle')}
               suppressHydrationWarning
             ></iframe>
+            <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-full">
+              <MapPin className="h-10 w-10 fill-red-600 text-red-700 drop-shadow-lg" aria-hidden="true" />
+            </div>
           </div>
         </div>
       </div>
