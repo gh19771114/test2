@@ -61,7 +61,6 @@ export default function CompanyOverviewPage() {
     { label: t('company.overview.profile.legalRepresentative'), value: t('company.overview.profile.legalRepresentativeValue') },
     { label: t('company.overview.profile.capital'), value: t('company.overview.profile.capitalValue') },
     { label: t('company.overview.profile.headquartersAddress'), value: t('company.overview.profile.headquartersAddressValue') },
-    { label: t('company.overview.profile.subsidiary'), value: t('company.overview.profile.subsidiaryValue') },
     {
       label: t('company.overview.profile.businessContent'),
       value: t('company.overview.profile.businessContentValue'),

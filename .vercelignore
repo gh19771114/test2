@@ -1,0 +1,7 @@
+app/maimai/3d-view
+public/imgs/3d-view
+public/models/world-tower-residence
+components/PropertyThreeViewer.tsx
+scripts/create-world-tower-*
+scripts/fetch-world-tower-osm.py
+data/geo/world-tower-residence-osm.json
