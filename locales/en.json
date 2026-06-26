@@ -1884,7 +1884,7 @@
     },
     "fees": {
       "title": "Transaction Fees Overview",
-      "description": "※Transaction fees vary depending on factors such as property age, condition, government policies, etc.<br />Generally, fees are approximately <span className=\"font-bold text-white\">7% to 10%</span> of the property transaction amount. The specific amounts below are for reference only.",
+      "description": "※Transaction fees vary depending on factors such as property age, condition, government policies, etc.<br />Generally, fees are approximately <span className=\"font-bold text-white\">3% to 6%</span> of the property transaction amount. The specific amounts below are for reference only.",
       "buyingTitle": "Buying Fees",
       "sellingTitle": "Selling Fees",
       "buy": "Buy",
