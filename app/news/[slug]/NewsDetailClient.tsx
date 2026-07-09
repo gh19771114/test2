@@ -90,7 +90,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
   }
 
   const isSaikaiPage = news.slug === 'president-attends-saikai-awards-2025'
-  const newsTitle = news.title ?? String(t(`news.items.${news.slug}.title`, { defaultValue: news.slug }))
+  const newsTitle = news.detailTitle ?? news.title ?? String(t(`news.items.${news.slug}.title`, { defaultValue: news.slug }))
   const newsContent = news.content ?? String(t(`news.items.${news.slug}.content`, { defaultValue: '' }))
   
   return (

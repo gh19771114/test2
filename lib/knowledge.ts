@@ -85,6 +85,7 @@ export type NewsItem = {
   date: string
   slug: string
   title?: string
+  detailTitle?: string
   content?: string
   isPinned?: boolean
   isNotice?: boolean
@@ -106,6 +107,7 @@ export const latestNews: NewsItem[] = [
     date: '2026-07-09',
     slug: '2026-07-09-impersonation-email-alert',
     title: '【重要】「なりすましメール」に関する注意喚起',
+    detailTitle: '【重要】当社代表取締役社長の名前を装った「なりすましメール」に関する注意喚起',
     content: `平素は格別のご高配を賜り、厚く御礼申し上げます。
 
 昨今、全国的に「社長の実名」での詐欺メールが確認されています。
@@ -130,7 +132,7 @@ export const latestNews: NewsItem[] = [
 当社では、突発的な金銭の振り込みやSNSでの連絡指示をメール等で行うことは一切ございません。`,
     isPinned: true,
     isNotice: true,
-    category: '騾夂衍',
+    category: '通知',
     pinnedOrder: -1,
     displayLocales: ['ja'],
   },
