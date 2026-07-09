@@ -84,6 +84,8 @@ export function extractDateFromWebString(dateStr: string, copyrightYear?: number
 export type NewsItem = {
   date: string
   slug: string
+  title?: string
+  content?: string
   isPinned?: boolean
   isNotice?: boolean
   category?: string
@@ -94,11 +96,44 @@ export type NewsItem = {
   contentImage?: string
   /** 房地产新闻条目：有此项时详情页从 japanRealEstateNews 按 id 取正文 */
   realEstateId?: string
+  displayLocales?: string[]
 }
 
 // 最新资讯数据
 // 注意：title 和 content 现在通过翻译文件提供，使用翻译键：news.items.{slug}.title 和 news.items.{slug}.content
 export const latestNews: NewsItem[] = [
+  {
+    date: '2026-07-09',
+    slug: '2026-07-09-impersonation-email-alert',
+    title: '【重要】「なりすましメール」に関する注意喚起',
+    content: `平素は格別のご高配を賜り、厚く御礼申し上げます。
+
+昨今、全国的に「社長の実名」での詐欺メールが確認されています。
+弊社でも、代表取締役社長の [桂小川] の名前をかたった、不審な迷惑メール（なりすましメール）が発信されている事実を確認いたしました。
+
+これらのメールは、悪質な詐欺行為を目的とした第三者によるものであり、弊社および弊社社長とは一切関係ございません。
+お取引先様および関係者の皆様におかれましては、十分にご注意いただきますようお願い申し上げます。
+
+▲不審 メールの特徴
+・差出人の表示名が弊社代表取締役社長の [桂小川] の名前になっている（公開情報から取得していると推察）
+・差出人のメールアドレスは＜outlook.com＞＜hotmail.com＞＜gmail.com＞などのフリーメール
+・在籍確認や急ぎの連絡を装う内容（例：「今オフィスにいますか？」「手伝ってほしい件があります」など）
+・外部SNSへの誘導（例：業務用のLINEグループを作成し、参加するよう指示する、もしくはLINEのマイIDを返信で要求するなど）
+
+▲不審なメールを受信した場合の対策とお願い
+万が一、当社関係者を名乗る不審なメールを受信された場合は、以下の対応をお願いいたします。
+・メールへの返信は決して行わないでください。
+・メール本文に記載されている怪しいURLのクリックや、QRコードのスキャンは絶対に行わないでください。（フィッシングサイトへの誘導やウイルス感染の恐れがあります）
+・メールに添付ファイルがある場合、絶対にダウンロードや開封をしないでください。
+・送信元とされる人に確認する場合は、送られてきたメールには返信はせずに、電話などの別の方法でご確認してください。
+
+当社では、突発的な金銭の振り込みやSNSでの連絡指示をメール等で行うことは一切ございません。`,
+    isPinned: true,
+    isNotice: true,
+    category: '騾夂衍',
+    pinnedOrder: -1,
+    displayLocales: ['ja'],
+  },
   {
     date: '2026-03-30',
     slug: '2026-03-30-communication-equipment-failure-notice',

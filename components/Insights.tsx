@@ -8,13 +8,14 @@ import Link from 'next/link'
 import { useTContent } from '@/hooks/useTContent'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
-type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number } | { slug: string; date: string; title: string; source: string; link: string }
+type LatestItem = { slug: string; date: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
 
 const Insights = () => {
-  const { t } = useTContent()
+  const { t, contentLanguage } = useTContent()
   const { getTitle: getRssTitle } = useRssTranslations()
   const [isMounted, setIsMounted] = useState(false)
   const [latestItems, setLatestItems] = useState<LatestItem[]>(() => getLatestNews())
+  const visibleLatestItems = useMemo(() => latestItems.filter((item) => !('displayLocales' in item) || !item.displayLocales?.length || item.displayLocales.includes(contentLanguage)), [latestItems, contentLanguage])
   const pinnedBarRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     fetch('/api/news/latest').then((r) => r.ok ? r.json() : { items: [] }).then((d: { items: LatestItem[] }) => { if (d.items?.length) setLatestItems(d.items) }).catch(() => {})
@@ -36,14 +37,14 @@ const Insights = () => {
 
   // 分离置顶和非置顶资讯（含置顶通知，按 pinnedOrder 优先再按日期排序）
   const pinnedNewsList = useMemo(() => {
-    const pinnedNews = latestItems.filter((n): n is LatestItem & { isPinned: true } => 'isPinned' in n && n.isPinned === true)
+    const pinnedNews = visibleLatestItems.filter((n): n is LatestItem & { isPinned: true } => 'isPinned' in n && n.isPinned === true)
     return [...pinnedNews].sort((a, b) => {
       const orderA = 'pinnedOrder' in a ? (a.pinnedOrder ?? 999) : 999
       const orderB = 'pinnedOrder' in b ? (b.pinnedOrder ?? 999) : 999
       if (orderA !== orderB) return orderA - orderB
       return new Date(b.date).getTime() - new Date(a.date).getTime()
     })
-  }, [latestItems])
+  }, [visibleLatestItems])
 
   // 获取分类标识
   const getCategoryLabel = (news: any) => {
@@ -65,7 +66,7 @@ const Insights = () => {
 
   // 按时间排序，显示最新20条普通资讯（不包含置顶），只保留3个月以内的新闻
   const filteredAndSortedNews = useMemo(() => {
-    const normalNews = latestItems.filter(n => !('isPinned' in n && n.isPinned))
+    const normalNews = visibleLatestItems.filter(n => !('isPinned' in n && n.isPinned))
     const threeMonthsAgo = new Date()
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
     const recentNews = normalNews.filter(news => {
@@ -76,7 +77,7 @@ const Insights = () => {
     })
     const sortedNormal = [...recentNews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     return sortedNormal.slice(0, 20)
-  }, [latestItems])
+  }, [visibleLatestItems])
 
   const newsList = useMemo(() => filteredAndSortedNews, [filteredAndSortedNews])
   const newsLoopList = useMemo(() => isMounted ? [...newsList, ...newsList] : newsList, [isMounted, newsList])
@@ -98,9 +99,9 @@ const Insights = () => {
   const getItemTitle = (item: LatestItem) => {
     if ('title' in item && item.slug.startsWith('rss-')) {
       const id = item.slug.slice(4)
-      return getRssTitle(id, 'title' in item ? item.title : '')
+      return getRssTitle(id, 'title' in item ? item.title ?? '' : '')
     }
-    return 'title' in item ? item.title : getNewsTitle(item.slug)
+    return 'title' in item && item.title ? item.title : getNewsTitle(item.slug)
   }
   const getItemHref = (item: LatestItem) => (item.slug.startsWith('rss-') ? `/news/rss/${item.slug.slice(4)}` : `/news/${item.slug}`)
 

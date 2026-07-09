@@ -90,6 +90,8 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
   }
 
   const isSaikaiPage = news.slug === 'president-attends-saikai-awards-2025'
+  const newsTitle = news.title ?? String(t(`news.items.${news.slug}.title`, { defaultValue: news.slug }))
+  const newsContent = news.content ?? String(t(`news.items.${news.slug}.content`, { defaultValue: '' }))
   
   return (
     <PageLayout>
@@ -123,7 +125,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
             </div>
             
             <h1 className="text-3xl font-bold text-navy-900 md:mb-6 news-title" style={{ marginBottom: '0.75rem' }}>
-              {t(`news.items.${news.slug}.title`, { defaultValue: news.slug })}
+              {newsTitle}
             </h1>
             
             {/* 标题图片 */}
@@ -149,9 +151,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
           <div className="container-custom max-w-4xl">
             <div className="prose prose-lg max-w-none text-gray-800 prose-p:text-gray-800 prose-headings:text-navy-900">
               {(() => {
-                const content: string = String(
-                  t(`news.items.${news.slug}.content`, { defaultValue: '' })
-                )
+                const content = newsContent
                 // 将内容按双换行符分割成段落
                 const paragraphs = content.split('\n\n').filter(p => p.trim())
                 const hasContentImage = news.contentImage || (!news.headerImage && !news.contentImage && news.image)

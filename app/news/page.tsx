@@ -9,7 +9,7 @@ import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
-type LatestItem = { slug: string; date: string; realEstateId?: string; isPinned?: boolean; pinnedOrder?: number; category?: string; isNotice?: boolean } | { slug: string; date: string; title: string; source: string; link: string }
+type LatestItem = { slug: string; date: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; pinnedOrder?: number; category?: string; isNotice?: boolean; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
 
 export default function NewsListPage() {
   const { t } = useLanguage()
@@ -30,9 +30,9 @@ export default function NewsListPage() {
   }
   const getItemTitle = (news: LatestItem) => {
     if ('title' in news && news.slug.startsWith('rss-')) {
-      return getRssTitle(news.slug.slice(4), news.title)
+      return getRssTitle(news.slug.slice(4), news.title ?? '')
     }
-    return 'title' in news ? news.title : getNewsTitle(news.slug)
+    return 'title' in news && news.title ? news.title : getNewsTitle(news.slug)
   }
   const getItemHref = (news: LatestItem) => (news.slug.startsWith('rss-') ? `/news/rss/${news.slug.slice(4)}` : `/news/${news.slug}`)
 
