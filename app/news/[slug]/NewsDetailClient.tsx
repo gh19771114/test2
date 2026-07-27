@@ -7,9 +7,10 @@ import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { NewsItem } from '@/lib/knowledge'
 import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
+import { languageToHomePath } from '@/lib/home-root-redirect'
 
 export default function NewsDetailClient({ news }: { news: NewsItem }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
   // 房地产单条：从数据渲染标题、正文、出处、原文链接（标题支持多语言）
   if (news.realEstateId) {
@@ -92,6 +93,52 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
   const isSaikaiPage = news.slug === 'president-attends-saikai-awards-2025'
   const newsTitle = news.detailTitle ?? news.title ?? String(t(`news.items.${news.slug}.title`, { defaultValue: news.slug }))
   const newsContent = news.content ?? String(t(`news.items.${news.slug}.content`, { defaultValue: '' }))
+  const contactHref = `${languageToHomePath(language)}#contact`
+  const renderParagraphContent = (paragraph: string) => {
+    const lines = paragraph.split('\n')
+
+    if (paragraph.trim() === '[[CONTACT_BUTTON]]') {
+      return (
+        <Link
+          href={contactHref}
+          className="btn-primary inline-flex items-center justify-center"
+        >
+          {t('navigation.contact')}
+        </Link>
+      )
+    }
+
+    if (paragraph.trim().startsWith('■ ')) {
+      return (
+        <>
+          <strong className="font-bold text-gray-900">{lines[0]}</strong>
+          {lines.slice(1).map((line, lineIndex) => (
+            <span key={lineIndex}>
+              <br />
+              {line}
+            </span>
+          ))}
+        </>
+      )
+    }
+
+    if (lines.length === 2 && /^TEL[：:]/.test(lines[1].trim())) {
+      return (
+        <>
+          <strong className="font-bold text-gray-900">{lines[0]}</strong>
+          <br />
+          <span>{lines[1]}</span>
+        </>
+      )
+    }
+
+    return lines.map((line, lineIndex) => (
+      <span key={lineIndex}>
+        {lineIndex > 0 && <br />}
+        {line}
+      </span>
+    ))
+  }
   
   return (
     <PageLayout>
@@ -217,12 +264,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                           {/* 第一段文字 - 手机版在右侧，其他版本隐藏（使用桌面版布局） */}
                           <div className="flex-1 text-gray-800 leading-relaxed text-lg md:text-xl news-content-first-paragraph">
                             <p>
-                              {firstParagraph.split('\n').map((line, lineIndex) => (
-                                <span key={lineIndex}>
-                                  {lineIndex > 0 && <br />}
-                                  {line}
-                                </span>
-                              ))}
+                              {renderParagraphContent(firstParagraph)}
                             </p>
                           </div>
                         </div>
@@ -232,12 +274,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                           <div className="mt-6 text-gray-800 leading-relaxed text-lg md:text-xl news-content-remaining-paragraphs">
                             {remainingParagraphs.map((paragraph, index) => (
                               <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                                {paragraph.split('\n').map((line, lineIndex) => (
-                                  <span key={lineIndex}>
-                                    {lineIndex > 0 && <br />}
-                                    {line}
-                                  </span>
-                                ))}
+                                {renderParagraphContent(paragraph)}
                               </p>
                             ))}
                           </div>
@@ -294,12 +331,7 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                         <div className="flex-1 text-gray-800 leading-relaxed text-lg md:text-xl">
                           {allContent.split('\n\n').map((paragraph, index) => (
                             <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                              {paragraph.split('\n').map((line, lineIndex) => (
-                                <span key={lineIndex}>
-                                  {lineIndex > 0 && <br />}
-                                  {line}
-                                </span>
-                              ))}
+                              {renderParagraphContent(paragraph)}
                             </p>
                           ))}
                         </div>
@@ -341,23 +373,13 @@ export default function NewsDetailClient({ news }: { news: NewsItem }) {
                       if (isCompanyNameBlock(paragraph)) {
                         return (
                           <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                            {paragraph.split('\n').map((line, lineIndex) => (
-                              <span key={lineIndex}>
-                                {lineIndex > 0 && <br />}
-                                {line}
-                              </span>
-                            ))}
+                            {renderParagraphContent(paragraph)}
                           </p>
                         )
                       }
                       return (
                         <p key={index} className={index > 0 ? 'mt-6' : ''}>
-                          {paragraph.split('\n').map((line, lineIndex) => (
-                            <span key={lineIndex}>
-                              {lineIndex > 0 && <br />}
-                              {line}
-                            </span>
-                          ))}
+                          {renderParagraphContent(paragraph)}
                         </p>
                       )
                     })}
