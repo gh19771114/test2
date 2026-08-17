@@ -106,10 +106,9 @@ export const latestNews: NewsItem[] = [
   {
     date: '2026-07-20',
     slug: '2026-summer-holiday-notice',
-    isPinned: true,
+    isPinned: false,
     isNotice: true,
     category: '通知',
-    pinnedOrder: -2,
   },
   {
     date: '2026-07-09',
