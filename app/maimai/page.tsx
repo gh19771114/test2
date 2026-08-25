@@ -27,7 +27,7 @@ const parsePriceToYen = (price: string): number | null => {
   if (!price) return null
   const normalized = price.replace(/[,\s]/g, '')
   let yen = 0
-  const okuMatch = normalized.match(/([0-9]+(?:\.[0-9]+)?)億/)
+  const okuMatch = normalized.match(/([0-9]+(?:\.[0-9]+)?)[億亿]/)
   if (okuMatch) {
     yen += parseFloat(okuMatch[1]) * 100_000_000
   }
@@ -156,6 +156,20 @@ export default function MaiMaiPage() {
 
     const formattedNumber = formatter.format(rounded)
     return `${t('maimai.currency.approx')}${formattedNumber}${label}`
+  }
+
+  const formatOkuYen = (amount: number) => {
+    if (language === 'en') {
+      const billion = amount / 1_000_000_000
+      return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(billion)} billion JPY`
+    }
+
+    const oku = amount / 100_000_000
+    const value = new Intl.NumberFormat(language === 'ja' ? 'ja-JP' : language, {
+      maximumFractionDigits: 2,
+    }).format(oku)
+    const suffix = language === 'ja' ? '億円' : language === 'zh' ? '亿日元' : '億日圓'
+    return `${value}${suffix}`
   }
 
   const propertiesNoFee = useMemo(
@@ -518,19 +532,21 @@ export default function MaiMaiPage() {
     [selectedCurrency, otherCurrencyOptions]
   )
 
-  const currencyDisplay = (price: string) => {
+  const currencyDisplay = (price: string, priceFormat?: 'oku') => {
     const yen = parsePriceToYen(price)
     if (yen === null) return price
     const rate = rates[selectedCurrency]
     if (!rate) return '—'
     const converted = yen * rate
+    if (selectedCurrency === 'JPY' && priceFormat === 'oku') return formatOkuYen(converted)
     return formatCurrencyValue(converted, selectedCurrency)
   }
 
   /** 下方「日元价格」行：按当前语言格式化为日元显示（如英文 42,680,000 JPY） */
-  const formatJpyPrice = (price: string) => {
+  const formatJpyPrice = (price: string, priceFormat?: 'oku') => {
     const yen = parsePriceToYen(price)
     if (yen === null) return price
+    if (priceFormat === 'oku') return formatOkuYen(yen)
     return formatCurrencyValue(yen, 'JPY')
   }
 
@@ -650,9 +666,9 @@ export default function MaiMaiPage() {
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
                           <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
-                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price, property.priceFormat)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price, property.priceFormat)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
@@ -686,9 +702,9 @@ export default function MaiMaiPage() {
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1" style={{ padding: '1rem' }}>
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
-                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price, property.priceFormat)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price, property.priceFormat)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
@@ -798,9 +814,9 @@ export default function MaiMaiPage() {
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1">
                           <h4 className="text-lg font-semibold text-navy-900 mb-2 group-hover:text-blue-700 transition-colors">{property.displayTitle}</h4>
-                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price, property.priceFormat)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price, property.priceFormat)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">
@@ -833,9 +849,9 @@ export default function MaiMaiPage() {
                         </div>
                         <div className="p-2 md:p-3 flex flex-col flex-1">
                           <h4 className="text-lg font-semibold text-navy-900 mb-2">{property.displayTitle}</h4>
-                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price)}</p>
+                          <p className="text-2xl font-bold text-navy-700 mb-1">{currencyDisplay(property.price, property.priceFormat)}</p>
                           {selectedCurrency !== 'JPY' && (
-                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price)}</p>
+                            <p className="text-xs text-gray-500 mb-2">{t('maimai.properties.jpyPrice')}：{formatJpyPrice(property.price, property.priceFormat)}</p>
                           )}
                           <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-2">
                             <span className="flex items-center gap-1">

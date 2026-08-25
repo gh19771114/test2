@@ -10,9 +10,24 @@ export type MaimaiPropertyCard = {
   image: string
   href: string
   featureKey: 'maimai.properties.noFee' | 'maimai.properties.withFee'
+  priceFormat?: 'oku'
 }
 
 export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
+  {
+    title: '日興パレス南麻布 102・103号室',
+    titleKey: 'maimai.properties.buildings.nikkoPalaceMinamiAzabu102103',
+    locationKey: 'maimai.properties.locations.nikkoPalaceMinamiAzabu102103',
+    typeKey: 'maimai.properties.types.shop',
+    price: '13.2亿日元',
+    priceFormat: 'oku',
+    area: '301.50㎡',
+    type: '店舗',
+    location: '東京都港区南麻布',
+    image: '/imgs/maimai/nikko-palace-minami-azabu-exterior.jpeg',
+    href: '/maimai/nikko-palace-minami-azabu-102-103',
+    featureKey: 'maimai.properties.noFee',
+  },
   {
     title: 'ライオンズマンション東銀座2F',
     titleKey: 'maimai.properties.buildings.lionsHigashiginza2f',

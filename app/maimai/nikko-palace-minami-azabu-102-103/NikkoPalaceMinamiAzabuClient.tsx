@@ -1,0 +1,316 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowLeft, Building2, Clock, MapPin, Train, TrendingUp, X } from 'lucide-react'
+import PageLayout from '@/components/PageLayout'
+import MaimaiPhotosMap from '@/components/MaimaiPhotosMap'
+import { useLanguage } from '@/contexts/LanguageContext'
+
+export default function NikkoPalaceMinamiAzabuClient() {
+  const { t, tTitle } = useLanguage()
+  const p = t('maimai.propertyDetail.properties.nikko-palace-minami-azabu-102-103', { returnObjects: true }) as any
+  const displayTitle = tTitle('maimai.properties.buildings.nikkoPalaceMinamiAzabu102103')
+  const labels = t('maimai.propertyDetail.labels', { returnObjects: true }) as any
+  const previewVideoRef = useRef<HTMLVideoElement>(null)
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
+  const [isClientMounted, setIsClientMounted] = useState(false)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
+  useEffect(() => {
+    setIsClientMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isClientMounted) return
+    const video = previewVideoRef.current
+    if (!video) return
+
+    video.muted = true
+    video.playsInline = true
+    video.setAttribute('playsinline', 'true')
+    video.play().catch(() => undefined)
+  }, [isClientMounted])
+
+  useEffect(() => {
+    if (!isVideoModalOpen) return
+    modalVideoRef.current?.play().catch(() => undefined)
+  }, [isVideoModalOpen])
+
+  const financials = [
+    { label: p.rentLabel, value: p.rent },
+    { label: p.yieldLabel, value: p.yield },
+    { label: p.managementFeeLabel, value: p.managementFee },
+    { label: p.reserveLabel, value: p.reserve },
+    { label: p.taxLabel, value: p.tax },
+  ]
+
+  return (
+    <PageLayout>
+      <main className="min-h-screen bg-slate-50 text-slate-900">
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-amber-100 via-slate-50 to-sky-100 pt-28 pb-16">
+          <div className="container-custom">
+            <div className="mx-auto max-w-6xl">
+              <Link
+                href="/maimai"
+                className="mb-6 inline-flex items-center gap-2 rounded-lg bg-white/80 px-4 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-white hover:text-slate-900 shadow-sm"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                {t('maimai.propertyDetail.backToPrevious')}
+              </Link>
+            </div>
+
+            <div className="mx-auto max-w-6xl lg:flex lg:items-center lg:gap-10">
+              <div className="flex-1">
+                <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-amber-700">
+                  {t('maimai.propertyDetail.subtitle')}
+                </p>
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                  {displayTitle}
+                </h1>
+                <p className="mt-4 text-sm leading-relaxed text-slate-700">{p.description}</p>
+
+                <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    <dt className="text-slate-500">{labels.area}</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {p.area}
+                      <span className="block text-[11px] text-slate-500">{p.areaNote}</span>
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    <dt className="text-slate-500">{labels.type}</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {p.type}
+                      <span className="block text-[11px] text-slate-500">{p.typeNote}</span>
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    <dt className="text-slate-500">{labels.nearestStation}</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {p.station}
+                      <span className="block text-[11px] text-slate-500">{p.stationNote}</span>
+                    </dd>
+                  </div>
+                  <div className="rounded-xl bg-white/80 p-4 shadow-sm">
+                    <dt className="text-slate-500">{labels.price}</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {p.price}
+                      <span className="block text-[11px] text-amber-600">{p.priceNote}</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              {/* 右侧视频 */}
+              <div className="mt-8 flex-1 justify-center lg:flex">
+                <div
+                  className="relative h-64 w-full max-w-sm cursor-pointer overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg"
+                  onClick={() => setIsVideoModalOpen(true)}
+                >
+                  {isClientMounted ? (
+                    <video
+                      ref={previewVideoRef}
+                      className="h-full w-full object-cover"
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
+                      poster="/imgs/maimai/nikko-palace-minami-azabu-exterior.jpeg"
+                    >
+                      <source src="/videos/maimai/nikko-palace-minami-azabu.mp4" type="video/mp4" />
+                      {t('maimai.propertyDetail.videoNotSupported')}
+                    </video>
+                  ) : (
+                    <Image
+                      src="/imgs/maimai/nikko-palace-minami-azabu-exterior.jpeg"
+                      alt={p.imageAlt}
+                      fill
+                      priority
+                      className="object-cover"
+                      sizes="384px"
+                    />
+                  )}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent" />
+                  <div className="pointer-events-none absolute bottom-3 left-4 text-xs text-slate-50 drop-shadow">
+                    <p className="font-semibold">{labels.appearance}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <MaimaiPhotosMap
+          photosTitle={t('maimai.propertyDetail.photos')}
+          mapTitle={t('maimai.propertyDetail.mapTitle')}
+          address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
+          images={[
+            {
+              src: '/imgs/maimai/nikko-palace-minami-azabu-exterior.jpeg',
+              alt: p.imageAlt,
+            },
+            {
+              src: '/imgs/maimai/nikko-palace-minami-azabu-interior.png',
+              alt: p.interiorAlt,
+            },
+            {
+              src: '/imgs/maimai/nikko-palace-minami-azabu-bar.png',
+              alt: p.barAlt,
+            },
+            {
+              src: '/imgs/maimai/nikko-palace-minami-azabu-dining.png',
+              alt: p.diningAlt,
+            },
+            {
+              src: '/imgs/maimai/nikko-palace-minami-azabu-floor-plan.png',
+              alt: p.floorPlanAlt,
+              fit: 'contain',
+            },
+          ]}
+        />
+
+        {/* 物业概要 */}
+        <section className="mx-auto mt-6 max-w-6xl px-4 pb-14">
+          <div className="grid gap-10 lg:grid-cols-[2fr,1.2fr]">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">{t('maimai.propertyDetail.overview')}</h2>
+              <div className="mt-4 overflow-hidden rounded-2xl bg-white shadow-sm">
+                <table className="w-full border-separate border-spacing-0 text-xs">
+                  <tbody>
+                    <tr className="border-b border-slate-100">
+                      <th className="w-32 bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.address}</th>
+                      <td className="px-4 py-3">
+                        {p.address}
+                        <span className="ml-1 text-[11px] text-slate-500">{p.buildingName}</span>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-100 align-top">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.access}</th>
+                      <td className="px-4 py-3">
+                        <ul className="space-y-1">
+                          <li>{p.access1}</li>
+                          <li>{p.access2}</li>
+                          <li>{p.access3}</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.structure}</th>
+                      <td className="px-4 py-3">{p.structure}</td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.floor}</th>
+                      <td className="px-4 py-3">{p.floorInfo}</td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.area}</th>
+                      <td className="px-4 py-3">{p.area}（{p.areaNote}）</td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.type}</th>
+                      <td className="px-4 py-3">{p.type}</td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{p.rentLabel}</th>
+                      <td className="px-4 py-3">{p.rent}</td>
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{p.yieldLabel}</th>
+                      <td className="px-4 py-3">{p.yield}</td>
+                    </tr>
+                    <tr>
+                      <th className="bg-slate-50 px-4 py-3 text-left font-medium text-slate-500">{labels.equipment}</th>
+                      <td className="px-4 py-3">{p.equipmentInfo}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* 投资亮点 */}
+              <h2 className="mt-10 text-lg font-semibold text-slate-900">{t('maimai.propertyDetail.investmentPoints')}</h2>
+              <div className="mt-4 grid gap-4 text-xs md:grid-cols-2">
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-2 flex items-center gap-2">
+                    <Train className="h-4 w-4 text-sky-600" />
+                    <h3 className="text-sm font-semibold text-slate-900">{p.point1Title}</h3>
+                  </div>
+                  <p className="mt-2 leading-relaxed text-slate-700">{p.point1Desc}</p>
+                </div>
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-2 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-emerald-600" />
+                    <h3 className="text-sm font-semibold text-slate-900">{p.point2Title}</h3>
+                  </div>
+                  <p className="mt-2 leading-relaxed text-slate-700">{p.point2Desc}</p>
+                </div>
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-2 flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-purple-600" />
+                    <h3 className="text-sm font-semibold text-slate-900">{p.point3Title}</h3>
+                  </div>
+                  <p className="mt-2 leading-relaxed text-slate-700">{p.point3Desc}</p>
+                </div>
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <div className="mb-2 flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-amber-600" />
+                    <h3 className="text-sm font-semibold text-slate-900">{p.point4Title}</h3>
+                  </div>
+                  <p className="mt-2 leading-relaxed text-slate-700">{p.point4Desc}</p>
+                </div>
+              </div>
+            </div>
+
+            <aside className="space-y-6">
+              <div className="rounded-2xl bg-white p-6 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900">{p.financialTitle}</h2>
+                <dl className="mt-4 divide-y divide-slate-100 text-xs">
+                  {financials.map((item) => (
+                    <div key={item.label} className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
+                      <dt className="text-slate-500">{item.label}</dt>
+                      <dd className="text-right font-semibold text-slate-900">{item.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div className="rounded-2xl bg-white p-6 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-amber-700" />
+                  <h2 className="text-lg font-semibold text-slate-900">{labels.notes}</h2>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-slate-700">{p.notesText}</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        {isVideoModalOpen && (
+          <div
+            className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+            onClick={() => setIsVideoModalOpen(false)}
+          >
+            <div
+              className="relative aspect-video w-full max-w-4xl overflow-hidden rounded-lg bg-black shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setIsVideoModalOpen(false)}
+                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70"
+                aria-label="Close"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              <video ref={modalVideoRef} className="h-full w-full object-contain" controls playsInline preload="auto">
+                <source src="/videos/maimai/nikko-palace-minami-azabu.mp4" type="video/mp4" />
+                {t('maimai.propertyDetail.videoNotSupported')}
+              </video>
+            </div>
+          </div>
+        )}
+      </main>
+    </PageLayout>
+  )
+}

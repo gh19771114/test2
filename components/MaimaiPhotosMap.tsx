@@ -7,29 +7,30 @@ export type MaimaiPhoto = {
   src: string
   alt: string
   type?: 'image' | 'pdf'
+  fit?: 'cover' | 'contain'
 }
 
 type Props = {
   photosTitle: string
   mapTitle: string
-  images: [MaimaiPhoto, MaimaiPhoto]
+  images: MaimaiPhoto[]
   address: string
 }
 
 export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address }: Props) {
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`
   const [isOpen, setIsOpen] = useState(false)
-  const [activeIndex, setActiveIndex] = useState<0 | 1>(0)
+  const [activeIndex, setActiveIndex] = useState(0)
 
-  const open = (idx: 0 | 1) => {
+  const open = (idx: number) => {
     setActiveIndex(idx)
     setIsOpen(true)
   }
 
   const close = () => setIsOpen(false)
 
-  const prev = () => setActiveIndex((i) => (i === 0 ? 1 : 0))
-  const next = () => setActiveIndex((i) => (i === 1 ? 0 : 1))
+  const prev = () => setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1))
+  const next = () => setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1))
 
   useEffect(() => {
     if (!isOpen) return
@@ -60,34 +61,28 @@ export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address
 
           <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div
-                className="relative h-56 overflow-hidden rounded-2xl bg-slate-900/5 sm:h-64 cursor-zoom-in"
-                role="button"
-                tabIndex={0}
-                onClick={() => open(0)}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' ? open(0) : null)}
-                aria-label={`Open photo: ${images[0].alt}`}
-              >
-                {images[0].type === 'pdf' ? (
-                  <iframe title={images[0].alt} src={images[0].src} className="absolute inset-0 h-full w-full" />
-                ) : (
-                  <Image src={images[0].src} alt={images[0].alt} fill className="object-cover" />
-                )}
-              </div>
-              <div
-                className="relative h-56 overflow-hidden rounded-2xl bg-slate-900/5 sm:h-64 cursor-zoom-in"
-                role="button"
-                tabIndex={0}
-                onClick={() => open(1)}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' ? open(1) : null)}
-                aria-label={`Open photo: ${images[1].alt}`}
-              >
-                {images[1].type === 'pdf' ? (
-                  <iframe title={images[1].alt} src={images[1].src} className="absolute inset-0 h-full w-full" />
-                ) : (
-                  <Image src={images[1].src} alt={images[1].alt} fill className="object-cover" />
-                )}
-              </div>
+              {images.map((photo, index) => (
+                <div
+                  key={photo.src}
+                  className="relative h-56 cursor-zoom-in overflow-hidden rounded-2xl bg-slate-900/5 sm:h-64"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => open(index)}
+                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' ? open(index) : null)}
+                  aria-label={`Open photo: ${photo.alt}`}
+                >
+                  {photo.type === 'pdf' ? (
+                    <iframe title={photo.alt} src={photo.src} className="absolute inset-0 h-full w-full" />
+                  ) : (
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      className={photo.fit === 'contain' ? 'object-contain p-3' : 'object-cover'}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
@@ -166,11 +161,11 @@ export default function MaimaiPhotosMap({ photosTitle, mapTitle, images, address
             </div>
 
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
-              {[0, 1].map((i) => (
+              {images.map((image, i) => (
                 <button
-                  key={i}
+                  key={image.src}
                   type="button"
-                  onClick={() => setActiveIndex(i as 0 | 1)}
+                  onClick={() => setActiveIndex(i)}
                   className={`h-2.5 w-2.5 rounded-full ${activeIndex === i ? 'bg-white' : 'bg-white/40'}`}
                   aria-label={`Go to photo ${i + 1}`}
                 />
