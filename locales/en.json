@@ -1785,7 +1785,6 @@
         "shinNakano305": "Nakano-ku Honcho, Tokyo",
         "shinNakano304": "Nakano-ku Honcho, Tokyo",
         "patioSuginami2f": "Suginami-ku Horinouchi, Tokyo",
-        "centHillsShiinamachi4f": "Toshima-ku Nagasaki, Tokyo",
         "paleDorSagamihara8f": "Sagamihara, Kanagawa",
         "nichishinPalaceTakenotsuka5f": "Adachi-ku Iko, Tokyo",
         "cesarTakashimadaira2f": "Itabashi-ku Tokumaru, Tokyo",
@@ -1794,7 +1793,13 @@
         "skyCourtIkuta2f": "Kawasaki Tama-ku, Kanagawa",
         "nikkoPalaceMinamiAzabu102103": "Minami-Azabu, Minato-ku, Tokyo",
         "exceriaSetagayaKamimachi6f": "Setagaya-ku, Tokyo",
-        "graceYotsuya4f": "Shinjuku-ku, Tokyo"
+        "graceYotsuya4f": "Shinjuku-ku, Tokyo",
+        "skyCourtMukogaokaYuen4f": "Noborito, Tama-ku, Kawasaki",
+        "komatsuEightMagumoto2f": "Magumoto, Minami-ku, Saitama",
+        "gloriaHatsuhoOtsuka2f": "Kami-Ikebukuro, Toshima-ku, Tokyo",
+        "evenaNishiochiai4f": "Nishi-Ochiai, Shinjuku-ku, Tokyo",
+        "parkhouseNishiShinjukuTower6052f": "Nishi-Shinjuku, Shinjuku-ku, Tokyo",
+        "klarheitMishukuIi": "Ikejiri, Setagaya-ku, Tokyo"
       },
       "types": {
         "shopOffice": "Shop / Office",
@@ -1805,7 +1810,9 @@
         "1k": "1K",
         "2to3ldk": "2LDK–3LDK (expected)",
         "1k3units": "1K × 3 units",
-        "1r9units": "1R × 9 units"
+        "1r9units": "1R × 9 units",
+        "3ldk": "3LDK",
+        "commercialBuilding": "Whole commercial building"
       },
       "areaApprox17": "Approx. 17㎡",
       "areaNa": "—",
@@ -1814,7 +1821,6 @@
         "shinNakano305": "Shin-Nakano Ekijou Plaza 305",
         "shinNakano304": "Shin-Nakano Ekijou Plaza 304",
         "patioSuginami2f": "Patio Suginami 2F",
-        "centHillsShiinamachi4f": "Saint Hills Shiinamachi 4F",
         "paleDorSagamihara8f": "Palais d'Or Sagamihara 8F",
         "nichishinPalaceTakenotsuka5f": "Nisshin Palace Takenotsuka 5F",
         "cesarTakashimadaira2f": "Cesar Nishi-Takashimadaira 2F",
@@ -1823,7 +1829,13 @@
         "skyCourtIkuta2f": "Sky Court Ikuta 2F",
         "nikkoPalaceMinamiAzabu102103": "Nikko Palace Minami-Azabu Units 102 & 103",
         "exceriaSetagayaKamimachi6f": "Exceria Setagaya Kamimachi 6F",
-        "graceYotsuya4f": "Grace Yotsuya 4F"
+        "graceYotsuya4f": "Grace Yotsuya 4F",
+        "skyCourtMukogaokaYuen4f": "Sky Court Mukogaoka-Yuen 4F",
+        "komatsuEightMagumoto2f": "Komatsu Eight Magumoto 2F",
+        "gloriaHatsuhoOtsuka2f": "Gloria Hatsuho Otsuka 2F",
+        "evenaNishiochiai4f": "Evena Nishi-Ochiai 4F",
+        "parkhouseNishiShinjukuTower6052f": "The Parkhouse Nishi-Shinjuku Tower 60 52F",
+        "klarheitMishukuIi": "Klarheit Mishuku II"
       }
     },
     "deals": {
@@ -2242,46 +2254,6 @@
           "notesText": "Current rent: ¥65,000/month (occupied). Mgmt fee: ¥8,110/month; Repair reserve: ¥9,070/month; Fixed asset tax (FY2024): ¥33,300/year. ※If drawing differs from current condition, current condition takes precedence.",
           "imageAlt": "Patio Suginami exterior"
         },
-        "cent-hills-shiinamachi-405": {
-          "title": "Saint Hills Shiinamachi 4F (Top Floor)",
-          "description": "Multi-access: 5 min walk from Seibu Ikebukuro Line \"Shiinamachi\" Station, Yurakucho/Fukutoshin Line \"Kanamecho\" Station also available. Top-floor unit in low-rise with distinctive white-tile exterior.",
-          "area": "13.84m²",
-          "areaNote": "Exclusive area (wall-center)",
-          "type": "1R",
-          "typeNote": "Compact studio",
-          "station": "Seibu Ikebukuro Line \"Shiinamachi\" Station: 5 min walk",
-          "stationNote": "Yurakucho/Fukutoshin Line \"Kanamecho\" Station: 7 min walk",
-          "price": "¥10.5 million (tax incl.)",
-          "priceNote": "※Please confirm with latest recruitment materials",
-          "address": "1-25-15 Nagasaki, Toshima-ku, Tokyo",
-          "buildingName": "Saint Hills Shiinamachi",
-          "access1": "Seibu Ikebukuro Line \"Shiinamachi\" Station: 5 min walk",
-          "access2": "Tokyo Metro Yurakucho/Fukutoshin Line \"Kanamecho\" Station: 7 min walk",
-          "access3": "",
-          "structure": "RC structure, flat roof / 4F above ground / Aug 1984 / 29 units",
-          "floorInfo": "4F (top floor) / 1R / East-facing",
-          "equipmentInfo": "Top floor / Good daylight / Elevator",
-          "point1Title": "Ochiai–Nagasaki area near Ikebukuro",
-          "point1Desc": "2 stations (Shiinamachi, Kanamecho), approx. 3 min to Ikebukuro. Absorbs rental demand from singles and couples working in Ikebukuro area.",
-          "point2Title": "Well-maintained compact housing",
-          "point2Desc": "29-unit mid-scale condo with good exterior and common-area maintenance. Aesthetic common areas are a plus when recruiting tenants.",
-          "life1": "Supermarkets",
-          "life2": "Convenience stores",
-          "life3": "Drugstores",
-          "life4": "Restaurants",
-          "education1": "Schools",
-          "education2": "Parks",
-          "education3": "Library",
-          "transport1": "Ikebukuro Station approx. 3 min",
-          "transport2": "Shinjuku Station approx. 15 min",
-          "transport3": "Tokyo Station approx. 20 min",
-          "locationDesc": "Quiet residential area with condos and houses. Supermarkets, convenience stores, and drugstores within 5 min walk; high daily convenience.",
-          "target1": "Singles and couples working in Ikebukuro area",
-          "target2": "Long-term holders valuing maintenance condition",
-          "target3": "First-time investors seeking compact housing",
-          "notesText": "Current rent: ¥53,000/month (occupied). Mgmt fee: ¥8,000/month; Repair reserve: ¥3,500/month; Fixed asset tax (FY2024): ¥20,800/year. Gross yield: 6.05%. ※If drawing differs from current condition, current condition takes precedence.",
-          "imageAlt": "Saint Hills Shiinamachi exterior"
-        },
         "cesar-takashimadaira-206": {
           "title": "Cesar Nishi Takashimadaira 2F",
           "description": "Family-type condo within walking distance of Toei Mita Line \"Takashimadaira\" Station. 2F is a 1DK of approx. 50m²—suitable for both owner-occupation and rental investment.",
@@ -2291,8 +2263,8 @@
           "typeNote": "※Based on past recruitment examples / enter actual layout",
           "station": "Takashimadaira Station: 13–14 min walk",
           "stationNote": "Nishidai, Tobu Nerima also available",
-          "price": "Approx. ¥24 million",
-          "priceNote": "※Reference based on online market data",
+          "price": "12 million JPY",
+          "priceNote": "Brokerage Fee Required",
           "address": "7-22-10 Tokumaru, Itabashi-ku, Tokyo",
           "buildingName": "Cesar Nishi Takashimadaira",
           "access1": "Toei Mita Line \"Takashimadaira\" Station: 13–14 min walk",
@@ -2319,7 +2291,8 @@
           "target2": "Long-term holders valuing living convenience",
           "target3": "Owner-occupation or rental dual-use consideration",
           "notesText": "Please enter/correct 2F exact area, layout, price, rent, etc. based on latest sales materials.",
-          "imageAlt": "Cesar Nishi Takashimadaira exterior"
+          "imageAlt": "Cesar Nishi Takashimadaira exterior",
+          "priceLabel": "Sale price"
         },
         "pale-dor-sagamihara-808": {
           "title": "Palais d'Or Sagamihara 8F",
@@ -2768,6 +2741,690 @@
               "East-facing balcony, shared laundry room, on-site waste collection area"
             ]
           ]
+        },
+        "sky-court-mukogaoka-yuen-4f": {
+          "title": "スカイコート向ヶ丘遊園 4F",
+          "description": "A tenanted 1K property with 16.24㎡ of exclusive area, a 9-minute walk from Mukogaoka-Yuen. The brochure states a gross yield of 8%.",
+          "address": "神奈川県川崎市多摩区登戸522-2",
+          "price": "JPY 7,500,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Brokerage fees apply",
+          "area": "16.24㎡",
+          "areaNote": "Exclusive area",
+          "type": "1K",
+          "status": "Tenanted",
+          "station": "Mukogaoka-Yuen",
+          "stationNote": "9-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "神奈川県川崎市多摩区登戸522-2"
+            ],
+            [
+              "Access",
+              "Odakyu Odawara Line: Mukogaoka-Yuen, 9-minute walk"
+            ],
+            [
+              "Year built",
+              "1988-12"
+            ],
+            [
+              "Structure",
+              "RC, flat roof, 5 storeys"
+            ],
+            [
+              "Exclusive area",
+              "16.24㎡"
+            ],
+            [
+              "Layout / Floor",
+              "1K / 4F"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Total units",
+              "93"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Fully outsourced\nスカイサービス株式会社\nPeriodic patrol management"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 6,500 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 4,000 / month"
+            ],
+            [
+              "Monthly rent",
+              "JPY 50,000 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 24,700 / year (2025)"
+            ],
+            [
+              "Annual rental income",
+              "JPY 600,000 / year"
+            ],
+            [
+              "Lease period",
+              "2025/01/20 – 2027/01/19"
+            ],
+            [
+              "Gross yield",
+              "8%"
+            ],
+            [
+              "Features",
+              "Balcony, lift, indoor washing machine space, IH hob, electric water heater, air conditioning"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Mukogaoka-Yuen · 9-minute walk",
+              "description": "Odakyu Odawara Line: Mukogaoka-Yuen, 9-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "Balcony, lift, indoor washing machine space, IH hob, electric water heater, air conditioning"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings.",
+            "The owner is a non-resident.",
+            "Air conditioning replaced in 2019; electric water heater replaced in 2021. The 1K layout is based on the floor plan."
+          ]
+        },
+        "komatsu-eight-magumoto-2f": {
+          "title": "コマツエイト曲本 2F",
+          "description": "A tenanted 3LDK property with 85.68㎡ of exclusive area, a 13-minute walk from Nishi-Urawa. The brochure states a gross yield of 6.41%.",
+          "address": "埼玉県さいたま市南区曲本2丁目 コマツエイト曲本",
+          "price": "JPY 23,000,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Brokerage fees apply",
+          "area": "85.68㎡",
+          "areaNote": "Wall-centre measurement",
+          "type": "3LDK",
+          "status": "Tenanted",
+          "station": "Nishi-Urawa",
+          "stationNote": "13-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "埼玉県さいたま市南区曲本2丁目 コマツエイト曲本"
+            ],
+            [
+              "Access",
+              "JR Musashino Line: Nishi-Urawa, 13-minute walk"
+            ],
+            [
+              "Year built",
+              "1990-07"
+            ],
+            [
+              "Structure",
+              "RC, flat roof, 4 storeys"
+            ],
+            [
+              "Exclusive area",
+              "85.68㎡"
+            ],
+            [
+              "Layout / Floor",
+              "3LDK / 2F"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Total units",
+              "12"
+            ],
+            [
+              "Zoning",
+              "Category I residential zone"
+            ],
+            [
+              "Parking",
+              "None"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Partially outsourced"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 17,100 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 11,200 / month"
+            ],
+            [
+              "Monthly rent",
+              "JPY 123,000 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 110,300 / year (2025)"
+            ],
+            [
+              "Lease period",
+              "2024/10/26 – 2026/10/25"
+            ],
+            [
+              "Gross yield",
+              "6.41%"
+            ],
+            [
+              "Features",
+              "3LDK; pets permitted subject to building rules"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Nishi-Urawa · 13-minute walk",
+              "description": "JR Musashino Line: Nishi-Urawa, 13-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "3LDK; pets permitted subject to building rules"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings.",
+            "The owner is a non-resident."
+          ]
+        },
+        "gloria-hatsuho-otsuka-2f": {
+          "title": "グローリア初穂大塚 2F",
+          "description": "A tenanted 1R property with 16.22㎡ of exclusive area, a 10-minute walk from Otsuka. The brochure states a gross yield of 6.46%.",
+          "address": "東京都豊島区上池袋1-29-7",
+          "price": "JPY 11,500,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "area": "16.22㎡",
+          "areaNote": "Wall-centre measurement",
+          "type": "1R",
+          "status": "Tenanted",
+          "station": "Otsuka",
+          "stationNote": "10-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "東京都豊島区上池袋1-29-7"
+            ],
+            [
+              "Access",
+              "JR Yamanote Line: Otsuka, 10-minute walk\nTobu Tojo Line: Kita-Ikebukuro, 10-minute walk\nToden Arakawa Line: Sugamoshinden, 8-minute walk"
+            ],
+            [
+              "Year built",
+              "1987-06"
+            ],
+            [
+              "Structure",
+              "RC, flat roof, 4 storeys"
+            ],
+            [
+              "Exclusive area",
+              "16.22㎡"
+            ],
+            [
+              "Layout / Floor",
+              "1R / 2F"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Total units",
+              "32"
+            ],
+            [
+              "Parking",
+              "None"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Periodic patrol management"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 9,000 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 5,000 / month"
+            ],
+            [
+              "Monthly rent",
+              "JPY 62,000 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 26,100 / year (2024)"
+            ],
+            [
+              "Gross yield",
+              "6.46%"
+            ],
+            [
+              "Features",
+              "Indoor washing machine space; access to three rail lines"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Otsuka · 10-minute walk",
+              "description": "JR Yamanote Line: Otsuka, 10-minute walk\nTobu Tojo Line: Kita-Ikebukuro, 10-minute walk\nToden Arakawa Line: Sugamoshinden, 8-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "Indoor washing machine space; access to three rail lines"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings.",
+            "The owner is a non-resident."
+          ]
+        },
+        "evena-nishiochiai-4f": {
+          "title": "エヴェナール西落合 4F",
+          "description": "A tenanted 1R property with 16.52㎡ of exclusive area, a 9-minute walk from Ochiai-Minami-Nagasaki. The brochure states a gross yield of 7.08%.",
+          "address": "東京都新宿区西落合1-32-19",
+          "price": "JPY 10,000,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "area": "16.52㎡",
+          "areaNote": "Wall-centre measurement",
+          "type": "1R",
+          "status": "Tenanted",
+          "station": "Ochiai-Minami-Nagasaki",
+          "stationNote": "9-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "東京都新宿区西落合1-32-19"
+            ],
+            [
+              "Access",
+              "Toei Oedo Line: Ochiai-Minami-Nagasaki, 9-minute walk\nSeibu Shinjuku Line: Nakai, 15-minute walk"
+            ],
+            [
+              "Year built",
+              "1991-12"
+            ],
+            [
+              "Structure",
+              "RC, flat roof, 4 storeys"
+            ],
+            [
+              "Exclusive area",
+              "16.52㎡"
+            ],
+            [
+              "Layout / Floor",
+              "1R / 4F"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Total units",
+              "17"
+            ],
+            [
+              "Zoning",
+              "Category I residential zone"
+            ],
+            [
+              "Parking",
+              "None"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Periodic patrol management"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 10,400 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 5,780 / month"
+            ],
+            [
+              "Monthly rent",
+              "JPY 59,000 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 28,400 / year (2024)"
+            ],
+            [
+              "Gross yield",
+              "7.08%"
+            ],
+            [
+              "Features",
+              "Auto-lock entrance; quiet residential neighbourhood"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Ochiai-Minami-Nagasaki · 9-minute walk",
+              "description": "Toei Oedo Line: Ochiai-Minami-Nagasaki, 9-minute walk\nSeibu Shinjuku Line: Nakai, 15-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "Auto-lock entrance; quiet residential neighbourhood"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings.",
+            "The owner is a non-resident."
+          ]
+        },
+        "parkhouse-nishi-shinjuku-tower60-52f": {
+          "title": "ザ・パークハウス西新宿タワー60 52F",
+          "description": "A tenanted 3LDK property with 89.86㎡ of exclusive area, a 8-minute walk from Nishi-Shinjuku-Gochome. The brochure states a gross yield of 2.6%.",
+          "address": "東京都新宿区西新宿5-5-1",
+          "price": "JPY 244,610,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "area": "89.86㎡",
+          "areaNote": "Wall-centre measurement",
+          "type": "3LDK",
+          "status": "Tenanted",
+          "station": "Nishi-Shinjuku-Gochome",
+          "stationNote": "8-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "東京都新宿区西新宿5-5-1"
+            ],
+            [
+              "Access",
+              "Toei Oedo Line: Nishi-Shinjuku-Gochome, 8-minute walk\nMarunouchi Line: Nishi-Shinjuku, 9-minute walk\nToei Oedo Line: Tochomae, 10-minute walk"
+            ],
+            [
+              "Year built",
+              "2017-08"
+            ],
+            [
+              "Structure",
+              "RC, flat roof, 60 storeys plus 2 basement levels"
+            ],
+            [
+              "Exclusive area",
+              "89.86㎡"
+            ],
+            [
+              "Layout / Floor",
+              "3LDK / 52F"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Total units",
+              "954"
+            ],
+            [
+              "Parking",
+              "Available in the building; vacancy to be confirmed"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Fully outsourced"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 27,000 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 16,180 / month"
+            ],
+            [
+              "Monthly rent",
+              "JPY 530,000 / month"
+            ],
+            [
+              "Internet fee",
+              "JPY 1,067 / month"
+            ],
+            [
+              "Total monthly fees",
+              "JPY 44,247 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "To be confirmed"
+            ],
+            [
+              "Annual rental income",
+              "JPY 6,360,000 / year"
+            ],
+            [
+              "Balcony",
+              "14.97 m², west-facing"
+            ],
+            [
+              "Gross yield",
+              "2.6%"
+            ],
+            [
+              "Features",
+              "52nd floor, west-facing, 3LDK"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Nishi-Shinjuku-Gochome · 8-minute walk",
+              "description": "Toei Oedo Line: Nishi-Shinjuku-Gochome, 8-minute walk\nMarunouchi Line: Nishi-Shinjuku, 9-minute walk\nToei Oedo Line: Tochomae, 10-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "52nd floor, west-facing, 3LDK"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings.",
+            "Monthly management fee: JPY 13,560 whole-building + JPY 13,440 residential. Monthly repair reserve: JPY 9,440 whole-building + JPY 6,740 residential."
+          ]
+        },
+        "klarheit-mishuku-ii": {
+          "title": "クラールハイト三宿Ⅱ",
+          "description": "A tenanted Whole commercial building property with 552.88㎡ of total floor area, a 9-minute walk from Sangenjaya. The brochure states a gross yield of 3.8%.",
+          "address": "東京都世田谷区池尻3-28-5",
+          "price": "JPY 1,006,000,000",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "area": "552.88㎡",
+          "areaNote": "Total floor area",
+          "type": "Whole commercial building",
+          "status": "Tenanted",
+          "station": "Sangenjaya",
+          "stationNote": "9-minute walk",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "overviewRows": [
+            [
+              "Address",
+              "東京都世田谷区池尻3-28-5"
+            ],
+            [
+              "Access",
+              "Tokyu Den-en-toshi Line: Sangenjaya, 9-minute walk\nTokyu Setagaya Line: Sangenjaya, 12-minute walk"
+            ],
+            [
+              "Year built",
+              "2008-05"
+            ],
+            [
+              "Structure",
+              "SRC, flat roof, 3 storeys plus 1 basement level"
+            ],
+            [
+              "Total floor area",
+              "552.88㎡ (167.25坪)"
+            ],
+            [
+              "Property type",
+              "Whole commercial building"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Land area",
+              "216.64㎡ (65.53坪)"
+            ],
+            [
+              "Total units",
+              "4"
+            ],
+            [
+              "Zoning",
+              "Neighbourhood commercial zone"
+            ],
+            [
+              "Urban planning",
+              "Urbanisation promotion area"
+            ],
+            [
+              "Building coverage / Floor area ratio",
+              "80% / 300%"
+            ],
+            [
+              "Road frontage",
+              "West-facing public metropolitan road, approx. 15 m wide"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Annual rental income",
+              "Approx. JPY 38,218,944 / year"
+            ],
+            [
+              "Roadside land value",
+              "JPY 910,000 / m² (2026)"
+            ],
+            [
+              "Completion inspection certificate",
+              "Available"
+            ],
+            [
+              "Gross yield",
+              "3.8%"
+            ],
+            [
+              "Features",
+              "Whole building with shop and office units; electricity, public water and sewer, city gas"
+            ]
+          ],
+          "highlightsTitle": "Property highlights",
+          "highlights": [
+            {
+              "title": "Sangenjaya · 9-minute walk",
+              "description": "Tokyu Den-en-toshi Line: Sangenjaya, 9-minute walk\nTokyu Setagaya Line: Sangenjaya, 12-minute walk"
+            },
+            {
+              "title": "Tenanted",
+              "description": "Whole building with shop and office units; electricity, public water and sewer, city gas"
+            }
+          ],
+          "notes": [
+            "Brokerage fees apply.",
+            "Gross yield is as stated in the brochure, before management, repair, tax and other expenses. It is not a net return or a guarantee of future income.",
+            "Handover by agreement. The actual condition takes precedence over the drawings."
+          ],
+          "areaLabel": "Total floor area",
+          "typeLabel": "Property type"
         }
       }
     }

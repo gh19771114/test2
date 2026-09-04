@@ -15,8 +15,10 @@ type Detail = {
   priceLabel: string
   taxIncluded: string
   area: string
+  areaLabel?: string
   areaNote: string
   type: string
+  typeLabel?: string
   status: string
   station: string
   stationNote: string
@@ -57,8 +59,8 @@ export default function FeePropertyDetail({ propertyId, imagePrefix, mapImage }:
                 <p className="mt-4 text-sm leading-relaxed text-slate-700">{p.description}</p>
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-xs sm:grid-cols-4">
                   {[
-                    [labels.area, p.area, p.areaNote],
-                    [labels.type, p.type, p.status],
+                    [p.areaLabel ?? labels.area, p.area, p.areaNote],
+                    [p.typeLabel ?? labels.type, p.type, p.status],
                     [labels.nearestStation, p.station, p.stationNote],
                     [p.priceLabel, p.price, p.taxIncluded],
                   ].map(([label, value, note]) => (

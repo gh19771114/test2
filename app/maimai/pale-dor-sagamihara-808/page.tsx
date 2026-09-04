@@ -82,7 +82,7 @@ export default function PalaisDorSagamihara808Page() {
               <div className="mt-8 flex-1 justify-center lg:flex">
                 <div className="relative h-64 w-full max-w-sm overflow-hidden rounded-3xl bg-slate-900/5 shadow-lg">
                   <Image
-                    src="/imgs/maimai/Palais d'Or Sagamihara 8F.jpeg"
+                    src="/imgs/maimai/palais-dor-sagamihara-exterior.jpeg"
                     alt={p.imageAlt || p.title || labels.appearance}
                     fill
                     className="object-cover"
@@ -104,7 +104,7 @@ export default function PalaisDorSagamihara808Page() {
           address={`${p.address || ''} ${p.buildingName || ''}`.trim()}
           images={[
             {
-              src: '/imgs/maimai/Palais d\'Or Sagamihara 8F.jpeg',
+              src: '/imgs/maimai/palais-dor-sagamihara-exterior.jpeg',
               alt: labels.exterior || labels.appearance || p.title,
             },
             {
