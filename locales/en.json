@@ -1792,7 +1792,9 @@
         "miwaPlazaTakaido1f": "Suginami-ku Kamitakaido, Tokyo",
         "lmNishihachioji3_707": "Hachioji Yagicho, Tokyo",
         "skyCourtIkuta2f": "Kawasaki Tama-ku, Kanagawa",
-        "nikkoPalaceMinamiAzabu102103": "Minami-Azabu, Minato-ku, Tokyo"
+        "nikkoPalaceMinamiAzabu102103": "Minami-Azabu, Minato-ku, Tokyo",
+        "exceriaSetagayaKamimachi6f": "Setagaya-ku, Tokyo",
+        "graceYotsuya4f": "Shinjuku-ku, Tokyo"
       },
       "types": {
         "shopOffice": "Shop / Office",
@@ -1819,7 +1821,9 @@
         "miwaPlazaTakaido1f": "Miwa Plaza Takaido 1F",
         "lmNishihachioji3_707": "LM Nishi-Hachioji No.3 7F",
         "skyCourtIkuta2f": "Sky Court Ikuta 2F",
-        "nikkoPalaceMinamiAzabu102103": "Nikko Palace Minami-Azabu Units 102 & 103"
+        "nikkoPalaceMinamiAzabu102103": "Nikko Palace Minami-Azabu Units 102 & 103",
+        "exceriaSetagayaKamimachi6f": "Exceria Setagaya Kamimachi 6F",
+        "graceYotsuya4f": "Grace Yotsuya 4F"
       }
     },
     "deals": {
@@ -2547,6 +2551,223 @@
           "target3": "Long-term holders valuing brand strength",
           "notesText": "Please enter/correct 2F exact area, rent level, management fees, etc. based on latest recruitment materials.",
           "imageAlt": "Sky Court Ikuta exterior"
+        },
+        "exceria-setagaya-kamimachi-6f": {
+          "description": "A 1K condominium on the 6th floor of an eight-storey building, a 2-minute walk from Kamimachi Station on the Tokyu Setagaya Line. Built in May 1998, with 18.56 m² of exclusive area. Currently vacant, with an east-facing balcony, lift and indoor washing machine space.",
+          "price": "15.4 million JPY",
+          "areaNote": "Wall-centre measurement",
+          "status": "Vacant",
+          "station": "Kamimachi",
+          "stationNote": "2-minute walk",
+          "highlights": [
+            {
+              "title": "2 minutes from Kamimachi Station",
+              "description": "A 2-minute walk to Kamimachi Station on the Tokyu Setagaya Line."
+            },
+            {
+              "title": "6th floor with an east-facing balcony",
+              "description": "The building has a lift, and the unit includes an east-facing balcony and indoor washing machine space."
+            }
+          ],
+          "title": "エクセリア世田谷上町 6F",
+          "address": "東京都世田谷区世田谷2-12-13",
+          "area": "18.56㎡",
+          "type": "1K",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "highlightsTitle": "Property highlights",
+          "notes": [
+            "Brokerage fees apply.",
+            "The judicial scrivener is designated by our company. The owner is a non-resident.",
+            "Handover by agreement. The actual condition takes precedence over the floor plan."
+          ],
+          "overviewRows": [
+            [
+              "Address",
+              "2-12-13 Setagaya, Setagaya-ku, Tokyo"
+            ],
+            [
+              "Access",
+              "Tokyu Setagaya Line: Kamimachi Station, 2-minute walk"
+            ],
+            [
+              "Year built",
+              "May 1998"
+            ],
+            [
+              "Structure",
+              "Reinforced concrete, flat roof, 8 storeys"
+            ],
+            [
+              "Exclusive area",
+              "18.56 m² (wall-centre measurement)"
+            ],
+            [
+              "Layout / Floor",
+              "1K / 6th floor"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Zoning",
+              "Neighbourhood commercial zone"
+            ],
+            [
+              "Use / Total units",
+              "Residential / 35 units"
+            ],
+            [
+              "Parking",
+              "None"
+            ],
+            [
+              "Occupancy",
+              "Vacant"
+            ],
+            [
+              "Management",
+              "Periodic patrol management"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 9,600 / month"
+            ],
+            [
+              "Repair reserve",
+              "Included in the management fee"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 37,600 / year (FY2026)"
+            ],
+            [
+              "Monthly rent",
+              "Vacant; rent not stated"
+            ],
+            [
+              "Features",
+              "East-facing balcony, lift, indoor washing machine space"
+            ]
+          ]
+        },
+        "grace-yotsuya-4f": {
+          "description": "A tenanted 1R condominium on the 4th floor, a 1-minute walk from Akebonobashi Station and a 5-minute walk from Yotsuya-sanchome Station. Registered exclusive area: 11.43 m². Current monthly rent is JPY 60,000; the brochure states a gross yield of 5.53%.",
+          "price": "13 million JPY",
+          "areaNote": "Registered area",
+          "status": "Tenanted",
+          "station": "Akebonobashi",
+          "stationNote": "1-minute walk",
+          "highlights": [
+            {
+              "title": "Access to three rail lines",
+              "description": "Akebonobashi: 1-minute walk; Yotsuya-sanchome: 5-minute walk; Wakamatsu-kawada: 13-minute walk."
+            },
+            {
+              "title": "Tenanted at JPY 60,000 per month",
+              "description": "Current monthly rent is JPY 60,000. The brochure states a gross yield of 5.53%."
+            }
+          ],
+          "title": "グレイス四谷 4F",
+          "address": "東京都新宿区舟町12-33",
+          "area": "11.43㎡",
+          "type": "1R",
+          "priceLabel": "Sale price",
+          "taxIncluded": "Tax included",
+          "floorPlanLabel": "Floor plan",
+          "locationMapLabel": "Access map",
+          "highlightsTitle": "Property highlights",
+          "notes": [
+            "Brokerage fees apply.",
+            "The judicial scrivener is designated by our company. The owner is a non-resident.",
+            "Handover by agreement. The actual condition takes precedence over the floor plan.",
+            "Gross yield is before management fees, repair reserves, taxes and other expenses; it is not a net return."
+          ],
+          "overviewRows": [
+            [
+              "Address",
+              "12-33 Funamachi, Shinjuku-ku, Tokyo"
+            ],
+            [
+              "Access",
+              "Toei Shinjuku Line: Akebonobashi Station, 1-minute walk\nMarunouchi Line: Yotsuya-sanchome Station, 5-minute walk\nToei Oedo Line: Wakamatsu-kawada Station, 13-minute walk"
+            ],
+            [
+              "Year built",
+              "December 1984"
+            ],
+            [
+              "Structure",
+              "Reinforced concrete, flat roof, 5 storeys"
+            ],
+            [
+              "Exclusive area",
+              "11.43 m² (registered area)"
+            ],
+            [
+              "Layout / Floor",
+              "1R / 4th floor"
+            ],
+            [
+              "Land rights",
+              "Freehold"
+            ],
+            [
+              "Zoning",
+              "Category I residential zone"
+            ],
+            [
+              "Use / Total units",
+              "Residential / 25 units"
+            ],
+            [
+              "Parking",
+              "None"
+            ],
+            [
+              "Occupancy",
+              "Tenanted"
+            ],
+            [
+              "Management",
+              "Periodic patrol management"
+            ],
+            [
+              "Handover",
+              "By agreement"
+            ],
+            [
+              "Management fee",
+              "JPY 6,110 / month"
+            ],
+            [
+              "Repair reserve",
+              "JPY 6,540 / month"
+            ],
+            [
+              "Property / city planning tax",
+              "JPY 18,700 / year (FY2026)"
+            ],
+            [
+              "Monthly rent",
+              "JPY 60,000 / month"
+            ],
+            [
+              "Gross yield",
+              "5.53% (as stated in the brochure)"
+            ],
+            [
+              "Features",
+              "East-facing balcony, shared laundry room, on-site waste collection area"
+            ]
+          ]
         }
       }
     }

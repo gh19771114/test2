@@ -71,6 +71,32 @@ export const maimaiPropertiesNoFee: MaimaiPropertyCard[] = [
 
 export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
   {
+    title: 'エクセリア世田谷上町 6F',
+    titleKey: 'maimai.properties.buildings.exceriaSetagayaKamimachi6f',
+    locationKey: 'maimai.properties.locations.exceriaSetagayaKamimachi6f',
+    typeKey: 'maimai.properties.types.1k',
+    price: '1,540万日元',
+    area: '18.56㎡',
+    type: '1K',
+    location: '東京都世田谷区世田谷',
+    image: '/imgs/maimai/exceria-setagaya-kamimachi-exterior.jpg',
+    href: '/maimai/exceria-setagaya-kamimachi-6f',
+    featureKey: 'maimai.properties.withFee',
+  },
+  {
+    title: 'グレイス四谷 4F',
+    titleKey: 'maimai.properties.buildings.graceYotsuya4f',
+    locationKey: 'maimai.properties.locations.graceYotsuya4f',
+    typeKey: 'maimai.properties.types.1r',
+    price: '1,300万日元',
+    area: '11.43㎡',
+    type: '1R',
+    location: '東京都新宿区舟町',
+    image: '/imgs/maimai/grace-yotsuya-exterior.jpg',
+    href: '/maimai/grace-yotsuya-4f',
+    featureKey: 'maimai.properties.withFee',
+  },
+  {
     title: 'パティオ杉並 2F',
     titleKey: 'maimai.properties.buildings.patioSuginami2f',
     locationKey: 'maimai.properties.locations.patioSuginami2f',
