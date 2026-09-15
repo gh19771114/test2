@@ -16,7 +16,6 @@ declare global {
 }
 
 const OFFICE_MAP_QUERY = '株式会社ボーンマーク 東京都中央区日本橋人形町1-2-12 Bourn Mark Ningyocho BLD. 2F'
-const OFFICE_MAP_CENTER = '35.68615,139.78285'
 
 const Contact = () => {
   const { t } = useTContent()
@@ -689,7 +688,7 @@ const Contact = () => {
         <div className="mt-12">
           <div className="relative w-full overflow-hidden rounded-3xl border border-white/30 shadow-2xl">
             <iframe
-              src={`https://www.google.com/maps?ll=${OFFICE_MAP_CENTER}&z=17&output=embed&hl=ja`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(OFFICE_MAP_QUERY)}&z=17&output=embed&hl=ja`}
               width="100%"
               height="400"
               style={{ border: 0 }}
