@@ -68,11 +68,11 @@ export default function SkyCourtIkuta202Page() {
                     </dd>
                   </div>
                   <div className="rounded-xl bg-white/80 p-4 shadow-sm">
-                    <dt className="text-slate-500">{labels.equipment}</dt>
+                    <dt className="text-slate-500">{p.priceLabel}</dt>
                     <dd className="mt-1 font-semibold text-slate-900">
-                      {p.completedDate}
+                      {p.price}
                       <span className="block text-[11px] text-slate-500">
-                        {p.completedDateNote}
+                        {p.priceNote}
                       </span>
                     </dd>
                   </div>

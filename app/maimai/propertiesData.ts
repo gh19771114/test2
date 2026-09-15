@@ -258,7 +258,7 @@ export const maimaiPropertiesWithFee: MaimaiPropertyCard[] = [
     titleKey: 'maimai.properties.buildings.skyCourtIkuta2f',
     locationKey: 'maimai.properties.locations.skyCourtIkuta2f',
     typeKey: 'maimai.properties.types.1k',
-    price: '430万日元',
+    price: '460万日元',
     area: '约17㎡',
     type: '1K',
     location: '神奈川県川崎市多摩区',
