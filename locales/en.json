@@ -763,13 +763,6 @@
             "label": "Current Position",
             "value": "Representative Director and President"
           },
-          "socialPosition": {
-            "label": "Social Position",
-            "value": [
-              "Standing Director of Chinese Enterprise Association",
-              "Director of Asset Resource Integration Committee"
-            ]
-          },
           "media": {
             "label": "Media Coverage",
             "value": [

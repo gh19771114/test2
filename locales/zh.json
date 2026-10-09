@@ -775,13 +775,6 @@
             "label": "现任职务",
             "value": "代表董事董事长"
           },
-          "socialPosition": {
-            "label": "社会职务",
-            "value": [
-              "中国企业协会常务理事",
-              "资产资源整合委员会主任"
-            ]
-          },
           "media": {
             "label": "媒体报道",
             "value": [

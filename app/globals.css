@@ -7691,7 +7691,8 @@ section.desktop-message {
     }
     
     .company-ceo-profile-intro-content {
-      display: block !important;
+      /* Include the floated portrait in the card height while keeping text wrapping. */
+      display: flow-root !important;
     }
     
     .company-ceo-profile-image {

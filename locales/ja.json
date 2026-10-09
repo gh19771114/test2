@@ -727,13 +727,6 @@
             "label": "現職",
             "value": "代表取締役社長"
           },
-          "socialPosition": {
-            "label": "社会職務",
-            "value": [
-              "中国企業協会常務理事",
-              "資産資源統合委員会主任"
-            ]
-          },
           "media": {
             "label": "メディア報道",
             "value": [

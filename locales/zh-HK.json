@@ -740,13 +740,6 @@
             "label": "現任職務",
             "value": "代表董事董事長"
           },
-          "socialPosition": {
-            "label": "社會職務",
-            "value": [
-              "中國企業協會常務理事",
-              "資產資源整合委員會主任"
-            ]
-          },
           "media": {
             "label": "媒體報道",
             "value": [
