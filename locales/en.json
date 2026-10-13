@@ -3945,7 +3945,7 @@
     "title": "Careers",
     "subtitle": "Join us and create the future together",
     "companyInfoTitle": "Company Information",
-    "noPositions": "Currently no positions available",
+    "noPositions": "No current openings",
     "viewDetails": "View Details",
     "jobDescription": "Job Description",
     "responsibilities": "Key Responsibilities",
@@ -3955,40 +3955,7 @@
     "workLocation": "Location",
     "employmentType": "Employment Type",
     "salary": "Salary",
-    "positions": [
-      {
-        "title": "Property Management Specialist (Chinese Language Proficiency)",
-        "location": "Nihonbashi Ningyocho, Chuo-ku, Tokyo",
-        "workType": "Full-time",
-        "salary": "JPY 290,000–323,000 / month (incl. fixed overtime pay)",
-        "summary": "Bridge asset value with language: work with overseas owners in Chinese and coordinate operations and value-enhancement projects for central Tokyo apartments (no prior industry experience required; full mentorship provided).",
-        "description": "Position: Property Management Specialist (Chinese Language Proficiency)\n— Bridge asset value with language and start your career in central Tokyo\n\nWe are looking for someone who:\n- Language: Can communicate in Chinese at a business level and work smoothly with overseas / Greater China owners;\n- Basic skills: Can use Word / Excel and other common office tools;\n- Work style: Patient, detail-oriented, good at listening, and able to collaborate effectively;\n- Growth mindset: Interested in property management and overseas asset operations (no prior experience required; senior members will mentor you end-to-end).\n\nWork location:\nBourn Mark Ningyocho BLD. 2F, 1-2-12 Nihonbashi Ningyocho, Chuo-ku, Tokyo\n▶ Access: 2-minute walk from Ningyocho Station",
-        "responsibilities": [
-          "Owner communication & support: Communicate mainly in Chinese to support overseas owners; respond to inquiries about repairs and value-enhancement initiatives",
-          "Operations coordination: Coordinate with external contractors and manage repairs/renovations for assigned apartments in central Tokyo (no on-site work required)",
-          "Asset value enhancement: Participate in proposals and planning for major repairs and renovation projects to support value preservation and growth",
-          "Daily administration: Respond to resident inquiries; organize property-management documents (contracts/reports handled in Japanese)"
-        ],
-        "requirements": [
-          "Business-level Chinese communication (Required)",
-          "Basic Word / Excel skills",
-          "Patient, detail-oriented; strong teamwork and execution",
-          "Interest in property management and overseas asset operations; willingness to learn (no prior experience required; mentorship provided)"
-        ],
-        "benefits": [
-          "Visible career growth: Work directly with the CEO and overseas high-net-worth owners; build high-end networks and cross-cultural communication skills",
-          "Certification support: Support for licenses such as Real Estate Transaction Agent and Rental Property Management; additional allowance after obtaining (up to JPY 30,000/month)",
-          "Small team, high autonomy: A lean team with strong ownership and room for initiative",
-          "Working hours: 10:00–19:00 (8 hours actual work); generally on-time; monthly overtime within 10 hours",
-          "Holidays: Sat/Sun off + year-end/New Year (4 days) + Golden Week + summer break (3 days) + paid leave (10–20 days/year) + childcare leave + anniversary leave",
-          "Office & facilities: Company-owned building; lounge with nap space, massage chair, coffee machine",
-          "Compensation: JPY 290,000–323,000/month (incl. fixed overtime), two bonuses/year (historically 2.5+ months), performance incentives every half-year",
-          "Additional perks: Full transportation reimbursement + certification allowance + company trip (Okinawa for all members at end of 2025) + quarterly team events + work phone + flu vaccination",
-          "Insurance: Health insurance, employee pension, employment insurance, workers' compensation; same benefits during 3-month probation"
-        ],
-        "contact": "This page is for job promotion only. If you are interested, please apply via https://jp.indeed.com/viewjob?jk=e641e0fd67e66aca&from=shareddesktop_copy. Within 3 business days after applying, our recruiter will contact you. The interview process includes \"HR + hiring manager\" and a \"CEO interview\". We look forward to speaking with you."
-      }
-    ]
+    "positions": []
   },
   "notFound": {
     "title": "Page Not Found",
