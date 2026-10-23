@@ -108,6 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic: News
   for (const n of latestNews) {
+    if (n.href) continue
     addUrl(`/news/${n.slug}`, {
       lastModified: parseLooseDate(n.date) || now,
       changeFrequency: 'yearly',

@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getNewsBySlug, getAllNewsSlugs } from '@/lib/knowledge'
 import NewsDetailClient from './NewsDetailClient'
 
@@ -6,6 +6,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   const { slug } = await params
   const news = getNewsBySlug(slug)
   if (!news) notFound()
+  if (news.href) redirect(news.href)
   return <NewsDetailClient news={news} />
 }
 

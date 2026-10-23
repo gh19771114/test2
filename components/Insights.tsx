@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { useTContent } from '@/hooks/useTContent'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
-type LatestItem = { slug: string; date: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
+type LatestItem = { slug: string; date: string; href?: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; category?: string; isNotice?: boolean; pinnedOrder?: number; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
 
 const Insights = () => {
   const { t, contentLanguage } = useTContent()
@@ -103,7 +103,7 @@ const Insights = () => {
     }
     return 'title' in item && item.title ? item.title : getNewsTitle(item.slug)
   }
-  const getItemHref = (item: LatestItem) => (item.slug.startsWith('rss-') ? `/news/rss/${item.slug.slice(4)}` : `/news/${item.slug}`)
+  const getItemHref = (item: LatestItem) => ('href' in item && item.href ? item.href : item.slug.startsWith('rss-') ? `/news/rss/${item.slug.slice(4)}` : `/news/${item.slug}`)
 
   const getEncyclopediaTitle = (slug: string, fallback?: string) => {
     const translated = t(`encyclopedia.items.${slug}.title`)

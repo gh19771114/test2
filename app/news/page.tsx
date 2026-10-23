@@ -9,7 +9,7 @@ import { getJapanRealEstateNewsById } from '@/data/japanRealEstateNews'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useRssTranslations } from '@/hooks/useRssTranslations'
 
-type LatestItem = { slug: string; date: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; pinnedOrder?: number; category?: string; isNotice?: boolean; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
+type LatestItem = { slug: string; date: string; href?: string; title?: string; content?: string; realEstateId?: string; isPinned?: boolean; pinnedOrder?: number; category?: string; isNotice?: boolean; displayLocales?: string[] } | { slug: string; date: string; title: string; source: string; link: string }
 
 export default function NewsListPage() {
   const { t } = useLanguage()
@@ -34,7 +34,7 @@ export default function NewsListPage() {
     }
     return 'title' in news && news.title ? news.title : getNewsTitle(news.slug)
   }
-  const getItemHref = (news: LatestItem) => (news.slug.startsWith('rss-') ? `/news/rss/${news.slug.slice(4)}` : `/news/${news.slug}`)
+  const getItemHref = (news: LatestItem) => ('href' in news && news.href ? news.href : news.slug.startsWith('rss-') ? `/news/rss/${news.slug.slice(4)}` : `/news/${news.slug}`)
 
   const getCategoryLabel = (news: LatestItem) => {
     if ('category' in news && news.category) {

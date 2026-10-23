@@ -84,6 +84,7 @@ export function extractDateFromWebString(dateStr: string, copyrightYear?: number
 export type NewsItem = {
   date: string
   slug: string
+  href?: string
   title?: string
   detailTitle?: string
   content?: string
@@ -103,6 +104,14 @@ export type NewsItem = {
 // 最新资讯数据
 // 注意：title 和 content 现在通过翻译文件提供，使用翻译键：news.items.{slug}.title 和 news.items.{slug}.content
 export const latestNews: NewsItem[] = [
+  {
+    date: '2026-10-23',
+    slug: '2026-10-23-customer-harassment-policy-update',
+    href: '/customer-harassment',
+    isPinned: true,
+    pinnedOrder: -2,
+    isNotice: true,
+  },
   {
     date: '2026-07-20',
     slug: '2026-summer-holiday-notice',
