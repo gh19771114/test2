@@ -287,11 +287,14 @@ const Footer = () => {
 
         {/* Bottom Footer */}
         <motion.div className="border-t border-navy-800 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 text-sm">
+          <div className="flex flex-col xl:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm shrink-0">
               {t('footer.copyright')}
             </p>
-            <div className="flex items-center space-x-6 text-sm footer-bottom-actions">
+            <div className="flex max-w-full flex-wrap justify-center items-center gap-x-6 gap-y-3 pr-16 text-center text-sm lg:pr-0 footer-bottom-actions">
+              <a href="/customer-harassment" lang="ja" className="text-gray-400 hover:text-white transition-colors duration-200">
+                カスタマーハラスメントに対する基本方針
+              </a>
               <a href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
                 {t('footer.privacyPolicy')}
               </a>

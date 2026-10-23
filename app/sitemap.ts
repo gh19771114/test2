@@ -100,6 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   addUrl('/company/sns', { changeFrequency: 'yearly', priority: 0.4 })
   addUrl('/careers', { changeFrequency: 'weekly', priority: 0.6 })
   addUrl('/privacy', { changeFrequency: 'yearly', priority: 0.2 })
+  addUrl('/customer-harassment', { changeFrequency: 'yearly', priority: 0.2 })
 
   // Tenant pages (kept low priority; excludes preview)
   addUrl('/tenant', { changeFrequency: 'monthly', priority: 0.2 })
